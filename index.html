@@ -1,71 +1,225 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V1.0</title><style>
-*{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#2a203f;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;touch-action:none}#stage{position:absolute;inset:0;height:var(--available-height,100%);display:flex;align-items:center;justify-content:center}canvas{display:block;width:100%;height:100%;object-fit:fill;image-rendering:pixelated;touch-action:none;-webkit-user-select:none}#hud{position:absolute;top:max(8px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));color:#fff;font-size:clamp(13px,2.2vw,19px);font-weight:800;text-shadow:1px 2px #704b73;pointer-events:none}#pause{position:absolute;right:max(12px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));z-index:2}button{font-family:inherit;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent}#controls{position:absolute;inset:0;pointer-events:none;z-index:3}#left,#right,#jump{opacity:.58;position:absolute;bottom:max(10px,env(safe-area-inset-bottom));width:52px;height:52px;background:#55476655;border:2px solid #ffffff77;color:#fff;border-radius:12px;font-size:22px;font-weight:800;pointer-events:auto}#left{left:max(12px,env(safe-area-inset-left))}#right{left:calc(max(12px,env(safe-area-inset-left)) + 61px)}#jump{right:max(12px,env(safe-area-inset-right));border-radius:50%;font-size:28px}.pressed{background:#ec8eaecc!important;opacity:1!important}#pause{border:2px solid #ffffffaa;background:#55476677;color:#fff;border-radius:11px;width:45px;height:42px;font-size:20px}#shade{position:absolute;inset:0;height:var(--available-height,100%);background:#211b39c9;display:flex;justify-content:center;align-items:center;z-index:4;padding:12px}#card{background:#fff3f6;border:3px solid #ffc2d7;border-radius:17px;color:#68455e;text-align:center;width:min(440px,92%);padding:16px;max-height:90%;overflow:auto;box-shadow:0 6px #a36e9d}#card h1{font-size:clamp(19px,3.2vw,27px);color:#db6394;margin:0 0 8px}#card p{font-size:clamp(12px,1.8vw,15px);line-height:1.65;margin:8px 0}#actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}#actions button{font-size:14px;font-weight:700;border:0;background:#e979a5;color:#fff;border-radius:10px;padding:10px 15px;min-height:43px}#actions button.alt{background:#a88bad}#rotate{position:absolute;inset:0;height:var(--available-height,100%);background:#241b38;color:white;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:8;gap:12px;font-size:20px;padding:24px}#rotate small{font-size:13px;opacity:.8}#error{display:none;position:absolute;z-index:12;inset:10%;background:#fff5f5;color:#a12750;border-radius:12px;padding:16px;overflow:auto;font-size:14px}.hide{display:none!important}@media(orientation:portrait){#rotate{display:flex}}@media(max-height:310px){#card{padding:8px}#card p{margin:3px}#left,#right,#jump{opacity:.58;width:48px;height:48px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 56px)}}
-#interact{position:absolute;bottom:22%;left:50%;transform:translateX(-50%);background:#e979a5;color:white;border:2px solid #fff;border-radius:12px;padding:9px 16px;z-index:3;font-weight:800}#card{max-width:520px!important}#hud{z-index:2;max-width:75%;font-size:clamp(12px,1.7vw,18px)}@media(orientation:landscape){#left,#right,#jump{bottom:max(10px,env(safe-area-inset-bottom))}} </style></head><body><div id="stage"><canvas id="game" width="640" height="360" aria-label="春日小镇游戏"></canvas></div><div id="hud">❤️ 0/3　🌱 0/1　春日小镇 · 相遇</div><button id="pause" aria-label="暂停">Ⅱ</button><div id="controls" class="hide"><button id="left" aria-label="向左">◀</button><button id="right" aria-label="向右">▶</button><button id="jump" aria-label="跳跃">✦</button></div><button id="interact" class="hide" type="button">♡ 坐下来</button><div id="shade"><div id="card"><h1 id="heading">🐰 我们的奇妙冒险 🦁</h1><p id="message">三颗爱心，一颗种子。<br>和小狮子一起，走过属于我们的四季。</p><div id="actions"><button id="start" type="button">开始冒险 ♡</button></div></div></div><div id="rotate"><div style="font-size:42px">🐰 🦁</div><strong>请将手机横过来 ♡</strong><small>关闭方向锁定后横屏；若仍无法旋转，可在 Safari 中打开。</small></div><div id="error"></div><script>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V1.2</title><style>
+*{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#2a203f;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;touch-action:none}#stage{position:absolute;inset:0;height:var(--available-height,100%);display:flex;align-items:center;justify-content:center}canvas{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;touch-action:none;-webkit-user-select:none}#hud{position:absolute;top:max(8px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));color:#fff;font-size:clamp(13px,2.2vw,19px);font-weight:800;text-shadow:1px 2px #704b73;pointer-events:none}#pause{position:absolute;right:max(12px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));z-index:2}button{font-family:inherit;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent}#controls{position:absolute;inset:0;pointer-events:none;z-index:3}#left,#right,#jump{opacity:.58;position:absolute;bottom:max(10px,env(safe-area-inset-bottom));width:52px;height:52px;background:#55476655;border:2px solid #ffffff77;color:#fff;border-radius:12px;font-size:22px;font-weight:800;pointer-events:auto}#left{left:max(12px,env(safe-area-inset-left))}#right{left:calc(max(12px,env(safe-area-inset-left)) + 61px)}#jump{right:max(12px,env(safe-area-inset-right));border-radius:50%;font-size:28px}.pressed{background:#ec8eaecc!important;opacity:1!important}#pause{border:2px solid #ffffffaa;background:#55476677;color:#fff;border-radius:11px;width:45px;height:42px;font-size:20px}#shade{position:absolute;inset:0;height:var(--available-height,100%);background:#211b39c9;display:flex;justify-content:center;align-items:center;z-index:4;padding:12px}#card{background:#fff3f6;border:3px solid #ffc2d7;border-radius:17px;color:#68455e;text-align:center;width:min(440px,92%);padding:16px;max-height:90%;overflow:auto;box-shadow:0 6px #a36e9d}#card h1{font-size:clamp(19px,3.2vw,27px);color:#db6394;margin:0 0 8px}#card p{font-size:clamp(12px,1.8vw,15px);line-height:1.65;margin:8px 0}#actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}#actions button{font-size:14px;font-weight:700;border:0;background:#e979a5;color:#fff;border-radius:10px;padding:10px 15px;min-height:43px}#actions button.alt{background:#a88bad}#rotate{position:absolute;inset:0;height:var(--available-height,100%);background:#241b38;color:white;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:8;gap:12px;font-size:20px;padding:24px}#rotate small{font-size:13px;opacity:.8}#error{display:none;position:absolute;z-index:12;inset:10%;background:#fff5f5;color:#a12750;border-radius:12px;padding:16px;overflow:auto;font-size:14px}.hide{display:none!important}@media(orientation:portrait){#rotate{display:flex}}@media(max-height:310px){#card{padding:8px}#card p{margin:3px}#left,#right,#jump{opacity:.58;width:48px;height:48px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 56px)}}
+#interact{position:absolute;bottom:22%;left:50%;transform:translateX(-50%);background:#e979a5;color:white;border:2px solid #fff;border-radius:12px;padding:9px 16px;z-index:3;font-weight:800}#card{max-width:520px!important}#hud{z-index:2;max-width:75%;font-size:clamp(12px,1.7vw,18px)}@media(orientation:landscape){#left,#right,#jump{bottom:max(10px,env(safe-area-inset-bottom))}} 
+#gate{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 30% 20%,#ffd6e6,#f6aed3 45%,#b48ac8);height:var(--available-height,100%)}
+#gate-card{background:#fff6f9;border:3px solid #ffc2d7;border-radius:20px;box-shadow:0 6px #a36e9d;color:#68455e;text-align:center;width:min(380px,92%);padding:20px 18px}
+#gate h1{margin:0 0 6px;color:#db6394;font-size:clamp(22px,6vw,30px)}#gate .duo{font-size:clamp(16px,4.5vw,20px);margin:10px 0 16px;font-weight:700}
+#gate p{margin:6px 0 12px;font-size:15px;line-height:1.6}
+#gate button{font-family:inherit;font-size:16px;font-weight:800;border:0;background:#e979a5;color:#fff;border-radius:12px;padding:12px 22px;min-height:46px;touch-action:manipulation}
+#gate input{-webkit-user-select:text;user-select:text;font-family:inherit;font-size:24px;letter-spacing:6px;text-align:center;width:180px;padding:10px;border:2px solid #f3b5cc;border-radius:12px;color:#68455e;background:#fff;margin:4px 0 10px;touch-action:manipulation}
+#gate-msg{min-height:22px;font-size:14px;color:#c2477a;margin:4px 0 0!important}
+.shake{animation:shake .4s}@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+</style></head><body><div id="stage"><canvas id="game" width="640" height="360" aria-label="我们的奇妙冒险"></canvas></div><div id="hud" class="hide"></div><button id="pause" class="hide" aria-label="暂停">Ⅱ</button><div id="controls" class="hide"><button id="left" aria-label="向左">◀</button><button id="right" aria-label="向右">▶</button><button id="jump" aria-label="跳跃">✦</button></div><button id="interact" class="hide" type="button">♡ 坐下来</button><div id="shade" class="hide"><div id="card"><h1 id="heading"></h1><p id="message"></p><div id="actions"></div></div></div>
+<div id="gate"><div id="gate-card"><div id="gate-welcome"><h1>🌸《我们的奇妙冒险》</h1><div class="duo">🐰 小兔子 + 🦁 小狮子</div><button id="gate-enter" type="button">进入 ♡</button></div>
+<form id="gate-date" class="hide" autocomplete="off"><h1>🌸</h1><p>我们的故事，从哪一天开始？</p><input id="gate-input" type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="8" placeholder="MMDD" aria-label="纪念日期"><br><button type="submit">确定 ♡</button><p id="gate-msg"></p></form></div></div>
+<div id="rotate"><div style="font-size:42px">🐰 🦁</div><strong>请将手机横过来 ♡</strong><small>关闭方向锁定后横屏；若仍无法旋转，可在 Safari 中打开。</small></div><div id="error"></div><script>
 (function(){'use strict';
-const $=q=>document.querySelector(q), canvas=$('#game'),ctx=canvas.getContext('2d');
-if(!ctx){$('#error').style.display='block';$('#error').textContent='Canvas 无法启动，请使用 Safari';return}
-const H=360, G=284, SAVE='our_adventure_full_v1', LEVELS=['春日小镇 · 相遇','大阪 · 夕阳与花火','秘密花园 · 未来的约定'];
-let W=640, cam=0, mode='menu', last=0, level=0, held={left:false,right:false,jump:false}, jumpQueue=false, assist=true, clouds=[], failCount=0, lastFailure=null, timer=0, storySeen={}, music=false;
-let data={version:1,level:0,hearts:[false,false,false],seed:false,stars:[],shells:[],met:false,cp:0,done:false,story:{},assist:true};
+const $=q=>document.querySelector(q), canvas=$('#game'), ctx=canvas.getContext('2d');
+if(!ctx){$('#error').style.display='block';$('#error').textContent='Canvas 无法启动，请使用 Safari 打开链接';return}
+const H=360, G=284, SAVE='our_adventure_full_v1', GATE='our_adventure_gate_v1';
+const LEVELS=['春日小镇 · 相遇','海边 · 夕阳与花火','秘密花园 · 未来的约定'];
+const ANNIV={month:11,day:13,label:'2025.11.13 — 2026.11.13'};
+let W=640, cam=0, mode='gate', last=0, level=0, timer=0;
+let held={left:false,right:false,jump:false}, jumpQueue=false, assist=true;
+let clouds=[], sleeping=false, failCount=0, failCp=-1, respawnGuard=0, cinematicStart=0;
+const freshData=()=>({version:1,level:0,hearts:[false,false,false],seed:false,stars:[],shells:[],met:false,cp:0,cpLevel:0,done:false,story:{},assist:true});
+let data=freshData();
 let p={x:45,y:G-27,w:22,h:27,vx:0,vy:0,on:false,coyote:0,buffer:0,jumpMs:0}, lion={x:30,y:G-27};
-let map=[], checkpoints=[], enemies=[], objects=[], levelEnd=0, scene='normal';
-const ground=(x,w,y=G)=>({x,y,w,kind:'ground'}), plat=(x,w,y)=>({x,y,w,kind:'platform'});
-function save(){try{localStorage.setItem(SAVE,JSON.stringify(data))}catch(e){}}
-function load(){try{let d=JSON.parse(localStorage.getItem(SAVE)||'null');if(d&&d.version===1){data=Object.assign(data,d);data.hearts=(data.hearts||[]).slice(0,3);data.stars=data.stars||[];data.shells=data.shells||[];data.story=data.story||{};assist=data.assist!==false}}catch(e){}}
-function clearInput(){Object.keys(held).forEach(k=>{held[k]=false;$('#'+k).classList.remove('pressed')});jumpQueue=false}
-function layout(n){level=n;clouds=[];failCount=0;lastFailure=null;scene='normal';enemies=[];objects=[];if(n===0){levelEnd=2140;map=[ground(0,405),ground(451,490),ground(989,460),ground(1497,670),plat(235,92,244),plat(595,98,241),plat(1110,105,238),plat(1690,100,235)];checkpoints=[45,360,1460];objects=[{type:'heart',x:1995,y:242}];}
-else if(n===1){levelEnd=2250;map=[ground(0,480),ground(520,500),ground(1060,350),ground(1560,720),plat(250,95,247),plat(710,115,244),plat(1190,105,242),plat(1660,105,247)];checkpoints=[45,650,1580];objects=[{type:'sit',x:550,y:G-30},{type:'star',id:0,x:820,y:207},{type:'star',id:1,x:1160,y:209},{type:'star',id:2,x:1370,y:219},{type:'fireworks',x:2130,y:G-30}];[185,445,900,1290,1750].forEach((x,id)=>objects.push({type:'shell',id,x,y:G-13}));}
-else {levelEnd=2350;map=[ground(0,490),ground(535,475),ground(1050,455),ground(1550,850),plat(240,110,240),plat(700,110,241),plat(1220,115,229),plat(1750,110,241)];checkpoints=[45,760,1890];objects=[{type:'pipe',x:860,y:G-42},{type:'switch',x:1420,y:G-22},{type:'heart',x:2160,y:236}];enemies=[{x:620,start:605,end:745,v:.55},{x:1170,start:1130,end:1320,v:.48},{x:1720,start:1690,end:1820,v:.6}];}
+let L=null;
+
+// ---------- Level data ----------
+// ground: walkable floor at y=G.  block: raised, solid from the side, drawn down to the floor.
+const gr=(x,w)=>({x,y:G,w,kind:'ground'}), bl=(x,w,y)=>({x,y,w,kind:'block'});
+function buildLevel(n){
+ if(n===0) return {end:2140,
+  map:[gr(0,405),gr(451,490),gr(989,460),gr(1497,670),bl(235,92,244),bl(595,98,241),bl(1110,105,238),bl(1690,100,235)],
+  cps:[45,360,1515], trees:[105,390,730,1040,1450,1610,2040], enemies:[],
+  objects:[{type:'heart',x:1995,y:242}]};
+ if(n===1) return {end:2250,
+  map:[gr(0,480),gr(520,500),gr(1060,350),gr(1560,720),bl(250,95,247),bl(710,115,244),bl(1190,105,242),bl(1660,105,247)],
+  cps:[45,650,1580], trees:[], enemies:[],
+  objects:[{type:'star',id:0,x:820,y:214},{type:'star',id:1,x:1150,y:212},{type:'star',id:2,x:1365,y:219},
+   {type:'shell',id:0,x:185,y:G-8},{type:'shell',id:1,x:445,y:G-8},{type:'shell',id:2,x:900,y:G-8},{type:'shell',id:3,x:1242,y:242-8},{type:'shell',id:4,x:1810,y:G-8}]};
+ return {end:2350,
+  map:[gr(0,490),gr(535,475),gr(1050,455),gr(1550,850),bl(240,110,240),bl(700,110,241),bl(1220,115,229),bl(1750,110,241)],
+  cps:[45,600,950,1890], trees:[140,420,620,1150,1650,2080],
+  enemies:[{x:120,start:95,end:195,v:.4},{x:1150,start:1100,end:1205,v:.45},{x:1650,start:1610,end:1735,v:.55}],
+  objects:[{type:'pipe',x:860,w:42,top:G-44},{type:'switch',x:1420},{type:'heart',x:2160,y:236}]};
 }
-function respawnAt(x){p.x=x;p.y=G-p.h;p.vx=p.vy=0;p.on=false;p.coyote=p.buffer=p.jumpMs=0;lion.x=x-34;lion.y=p.y;cam=Math.max(0,x-W*.35);clearInput()}
-function startLevel(n,fromSave=true){layout(n);let cp=fromSave?Math.max(0,Math.min(2,data.cp)):0;respawnAt(checkpoints[cp]);play()}
-function menu(title,body,buttons){mode='menu';clearInput();$('#controls').classList.add('hide');$('#interact').classList.add('hide');$('#shade').classList.remove('hide');$('#heading').textContent=title;$('#message').innerHTML=body;const el=$('#actions');el.textContent='';buttons.forEach((b,i)=>{let btn=document.createElement('button');btn.type='button';btn.textContent=b[0];if(i)btn.className='alt';btn.addEventListener('click',b[1]);el.appendChild(btn)})}
-function play(){mode='play';$('#shade').classList.add('hide');$('#controls').classList.remove('hide');last=performance.now()}
-function home(){menu('🐰 我们的奇妙冒险 🦁','恋爱一周年特别篇 · 11月13日<br>春日相遇 → 大阪夕阳与花火 → 秘密花园<br>左右移动，轻点 ✦ 小跳，长按 ✦ 大跳。',[[data.done?'回忆我们的冒险 ♡':'开始 / 继续 ♡',()=>data.done?ending(true):startLevel(data.level,true)],['从第一关重新开始',()=>{data={version:1,level:0,hearts:[false,false,false],seed:false,stars:[],shells:[],met:false,cp:0,done:false,story:{},assist:true};assist=true;save();startLevel(0,false)}],['选关（已解锁）',chooseLevel]])}
-function chooseLevel(){let b=[];for(let i=0;i<=Math.min(2,data.level);i++)b.push([LEVELS[i],()=>{data.level=i;data.cp=0;save();startLevel(i,false)}]);b.push(['返回',home]);menu('选择旅程','已解锁的关卡可以重新游玩。',b)}
-function pause(){if(mode!=='play')return;menu('暂停一下 ♡','小狮子会在这里等你。', [['继续冒险',play],['重新开始本关',()=>{data.cp=0;save();startLevel(level,false)}],['辅助模式：'+(assist?'开':'关'),()=>{assist=!assist;data.assist=assist;save();mode='play';pause()}],['返回首页',home]])}
-function cut(title,body,done,canSkip=true){menu(title,body,[[canSkip?'继续 ♡':'继续观看 ♡',done]])}
-function checkpoint(i){if(data.cp<i){data.cp=i;save()}}
-function meet(){data.met=true;checkpoint(1);save();cut('🦁 遇见你，真好','小兔子：「你也要去冒险吗？」<br>小狮子：「那我们一起走吧！」<br><br>有些故事，从一次相遇开始。',play)}
+const PIPE=()=>L.objects.find(o=>o.type==='pipe');
+function solids(){
+ let arr=L.map.slice();
+ clouds.forEach(c=>arr.push({x:c.x,y:G,w:c.w,kind:'cloud'}));
+ if(level===1) for(let i=0;i<3;i++) if(data.stars.includes(i)) arr.push({x:1410+i*49,y:G,w:51,kind:'star'});
+ if(level===2){const pp=PIPE();arr.push({x:pp.x-5,y:pp.top,w:pp.w+10,kind:'pipe'});if(data.story.bridge)arr.push({x:1500,y:G,w:55,kind:'bridge'})}
+ return arr}
+function onFloor(x){return L.map.some(a=>a.kind==='ground'&&x+p.w>a.x+4&&x<a.x+a.w-4)}
+function insideBlock(x){return solids().some(a=>a.y<G-8&&x+p.w>a.x&&x<a.x+a.w)}
+// Find a safe standing x near the requested one (never in a pit or inside a block).
+function safeX(x){for(let d=0;d<400;d+=4){for(const c of [x-d,x+d]){if(c>5&&c<L.end-40&&onFloor(c)&&!insideBlock(c))return c}}return 45}
+
+// ---------- Save ----------
+function save(){try{localStorage.setItem(SAVE,JSON.stringify(data))}catch(e){}}
+function load(){try{let d=JSON.parse(localStorage.getItem(SAVE)||'null');if(d&&d.version===1){data=Object.assign(freshData(),d);data.hearts=(data.hearts||[]).slice(0,3);while(data.hearts.length<3)data.hearts.push(false);data.story=data.story||{};assist=data.assist!==false}}catch(e){}}
+function gateOk(){try{return localStorage.getItem(GATE)==='1'}catch(e){return false}}
+
+// ---------- Flow ----------
+function clearInput(){Object.keys(held).forEach(k=>{held[k]=false;$('#'+k).classList.remove('pressed')});jumpQueue=false}
+function layout(n){level=n;L=buildLevel(n);clouds=[];sleeping=false;failCount=0;failCp=-1;L.enemies.forEach(e=>e.v=Math.abs(e.v))}
+function respawnAt(x){x=safeX(x);p.x=x;p.y=G-p.h;p.vx=p.vy=0;p.on=true;p.coyote=p.buffer=p.jumpMs=0;lion.x=x-34;lion.y=p.y;cam=Math.max(0,Math.min(L.end-W,x-W*.35));respawnGuard=900;clearInput()}
+function startLevel(n,fromSave){layout(n);let cp=(fromSave&&data.cpLevel===n)?Math.max(0,Math.min(L.cps.length-1,data.cp)):0;data.level=Math.max(data.level,n);data.cp=cp;data.cpLevel=n;save();respawnAt(L.cps[cp]);play()}
+function showUI(play){$('#controls').classList.toggle('hide',!play);$('#pause').classList.toggle('hide',!play);$('#hud').classList.toggle('hide',mode==='gate')}
+function menu(title,body,buttons){mode='menu';clearInput();showUI(false);$('#interact').classList.add('hide');$('#shade').classList.remove('hide');$('#heading').textContent=title;$('#message').innerHTML=body;const el=$('#actions');el.textContent='';buttons.forEach((b,i)=>{let btn=document.createElement('button');btn.type='button';btn.textContent=b[0];if(i)btn.className='alt';btn.addEventListener('click',b[1]);el.appendChild(btn)})}
+function play(){mode='play';$('#shade').classList.add('hide');showUI(true);last=performance.now()}
+function home(){
+ const started=data.met||data.level>0||data.cp>0;
+ menu('🐰 我们的奇妙冒险 🦁','恋爱一周年特别篇 · 11月13日<br>春日相遇 → 海边夕阳与花火 → 秘密花园<br>左右移动，轻点 ✦ 小跳，长按 ✦ 大跳。',
+ [[data.done?'回忆我们的冒险 ♡':(started?'继续我们的冒险 ♡':'开始我们的冒险 ♡'),()=>data.done?ending():startLevel(data.level,true)],
+  ...(started?[['从第一关重新开始',()=>{data=freshData();assist=true;save();startLevel(0,false)}]]:[]),
+  ...(data.level>0||data.done?[['选关',chooseLevel]]:[])])}
+function chooseLevel(){let b=[];for(let i=0;i<=Math.min(2,data.done?2:data.level);i++)b.push([LEVELS[i],()=>startLevel(i,false)]);b.push(['返回',home]);menu('选择旅程','已解锁的关卡可以重新游玩，进度不会丢失。',b)}
+function pause(){if(mode!=='play')return;menu('暂停一下 ♡','小狮子会在这里等你。',[['继续冒险',play],['重新开始本关',()=>startLevel(level,false)],['辅助模式：'+(assist?'开':'关'),()=>{assist=!assist;data.assist=assist;save();mode='play';pause()}],['返回首页',home]])}
+function cut(title,body,done,label){menu(title,body,[[label||'继续 ♡',done]])}
+function checkpoint(i){if(data.cp<i){data.cp=i;data.cpLevel=level;save()}}
 function collectHeart(i){if(!data.hearts[i]){data.hearts[i]=true;save()}}
-function finishLevel(){if(level===0){collectHeart(0);cut('🌸 第一颗爱心','春日的风里，我们遇见了彼此。<br>❤️ 1 / 3',()=>nextLevel(1))}
-else if(level===1){collectHeart(1);cut('🎆 大阪的花火','那天，我们一起看了夕阳，也一起等到了烟花。<br>❤️ 2 / 3',()=>nextLevel(2))}
-else{if(!data.seed){cut('🌱 还缺少种子','小狮子提醒你：去寻找发光的绿色管道吧。',()=>{respawnAt(750);play()});return}collectHeart(2);ending(false)}}
-function nextLevel(n){data.level=n;data.cp=0;save();startLevel(n,false)}
-function ending(replay){data.done=true;data.level=2;save();let extra=data.shells.length>=5?'还记得大阪海边的贝壳吗？我们把那一天收藏起来。':data.shells.length>=3?'大阪海边的夕阳，是我们珍贵的回忆。':'';menu('🌸 我们的第一个365天','2025.11.13 — 2026.11.13<br>🐰 ❤️ 🦁<br>我们一起种下未来的种子，等它长成樱花树。<br><strong>一周年快乐 ♡</strong><br>'+extra+'<br><small>礼物盒内容将在正式版填入；目前是完整流程测试结局。</small>',[['🎁 打开纪念礼物',()=>menu('🎁 给你的礼物','谢谢你陪我走过第一个365天。<br>以后也一起看更多夕阳和烟花吧。<br>To be continued…',[['继续我们的冒险 ♡',home],['回忆相册',album]])],['回忆相册',album],['重新游玩',home]])}
-function album(){menu('📷 我们的回忆相册','🌸 春日相遇<br>🎆 大阪夕阳与花火<br>🌱 秘密花园<br>🐚 贝壳 '+data.shells.length+'/5'+(data.shells.length>=3?'<br>解锁回忆卡 A':'')+(data.shells.length>=5?'<br>解锁回忆卡 B':''),[['返回',home]])}
-function failure(){let x=p.x, cp=data.cp;failCount++;lastFailure={x,cp,level};respawnAt(checkpoints[cp]);if(!assist)return;if(failCount===3){menu('🦁 要小狮子帮忙吗？','小狮子会在<strong>刚才失败的位置</strong>附近搭一朵云，只帮助这一处，不影响其他地方。',[['好呀 ♡',()=>{let gap=findGap(x);if(gap&&!clouds.some(c=>c.id===gap.id))clouds.push({id:gap.id,x:gap.x,y:G-29,w:gap.w});respawnAt(Math.max(checkpoints[cp],gap?gap.x-95:x-90));play()}],['再试试',play]])}else if(failCount===5){menu('🦁 我们一起过去吧','这段有点难，要不要从下一个安全位置继续？',[['带我过去',()=>{let next=Math.min(2,cp+1);checkpoint(next);respawnAt(checkpoints[next]);play()}],['继续挑战',play]])}}
-function findGap(x){let grounds=map.filter(a=>a.kind==='ground');for(let i=0;i<grounds.length-1;i++){let a=grounds[i],b=grounds[i+1],start=a.x+a.w,end=b.x;if(x>=start-150&&x<=end+100)return{id:level+'-'+i,x:start+4,w:Math.max(25,end-start-8)}}return null}
-function solid(){let arr=map.concat(clouds.map(c=>({x:c.x,y:c.y,w:c.w,kind:'cloud'})));if(level===1){for(let i=0;i<3;i++)if(data.stars.includes(i))arr.push(plat(1410+i*49,50,263))}if(level===2&&data.story.bridge)arr.push(plat(1500,52,266));return arr}
-function update(dt){timer+=dt;let k=Math.min(2,dt/16.667),dir=(held.right?1:0)-(held.left?1:0),prev=p.y;p.vx+=(dir*2.45-p.vx)*Math.min(1,.27*k);if(!dir)p.vx*=Math.pow(.7,k);p.x=Math.max(0,Math.min(levelEnd-24,p.x+p.vx*k));p.buffer=Math.max(0,p.buffer-dt);if(jumpQueue){p.buffer=120;jumpQueue=false}p.coyote=p.on?105:Math.max(0,p.coyote-dt);if(p.buffer>0&&p.coyote>0){p.vy=-7.8;p.on=false;p.coyote=0;p.buffer=0;p.jumpMs=0}if(held.jump&&p.vy<0&&p.jumpMs<175){p.vy-=.18*k;p.jumpMs+=dt}p.vy=Math.min(11,p.vy+.43*k);p.y+=p.vy*k;p.on=false;
-for(let a of solid()){if(p.x+p.w>a.x+3&&p.x<a.x+a.w-3&&prev+p.h<=a.y+7&&p.y+p.h>=a.y&&p.vy>=0){p.y=a.y-p.h;p.vy=0;p.on=true}}
-if(p.y>H+30){failure();return}
-for(let i=1;i<checkpoints.length;i++)if(p.x>=checkpoints[i]-20)checkpoint(i);
-if(level===0){if(!data.met&&p.x>340){meet();return}if(p.x>1995&&!data.hearts[0])collectHeart(0)}
-if(level===1){if(p.x>540&&!data.story.sunset){$('#interact').classList.remove('hide');$('#interact').textContent='♡ 坐下来';p.x=Math.min(p.x,580)}else $('#interact').classList.add('hide');for(let o of objects){if(o.type==='star'&&!data.stars.includes(o.id)&&Math.abs(p.x-o.x)<26){data.stars.push(o.id);save()}if(o.type==='shell'&&!data.shells.includes(o.id)&&Math.abs(p.x-o.x)<22){data.shells.push(o.id);save()}}if(p.x>1370&&data.stars.length<3){p.x=Math.min(p.x,1390);if(!data.story.starHint){data.story.starHint=true;save();cut('✨ 星光步道','收集主路上的三颗星星，海面上的浮台就会出现。<br>目前 '+data.stars.length+'/3 颗。',play);return}}if(p.x>2110&&!data.story.fireworks){data.story.fireworks=true;save();cut('🎆 那晚的烟花','小兔子和小狮子坐在沙滩上。<br>夜空里，粉色、金色、蓝色的烟花一朵朵绽放。<br><br>那天，我们一起看了夕阳，也一起等到了烟花。',()=>finishLevel(),false);return}}
-if(level===2){for(let e of enemies){e.x+=e.v*k;if(e.x>e.end||e.x<e.start)e.v*=-1;if(Math.abs(p.x-e.x)<20&&Math.abs(p.y-(G-18))<27){failure();return}}if(p.x>840&&p.x<920&&!data.seed){$('#interact').classList.remove('hide');$('#interact').textContent='✦ 进入管道'}else $('#interact').classList.add('hide');if(p.x>1410&&!data.story.bridge){data.story.bridge=true;save();cut('🦁 小狮子的帮助','小狮子跑过去踩下开关，桥梁缓缓升起。<br>「有些路，两个人一起走就容易多啦。」',play);return}if(p.x>2140&&!data.hearts[2])collectHeart(2)}
-if(p.x>levelEnd-75){if(level===1&&!data.story.fireworks)return;finishLevel();return}
-let tx=p.x-35;if(Math.abs(lion.x-tx)>130){lion.x=tx;lion.y=p.y}else{lion.x+=(tx-lion.x)*Math.min(1,.12*k);lion.y+=(p.y-lion.y)*Math.min(1,.15*k)}cam+=(Math.max(0,Math.min(levelEnd-W,p.x-W*.37))-cam)*Math.min(1,.12*k)}
-function rect(x,y,w,h,c){ctx.fillStyle=c;ctx.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h))}function circle(x,y,r,c){ctx.fillStyle=c;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill()}
-function bg(){let gr=ctx.createLinearGradient(0,0,0,H);if(level===0){gr.addColorStop(0,'#f6aed3');gr.addColorStop(1,'#ffe7c9')}else if(level===1){let night=data.story.sunset?1:0;gr.addColorStop(0,night?'#20254f':'#f39b9e');gr.addColorStop(1,night?'#6d568c':'#ffe2b0')}else{gr.addColorStop(0,'#b4e3d4');gr.addColorStop(1,'#eaf7c9')}ctx.fillStyle=gr;ctx.fillRect(0,0,W,H);circle(W*.78-cam*.015,80,31,level===1&&data.story.sunset?'#dce5ff':'#fff0bd');for(let i=0;i<11;i++){let x=i*190-cam*.12;ctx.fillStyle=level===2?'#a0cfc2':'#cbb9df';ctx.beginPath();ctx.moveTo(x-140,G);ctx.lineTo(x+70,155+(i%3)*11);ctx.lineTo(x+280,G);ctx.fill()}if(level===1){rect(0,244,W,116,data.story.sunset?'#283c6b':'#da97b0');for(let i=0;i<35;i++){let x=(i*79-cam*.18)%W;rect(x,265+i%6*11,35,2,i%3?'#ffccab':'#a9b2db')}if(data.story.sunset)for(let i=0;i<34;i++)circle((i*97)%W,20+(i*37)%170,1.1,'#fff4ce')}if(level===2){for(let i=0;i<10;i++){let x=i*245-cam*.45;rect(x,182,9,100,'#79aa87');circle(x+5,185,24,'#91c69c')}}else if(level===0){for(let i=0;i<12;i++){let x=i*220-cam*.4;rect(x,238,48,46,'#f5c9c8');rect(x-5,232,58,8,'#a783a4')}}}
+function nextLevel(n){data.level=Math.max(data.level,n);data.cp=0;data.cpLevel=n;save();startLevel(n,false)}
+function finishLevel(){
+ if(level===0){collectHeart(0);cut('🌸 第一颗爱心','春日的风里，我们遇见了彼此。<br>❤️ 1 / 3',()=>nextLevel(1))}
+ else if(level===1){collectHeart(1);cut('💖 第二颗爱心','那天，我们一起看了夕阳，也一起等到了烟花。<br>❤️ 2 / 3',()=>nextLevel(2))}
+ else{if(!data.seed){cut('🌱 还缺少种子','小狮子提醒你：回去找找那根发光的绿色管道吧，跳到管道上面就能进去。',()=>{respawnAt(L.cps[1]);play()});return}collectHeart(2);ending()}}
+function ending(){data.done=true;save();
+ const n=data.shells.length,extra=n>=5?'<br>还记得海边的贝壳吗？我们把那一天收藏起来。':n>=3?'<br>海边的夕阳，是我们珍贵的回忆。':'';
+ menu('🌸 我们的第一个365天',ANNIV.label+'<br>🐰 ❤️ 🦁<br>我们一起种下未来的种子，等它长成樱花树。<br><strong>一周年快乐 ♡</strong>'+extra+'<br><small>礼物盒内容将在正式版填入；目前是完整流程测试结局。</small>',
+ [['🎁 打开纪念礼物',()=>menu('🎁 给你的礼物','谢谢你陪我走过第一个365天。<br>以后也一起看更多夕阳和烟花吧。<br>To be continued…',[['继续我们的冒险 ♡',home],['回忆相册',album]])],['回忆相册',album],['返回首页',home]])}
+function album(){const n=data.shells.length;menu('📷 我们的回忆相册','🌸 春日相遇<br>🎆 海边夕阳与花火<br>🌱 秘密花园<br>🐚 贝壳 '+n+'/5'+(n>=3?'<br>已解锁回忆卡 A':'')+(n>=5?'<br>已解锁回忆卡 B':''),[['返回',home]])}
+
+// ---------- Assist ----------
+function findGap(x){const g=L.map.filter(a=>a.kind==='ground').sort((a,b)=>a.x-b.x);let best=null,bd=1e9;for(let i=0;i<g.length-1;i++){const s=g[i].x+g[i].w,e=g[i+1].x;if(e-s<8)continue;const d=x<s?s-x:x>e?x-e:0;if(d<bd){bd=d;best={id:level+'-'+i,x:s,w:e-s}}}return bd<200?best:null}
+function failure(cause){
+ const x=p.x,cp=data.cpLevel===level?data.cp:0;
+ if(failCp!==cp){failCp=cp;failCount=0}
+ failCount++;respawnAt(L.cps[cp]);
+ if(!assist)return;
+ if(failCount===3){
+  if(cause==='fall'){const gap=findGap(x);if(gap&&!clouds.some(c=>c.id===gap.id))
+   menu('🦁 要小狮子帮忙吗？','小狮子可以在<strong>刚才掉下去的地方</strong>搭一朵云桥，只帮这一处。',[['好呀 ♡',()=>{clouds.push(gap);play()}],['再试试',play]])}
+  else if(!sleeping) menu('🦁 要小狮子帮忙吗？','小狮子可以唱一首摇篮曲，让小怪们先睡一会儿。',[['好呀 ♡',()=>{sleeping=true;play()}],['再试试',play]]);
+ } else if(failCount===5){
+  const next=cp+1<L.cps.length?cp+1:-1;
+  menu('🦁 我们一起过去吧','这段有点难，要不要从下一个安全位置继续？',[['带我过去',()=>{if(next>0){checkpoint(next);respawnAt(L.cps[next])}else respawnAt(L.end-150);failCount=0;play()}],['继续挑战',play]]);
+ }}
+
+// ---------- Update ----------
+function overlap(o,r){return p.x<o.x+r&&p.x+p.w>o.x-r&&p.y<o.y+r&&p.y+p.h>o.y-r}
+function update(dt){
+ timer+=dt;respawnGuard=Math.max(0,respawnGuard-dt);
+ const k=Math.min(2,dt/16.667),dir=(held.right?1:0)-(held.left?1:0),prevY=p.y,prevX=p.x,sol=solids();
+ p.vx+=(dir*2.45-p.vx)*Math.min(1,.27*k);if(!dir)p.vx*=Math.pow(.7,k);
+ p.x=Math.max(0,Math.min(L.end-24,p.x+p.vx*k));
+ // raised terrain and pipes are solid from the side
+ for(const a of sol){if(a.y>=G-8)continue;if(p.y+p.h>a.y+5){if(prevX+p.w<=a.x+3&&p.x+p.w>a.x){p.x=a.x-p.w;p.vx=0}else if(prevX>=a.x+a.w-3&&p.x<a.x+a.w){p.x=a.x+a.w;p.vx=0}}}
+ p.buffer=Math.max(0,p.buffer-dt);if(jumpQueue){p.buffer=120;jumpQueue=false}
+ p.coyote=p.on?105:Math.max(0,p.coyote-dt);
+ if(p.buffer>0&&p.coyote>0){p.vy=-7.8;p.on=false;p.coyote=0;p.buffer=0;p.jumpMs=0}
+ if(held.jump&&p.vy<0&&p.jumpMs<175){p.vy-=.18*k;p.jumpMs+=dt}
+ p.vy=Math.min(11,p.vy+.43*k);p.y+=p.vy*k;p.on=false;
+ for(const a of sol){if(p.x+p.w>a.x+3&&p.x<a.x+a.w-3&&prevY+p.h<=a.y+7&&p.y+p.h>=a.y&&p.vy>=0){p.y=a.y-p.h;p.vy=0;p.on=true}}
+ if(p.y>H+30){failure('fall');return}
+ for(let i=1;i<L.cps.length;i++)if(p.on&&p.x>=L.cps[i]-20)checkpoint(i);
+ let showInteract=false;
+ if(level===0){if(!data.met&&p.x>340){data.met=true;checkpoint(1);cut('🦁 遇见你，真好','小兔子：「你也要去冒险吗？」<br>小狮子：「那我们一起走吧！」<br><br>有些故事，从一次相遇开始。',play);return}
+  if(p.x>1995&&!data.hearts[0])collectHeart(0)}
+ if(level===1){
+  if(!data.story.sunset&&p.x>540){p.x=Math.min(p.x,580);showInteract='♡ 坐下来'}
+  for(const o of L.objects){if(o.type==='star'&&!data.stars.includes(o.id)&&overlap(o,10)){data.stars.push(o.id);save()}
+   if(o.type==='shell'&&!data.shells.includes(o.id)&&overlap(o,8)){data.shells.push(o.id);save()}}
+  if(p.x>1383&&data.stars.length<3){p.x=Math.min(p.x,1388);if(!data.story.starHint){data.story.starHint=true;save();cut('✨ 星光步道','收集主路上的三颗星星（有的要跳起来才够得着），海面上的浮台就会出现。<br>目前 '+data.stars.length+'/3 颗。',play);return}}
+  if(p.x>2110&&!data.story.fireworks){data.story.fireworks=true;save();mode='fireworks';cinematicStart=performance.now();clearInput();showUI(false);$('#interact').classList.add('hide');return}}
+ if(level===2){
+  for(const e of L.enemies){if(!sleeping){e.x+=e.v*k;if(e.x>e.end)e.v=-Math.abs(e.v);if(e.x<e.start)e.v=Math.abs(e.v)}
+   if(!sleeping&&respawnGuard===0&&p.x+p.w>e.x-10&&p.x<e.x+10&&p.y+p.h>G-32){failure('enemy');return}}
+  const pp=PIPE();if(!data.seed&&p.on&&p.x+p.w>pp.x-5&&p.x<pp.x+pp.w+5&&Math.abs(p.y+p.h-pp.top)<2)showInteract='✦ 进入管道';
+  if(p.x>1390&&p.x<1470&&!data.story.bridge){data.story.bridge=true;save();cut('🦁 小狮子的帮助','小狮子跑过去踩下开关，桥梁缓缓升起。<br>「有些路，两个人一起走就容易多啦。」',play);return}
+  if(p.x>2140&&!data.hearts[2])collectHeart(2)}
+ const ib=$('#interact');if(showInteract){ib.textContent=showInteract;ib.classList.remove('hide')}else ib.classList.add('hide');
+ if(p.x>L.end-75&&level!==1){finishLevel();return}
+ const tx=p.x-35;if(Math.abs(lion.x-tx)>130){lion.x=tx;lion.y=p.y}else{lion.x+=(tx-lion.x)*Math.min(1,.12*k);lion.y+=(p.y-lion.y)*Math.min(1,.15*k)}
+ cam+=(Math.max(0,Math.min(L.end-W,p.x-W*.37))-cam)*Math.min(1,.12*k)}
+
+// ---------- Draw ----------
+function rect(x,y,w,h,c){ctx.fillStyle=c;ctx.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h))}
+function circle(x,y,r,c){ctx.fillStyle=c;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill()}
+function text(t,x,y,c,size){ctx.fillStyle=c;ctx.font='bold '+(size||11)+'px sans-serif';ctx.fillText(t,x,y)}
+function bg(){let gr=ctx.createLinearGradient(0,0,0,H);const night=level===1&&data.story.sunset;
+ if(level===0){gr.addColorStop(0,'#f6aed3');gr.addColorStop(1,'#ffe7c9')}else if(level===1){gr.addColorStop(0,night?'#20254f':'#f39b9e');gr.addColorStop(1,night?'#6d568c':'#ffe2b0')}else{gr.addColorStop(0,'#b4e3d4');gr.addColorStop(1,'#eaf7c9')}
+ ctx.fillStyle=gr;ctx.fillRect(0,0,W,H);circle(W*.78-cam*.015,80,31,night?'#dce5ff':'#fff0bd');
+ for(let i=0;i<14;i++){let x=i*190-cam*.12;ctx.fillStyle=level===2?'#a0cfc2':'#cbb9df';ctx.beginPath();ctx.moveTo(x-140,G);ctx.lineTo(x+70,155+(i%3)*11);ctx.lineTo(x+280,G);ctx.fill()}
+ if(level===1){rect(0,244,W,116,night?'#283c6b':'#da97b0');for(let i=0;i<40;i++){let x=((i*79-cam*.18)%W+W)%W;rect(x,265+i%6*11,35,2,i%3?'#ffccab':'#a9b2db')}if(night)for(let i=0;i<40;i++)circle((i*97)%W,20+(i*37)%170,1.1,'#fff4ce')}
+ if(level===2){for(let i=0;i<14;i++){let x=i*245-cam*.45;rect(x,182,9,100,'#79aa87');circle(x+5,185,24,'#91c69c')}}
+ else if(level===0){for(let i=0;i<16;i++){let x=i*220-cam*.4;rect(x,238,48,46,'#f5c9c8');rect(x-5,232,58,8,'#a783a4')}}}
 function tree(x){let s=x-cam;if(s<-70||s>W+70)return;rect(s-4,G-84,10,86,'#8d647b');circle(s-24,G-91,27,'#f3a3c6');circle(s+8,G-111,30,'#f8b9d3');circle(s+28,G-87,27,'#f5a8c9');circle(s-3,G-78,28,'#ffccdf');for(let i=0;i<7;i++)rect(s+(i*17)%60-30,G-120+(i*13)%48,3,3,'#fff1f5')}
 function terrain(a){let x=a.x-cam;if(x>W||x+a.w<0)return;rect(x,a.y,a.w,H-a.y,level===1?'#c7a38f':level===2?'#a98276':'#b8867c');rect(x,a.y,a.w,9,level===1?'#f1c59c':level===2?'#85c79b':'#82d1a0');rect(x,a.y+8,a.w,6,level===2?'#4b9b77':'#6ca582');for(let i=0;i<a.w/22;i++)for(let j=0;j<4;j++)if((i+j*3)%4===0)rect(x+i*22+5,a.y+21+j*19,4,3,'#e0b0a2')}
+function bridge(a,c1,c2){let x=a.x-cam;rect(x,a.y,a.w,8,c1);rect(x,a.y+8,a.w,3,c2);for(let i=4;i<a.w;i+=12)rect(x+i,a.y+2,2,4,c2)}
 function bunny(x,y){x=Math.round(x);y=Math.round(y);rect(x+4,y-8,5,15,'#fffaf6');rect(x+13,y-9,5,16,'#fffaf6');rect(x+6,y-5,2,9,'#ef9fba');rect(x+15,y-6,2,9,'#ef9fba');rect(x+2,y+5,20,18,'#fffaf6');rect(x+6,y+12,3,3,'#4b3c51');rect(x+16,y+12,3,3,'#4b3c51');rect(x+11,y+17,4,2,'#e58baa');rect(x+3,y+21,19,4,'#ed85ab');rect(x+3,y+25,6,3,'#fffaf6');rect(x+16,y+25,6,3,'#fffaf6')}
 function lionDraw(x,y){x=Math.round(x);y=Math.round(y);circle(x+12,y+11,13,'#92603d');rect(x+3,y+17,19,10,'#c89158');circle(x+12,y+11,9,'#f4c28d');circle(x+4,y+3,5,'#92603d');circle(x+21,y+3,5,'#92603d');rect(x+7,y+10,3,3,'#493b50');rect(x+16,y+10,3,3,'#493b50');rect(x+11,y+16,4,3,'#7b4d53');rect(x+7,y+21,11,4,'#e7839b');rect(x+3,y+25,7,4,'#f4c28d');rect(x+17,y+25,7,4,'#f4c28d')}
 function heart(x,y){circle(x-5,y-2,6,'#f26d9e');circle(x+5,y-2,6,'#f26d9e');ctx.fillStyle='#f26d9e';ctx.beginPath();ctx.moveTo(x-11,y);ctx.lineTo(x,y+12);ctx.lineTo(x+11,y);ctx.fill()}
-function cloud(c){let x=c.x-cam,y=c.y;circle(x+9,y+4,12,'#eaf8ff');circle(x+22,y-3,15,'#fff');circle(x+39,y+4,13,'#eaf8ff');rect(x+5,y+3,c.w-9,9,'#eaf8ff');rect(x+10,y+11,c.w-18,3,'#a6d4eb')}
-function draw(){bg();if(level===0)[105,390,730,1100,1450,1750,2040].forEach(tree);if(level===2)[140,400,800,1200,1650,2080].forEach(tree);map.forEach(terrain);clouds.forEach(cloud);if(level===1)for(let i=0;i<3;i++)if(data.stars.includes(i))terrain(plat(1410+i*49,50,263));if(level===2&&data.story.bridge)terrain(plat(1500,52,266));for(let i=1;i<checkpoints.length;i++){let x=checkpoints[i]-cam;rect(x,G-45,4,45,'#8b6a85');rect(x+4,G-45,18,12,data.cp>=i?'#f28eaf':'#ffe5a1')}
-for(let o of objects){let x=o.x-cam;if(x<-40||x>W+40)continue;if(o.type==='heart'&&!data.hearts[level])heart(x,o.y);if(o.type==='star'&&!data.stars.includes(o.id)){circle(x,o.y,9,'#ffe3a2');rect(x-2,o.y-13,4,26,'#fff6c4');rect(x-13,o.y-2,26,4,'#fff6c4')}if(o.type==='shell'&&!data.shells.includes(o.id)){circle(x,o.y,6,'#ffd7a4');rect(x-5,o.y+2,10,3,'#e9a88f')}if(o.type==='pipe'){rect(x,G-39,42,39,'#4bba83');rect(x-5,G-44,52,10,'#7cdda0');circle(x+20,G-58,7,'#fff1a8')}if(o.type==='switch'){rect(x,G-20,28,20,'#a1a2d5');circle(x+14,G-24,8,'#ffcf6e')}}
-for(let e of enemies){let x=e.x-cam;circle(x,G-13,12,'#b978b0');circle(x-5,G-15,2,'#fff');circle(x+5,G-15,2,'#fff')}
-if(level===0&&!data.met){lionDraw(350-cam,G-28);circle(363-cam,G-56,10,'#fff6e8');ctx.fillStyle='#9d6492';ctx.font='bold 14px sans-serif';ctx.fillText('!',359-cam,G-51)}else lionDraw(lion.x-cam,lion.y);bunny(p.x-cam,p.y);
-if(level===0||level===2){rect(levelEnd-70-cam,G-90,5,90,'#fff4e4');rect(levelEnd-65-cam,G-90,48,24,'#f18eb2');ctx.fillStyle='#fff';ctx.font='bold 13px sans-serif';ctx.fillText('终点',levelEnd-59-cam,G-73)}
-if(level===1&&data.story.fireworks){for(let i=0;i<8;i++){let x=(i*83+timer*.02)%W,y=60+(i*47)%105;for(let j=0;j<12;j++){let a=j*Math.PI/6;circle(x+Math.cos(a)*18,y+Math.sin(a)*18,2,i%2?'#ffcb8e':'#ff91c1')}}}
-$('#hud').textContent='❤️ '+data.hearts.filter(Boolean).length+'/3　🌱 '+(data.seed?1:0)+'/1　'+LEVELS[level]+(level===1?'　🐚 '+data.shells.length+'/5　⭐ '+data.stars.length+'/3':'')}
-function loop(t){try{let dt=Math.min(40,t-last||16);last=t;if(mode==='play')update(dt);draw()}catch(e){$('#error').style.display='block';$('#error').textContent='游戏运行异常：'+e.message;return}requestAnimationFrame(loop)}
-$('#interact').addEventListener('click',()=>{if(mode!=='play')return;if(level===1&&!data.story.sunset){data.story.sunset=true;save();cut('🌅 大阪海边的夕阳','小兔子和小狮子坐在沙滩上，静静看着太阳落入海面。<br><br>那天，我们一起等太阳落下，也一起等烟花升起。',()=>{respawnAt(610);play()})}else if(level===2&&!data.seed){data.seed=true;save();cut('🌱 找到未来的种子','小兔子钻进发光管道，找到一颗小小的种子。<br>「这是未来的种子，我们一起把它种下吧。」',()=>{checkpoint(1);respawnAt(1010);play()})}});
+function cloudDraw(c){let x=c.x-cam,y=G-4;circle(x+9,y+4,10,'#eaf8ff');circle(x+c.w/2,y-2,13,'#fff');circle(x+c.w-9,y+4,10,'#eaf8ff');rect(x,y+2,c.w,9,'#eaf8ff');rect(x+4,y+10,c.w-8,3,'#a6d4eb')}
+function draw(){
+ if(!L){ctx.fillStyle='#2a203f';ctx.fillRect(0,0,W,H);return}
+ bg();L.trees.forEach(tree);
+ L.map.forEach(terrain);clouds.forEach(cloudDraw);
+ if(level===1)for(let i=0;i<3;i++)if(data.stars.includes(i))bridge({x:1410+i*49,y:G,w:51},'#ffe9a6','#e8b85c');
+ if(level===2&&data.story.bridge)bridge({x:1500,y:G,w:55},'#c99a6b','#8d6248');
+ for(let i=1;i<L.cps.length;i++){let x=L.cps[i]-cam;if(x<-30||x>W+30)continue;rect(x,G-62,4,62,'#8b6a85');rect(x+4,G-62,18,12,data.cpLevel===level&&data.cp>=i?'#f28eaf':'#ffe5a1')}
+ for(const o of L.objects){let x=o.x-cam;if(x<-60||x>W+60)continue;
+  if(o.type==='heart'&&!data.hearts[level])heart(x,o.y+Math.sin(timer/300)*2);
+  if(o.type==='star'&&!data.stars.includes(o.id)){circle(x,o.y,9,'#ffe3a2');rect(x-2,o.y-13,4,26,'#fff6c4');rect(x-13,o.y-2,26,4,'#fff6c4')}
+  if(o.type==='shell'&&!data.shells.includes(o.id)){circle(x,o.y-2,6,'#ffd7a4');rect(x-5,o.y,10,3,'#e9a88f')}
+  if(o.type==='pipe'){rect(x,o.top+5,o.w,G-o.top-5,'#4bba83');rect(x-5,o.top,o.w+10,10,'#7cdda0');if(!data.seed){circle(x+o.w/2,o.top-14+Math.sin(timer/250)*2,6,'#fff1a8');text('跳上管道',x-6,o.top-26,'#fff')}}
+  if(o.type==='switch'){rect(x,G-12,28,12,'#a1a2d5');circle(x+14,G-14,6,data.story.bridge?'#8be0a4':'#ffcf6e');if(!data.story.bridge)text('双人机关',x-12,G-30,'#4b3c51')}}
+ for(const e of L.enemies){let x=e.x-cam;circle(x,G-12,12,'#b978b0');if(sleeping){rect(x-7,G-15,5,2,'#fff');rect(x+2,G-15,5,2,'#fff');text('z',x+10,G-26,'#fff',10)}else{circle(x-5,G-15,2,'#fff');circle(x+5,G-15,2,'#fff')}}
+ if(level===0&&!data.met){lionDraw(350-cam,G-28);circle(363-cam,G-56,10,'#fff6e8');text('!',359-cam,G-51,'#9d6492',14)}else lionDraw(lion.x-cam,lion.y);
+ bunny(p.x-cam,p.y);
+ if(level!==1){rect(L.end-70-cam,G-90,5,90,'#fff4e4');rect(L.end-65-cam,G-90,48,24,'#f18eb2');text('终点',L.end-59-cam,G-73,'#fff',13)}
+ if(level===1&&mode==='fireworks'){const t=performance.now()-cinematicStart;for(let i=0;i<15;i++){let x=(i*83+t*.07)%W,y=50+(i*47)%130,r=10+((t/30+i*7)%20);for(let j=0;j<12;j++){let a=j*Math.PI/6;circle(x+Math.cos(a)*r,y+Math.sin(a)*r,2,['#ffcb8e','#ff91c1','#9ad7ff'][i%3])}}}
+ $('#hud').textContent='❤️ '+data.hearts.filter(Boolean).length+'/3　🌱 '+(data.seed?1:0)+'/1　'+LEVELS[level]+(level===1?'　🐚 '+data.shells.length+'/5　⭐ '+data.stars.length+'/3':'')}
+function loop(t){try{let dt=Math.min(40,t-last||16);last=t;if(mode==='play')update(dt);
+ if(mode==='fireworks'&&t-cinematicStart>7500){cut('🎆 海边的花火','小兔子和小狮子坐在沙滩上。<br>夜空里，粉色、金色、蓝色的烟花一朵朵绽放。<br><br>那天，我们一起看了夕阳，也一起等到了烟花。',()=>finishLevel(),'继续 ♡')}
+ draw()}catch(e){$('#error').style.display='block';$('#error').textContent='游戏运行异常：'+e.message+'。请截图反馈。';return}requestAnimationFrame(loop)}
+
+// ---------- Interact ----------
+$('#interact').addEventListener('click',()=>{if(mode!=='play')return;
+ if(level===1&&!data.story.sunset){data.story.sunset=true;save();cut('🌅 海边的夕阳','小兔子和小狮子坐在沙滩上，静静看着太阳落入海面。<br><br>那天，我们一起等太阳落下，也一起等烟花升起。',()=>{respawnAt(610);play()})}
+ else if(level===2&&!data.seed){data.seed=true;save();cut('🌱 找到未来的种子','小兔子钻进发光管道，找到一颗小小的种子。<br>「这是未来的种子，我们一起把它种下吧。」',()=>{checkpoint(2);respawnAt(L.cps[2]);play()})}});
+
+// ---------- Gate (welcome + anniversary date) ----------
+function parseDate(v){const d=(v||'').replace(/[^0-9]/g,'');if(d.length===4)return d==='1113';if(d.length===8)return d.slice(4)==='1113';return false}
+let wrong=0;
+function showGate(step){mode='gate';showUI(false);$('#shade').classList.add('hide');$('#gate').classList.remove('hide');$('#gate-welcome').classList.toggle('hide',step!=='welcome');$('#gate-date').classList.toggle('hide',step!=='date');if(step==='date'){$('#gate-msg').textContent='';setTimeout(()=>{try{$('#gate-input').focus()}catch(e){}},50)}}
+function passGate(){try{localStorage.setItem(GATE,'1')}catch(e){}$('#gate-input').blur();$('#gate').classList.add('hide');mode='menu';home()}
+$('#gate-enter').addEventListener('click',()=>gateOk()?passGate():showGate('date'));
+$('#gate-date').addEventListener('submit',e=>{e.preventDefault();const v=$('#gate-input').value;
+ if(parseDate(v)){$('#gate-msg').textContent='答对啦 ♡';setTimeout(passGate,350)}
+ else{wrong++;$('#gate-msg').textContent=wrong>=3?'提示：是 11 月的某一天，输入 4 位数字，比如 0101':'再想想～是我们在一起的那一天哦';const c=$('#gate-card');c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake')}});
+$('#gate-input').addEventListener('input',e=>{const t=e.target;t.value=t.value.replace(/[^0-9]/g,'').slice(0,8)});
+
+// ---------- Input ----------
 ['left','right','jump'].forEach(key=>{let el=$('#'+key);function down(e){e.preventDefault();if(mode!=='play')return;try{el.setPointerCapture(e.pointerId)}catch(_){}held[key]=true;el.classList.add('pressed');if(key==='jump')jumpQueue=true}function up(e){e.preventDefault();held[key]=false;el.classList.remove('pressed')}el.addEventListener('pointerdown',down);el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up);el.addEventListener('lostpointercapture',up)});
-window.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','Space','ArrowUp','Escape'].includes(e.code))e.preventDefault();if(e.code==='Escape'){if(mode==='play')pause();return}if(mode!=='play')return;if(e.code==='ArrowLeft')held.left=true;if(e.code==='ArrowRight')held.right=true;if((e.code==='Space'||e.code==='ArrowUp')&&!held.jump){held.jump=true;jumpQueue=true}});window.addEventListener('keyup',e=>{if(e.code==='ArrowLeft')held.left=false;if(e.code==='ArrowRight')held.right=false;if(e.code==='Space'||e.code==='ArrowUp')held.jump=false});$('#pause').addEventListener('click',pause);document.addEventListener('visibilitychange',()=>{if(document.hidden&&mode==='play')pause()});window.addEventListener('blur',()=>{if(mode==='play')pause()});document.addEventListener('contextmenu',e=>e.preventDefault());['gesturestart','gesturechange','gestureend'].forEach(n=>document.addEventListener(n,e=>e.preventDefault(),{passive:false}));document.addEventListener('dblclick',e=>e.preventDefault(),{passive:false});document.addEventListener('touchmove',e=>{if(e.cancelable)e.preventDefault()},{passive:false});let lastTouch=0;document.addEventListener('touchend',e=>{let now=Date.now();if(now-lastTouch<320&&e.cancelable)e.preventDefault();lastTouch=now},{passive:false});
-function size(){let vh=window.visualViewport?window.visualViewport.height:window.innerHeight,vw=window.visualViewport?window.visualViewport.width:window.innerWidth;vh=Math.max(200,vh);vw=Math.max(300,vw);document.documentElement.style.setProperty('--available-height',vh+'px');W=Math.max(640,Math.round(360*vw/vh));canvas.width=W;canvas.height=H;ctx.imageSmoothingEnabled=false;cam=Math.max(0,Math.min(levelEnd-W,cam))}window.addEventListener('resize',size);window.addEventListener('orientationchange',()=>setTimeout(size,250));if(window.visualViewport)window.visualViewport.addEventListener('resize',size);
-load();layout(Math.min(2,data.level));respawnAt(checkpoints[Math.min(2,data.cp)]);size();home();requestAnimationFrame(loop);
+window.addEventListener('keydown',e=>{if(mode==='gate')return;if(['ArrowLeft','ArrowRight','Space','ArrowUp','Escape'].includes(e.code))e.preventDefault();if(e.code==='Escape'){if(mode==='play')pause();return}if(mode!=='play')return;if(e.code==='ArrowLeft')held.left=true;if(e.code==='ArrowRight')held.right=true;if((e.code==='Space'||e.code==='ArrowUp')&&!held.jump){held.jump=true;jumpQueue=true}});
+window.addEventListener('keyup',e=>{if(e.code==='ArrowLeft')held.left=false;if(e.code==='ArrowRight')held.right=false;if(e.code==='Space'||e.code==='ArrowUp')held.jump=false});
+$('#pause').addEventListener('click',pause);
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&mode==='play')pause()});
+window.addEventListener('blur',()=>{if(mode==='play')pause()});
+document.addEventListener('contextmenu',e=>{if(e.target.tagName!=='INPUT')e.preventDefault()});
+['gesturestart','gesturechange','gestureend'].forEach(n=>document.addEventListener(n,e=>e.preventDefault(),{passive:false}));
+document.addEventListener('dblclick',e=>e.preventDefault(),{passive:false});
+document.addEventListener('touchmove',e=>{if(e.cancelable)e.preventDefault()},{passive:false});
+let lastTouch=0;document.addEventListener('touchend',e=>{if(e.target.tagName==='INPUT')return;let now=Date.now();if(now-lastTouch<320&&e.cancelable)e.preventDefault();lastTouch=now},{passive:false});
+function size(){let vh=window.visualViewport?window.visualViewport.height:window.innerHeight,vw=window.visualViewport?window.visualViewport.width:window.innerWidth;vh=Math.max(200,vh);vw=Math.max(300,vw);document.documentElement.style.setProperty('--available-height',vh+'px');
+ W=Math.max(560,Math.min(1000,Math.round(360*vw/vh)));if(canvas.width!==W){canvas.width=W;canvas.height=H;ctx.imageSmoothingEnabled=false}if(L)cam=Math.max(0,Math.min(L.end-W,cam))}
+window.addEventListener('resize',size);window.addEventListener('orientationchange',()=>setTimeout(size,300));if(window.visualViewport)window.visualViewport.addEventListener('resize',size);
+load();layout(Math.min(2,data.level));respawnAt(L.cps[data.cpLevel===level?Math.min(L.cps.length-1,data.cp):0]);size();setTimeout(size,500);
+showGate('welcome');requestAnimationFrame(loop);
+
 })();
 </script></body></html>
