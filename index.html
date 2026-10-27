@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V1.6</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V1.9</title><style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#2a203f;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;touch-action:none}#stage{position:absolute;inset:0;height:var(--available-height,100%);display:flex;align-items:center;justify-content:center}canvas{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;touch-action:none;-webkit-user-select:none}#hud{position:absolute;top:max(8px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));color:#fff;font-size:clamp(13px,2.2vw,19px);font-weight:800;text-shadow:1px 2px #704b73;pointer-events:none}#pause{position:absolute;right:max(12px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));z-index:2}button{font-family:inherit;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent}#controls{position:absolute;inset:0;pointer-events:none;z-index:3}#left,#right,#jump{opacity:.58;position:absolute;bottom:max(10px,env(safe-area-inset-bottom));width:52px;height:52px;background:#55476655;border:2px solid #ffffff77;color:#fff;border-radius:12px;font-size:22px;font-weight:800;pointer-events:auto}#left{left:max(12px,env(safe-area-inset-left))}#right{left:calc(max(12px,env(safe-area-inset-left)) + 61px)}#jump{right:max(12px,env(safe-area-inset-right));border-radius:50%;font-size:28px}.pressed{background:#ec8eaecc!important;opacity:1!important}#pause{border:2px solid #ffffffaa;background:#55476677;color:#fff;border-radius:11px;width:45px;height:42px;font-size:20px}#shade{position:absolute;inset:0;height:var(--available-height,100%);background:#211b39c9;display:flex;justify-content:center;align-items:center;z-index:4;padding:12px}#card{background:#fff3f6;border:3px solid #ffc2d7;border-radius:17px;color:#68455e;text-align:center;width:min(440px,92%);padding:16px;max-height:90%;overflow:auto;box-shadow:0 6px #a36e9d}#card h1{font-size:clamp(19px,3.2vw,27px);color:#db6394;margin:0 0 8px}#card p{font-size:clamp(12px,1.8vw,15px);line-height:1.65;margin:8px 0}#actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}#actions button{font-size:14px;font-weight:700;border:0;background:#e979a5;color:#fff;border-radius:10px;padding:10px 15px;min-height:43px}#actions button.alt{background:#a88bad}#rotate{position:absolute;inset:0;height:var(--available-height,100%);background:#241b38;color:white;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:8;gap:12px;font-size:20px;padding:24px}#rotate small{font-size:13px;opacity:.8}#error{display:none;position:absolute;z-index:12;inset:10%;background:#fff5f5;color:#a12750;border-radius:12px;padding:16px;overflow:auto;font-size:14px}.hide{display:none!important}@media(orientation:portrait){#rotate{display:flex}}@media(max-height:310px){#card{padding:8px}#card p{margin:3px}#left,#right,#jump{opacity:.58;width:48px;height:48px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 56px)}}
 #interact{position:absolute;bottom:22%;left:50%;transform:translateX(-50%);background:#e979a5;color:white;border:2px solid #fff;border-radius:12px;padding:9px 16px;z-index:3;font-weight:800}#card{max-width:520px!important}#hud{z-index:2;max-width:75%;font-size:clamp(12px,1.7vw,18px)}@media(orientation:landscape){#left,#right,#jump{bottom:max(10px,env(safe-area-inset-bottom))}} 
 #gate{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 30% 20%,#ffd6e6,#f6aed3 45%,#b48ac8);height:var(--available-height,100%)}
@@ -11,7 +11,20 @@
 .shake{animation:shake .4s}@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
 #card{max-height:calc(var(--available-height,100vh) - 24px);overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;overscroll-behavior:contain}@media(max-height:430px){#card{padding:10px 14px}#card h1{font-size:20px;margin:0 0 4px}#card p{font-size:13px;line-height:1.5;margin:4px 0}#actions button{min-height:38px;padding:8px 12px}}
 #left,#right,#jump{width:64px;height:64px;font-size:27px;touch-action:none!important;-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important}#right{left:calc(max(12px,env(safe-area-inset-left)) + 73px)}#jump{font-size:33px}#controls,#stage,#game{-webkit-touch-callout:none!important;-webkit-user-select:none!important;user-select:none!important;touch-action:none!important}@media(max-height:310px){#left,#right,#jump{width:56px;height:56px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 65px)}}
-</style></head><body><div id="stage"><canvas id="game" width="640" height="360" aria-label="我们的奇妙冒险"></canvas></div><div id="hud" class="hide"></div><button id="pause" class="hide" aria-label="暂停">Ⅱ</button><div id="controls" class="hide"><button id="left" aria-label="向左">◀</button><button id="right" aria-label="向右">▶</button><button id="jump" aria-label="跳跃">✦</button></div><button id="interact" class="hide" type="button">♡ 坐下来</button><div id="shade" class="hide"><div id="card"><h1 id="heading"></h1><p id="message"></p><div id="actions"></div></div></div>
+
+/* V1.7: landscape thumb controls, shifted inward and down */
+#left,#right{width:68px;height:68px;bottom:max(3px,env(safe-area-inset-bottom));font-size:28px}
+#left{left:calc(max(12px,env(safe-area-inset-left)) + 22px)}
+#right{left:calc(max(12px,env(safe-area-inset-left)) + 100px)}
+#jump{width:76px;height:76px;right:calc(max(12px,env(safe-area-inset-right)) + 18px);bottom:max(3px,env(safe-area-inset-bottom));font-size:37px}
+@media(max-height:310px){#left,#right{width:60px;height:60px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 92px)}#jump{width:68px;height:68px}}
+
+/* V1.8 approved floating controls */
+#left,#right{width:64px!important;height:64px!important;bottom:max(2px,env(safe-area-inset-bottom))!important;opacity:.7}
+#left{left:calc(max(12px,env(safe-area-inset-left)) + 22px)!important}
+#right{left:calc(max(12px,env(safe-area-inset-left)) + 102px)!important}
+#jump{width:76px!important;height:76px!important;right:calc(max(12px,env(safe-area-inset-right)) + 18px)!important;bottom:max(2px,env(safe-area-inset-bottom))!important;opacity:.7}
+#card p{overflow-wrap:anywhere}#card strong{color:#cf5a91}</style></head><body><div id="stage"><canvas id="game" width="640" height="360" aria-label="我们的奇妙冒险"></canvas></div><div id="hud" class="hide"></div><button id="pause" class="hide" aria-label="暂停">Ⅱ</button><div id="controls" class="hide"><button id="left" aria-label="向左">◀</button><button id="right" aria-label="向右">▶</button><button id="jump" aria-label="跳跃">✦</button></div><button id="interact" class="hide" type="button">♡ 坐下来</button><div id="shade" class="hide"><div id="card"><h1 id="heading"></h1><p id="message"></p><div id="actions"></div></div></div>
 <div id="gate"><div id="gate-card"><div id="gate-welcome"><h1>🌸《我们的奇妙冒险》</h1><div class="duo">🐰 小兔子 + 🦁 小狮子</div><button id="gate-enter" type="button">进入 ♡</button></div>
 <form id="gate-date" class="hide" autocomplete="off"><h1>🌸</h1><p>我们的故事，从哪一天开始？</p><input id="gate-input" type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="8" placeholder="MMDD" aria-label="纪念日期"><br><button type="submit">确定 ♡</button><p id="gate-msg"></p></form></div></div>
 <div id="rotate"><div style="font-size:42px">🐰 🦁</div><strong>请将手机横过来 ♡</strong><small>关闭方向锁定后横屏；若仍无法旋转，可在 Safari 中打开。</small></div><div id="error"></div><script>
@@ -19,7 +32,7 @@
 const $=q=>document.querySelector(q), canvas=$('#game'), ctx=canvas.getContext('2d');
 if(!ctx){$('#error').style.display='block';$('#error').textContent='Canvas 无法启动，请使用 Safari 打开链接';return}
 const H=360, G=284, SAVE='our_adventure_full_v1', GATE='our_adventure_gate_v1';
-const LEVELS=['初夏小镇 · 相遇','海边 · 夕阳与花火','秘密花园 · 未来的约定'];
+const LEVELS=['初夏小镇 · 相遇','夕阳花火','秘密花园 · 未来的约定'];
 const ANNIV={label:'2025.11.13 — 2026.11.13'};
 let W=640, cam=0, mode='gate', last=0, level=0, timer=0;
 let held={left:false,right:false,jump:false}, jumpQueue=false, assist=true;
@@ -46,7 +59,7 @@ function buildLevel(n){
   plats:[spring(1860)],
   cps:[45,360,1000,1515], trees:[105,390,730,1040,1450,1610,2040],
   enemies:[{type:'walker',x:1620,start:1580,end:1670,v:.35}],
-  objects:[{type:'heart',x:1995,y:242},{type:'sign',x:118,text:'从下面顶一下 ？ 砖块'},{type:'sign',x:1420,text:'跳到小怪头上能踩扁它'},{type:'sign',x:1810,text:'踩蘑菇弹簧跳得更高'},
+  objects:[{type:'heart',x:1995,y:264},{type:'sign',x:118,text:'从下面顶一下 ？ 砖块'},{type:'sign',x:1420,text:'跳到小怪头上能踩扁它'},{type:'sign',x:1810,text:'踩蘑菇弹簧跳得更高'},
    ...coins(0,[...arc(410,250,3,18,12),...row(612,214,4,20),...arc(944,245,3,20,14),...row(1130,212,3,24),...row(1855,120,3,22),...row(1925,150,2,22)])]};
  if(n===1) return {end:2250,
   map:[gr(0,480),gr(520,500),gr(1060,350),gr(1560,330),gr(2010,270),bl(250,95,247),bl(710,115,244),bl(1190,105,242),bl(1660,105,247)],
@@ -54,7 +67,7 @@ function buildLevel(n){
   plats:[mover(1922,G-2,58,40,0,3400),spring(1600)],
   cps:[45,650,1070,1580], trees:[],
   enemies:[{type:'walker',x:180,start:140,end:232,v:.35},{type:'walker',x:880,start:835,end:955,v:.45}],
-  objects:[{type:'star',id:0,x:820,y:214},{type:'star',id:1,x:1150,y:228},{type:'star',id:2,x:1365,y:219},
+  objects:[{type:'heart',x:2170,y:264},{type:'star',id:0,x:820,y:214},{type:'star',id:1,x:1150,y:228},{type:'star',id:2,x:1365,y:219},
    {type:'shell',id:0,x:185,y:G-8},{type:'shell',id:1,x:445,y:G-8},{type:'shell',id:2,x:930,y:G-8},{type:'shell',id:3,x:1242,y:242-8},{type:'shell',id:4,x:1615,y:96},
    ...coins(0,[...arc(484,260,3,16,12),...row(735,218,4,22),...arc(1024,262,3,14,10),...row(1580,130,2,26),...row(1906,236,5,20),...row(2040,250,3,22)])]};
  return {end:2350,
@@ -64,7 +77,7 @@ function buildLevel(n){
   cps:[45,600,950,1580,1890,2130], trees:[140,620,1150,1650,2230],
   enemies:[{type:'walker',x:120,start:95,end:195,v:.4},{type:'fly',x:600,start:560,end:680,v:.5,base:222,amp:18},
    {type:'walker',x:1120,start:1070,end:1195,v:.45},{type:'frog',x:1650,start:1600,end:1730,v:.35},{type:'fly',x:1930,start:1900,end:1990,v:.45,base:226,amp:16}],
-  objects:[{type:'pipe',x:860,w:42,top:G-44},{type:'exitpipe',x:925,w:34,top:G-30},{type:'switch',x:1420},{type:'heart',x:2160,y:236},
+  objects:[{type:'pipe',x:860,w:42,top:G-44},{type:'exitpipe',x:925,w:34,top:G-30},{type:'switch',x:1420},{type:'heart',x:2160,y:264},
    ...coins(0,[...row(420,110,3,20),...arc(495,258,3,18,10),...row(1346,100,3,20),...row(1236,150,5,20),...row(1012,250,2,22),...row(2015,246,5,20)])]};
 }
 // Underground bonus room behind the glowing pipe (level 3)
@@ -116,33 +129,79 @@ function menu(title,body,buttons){mode='menu';clearInput();showUI(false);$('#int
 function play(){mode='play';$('#shade').classList.add('hide');showUI(true);last=performance.now()}
 function home(){
  const started=data.met||data.level>0||data.cp>0;
- menu('🐰 我们的奇妙冒险 🦁','恋爱一周年特别篇 · 11月13日<br>初夏相遇 → 海边夕阳与花火 → 秘密花园<br>左右移动，轻点 ✦ 小跳，长按 ✦ 大跳。',
+ menu('🐰 我们的奇妙冒险 🦁','恋爱一周年特别篇 · 11月13日<br>初夏相遇 → 夕阳花火 → 秘密花园<br>左右移动，轻点 ✦ 小跳，长按 ✦ 大跳。每关必须亲手收集关键爱心，才能继续。',
  [[data.done?'回忆我们的冒险 ♡':(started?'继续我们的冒险 ♡':'开始我们的冒险 ♡'),()=>data.done?ending():startLevel(data.level,true)],
   ...(started?[['从第一关重新开始',()=>{data=freshData();assist=true;save();startLevel(0,false)}]]:[]),
-  ...(data.level>0||data.done?[['选关',chooseLevel]]:[])])}
+  ...(data.level>0||data.done?[['选关',chooseLevel]]:[]),['📖 冒险手册',()=>journal(home)]])}
 function chooseLevel(){let b=[];for(let i=0;i<=Math.min(2,data.done?2:data.level);i++)b.push([LEVELS[i],()=>startLevel(i,false)]);b.push(['返回',home]);menu('选择旅程','已解锁的关卡可以重新游玩，收集过的东西不会丢。',b)}
-function pause(){if(mode!=='play')return;menu('暂停一下 ♡','小狮子会在这里等你。',[['继续冒险',play],['重新开始本关',()=>startLevel(level,false)],['辅助模式：'+(assist?'开':'关'),()=>{assist=!assist;data.assist=assist;save();mode='play';pause()}],['返回首页',home]])}
+function pause(){if(mode!=='play')return;menu('暂停一下 ♡','小狮子会在这里等你。',[['继续冒险',play],['重新开始本关',()=>startLevel(level,false)],['📖 冒险手册',()=>journal(()=>{play()})],['辅助模式：'+(assist?'开':'关'),()=>{assist=!assist;data.assist=assist;save();mode='play';pause()}],['返回首页',home]])}
 function cut(title,body,done,label){menu(title,body,[[label||'继续 ♡',done]])}
 function checkpoint(i){
  // A flag activates only when the bunny physically reaches its position on safe ground.
- if(i>0&&(!p.on||Math.abs(p.x-L.cps[i])>28||!onFloor(p.x)))return;
+ if(i>0&&(!p.on||p.x+p.w<L.cps[i]||p.x>L.cps[i]+28||!onFloor(p.x)))return;
  if(data.cpLevel!==level||data.cp<i){data.cp=i;data.cpLevel=level;save()}
 }
 function collectHeart(i){if(!data.hearts[i]){data.hearts[i]=true;save()}}
+function rewardLines(){
+ const n=data.coins.length,sh=data.shells.length;
+ const out=[];
+ if(n>=10)out.push('🪙 10枚：兔兔的开心表情已收录 ♡');
+ if(n>=20)out.push('🪙 20枚：小狮子的悄悄话——「和你一起走，哪里都好玩。」');
+ if(n>=30)out.push('🪙 30枚：像素回忆卡「两个人的旅途」已解锁');
+ if(sh>=3)out.push('🐚 3枚：海边回忆卡「夕阳的颜色」已解锁');
+ if(sh>=5)out.push('🐚 5枚：海边回忆卡「等待花火」已解锁');
+ return out;
+}
+function journal(back){
+ const h=data.hearts.filter(Boolean).length;
+ const lines=['❤️ 特别爱心 '+h+'/3　· 每段旅程藏着一颗，试着全部找到吧。',
+ '⭐ 回忆星星 '+data.stars.length+'/3　· 集齐星光，路就会出现。',
+ '🌱 神秘种子 '+(data.seed?'已发现':'尚未发现')+'　· 花园深处似乎藏着什么。',
+ '🪙 爱心金币 '+data.coins.length+'/'+TOTAL_COINS+'　· 10、20、30枚有小奖励。',
+ '🐚 海边贝壳 '+data.shells.length+'/5　· 找到3枚、5枚会解锁回忆卡。'];
+ const rewards=rewardLines();
+ if(rewards.length)lines.push('<br><strong>✨ 已解锁的收藏</strong>',...rewards);
+ menu('📖 冒险手册',lines.join('<br>'),[['继续冒险 ♡',back]]);
+}
+function rewardToast(kind,count){
+ if(kind==='coin'&&[10,20,30].includes(count))flash('✨ '+count+'枚金币！收藏奖励已解锁，暂停菜单可查看手册');
+ if(kind==='shell'&&[3,5].includes(count))flash('🐚 '+count+'/5！新的海边回忆卡已解锁');
+}
+function stageCoins(n){return data.coins.filter(x=>x.startsWith(String(n)+'-')).length}
+function stageCoinTotal(n){const z=buildLevel(n);return z.objects.filter(o=>o.type==='coin').length+z.boxes.length}
+function stageReview(n,done){
+ const c=stageCoins(n),tot=stageCoinTotal(n);
+ const lines=['❤️ 特别爱心：'+(data.hearts[n]?'已找到 ✓':'未找到'),
+ '🪙 爱心金币：'+c+'/'+tot];
+ if(n===1)lines.push('⭐ 回忆星星：'+data.stars.length+'/3','🐚 海边贝壳：'+data.shells.length+'/5');
+ if(n===2)lines.push('🌱 神秘种子：'+(data.seed?'已找到 ✓':'未找到'),'🦁 双人机关：'+(data.story.bridge?'已完成 ✓':'未完成'));
+ const optional=(n===1&&data.shells.length<5)||c<tot;
+ if(optional)lines.push('<br>还有可爱的收藏品留在路上，想再逛逛吗？');
+ const buttons=[];
+ if(optional)buttons.push(['再逛逛 ♡',()=>{respawnAt(L.cps[Math.min(data.cp,L.cps.length-1)]);play()}]);
+ buttons.push(['继续旅程 →',done]);
+ menu('✨ '+LEVELS[n]+' · 完成！',lines.join('<br>'),buttons);
+}
 function nextLevel(n){data.level=Math.max(data.level,n);data.cp=0;data.cpLevel=n;save();startLevel(n,false)}
 function finishLevel(){
- if(level===0){collectHeart(0);cut('🌸 第一颗爱心','初夏的风里，我们遇见了彼此。<br>❤️ 1 / 3　🪙 '+data.coins.length,()=>nextLevel(1))}
- else if(level===1){collectHeart(1);cut('💖 第二颗爱心','那天，我们一起看了夕阳，也一起等到了烟花。<br>❤️ 2 / 3　🪙 '+data.coins.length,()=>nextLevel(2))}
- else{if(!data.seed){cut('🌱 还缺少种子','小狮子提醒你：回去找找那根发光的绿色管道吧，跳到管道上面就能钻进去。',()=>{respawnAt(L.cps[1]);play()});return}collectHeart(2);startScene('plant');}}
+ if(!data.hearts[level]){
+  cut('❤️ 还差一颗关键爱心','这一关的爱心还没有拿到哦！请回到地图寻找粉色爱心，触碰它才能解锁下一关。',()=>{respawnAt(L.cps[Math.min(data.cp,L.cps.length-1)]);play()});return;
+ }
+ if(level===0){stageReview(0,()=>nextLevel(1))}
+ else if(level===1){if(data.stars.length<3){cut('⭐ 星星还没集齐','请先收集三颗回忆星星，再继续去看烟花。',()=>{respawnAt(L.cps[Math.min(data.cp,L.cps.length-1)]);play()});return}
+  stageReview(1,()=>nextLevel(2))}
+ else{if(!data.seed){cut('🌱 还缺少种子','小狮子提醒你：回去找找发光的绿色管道，跳到管道上面就能钻进去。',()=>{respawnAt(L.cps[1]);play()});return}
+  if(!data.story.bridge){cut('🦁 双人机关还没完成','先和小狮子一起启动花园机关，再前往终点。',()=>{respawnAt(L.cps[Math.min(data.cp,L.cps.length-1)]);play()});return}
+  stageReview(2,()=>startScene('plant'));}}
 function cardC(){return data.coins.length>=Math.ceil(TOTAL_COINS*.7)}
-function ending(){data.done=true;save();
+function ending(){if(!data.hearts.every(Boolean)||!data.seed||!data.story.bridge||data.stars.length<3){menu('✨ 旅程还没完成','还有未收集的特别爱心、星星或种子，或尚未完成的双人机关。翻翻冒险手册，看看遗漏了什么吧。',[['继续冒险',()=>startLevel(Math.min(2,data.level),true)],['返回首页',home]]);return}data.done=true;save();
  menu('🌸 我们的第一个365天',ANNIV.label+'<br>🐰 ❤️ 🦁<br>我们一起种下未来的种子，<br>等它长成樱花树。<br><strong>一周年快乐 ♡</strong>',[['下一页 ♡',ending2]])}
 function ending2(){const n=data.shells.length;
  const lines=[];if(n>=5)lines.push('🐚 还记得海边的贝壳吗？我们把那一天收藏起来。');else if(n>=3)lines.push('🐚 海边的夕阳，是我们珍贵的回忆。');
  if(cardC())lines.push('🪙 爱心币收集达人！隐藏回忆卡 C 已解锁');
  lines.push('<small>礼物盒内容将在正式版填入；目前是完整流程测试结局。</small>');
  menu('🎁 还有一份礼物',lines.join('<br>'),[['🎁 打开纪念礼物',()=>menu('🎁 给你的礼物','谢谢你陪我走过第一个365天。<br>以后也一起看更多夕阳和烟花吧。<br>To be continued…',[['继续我们的冒险 ♡',home],['回忆相册',album]])],['回忆相册',album],['返回首页',home]])}
-function album(){const n=data.shells.length,c=data.coins.length;menu('📷 我们的回忆相册','🌸 初夏相遇　🎆 海边夕阳与花火　🌱 秘密花园<br>🐚 贝壳 '+n+'/5'+(n>=3?'　回忆卡 A ✓':'')+(n>=5?'　回忆卡 B ✓':'')+'<br>🪙 爱心币 '+c+'/'+TOTAL_COINS+(cardC()?'　隐藏回忆卡 C ✓':'<br>（收集 '+Math.ceil(TOTAL_COINS*.7)+' 枚解锁隐藏卡 C）'),[['返回',home]])}
+function album(){const n=data.shells.length,c=data.coins.length;menu('📷 我们的回忆相册','🌸 初夏相遇　🎆 夕阳花火　🌱 秘密花园<br>🐚 贝壳 '+n+'/5'+(n>=3?'　回忆卡 A ✓':'')+(n>=5?'　回忆卡 B ✓':'')+'<br>🪙 爱心币 '+c+'/'+TOTAL_COINS+(cardC()?'　隐藏回忆卡 C ✓':'<br>（收集 '+Math.ceil(TOTAL_COINS*.7)+' 枚解锁隐藏卡 C）'),[['📖 冒险手册',()=>journal(home)],['返回',home]])}
 
 // ================= Fade =================
 function fadeTo(cb,txt){fade.dir=1;fade.cb=cb;fade.text=txt||''}
@@ -158,7 +217,9 @@ function updateDying(dt){const k=Math.min(2,dt/16.667);dying.t+=dt;
 function failure(cause,x){
  const cp=data.cpLevel===level?Math.min(data.cp,L.cps.length-1):0;
  if(failCp!==cp){failCp=cp;failCount=0}
- failCount++;respawnAt(L.cps[cp]);play();
+ failCount++;
+ // Always respawn at the latest ACTIVATED flag, never at a temporary bank.
+ respawnAt(L.cps[cp]);play();
  if(!assist)return;
  if(failCount===3){
   if(cause==='fall'){const gap=findGap(x);if(gap&&!clouds.some(c=>c.id===gap.id))
@@ -198,7 +259,7 @@ function exitUnder(){L=mainL;mainL=null;checkpoint(2);const ep=L.objects.find(o=
 // ================= Update =================
 function overlap(o,r){return p.x<o.x+r&&p.x+p.w>o.x-r&&p.y<o.y+r&&p.y+p.h>o.y-r}
 function flash(t){toast={t,until:timer+1800}}
-function addCoin(key,x,y){if(data.coins.includes(key))return;data.coins.push(key);save();L.pops.push({x,y,t:0})}
+function addCoin(key,x,y){if(data.coins.includes(key))return;data.coins.push(key);save();rewardToast('coin',data.coins.length);L.pops.push({x,y,t:0})}
 function enemyBox(e){const top=e.type==='fly'?e.y-10:G-22-e.hop;const bottom=e.type==='fly'?e.y+10:G-e.hop;return {l:e.x-11,r:e.x+11,t:top,b:bottom}}
 function updatePlats(dt,k){
  for(const pl of L.plats){
@@ -228,7 +289,21 @@ function update(dt){
  if(dir)p.face=dir;
  p.vx+=(dir*2.45-p.vx)*Math.min(1,.27*k);if(!dir)p.vx*=Math.pow(.7,k);
  p.x=Math.max(0,Math.min(L.end-24,p.x+p.vx*k));
- for(const a of sol){if(!a.box)continue;if(p.y+p.h>a.y+5&&p.y<a.y+a.h-2&&p.x+p.w>a.x&&p.x<a.x+a.w){if(prevX+p.w<=a.x+3)p.x=a.x-p.w;else if(prevX>=a.x+a.w-3)p.x=a.x+a.w;else continue;p.vx=0}}
+ for(const a of sol){
+  // Solid raised blocks, question bricks and pipes cannot be walked through.
+  if(!a.box)continue;
+  if(!(p.y+p.h>a.y+4&&p.y<a.y+(a.h||H)+0))continue;
+  const crossedRight=p.vx>0&&prevX+p.w<=a.x+4&&p.x+p.w>a.x;
+  const crossedLeft=p.vx<0&&prevX>=a.x+a.w-4&&p.x<a.x+a.w;
+  if(crossedRight){p.x=a.x-p.w;p.vx=0}
+  else if(crossedLeft){p.x=a.x+a.w;p.vx=0}
+  else if(p.x+p.w>a.x&&p.x<a.x+a.w&&p.y+p.h>a.y+8){
+    // Resolve existing penetration on the closest side instead of allowing phasing.
+    const leftDepth=p.x+p.w-a.x,rightDepth=a.x+a.w-p.x;
+    if(leftDepth<rightDepth)p.x=a.x-p.w;else p.x=a.x+a.w;
+    p.vx=0;
+  }
+ }
  p.buffer=Math.max(0,p.buffer-dt);if(jumpQueue){p.buffer=120;jumpQueue=false}
  p.coyote=p.on?105:Math.max(0,p.coyote-dt);
  if(p.buffer>0&&p.coyote>0){p.vy=-7.8;p.on=false;p.ride=null;p.coyote=0;p.buffer=0;p.jumpMs=0}
@@ -243,11 +318,12 @@ function update(dt){
    if(a.kind==='q'){const b=a.ref;if(!data.qb.includes(qKey(b))){data.qb.push(qKey(b));addCoin(qKey(b),b.x+11,b.y-8)}b.bump=150}}}
  p.ride=p.on?ride:null;
  if(p.y>H+30){die('fall');return}
- if(!L.under)for(let i=1;i<L.cps.length;i++)if(p.on&&Math.abs(p.x-L.cps[i])<=24)checkpoint(i);
+ if(!L.under)for(let i=1;i<L.cps.length;i++)if(p.on&&p.x+p.w>=L.cps[i]&&prevX<=L.cps[i]+14&&p.x<=L.cps[i]+28)checkpoint(i);
  for(const o of L.objects){
-  if(o.type==='coin'&&!data.coins.includes(cKey(o))&&overlap(o,8)){data.coins.push(cKey(o));save()}
-  if(o.type==='star'&&!data.stars.includes(o.id)&&overlap(o,10)){data.stars.push(o.id);save()}
-  if(o.type==='shell'&&!data.shells.includes(o.id)&&overlap(o,8)){data.shells.push(o.id);save();flash('🐚 贝壳 '+data.shells.length+'/5')}
+  if(o.type==='heart'&&!data.hearts[level]&&overlap(o,16)){collectHeart(level);flash('❤️ 珍贵爱心 '+data.hearts.filter(Boolean).length+'/3，集齐会发生什么呢？')}
+  if(o.type==='coin'&&!data.coins.includes(cKey(o))&&overlap(o,8)){data.coins.push(cKey(o));save();rewardToast('coin',data.coins.length)}
+  if(o.type==='star'&&!data.stars.includes(o.id)&&overlap(o,10)){data.stars.push(o.id);save();flash(data.stars.length===3?'⭐ 星光道路出现啦！':'⭐ 回忆星星 '+data.stars.length+'/3')}
+  if(o.type==='shell'&&!data.shells.includes(o.id)&&overlap(o,8)){data.shells.push(o.id);save();flash('🐚 海边收藏 '+data.shells.length+'/5');rewardToast('shell',data.shells.length)}
   if(o.type==='seed'&&!data.seed&&overlap(o,12)){data.seed=true;save();cut('🌱 找到未来的种子','小兔子在地下花园里找到一颗小小的种子。<br>「这是未来的种子，我们一起把它种下吧。」<br>从右边的绿色管道回到花园吧。',play);return}}
  for(const b of L.boxes)if(b.bump)b.bump=Math.max(0,b.bump-dt);
  for(const q of L.pops)q.t+=dt;L.pops=L.pops.filter(q=>q.t<600);
@@ -265,15 +341,15 @@ function update(dt){
  if(L.under){const ex=PIPE();if(onPipeTop(ex))showInteract=data.seed?'✦ 回到花园':false;if(onPipeTop(ex)&&!data.seed&&!toast)flash('先拿到种子哦～')}
  else{
  if(level===0){if(!data.met&&p.x>340){data.met=true;checkpoint(1);cut('🦁 遇见你，真好','小兔子：「你也要去冒险吗？」<br>小狮子：「那我们一起走吧！」<br><br>有些故事，从一次相遇开始。',play);return}
-  if(p.x>1995&&!data.hearts[0])collectHeart(0)}
+  /* heart collected on contact below */}
  if(level===1){
   if(!data.story.sunset&&p.x>540){p.x=Math.min(p.x,580);showInteract='♡ 坐下来'}
   if(p.x>1383&&data.stars.length<3&&p.y+p.h>=G-2){p.x=Math.min(p.x,1388);if(!data.story.starHint){data.story.starHint=true;save();cut('✨ 星光步道','收集主路上的三颗星星（有的要跳起来才够得着），海面上的浮台就会出现。<br>目前 '+data.stars.length+'/3 颗。',play);return}}
-  if(p.x>2110&&!data.story.fireworks){data.story.fireworks=true;save();startScene('fireworks');return}}
+  if(p.x>2200&&!data.story.fireworks&&data.hearts[1]){data.story.fireworks=true;save();startScene('fireworks');return}}
  if(level===2){
   if(!data.seed&&onPipeTop(PIPE()))showInteract='✦ 钻进管道';
   if(p.x>1380&&p.x<1470&&!data.story.bridge){startScene('switch');return}
-  if(p.x>2140&&!data.hearts[2])collectHeart(2)}}
+  /* heart collected on contact below */}}
  const ib=$('#interact');if(showInteract){ib.textContent=showInteract;ib.classList.remove('hide')}else ib.classList.add('hide');
  if(!L.under&&p.x>L.end-75&&level!==1){finishLevel();return}
  updateLion(k);
