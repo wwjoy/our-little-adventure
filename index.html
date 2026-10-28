@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V2.2</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V2.4</title><style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#2a203f;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;touch-action:none}#stage{position:absolute;inset:0;height:var(--available-height,100%);display:flex;align-items:center;justify-content:center}canvas{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;touch-action:none;-webkit-user-select:none}#hud{position:absolute;top:max(8px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));color:#fff;font-size:clamp(13px,2.2vw,19px);font-weight:800;text-shadow:1px 2px #704b73;pointer-events:none}#pause{position:absolute;right:max(12px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));z-index:2}button{font-family:inherit;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent}#controls{position:absolute;inset:0;pointer-events:none;z-index:3}#left,#right,#jump{opacity:.58;position:absolute;bottom:max(10px,env(safe-area-inset-bottom));width:52px;height:52px;background:#55476655;border:2px solid #ffffff77;color:#fff;border-radius:12px;font-size:22px;font-weight:800;pointer-events:auto}#left{left:max(12px,env(safe-area-inset-left))}#right{left:calc(max(12px,env(safe-area-inset-left)) + 61px)}#jump{right:max(12px,env(safe-area-inset-right));border-radius:50%;font-size:28px}.pressed{background:#ec8eaecc!important;opacity:1!important}#pause{border:2px solid #ffffffaa;background:#55476677;color:#fff;border-radius:11px;width:45px;height:42px;font-size:20px}#shade{position:absolute;inset:0;height:var(--available-height,100%);background:#211b39c9;display:flex;justify-content:center;align-items:center;z-index:4;padding:12px}#card{background:#fff3f6;border:3px solid #ffc2d7;border-radius:17px;color:#68455e;text-align:center;width:min(440px,92%);padding:16px;max-height:90%;overflow:auto;box-shadow:0 6px #a36e9d}#card h1{font-size:clamp(19px,3.2vw,27px);color:#db6394;margin:0 0 8px}#card p{font-size:clamp(12px,1.8vw,15px);line-height:1.65;margin:8px 0}#actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}#actions button{font-size:14px;font-weight:700;border:0;background:#e979a5;color:#fff;border-radius:10px;padding:10px 15px;min-height:43px}#actions button.alt{background:#a88bad}#rotate{position:absolute;inset:0;height:var(--available-height,100%);background:#241b38;color:white;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:8;gap:12px;font-size:20px;padding:24px}#rotate small{font-size:13px;opacity:.8}#error{display:none;position:absolute;z-index:12;inset:10%;background:#fff5f5;color:#a12750;border-radius:12px;padding:16px;overflow:auto;font-size:14px}.hide{display:none!important}@media(orientation:portrait){#rotate{display:flex}}@media(max-height:310px){#card{padding:8px}#card p{margin:3px}#left,#right,#jump{opacity:.58;width:48px;height:48px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 56px)}}
 #interact{position:absolute;bottom:22%;left:50%;transform:translateX(-50%);background:#e979a5;color:white;border:2px solid #fff;border-radius:12px;padding:9px 16px;z-index:3;font-weight:800}#card{max-width:520px!important}#hud{z-index:2;max-width:75%;font-size:clamp(12px,1.7vw,18px)}@media(orientation:landscape){#left,#right,#jump{bottom:max(10px,env(safe-area-inset-bottom))}} 
 #gate{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 30% 20%,#ffd6e6,#f6aed3 45%,#b48ac8);height:var(--available-height,100%)}
@@ -35,7 +35,9 @@ const H=360, G=284, SAVE='our_adventure_full_v1', GATE='our_adventure_gate_v1';
 const LEVELS=['初夏小镇 · 相遇','夕阳花火','秘密花园 · 未来的约定'];
 const ANNIV={label:'2025.11.13 — 2026.11.13'};
 let W=640, cam=0, mode='gate', last=0, level=0, timer=0;
+ let coop={state:'idle',lionX:1392,lionReady:false,started:false,bridgeTime:0};
  let finalReviewOpen=false, finalSceneTimeout=null;
+ let pendingFlag=-1, flagCrossingArmed=false;
 let held={left:false,right:false,jump:false}, jumpQueue=false, assist=true;
 let clouds=[], sleeping=false, failCount=0, failCp=-1, respawnGuard=0, toast=null;
 let scene=null, dying=null, fade={a:0,dir:0,cb:null,text:''}, rockets=[], trail=[], mainL=null, bubbleMsg=null;
@@ -78,7 +80,7 @@ function buildLevel(n){
   cps:[45,600,950,1580,1890,2130], trees:[140,620,1150,1650,2230],
   enemies:[{type:'walker',x:120,start:95,end:195,v:.4},{type:'fly',x:600,start:560,end:680,v:.5,base:222,amp:18},
    {type:'walker',x:1120,start:1070,end:1195,v:.45},{type:'frog',x:1650,start:1600,end:1730,v:.35},{type:'fly',x:1930,start:1900,end:1990,v:.45,base:226,amp:16}],
-  objects:[{type:'pipe',x:860,w:42,top:G-44},{type:'exitpipe',x:925,w:34,top:G-30},{type:'switch',x:1420},{type:'heart',x:2160,y:264},
+  objects:[{type:'pipe',x:860,w:42,top:G-44},{type:'exitpipe',x:925,w:34,top:G-30},{type:'switch',x:1392},{type:'heart',x:2160,y:264},
    ...coins(0,[...row(420,110,3,20),...arc(495,258,3,18,10),...row(1346,100,3,20),...row(1236,150,5,20),...row(1012,250,2,22),...row(2015,246,5,20)])]};
 }
 // Underground bonus room behind the glowing pipe (level 3)
@@ -121,9 +123,9 @@ function gateOk(){try{return localStorage.getItem(GATE)==='1'}catch(e){return fa
 
 // ================= Flow =================
 function clearInput(){Object.keys(held).forEach(k=>{held[k]=false;$('#'+k).classList.remove('pressed')});jumpQueue=false}
-function layout(n){finalReviewOpen=false;if(finalSceneTimeout){clearTimeout(finalSceneTimeout);finalSceneTimeout=null}fade={a:0,dir:0,cb:null,text:''};level=n;L=buildLevel(n);mainL=null;L.pops=[];clouds=[];sleeping=false;failCount=0;failCp=-1;scene=null;dying=null;L.enemies.forEach(e=>{e.v=Math.abs(e.v);e.dead=0;e.vy=0;e.hop=0;e.jt=Math.random()*900})}
+function layout(n){coop={state:'idle',lionX:1392,lionReady:false,started:false,bridgeTime:0};pendingFlag=-1;flagCrossingArmed=false;finalReviewOpen=false;if(finalSceneTimeout){clearTimeout(finalSceneTimeout);finalSceneTimeout=null}fade={a:0,dir:0,cb:null,text:''};level=n;L=buildLevel(n);mainL=null;L.pops=[];clouds=[];sleeping=false;failCount=0;failCp=-1;scene=null;dying=null;L.enemies.forEach(e=>{e.v=Math.abs(e.v);e.dead=0;e.vy=0;e.hop=0;e.jt=Math.random()*900})}
 function resetPlanks(){for(const pl of L.plats)if(pl.kind==='fall'){pl.y=pl.y0;pl.t=0;pl.vy=0}}
-function respawnAt(x){x=safeX(x);p.x=x;p.y=G-p.h;p.vx=p.vy=0;p.on=true;p.ride=null;p.sit=false;p.hidden=false;p.coyote=p.buffer=p.jumpMs=0;lion.x=x-34*p.face;lion.y=p.y;lion.sit=false;trail=[];resetPlanks();cam=Math.max(0,Math.min(L.end-W,x-W*.35));respawnGuard=900;clearInput()}
+function respawnAt(x){if(level===2&&!L.under&&!data.story.bridge&&coop.state==='approaching'){coop.state='waiting';coop.lionReady=true}pendingFlag=-1;flagCrossingArmed=false;x=safeX(x);p.x=x;p.y=G-p.h;p.vx=p.vy=0;p.on=true;p.ride=null;p.sit=false;p.hidden=false;p.coyote=p.buffer=p.jumpMs=0;lion.x=x-34*p.face;lion.y=p.y;lion.sit=false;trail=[];resetPlanks();cam=Math.max(0,Math.min(L.end-W,x-W*.35));respawnGuard=900;clearInput()}
 function startLevel(n,fromSave){layout(n);let cp=(fromSave&&data.cpLevel===n)?Math.max(0,Math.min(L.cps.length-1,data.cp)):0;data.level=Math.max(data.level,n);data.cp=cp;data.cpLevel=n;save();p.face=1;respawnAt(L.cps[cp]);play();if(n===0&&!data.story.introGuide){data.story.introGuide=true;save();cut('🦁 冒险的小目标','听说这片世界里藏着三颗特别的爱心，我们一起把它们找出来吧！<br><br>沿途的金币也值得收集，遇到特别的东西时，小狮子会提醒你。<br>想知道收集进度，可以在暂停菜单打开「📖 冒险手册」。',play,'出发吧 ♡')}}
 function showUI(on){$('#controls').classList.toggle('hide',!on);$('#pause').classList.toggle('hide',!on);$('#hud').classList.toggle('hide',mode==='gate')}
 function menu(title,body,buttons){mode='menu';clearInput();showUI(false);$('#interact').classList.add('hide');$('#shade').classList.remove('hide');$('#heading').textContent=title;$('#message').innerHTML=body;const el=$('#actions');el.textContent='';buttons.forEach((b,i)=>{let btn=document.createElement('button');btn.type='button';btn.textContent=b[0];if(i)btn.className='alt';btn.addEventListener('click',b[1]);el.appendChild(btn)});$('#card').scrollTop=0}
@@ -138,9 +140,30 @@ function chooseLevel(){let b=[];for(let i=0;i<=Math.min(2,data.done?2:data.level
 function pause(){if(mode!=='play')return;menu('暂停一下 ♡','小狮子会在这里等你。',[['继续冒险',play],['重新开始本关',()=>startLevel(level,false)],['📖 冒险手册',()=>journal(()=>{play()})],['辅助模式：'+(assist?'开':'关'),()=>{assist=!assist;data.assist=assist;save();mode='play';pause()}],['返回首页',home]])}
 function cut(title,body,done,label){menu(title,body,[[label||'继续 ♡',done]])}
 function checkpoint(i){
- // A flag activates only when the bunny physically reaches its position on safe ground.
- if(i>0&&(!p.on||p.x+p.w<L.cps[i]||p.x>L.cps[i]+28||!onFloor(p.x)))return;
- if(data.cpLevel!==level||data.cp<i){data.cp=i;data.cpLevel=level;save()}
+ if(i<=0||L.under||i>=L.cps.length)return;
+ // Only the movement system can confirm a flag: crossing it, then landing safely.
+ if(data.cpLevel!==level||data.cp<i){
+  data.cp=i;data.cpLevel=level;save();
+  flash('✨ 小旗子已点亮，冒险进度已保存 ♡');
+ }
+ pendingFlag=-1;
+}
+function updateFlags(prevX){
+ if(L.under)return;
+ const previous=data.cpLevel===level?data.cp:0;
+ // Crossing the flag with the bunny's center, even high above the flag, arms it.
+ // No flag may be armed just because a respawn placed the bunny nearby.
+ const before=prevX+p.w/2,now=p.x+p.w/2;
+ if(now>before){
+  for(let i=previous+1;i<L.cps.length;i++){
+   const fx=L.cps[i];
+   if(before<fx&&now>=fx)pendingFlag=Math.max(pendingFlag,i);
+  }
+ }
+ // The player must land safely after crossing. Falling into a pit cancels it.
+ if(pendingFlag>previous&&p.on&&onFloor(p.x)&&p.y+p.h<=G+2){
+  checkpoint(pendingFlag);
+ }
 }
 function collectHeart(i){if(!data.hearts[i]){data.hearts[i]=true;save()}}
 function rewardLines(){
@@ -232,7 +255,7 @@ function updateFade(dt){if(fade.dir===1){fade.a=Math.min(1,fade.a+dt/260);if(fad
 
 // ================= Death & assist =================
 function findGap(x){const g=L.map.filter(a=>a.kind==='ground').sort((a,b)=>a.x-b.x);let best=null,bd=1e9;for(let i=0;i<g.length-1;i++){const s=g[i].x+g[i].w,e=g[i+1].x;if(e-s<8)continue;const d=x<s?s-x:x>e?x-e:0;if(d<bd){bd=d;best={id:LK()+'-'+i,x:s,w:e-s}}}return bd<200?best:null}
-function die(cause){if(mode!=='play')return;mode='dying';dying={cause,t:0,x:p.x};clearInput();showUI(false);$('#interact').classList.add('hide');p.ride=null;p.vx=0;p.vy=cause==='enemy'?-7:0}
+function die(cause){if(mode!=='play')return;pendingFlag=-1;flagCrossingArmed=false;mode='dying';dying={cause,t:0,x:p.x};clearInput();showUI(false);$('#interact').classList.add('hide');p.ride=null;p.vx=0;p.vy=cause==='enemy'?-7:0}
 function updateDying(dt){const k=Math.min(2,dt/16.667);dying.t+=dt;
  if(dying.cause==='enemy'&&dying.t>250){p.vy=Math.min(9,p.vy+.4*k);p.y+=p.vy*k}
  const wait=dying.cause==='enemy'?1050:350;
@@ -266,18 +289,19 @@ function updateScene(dt){const s=scene,k=Math.min(2,dt/16.667);s.t+=dt;timer+=dt
    else for(const q of r.parts){q.x+=q.vx*k;q.y+=q.vy*k;q.vy+=.035*k;q.vx*=.985;q.life-=dt/1300}}
   rockets=rockets.filter(r=>!r.parts||r.parts.some(q=>q.life>0));
   if(s.t>10000){scene=null;p.sit=lion.sit=false;cut('🎆 海边的花火','夜空里，粉色、金色、蓝色的烟花一朵朵绽放。<br>那天，我们一起看了夕阳，也一起等到了烟花。',()=>{mode='play';finishLevel()})}}
- if(s.type==='switch'){const sw=L.objects.find(o=>o.type==='switch');p.vx=0;
-  if(!s.pressed){const tx=sw.x+3;lion.face=Math.sign(tx-lion.x)||1;lion.x+=Math.sign(tx-lion.x)*Math.min(3*k,Math.abs(tx-lion.x));lion.y=G-27;bubbleMsg={who:'lion',t:'交给我吧！'};if(Math.abs(tx-lion.x)<1){s.pressed=s.t}}
-  else{s.rise=Math.min(1,(s.t-s.pressed-250)/900);if(s.rise>0)bubbleMsg={who:'lion',t:'桥升起来啦～一起走吧！'};
-   if(s.t-s.pressed>2300){scene=null;bubbleMsg=null;data.story.bridge=true;save();play()}}
-  camTo(Math.min(p.x,1380)-W*.3,k)}
+ if(s.type==='switch'){
+  // Bridge only rises AFTER both characters are physically on their own plates.
+  coop.bridgeTime+=dt;
+  if(coop.bridgeTime>1500){scene=null;bubbleMsg=null;data.story.bridge=true;coop.state='done';lion.x=p.x-32;lion.y=G-27;save();play();flash('✨ 两个人一起完成啦！');}
+  return;
+ }
  if(s.type==='pipeIn'){const pp=s.pipe;p.x+=(pp.x+pp.w/2-11-p.x)*.3;p.y+=1.3*k;lion.sit=true;if(s.t>650&&fade.dir===0)fadeTo(()=>{scene=null;enterUnder()})}
  if(s.type==='pipeOut'){const pp=s.pipe;p.x+=(pp.x+pp.w/2-11-p.x)*.3;p.y+=1.3*k;if(s.t>650&&fade.dir===0)fadeTo(()=>{scene=null;exitUnder()})}
  if(s.type==='rise'){const ep=L.objects.find(o=>o.type==='exitpipe');p.x=ep.x+ep.w/2-11;p.y=Math.max(ep.top-p.h,p.y-1.2*k);if(p.y<=ep.top-p.h&&s.t>500){scene=null;p.vy=-3;p.on=false;p.x=ep.x+ep.w+4;play()}}
 }
 function camTo(x,k){cam+=(Math.max(0,Math.min(L.end-W,x))-cam)*Math.min(1,.08*k)}
 function enterUnder(){mainL=L;L=buildUnder();L.pops=[];clouds=[];p.face=1;respawnAt(70);p.y=60;p.vy=0;p.on=false;cam=0;play();flash('🌱 地下花园')}
-function exitUnder(){L=mainL;mainL=null;checkpoint(2);const ep=L.objects.find(o=>o.type==='exitpipe');respawnAt(ep.x+ep.w+4);p.x=ep.x+ep.w/2-11;p.y=G;p.hidden=false;startScene('rise');lion.x=ep.x-30;lion.y=G-27}
+function exitUnder(){L=mainL;mainL=null;const ep=L.objects.find(o=>o.type==='exitpipe');respawnAt(ep.x+ep.w+4);p.x=ep.x+ep.w/2-11;p.y=G;p.hidden=false;startScene('rise');lion.x=ep.x-30;lion.y=G-27}
 
 // ================= Update =================
 function overlap(o,r){return p.x<o.x+r&&p.x+p.w>o.x-r&&p.y<o.y+r&&p.y+p.h>o.y-r}
@@ -291,6 +315,11 @@ function updatePlats(dt,k){
   if(pl.kind==='spring'&&pl.anim>0)pl.anim=Math.max(0,pl.anim-dt)}}
 function onPipeTop(o){return p.on&&p.x+p.w>o.x-5&&p.x<o.x+o.w+5&&Math.abs(p.y+p.h-o.top)<2}
 function updateLion(k){
+ if(level===2&&!L.under&&!data.story.bridge&&['approaching','waiting','raising'].includes(coop.state)){
+  if(coop.state==='approaching'){const dx=coop.lionX-lion.x;lion.x+=Math.sign(dx)*Math.min(Math.abs(dx),3.5*k);lion.face=dx>=0?1:-1;if(Math.abs(dx)<2){lion.x=coop.lionX;coop.state='waiting';coop.lionReady=true;flash('🦁 小狮子已站上粉色机关，轮到你啦！')}}
+  lion.y=G-27;return;
+ }
+ if(coop.state==='done'&&!data.story.bridge)coop.state='idle';
  const desiredX=p.x-(p.face||1)*38;
  const dx=desiredX-lion.x;
  if(Math.abs(dx)>220){lion.x=desiredX;lion.y=p.y;lion.face=p.face;return}
@@ -342,7 +371,7 @@ function update(dt){
    if(a.kind==='q'){const b=a.ref;if(!data.qb.includes(qKey(b))){data.qb.push(qKey(b));addCoin(qKey(b),b.x+11,b.y-8)}b.bump=150}}}
  p.ride=p.on?ride:null;
  if(p.y>H+30){die('fall');return}
- if(!L.under)for(let i=1;i<L.cps.length;i++)if(p.on&&p.x+p.w>=L.cps[i]&&prevX<=L.cps[i]+14&&p.x<=L.cps[i]+28)checkpoint(i);
+ updateFlags(prevX);
  for(const o of L.objects){
   if(o.type==='heart'&&!data.hearts[level]&&overlap(o,16)){collectHeart(level);flash('❤️ 珍贵爱心 '+data.hearts.filter(Boolean).length+'/3，集齐会发生什么呢？')}
   if(o.type==='coin'&&!data.coins.includes(cKey(o))&&overlap(o,8)){data.coins.push(cKey(o));save();rewardToast('coin',data.coins.length)}
@@ -372,7 +401,15 @@ function update(dt){
   if(p.x>2200&&!data.story.fireworks&&data.hearts[1]){data.story.fireworks=true;save();startScene('fireworks');return}}
  if(level===2){
   if(!data.seed&&onPipeTop(PIPE()))showInteract='✦ 钻进管道';
-  if(p.x>1380&&p.x<1470&&!data.story.bridge){startScene('switch');return}
+  if(!data.story.bridge){
+   if(coop.state==='idle'&&p.x>=1360&&p.x<1410){
+    coop.state='prompt';cut('🦁 一起启动机关吧！','前面有两块机关：<br>🩷 小狮子站粉色机关，💛 小兔子站黄色机关。<br>只有两个人都站上去，木桥才会升起。',()=>{coop.state='approaching';play()},'一起试试 ♡');return;
+   }
+   // Bunny must stand firmly on the yellow plate, after lion reaches pink plate.
+   if(coop.state==='waiting'&&coop.lionReady&&p.on&&p.x+p.w>1448&&p.x<1476&&p.y+p.h>=G-3){
+    coop.state='raising';coop.bridgeTime=0;startScene('switch');return;
+   }
+  }
   /* heart collected on contact below */}}
  const ib=$('#interact');if(showInteract){ib.textContent=showInteract;ib.classList.remove('hide')}else ib.classList.add('hide');
  if(!L.under&&p.x>L.end-75&&level!==1){finishLevel();return}
@@ -458,7 +495,7 @@ function draw(){
  for(const o of L.objects)if(o.type==='exitpipe')pipeDraw(o);
  L.map.forEach(terrain);clouds.forEach(cloudDraw);
  if(level===1&&!L.under)for(let i=0;i<3;i++)if(data.stars.includes(i))bridge({x:1410+i*49,y:G,w:51},'#ffe9a6','#e8b85c');
- if(level===2&&!L.under&&(data.story.bridge||(scene&&scene.type==='switch'&&scene.rise>0))){const r=data.story.bridge?1:Math.max(0,scene.rise);bridge({x:1500,y:G+(1-r)*70,w:55},'#c99a6b','#8d6248')}
+ if(level===2&&!L.under&&(data.story.bridge||(scene&&scene.type==='switch'))){const r=data.story.bridge?1:Math.min(1,coop.bridgeTime/1200);bridge({x:1500,y:G+(1-r)*70,w:55},'#c99a6b','#8d6248')}
  if(!L.under)for(let i=1;i<L.cps.length;i++){let x=L.cps[i]-cam;if(x<-30||x>W+30)continue;rect(x,G-62,4,62,'#8b6a85');rect(x+4,G-62,18,12,data.cpLevel===level&&data.cp>=i?'#f28eaf':'#ffe5a1')}
  for(const o of L.objects)if(o.type==='sign')sign(o);
  L.plats.forEach(platDraw);L.boxes.forEach(qbrick);
@@ -468,7 +505,16 @@ function draw(){
   if(o.type==='seed'&&!data.seed)seedDraw(x,o.y);
   if(o.type==='star'&&!data.stars.includes(o.id)){circle(x,o.y,9,'#ffe3a2');rect(x-2,o.y-13,4,26,'#fff6c4');rect(x-13,o.y-2,26,4,'#fff6c4')}
   if(o.type==='shell'&&!data.shells.includes(o.id)){circle(x,o.y-2,6,'#ffd7a4');rect(x-5,o.y,10,3,'#e9a88f')}
-  if(o.type==='switch'){const down=data.story.bridge||(scene&&scene.type==='switch'&&scene.pressed);rect(x,G-(down?6:12),28,down?6:12,'#a1a2d5');circle(x+14,G-(down?8:14),6,down?'#8be0a4':'#ffcf6e');if(!down)text('双人机关',x+14,G-30,'#4b3c51',11,'center')}}
+  if(o.type==='switch'){
+    const pinkX=coop.lionX-cam, yellowX=1450-cam;
+    const lionOn=data.story.bridge||coop.lionReady||coop.state==='raising';
+    const bunnyOn=data.story.bridge||coop.state==='raising';
+    rect(pinkX,G-8,28,8,lionOn?'#f78cb8':'#b57899');
+    rect(yellowX,G-8,28,8,bunnyOn?'#ffe17e':'#c2a967');
+    text('🩷',pinkX+14,G-18,'#fff',13,'center');text('💛',yellowX+14,G-18,'#fff',13,'center');
+    if(!data.story.bridge&&coop.state==='waiting')text('小狮子已就位，站上黄色机关！',yellowX-10,G-48,'#62445f',11,'center');
+    else if(!data.story.bridge&&coop.state==='idle')text('双人机关',yellowX-14,G-45,'#62445f',11,'center');
+   }}
  const pipeOver=scene&&(scene.type==='pipeIn'||scene.type==='pipeOut'||scene.type==='rise');
  if(!pipeOver)for(const o of L.objects)if(o.type==='pipe')pipeDraw(o);
  L.enemies.forEach(enemyDraw);
