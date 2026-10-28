@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V2.1</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V2.2</title><style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#2a203f;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;touch-action:none}#stage{position:absolute;inset:0;height:var(--available-height,100%);display:flex;align-items:center;justify-content:center}canvas{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;touch-action:none;-webkit-user-select:none}#hud{position:absolute;top:max(8px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));color:#fff;font-size:clamp(13px,2.2vw,19px);font-weight:800;text-shadow:1px 2px #704b73;pointer-events:none}#pause{position:absolute;right:max(12px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));z-index:2}button{font-family:inherit;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent}#controls{position:absolute;inset:0;pointer-events:none;z-index:3}#left,#right,#jump{opacity:.58;position:absolute;bottom:max(10px,env(safe-area-inset-bottom));width:52px;height:52px;background:#55476655;border:2px solid #ffffff77;color:#fff;border-radius:12px;font-size:22px;font-weight:800;pointer-events:auto}#left{left:max(12px,env(safe-area-inset-left))}#right{left:calc(max(12px,env(safe-area-inset-left)) + 61px)}#jump{right:max(12px,env(safe-area-inset-right));border-radius:50%;font-size:28px}.pressed{background:#ec8eaecc!important;opacity:1!important}#pause{border:2px solid #ffffffaa;background:#55476677;color:#fff;border-radius:11px;width:45px;height:42px;font-size:20px}#shade{position:absolute;inset:0;height:var(--available-height,100%);background:#211b39c9;display:flex;justify-content:center;align-items:center;z-index:4;padding:12px}#card{background:#fff3f6;border:3px solid #ffc2d7;border-radius:17px;color:#68455e;text-align:center;width:min(440px,92%);padding:16px;max-height:90%;overflow:auto;box-shadow:0 6px #a36e9d}#card h1{font-size:clamp(19px,3.2vw,27px);color:#db6394;margin:0 0 8px}#card p{font-size:clamp(12px,1.8vw,15px);line-height:1.65;margin:8px 0}#actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}#actions button{font-size:14px;font-weight:700;border:0;background:#e979a5;color:#fff;border-radius:10px;padding:10px 15px;min-height:43px}#actions button.alt{background:#a88bad}#rotate{position:absolute;inset:0;height:var(--available-height,100%);background:#241b38;color:white;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:8;gap:12px;font-size:20px;padding:24px}#rotate small{font-size:13px;opacity:.8}#error{display:none;position:absolute;z-index:12;inset:10%;background:#fff5f5;color:#a12750;border-radius:12px;padding:16px;overflow:auto;font-size:14px}.hide{display:none!important}@media(orientation:portrait){#rotate{display:flex}}@media(max-height:310px){#card{padding:8px}#card p{margin:3px}#left,#right,#jump{opacity:.58;width:48px;height:48px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 56px)}}
 #interact{position:absolute;bottom:22%;left:50%;transform:translateX(-50%);background:#e979a5;color:white;border:2px solid #fff;border-radius:12px;padding:9px 16px;z-index:3;font-weight:800}#card{max-width:520px!important}#hud{z-index:2;max-width:75%;font-size:clamp(12px,1.7vw,18px)}@media(orientation:landscape){#left,#right,#jump{bottom:max(10px,env(safe-area-inset-bottom))}} 
 #gate{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 30% 20%,#ffd6e6,#f6aed3 45%,#b48ac8);height:var(--available-height,100%)}
@@ -102,7 +102,7 @@ function surfaces(){
  if(level===1&&!L.under)for(let i=0;i<3;i++)if(data.stars.includes(i))arr.push({x:1410+i*49,y:G,w:51,kind:'star'});
  for(const o of L.objects)if(o.type==='pipe')arr.push({x:o.x-5,y:o.top,w:o.w+10,h:G-o.top,kind:'pipe',box:true,ref:o});
  if(level===2&&!L.under&&data.story.bridge)arr.push({x:1500,y:G,w:55,kind:'bridge'});
- for(const pl of L.plats){if(pl.kind==='fall'&&pl.y>H+40)continue;arr.push({x:pl.x,y:pl.y,w:pl.w,kind:pl.kind,ref:pl})}
+ for(const pl of L.plats){if(pl.kind==='fall'&&pl.y>H+40)continue;arr.push({x:pl.x,y:pl.y,w:pl.w,h:pl.kind==='spring'?14:10,kind:pl.kind,box:pl.kind==='spring',ref:pl})}
  return arr}
 function onFloor(x){return L.map.some(a=>a.kind==='ground'&&x+p.w>a.x+4&&x<a.x+a.w-4)}
 function insideBox(x){return surfaces().some(a=>a.box&&a.y<G-8&&a.y+a.h>G-p.h&&x+p.w>a.x&&x<a.x+a.w)}
@@ -184,28 +184,29 @@ function stageReview(n,done){
  menu('✨ '+LEVELS[n]+' · 完成！',lines.join('<br>'),buttons);
 }
 function beginFinalPlanting(){
-  // A single explicit transition: dismiss the review before changing state.
-  if(level!==2||L.under){layout(2);respawnAt(2130)}
+  // Keep the whole planting cinematic visible before revealing any ending text.
   finalReviewOpen=false;
+  if(finalSceneTimeout){clearTimeout(finalSceneTimeout);finalSceneTimeout=null}
   $('#shade').classList.add('hide');
+  $('#interact').classList.add('hide');
+  $('#interact').style.bottom='';
   fade={a:0,dir:0,cb:null,text:''};
   startScene('plant');
+  scene.t=0;
   scene.startedAt=performance.now();
-  // The scene can always be completed even if an iOS frame loop stalls.
-  if(finalSceneTimeout)clearTimeout(finalSceneTimeout);
-  finalSceneTimeout=setTimeout(()=>{if(mode==='scene'&&scene&&scene.type==='plant')completeFinalPlanting()},9000);
-  const ib=$('#interact');ib.textContent='继续 ♡';ib.classList.remove('hide');
-  ib.style.bottom='8%';
+  scene.visibleFrames=0;
+  scene.readyToFinish=false;
 }
 function completeFinalPlanting(){
-  if(finalSceneTimeout){clearTimeout(finalSceneTimeout);finalSceneTimeout=null}
-  if(mode!=='scene'||!scene||scene.type!=='plant')return;
-  scene=null;$('#interact').classList.add('hide');$('#interact').style.bottom='';
+  if(mode!=='scene'||!scene||scene.type!=='plant'||!scene.readyToFinish)return;
+  scene=null;
+  $('#interact').classList.add('hide');
+  $('#interact').style.bottom='';
   ending();
 }
 function nextLevel(n){data.level=Math.max(data.level,n);data.cp=0;data.cpLevel=n;save();startLevel(n,false)}
 function finishLevel(){
- if(mode!=='play'||finalReviewOpen)return;
+ if(mode!=='play'||finalReviewOpen||scene)return;
  if(!data.hearts[level]){
   cut('❤️ 还差一颗关键爱心','这一关的爱心还没有拿到哦！请回到地图寻找粉色爱心，触碰它才能解锁下一关。',()=>{respawnAt(L.cps[Math.min(data.cp,L.cps.length-1)]);play()});return;
  }
@@ -258,7 +259,7 @@ function sceneDusk(){if(data.story.sunset)return 1;if(scene&&scene.type==='sunse
 function updateScene(dt){const s=scene,k=Math.min(2,dt/16.667);s.t+=dt;timer+=dt;
  if(s.type==='sunset'){p.x=548;p.y=G-p.h;p.sit=true;lion.x=520;lion.y=G-27;lion.sit=true;lion.face=1;p.face=1;camTo(p.x-W*.3,k);
   if(s.t>7800){scene=null;data.story.sunset=true;save();p.sit=lion.sit=false;cut('🌅 海边的夕阳','小兔子和小狮子坐在沙滩上，静静看着太阳落入海面。<br>那天，我们一起等太阳落下，也一起等烟花升起。',()=>{respawnAt(610);play()})}}
- if(s.type==='plant'){s.t=Math.max(s.t,performance.now()-(s.startedAt||performance.now()));if(s.t>7300){completeFinalPlanting()}return}
+ if(s.type==='plant'){s.t=Math.max(s.t,performance.now()-s.startedAt);if(s.t>=8800&&s.visibleFrames>=8){s.readyToFinish=true;completeFinalPlanting()}return}
  if(s.type==='fireworks'){p.x=2140;p.y=G-p.h;p.sit=true;lion.x=2112;lion.y=G-27;lion.sit=true;lion.face=1;camTo(p.x-W*.45,k);
   if(s.t<8600&&(s.next||0)<s.t){s.next=s.t+260+Math.random()*300;if(Math.random()<.35)rockets.push({x:W*(.15+Math.random()*.75),y:H-110,vy:-4.8-Math.random()*1.4,c:'#ffd6f0',parts:null});rockets.push({x:W*(.15+Math.random()*.75),y:H-110,vy:-4.6-Math.random()*1.6,c:['#ffcb8e','#ff91c1','#9ad7ff','#c8f7a6','#fff1a8'][Math.floor(Math.random()*5)],parts:null})}
   for(const r of rockets){if(!r.parts){r.y+=r.vy*k;r.vy+=.07*k;if(r.vy>-.6){r.parts=[];const n=34;for(let i=0;i<n;i++){const a=i/n*Math.PI*2,sp=1.8+Math.random()*1.6;r.parts.push({x:r.x,y:r.y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:1})}}}
@@ -315,6 +316,7 @@ function update(dt){
   // Solid raised blocks, question bricks and pipes cannot be walked through.
   if(!a.box)continue;
   if(!(p.y+p.h>a.y+4&&p.y<a.y+(a.h||H)+0))continue;
+   if(a.kind==='spring'&&prevY+p.h<=a.y+5)continue;
   const crossedRight=p.vx>0&&prevX+p.w<=a.x+4&&p.x+p.w>a.x;
   const crossedLeft=p.vx<0&&prevX>=a.x+a.w-4&&p.x<a.x+a.w;
   if(crossedRight){p.x=a.x-p.w;p.vx=0}
@@ -410,7 +412,7 @@ function coinDraw(x,y){const s=Math.abs(Math.sin(timer/220+x*.05));circle(x,y,6,
 function platDraw(pl){const x=pl.x-cam;if(x<-80||x>W+80)return;
  if(pl.kind==='mover'){const y=pl.y;circle(x+10,y+4,10,'#f2fbff');circle(x+pl.w/2,y-1,13,'#fff');circle(x+pl.w-10,y+4,10,'#f2fbff');rect(x,y+2,pl.w,9,'#eef8ff');rect(x+4,y+10,pl.w-8,3,'#a6d4eb')}
  if(pl.kind==='fall'){const sh=pl.t>0&&pl.t<450?Math.sin(timer/25)*1.5:0;rect(x+sh,pl.y,pl.w,9,'#c69468');rect(x+sh,pl.y+9,pl.w,3,'#8d6248');for(let i=6;i<pl.w;i+=14)rect(x+sh+i,pl.y+2,2,5,'#8d6248')}
- if(pl.kind==='spring'){const sq=pl.anim?4:0;rect(x+9,pl.y+6,8,14-sq,'#f5e6d3');rect(x+1,pl.y+sq,pl.w-2,8,'#e8577f');circle(x+7,pl.y+3+sq,2.2,'#fff');circle(x+18,pl.y+4+sq,2,'#fff')}}
+ if(pl.kind==='spring'){const sq=pl.anim?4:0;rect(x+2,pl.y+8,pl.w-4,7,'#9d5b73');rect(x+9,pl.y+6,8,9-sq,'#f5e6d3');rect(x+1,pl.y+sq,pl.w-2,8,'#e8577f');rect(x+1,pl.y+sq,pl.w-2,2,'#ffc3d8');circle(x+7,pl.y+3+sq,2.2,'#fff');circle(x+18,pl.y+4+sq,2,'#fff')}}
 function pipeDraw(o){const x=o.x-cam;if(x<-60||x>W+60)return;rect(x,o.top+5,o.w,G-o.top-5,'#4bba83');rect(x+4,o.top+5,5,G-o.top-5,'#7cdda0');rect(x-5,o.top,o.w+10,10,'#7cdda0');rect(x-5,o.top+8,o.w+10,2,'#3f9a6c');
  if(o.type==='pipe'&&!o.exit&&!data.seed){circle(x+o.w/2,o.top-14+Math.sin(timer/250)*2,6,'#fff1a8');text('跳上管道',x+o.w/2,o.top-26,'#fff',11,'center')}
  if(o.exit&&data.seed){text('⬇ 出口',x+o.w/2,o.top-12,'#fff',11,'center')}}
@@ -437,6 +439,7 @@ function seedDraw(x,y){const b=Math.sin(timer/300)*2;circle(x,y+b,11,'#fff6b0');
 function cloudDraw(c){let x=c.x-cam,y=G-4;circle(x+9,y+4,10,'#eaf8ff');circle(x+c.w/2,y-2,13,'#fff');circle(x+c.w-9,y+4,10,'#eaf8ff');rect(x,y+2,c.w,9,'#eaf8ff');rect(x+4,y+10,c.w-8,3,'#a6d4eb')}
 function draw(){
  if(scene&&scene.type==='plant'){
+  scene.visibleFrames=(scene.visibleFrames||0)+1;
   const t=scene.t;
   const grad=ctx.createLinearGradient(0,0,0,H);grad.addColorStop(0,'#f7c8e1');grad.addColorStop(1,'#d5f1ce');ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
   rect(0,G,W,H-G,'#b9897e');rect(0,G,W,9,'#7bcaa0');
@@ -486,7 +489,7 @@ function loop(t){try{let dt=Math.min(40,t-last||16);last=t;
  updateFade(dt);draw()}catch(e){$('#error').style.display='block';$('#error').textContent='游戏运行异常：'+e.message+'。请截图反馈。';return}requestAnimationFrame(loop)}
 
 // ================= Interact =================
-function interact(){if(mode==='scene'&&scene&&scene.type==='plant'){completeFinalPlanting();return}if(mode!=='play')return;
+function interact(){if(mode==='scene'&&scene&&scene.type==='plant')return;if(mode!=='play')return;
  if(L.under){if(data.seed&&onPipeTop(PIPE()))startScene('pipeOut',{pipe:PIPE()});return}
  if(level===1&&!data.story.sunset&&p.x>=535){startScene('sunset');return}
  if(level===2&&!data.seed&&onPipeTop(PIPE())){startScene('pipeIn',{pipe:PIPE()})}}
