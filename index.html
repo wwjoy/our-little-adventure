@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V2.6.7</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V2.6.8</title><style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#2a203f;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;touch-action:none}#stage{position:absolute;inset:0;height:var(--available-height,100%);display:flex;align-items:center;justify-content:center}canvas{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;touch-action:none;-webkit-user-select:none}#hud{position:absolute;top:max(8px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));color:#fff;font-size:clamp(13px,2.2vw,19px);font-weight:800;text-shadow:1px 2px #704b73;pointer-events:none}#pause{position:absolute;right:max(12px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));z-index:2}button{font-family:inherit;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent}#controls{position:absolute;inset:0;pointer-events:none;z-index:3}#left,#right,#jump{opacity:.58;position:absolute;bottom:max(10px,env(safe-area-inset-bottom));width:52px;height:52px;background:#55476655;border:2px solid #ffffff77;color:#fff;border-radius:12px;font-size:22px;font-weight:800;pointer-events:auto}#left{left:max(12px,env(safe-area-inset-left))}#right{left:calc(max(12px,env(safe-area-inset-left)) + 61px)}#jump{right:max(12px,env(safe-area-inset-right));border-radius:50%;font-size:28px}.pressed{background:#ec8eaecc!important;opacity:1!important}#pause{border:2px solid #ffffffaa;background:#55476677;color:#fff;border-radius:11px;width:45px;height:42px;font-size:20px}#shade{position:absolute;inset:0;height:var(--available-height,100%);background:#211b39c9;display:flex;justify-content:center;align-items:center;z-index:4;padding:12px}#card{background:#fff3f6;border:3px solid #ffc2d7;border-radius:17px;color:#68455e;text-align:center;width:min(440px,92%);padding:16px;max-height:90%;overflow:auto;box-shadow:0 6px #a36e9d}#card h1{font-size:clamp(19px,3.2vw,27px);color:#db6394;margin:0 0 8px}#card p{font-size:clamp(12px,1.8vw,15px);line-height:1.65;margin:8px 0}#actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}#actions button{font-size:14px;font-weight:700;border:0;background:#e979a5;color:#fff;border-radius:10px;padding:10px 15px;min-height:43px}#actions button.alt{background:#a88bad}#rotate{position:absolute;inset:0;height:var(--available-height,100%);background:#241b38;color:white;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:8;gap:12px;font-size:20px;padding:24px}#rotate small{font-size:13px;opacity:.8}#error{display:none;position:absolute;z-index:12;inset:10%;background:#fff5f5;color:#a12750;border-radius:12px;padding:16px;overflow:auto;font-size:14px}.hide{display:none!important}@media(orientation:portrait){#rotate{display:flex}}@media(max-height:310px){#card{padding:8px}#card p{margin:3px}#left,#right,#jump{opacity:.58;width:48px;height:48px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 56px)}}
 #interact{position:absolute;left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);background:#fff9f0e8;color:#79516c;border:2px solid #e9a7c5;border-radius:7px;padding:4px 8px;min-width:66px;min-height:32px;z-index:3;font-weight:800;font-size:11px;box-shadow:0 3px #a88ba4;white-space:nowrap}#card{max-width:520px!important}#hud{z-index:2;max-width:75%;font-size:clamp(12px,1.7vw,18px)}@media(orientation:landscape){#left,#right,#jump{bottom:max(10px,env(safe-area-inset-bottom))}} 
 #gate{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 30% 20%,#ffd6e6,#f6aed3 45%,#b48ac8);height:var(--available-height,100%)}
@@ -399,7 +399,7 @@ function drawSnow(){
  const s=snow;if(!s)return;
  const sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#83c7e9');sky.addColorStop(1,'#f7dcec');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
  const px=Math.min(W*.30,220),offset=s.distance-px;
- for(let i=0;i<9;i++){const x=i*185-(s.distance*.12%185);ctx.fillStyle=i%2?'#e8f8ff':'#c9e4f4';ctx.beginPath();ctx.moveTo(x-140,270);ctx.lineTo(x+50,92+(i%3)*20);ctx.lineTo(x+230,270);ctx.fill()}
+ for(let i=0;i<9;i++){const x=i*185-(s.distance*.12%185);ctx.fillStyle=i%2?'#e8f8ff':'#c9e4f4';ctx.beginPath();ctx.moveTo(x-140,H);ctx.lineTo(x+50,92+(i%3)*20);ctx.lineTo(x+230,H);ctx.closePath();ctx.fill()}
  for(let i=0;i<65;i++){const x=((i*113-s.distance*.24)%W+W)%W,y=(i*67+timer*.02)%265;circle(x,y,1.5,'#fff')}
    // One continuous snow surface, with no legacy horizontal ground stripe.
   ctx.beginPath();ctx.moveTo(0,H);
@@ -418,16 +418,16 @@ function drawSnow(){
 for(let i=0;i<SNOW_FLAKES.length;i++){const x=SNOW_FLAKES[i],sx=x-offset;if(sx>-25&&sx<W+25&&!s.flakes.has(i))text('❄',sx,snowGround(x)-45,'#fff',20,'center')}
  for(const q of s.particles){ctx.globalAlpha=Math.max(0,q.life/.5);circle(q.x-offset,q.y,2,'#fff');ctx.globalAlpha=1}
  const py=s.onGround?snowGround(s.distance):s.airY;
- if(!scene||scene.type!=='snowEnding'||s.endT<1700){ctx.save();ctx.translate(px,py);ctx.rotate(s.onGround?s.angle:Math.max(-.24,Math.min(.24,s.angle*.35)));rect(-10,-2,44,6,'#f6a9cf');rect(-8,-4,40,2,'#fff4fa');bunny(-1,-30,1,false,false);ctx.restore();}
+ if(!scene||scene.type!=='snowEnding'||s.endT<900){ctx.save();ctx.translate(px,py);ctx.rotate(s.onGround?s.angle:Math.max(-.24,Math.min(.24,s.angle*.35)));rect(-10,-2,44,6,'#f6a9cf');rect(-8,-4,40,2,'#fff4fa');bunny(-1,-30,1,false,false);ctx.restore();}
  if(s.distance>SNOW_SPEED*SNOW_LENGTH-165&&(!scene||scene.type!=='snowEnding')){const lx=SNOW_SPEED*SNOW_LENGTH-offset;lionDraw(lx,snowGround(SNOW_SPEED*SNOW_LENGTH)-27,-1,false);text('终点 ♡',lx,snowGround(SNOW_SPEED*SNOW_LENGTH)-48,'#805f88',13,'center')}
  text('❄ 未来的冬天',18,29,'#426b88',20);text('🏂 跳过雪堆 · ❄ '+s.flakes.size+'/'+SNOW_FLAKES.length,18,53,'#426b88',12);
  rect(18,65,W-36,7,'#ffffff88');rect(18,65,(W-36)*Math.min(1,s.distance/(SNOW_SPEED*SNOW_LENGTH)),7,'#ed9fc8');if(scene&&scene.type==='snowEnding'){
- const t=s.endT||0, a=Math.min(1,t/1800),lx=px+58-30*a,py2=snowGround(s.distance);
+ const t=s.endT||0, a=Math.min(1,t/1050),lx=px+42-11*a,py2=snowGround(s.distance);
  // Lion approaches, rabbit steps off the board, then they share a heart.
  lionDraw(lx,py2-27,-1,false);
- if(t>1700){bunny(px,py2-27,1,t>2800,false);}
- if(t>2600){heart(px+29,py2-67-3*Math.sin(t/240));}
- if(t>3300){ctx.fillStyle='#fff8f0e9';ctx.fillRect(W/2-205,48,410,58);
+ if(t>900){bunny(px,py2-27,1,t>1550,false);}
+ if(t>1550){heart(px+16,py2-67-3*Math.sin(t/240));}
+ if(t>2050){ctx.fillStyle='#fff8f0e9';ctx.fillRect(W/2-205,48,410,58);
  text('🦁 以后，我们一起去滑雪吧。',W/2,73,'#805878',20,'center');
  text('还有好多想和你一起做的事 ♡',W/2,95,'#966987',13,'center');}
  }else text('✦ 跳跃',W-28,H-22,'#6d8ba4',13,'right');
@@ -438,7 +438,7 @@ function startScene(type,o){mode='scene';scene=Object.assign({type,t:0},o||{});c
 function sceneDusk(){if(data.story.sunset)return 1;if(scene&&scene.type==='sunset')return Math.min(1,scene.t/6500);return 0}
 function updateScene(dt){const s=scene,k=Math.min(2,dt/16.667);s.t+=dt;timer+=dt;
  if(s.type==='snow'){updateSnow(dt);return}
- if(s.type==='snowEnding'){if(snow){snow.endT+=dt;if(snow.endT>7500){finishWinterScene()}}return}
+ if(s.type==='snowEnding'){if(snow){snow.endT+=dt;if(snow.endT>4500){finishWinterScene()}}return}
  if(s.type==='sunset'){p.x=548;p.y=G-p.h;p.sit=true;lion.x=520;lion.y=G-27;lion.sit=true;lion.face=1;p.face=1;camTo(p.x-W*.3,k);
   if(s.t>7800){scene=null;data.story.sunset=true;save();p.sit=lion.sit=false;cut('🌅 海边的夕阳','小兔子和小狮子坐在沙滩上，静静看着太阳落入海面。<br>那天，我们一起等太阳落下，也一起等烟花升起。',()=>{respawnAt(610);play()})}}
  if(s.type==='plant'){s.t=Math.max(s.t,performance.now()-s.startedAt);if(s.t>=8800&&s.visibleFrames>=8){s.readyToFinish=true;completeFinalPlanting()}return}
