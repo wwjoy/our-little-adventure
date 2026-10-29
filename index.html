@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V2.6.3</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V2.6.4</title><style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#2a203f;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;touch-action:none}#stage{position:absolute;inset:0;height:var(--available-height,100%);display:flex;align-items:center;justify-content:center}canvas{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;touch-action:none;-webkit-user-select:none}#hud{position:absolute;top:max(8px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));color:#fff;font-size:clamp(13px,2.2vw,19px);font-weight:800;text-shadow:1px 2px #704b73;pointer-events:none}#pause{position:absolute;right:max(12px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));z-index:2}button{font-family:inherit;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent}#controls{position:absolute;inset:0;pointer-events:none;z-index:3}#left,#right,#jump{opacity:.58;position:absolute;bottom:max(10px,env(safe-area-inset-bottom));width:52px;height:52px;background:#55476655;border:2px solid #ffffff77;color:#fff;border-radius:12px;font-size:22px;font-weight:800;pointer-events:auto}#left{left:max(12px,env(safe-area-inset-left))}#right{left:calc(max(12px,env(safe-area-inset-left)) + 61px)}#jump{right:max(12px,env(safe-area-inset-right));border-radius:50%;font-size:28px}.pressed{background:#ec8eaecc!important;opacity:1!important}#pause{border:2px solid #ffffffaa;background:#55476677;color:#fff;border-radius:11px;width:45px;height:42px;font-size:20px}#shade{position:absolute;inset:0;height:var(--available-height,100%);background:#211b39c9;display:flex;justify-content:center;align-items:center;z-index:4;padding:12px}#card{background:#fff3f6;border:3px solid #ffc2d7;border-radius:17px;color:#68455e;text-align:center;width:min(440px,92%);padding:16px;max-height:90%;overflow:auto;box-shadow:0 6px #a36e9d}#card h1{font-size:clamp(19px,3.2vw,27px);color:#db6394;margin:0 0 8px}#card p{font-size:clamp(12px,1.8vw,15px);line-height:1.65;margin:8px 0}#actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}#actions button{font-size:14px;font-weight:700;border:0;background:#e979a5;color:#fff;border-radius:10px;padding:10px 15px;min-height:43px}#actions button.alt{background:#a88bad}#rotate{position:absolute;inset:0;height:var(--available-height,100%);background:#241b38;color:white;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:8;gap:12px;font-size:20px;padding:24px}#rotate small{font-size:13px;opacity:.8}#error{display:none;position:absolute;z-index:12;inset:10%;background:#fff5f5;color:#a12750;border-radius:12px;padding:16px;overflow:auto;font-size:14px}.hide{display:none!important}@media(orientation:portrait){#rotate{display:flex}}@media(max-height:310px){#card{padding:8px}#card p{margin:3px}#left,#right,#jump{opacity:.58;width:48px;height:48px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 56px)}}
 #interact{position:absolute;bottom:22%;left:50%;transform:translateX(-50%);background:#e979a5;color:white;border:2px solid #fff;border-radius:12px;padding:9px 16px;z-index:3;font-weight:800}#card{max-width:520px!important}#hud{z-index:2;max-width:75%;font-size:clamp(12px,1.7vw,18px)}@media(orientation:landscape){#left,#right,#jump{bottom:max(10px,env(safe-area-inset-bottom))}} 
 #gate{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 30% 20%,#ffd6e6,#f6aed3 45%,#b48ac8);height:var(--available-height,100%)}
@@ -41,7 +41,7 @@ let W=640, cam=0, mode='gate', last=0, level=0, timer=0;
 let held={left:false,right:false,jump:false}, jumpQueue=false, assist=true;
 let clouds=[], sleeping=false, failCount=0, failCp=-1, respawnGuard=0, toast=null;
 let scene=null, dying=null, fade={a:0,dir:0,cb:null,text:''}, rockets=[], trail=[], mainL=null, bubbleMsg=null;
-const freshData=()=>({version:1,gifts:[],keepsakes:[],keys:[],secretDoors:[],rewardMigration:0,level:0,hearts:[false,false,false],seed:false,stars:[],shells:[],coins:[],qb:[],met:false,cp:0,cpLevel:0,done:false,story:{},assist:true});
+const freshData=()=>({version:1,gifts:[],keepsakes:[],keys:[],secretDoors:[],snowboard:false,winterCard:false,snowBest:0,rewardMigration:0,level:0,hearts:[false,false,false],seed:false,stars:[],shells:[],coins:[],qb:[],met:false,cp:0,cpLevel:0,done:false,story:{},assist:true});
 let data=freshData();
 let p={x:45,y:G-27,w:22,h:27,vx:0,vy:0,on:false,ride:null,coyote:0,buffer:0,jumpMs:0,face:1,sit:false,hidden:false}, lion={x:30,y:G-27,sit:false,face:1};
 let L=null;
@@ -60,7 +60,7 @@ const arc=(x,y,n,dx=18,h=18)=>Array.from({length:n},(_,i)=>[x+i*dx,y-Math.round(
 function buildLevel(n){
  if(n===0) return {end:2140,
   map:[gr(0,405),gr(451,490),gr(989,460),gr(1497,670),bl(235,92,244),bl(595,98,241),bl(1110,105,238),bl(1690,100,235)],
-  boxes:[qb(0,150,190,'coin'),qb(1,520,190,'bag'),qb(2,770,190,'keepsake'),qb(3,792,190,'coin'),qb(4,1320,190,'key'),qb(5,615,157,'gift'),qb(6,1138,164,'bag')],
+  boxes:[qb(0,150,190,'coin'),qb(1,520,190,'bag'),qb(2,770,190,'keepsake'),qb(3,792,190,'coin'),qb(4,1320,190,'key'),qb(5,615,157,'coin'),qb(6,1138,164,'bag')],
   plats:[spring(1860)],
   cps:[45,360,1000,1515], trees:[105,390,730,1040,1450,1610,2040],
   enemies:[{type:'walker',x:1620,start:1580,end:1670,v:.35}],
@@ -68,7 +68,7 @@ function buildLevel(n){
    ...coins(0,[...arc(410,250,3,18,12),...row(612,214,4,20),...arc(944,245,3,20,14),...row(1130,212,3,24),...row(1855,120,3,22),...row(1925,150,2,22)])]};
  if(n===1) return {end:2250,
   map:[gr(0,480),gr(520,500),gr(1060,350),gr(1560,330),gr(2010,270),bl(250,95,247),bl(710,115,244),bl(1190,105,242),bl(1660,105,247)],
-  boxes:[qb(0,380,190,'shell'),qb(1,640,190,'bag'),qb(2,1110,186,'gift'),qb(3,1700,170,'gift'),qb(4,735,157,'coin')],
+  boxes:[qb(0,380,190,'shell'),qb(1,640,190,'bag'),qb(2,1110,186,'gift'),qb(3,1700,170,'coin'),qb(4,735,157,'coin')],
   plats:[mover(1922,G-2,58,40,0,3400),spring(1600)],
   cps:[45,650,1070,1580], trees:[],
   enemies:[{type:'walker',x:180,start:140,end:232,v:.35},{type:'walker',x:880,start:835,end:955,v:.45}],
@@ -77,7 +77,7 @@ function buildLevel(n){
    ...coins(0,[...arc(484,260,3,16,12),...row(735,218,4,22),...arc(1024,262,3,14,10),...row(1580,130,2,26),...row(1906,236,5,20),...row(2040,250,3,22)])]};
  return {end:2350,
   map:[gr(0,490),gr(535,475),gr(1050,455),gr(1550,450),gr(2110,290),bl(240,110,240),bl(700,110,241),bl(1220,115,229),bl(1750,110,241)],
-  boxes:[qb(0,600,190,'keepsake'),qb(1,1080,190,'bag'),qb(2,1660,190,'gift'),qb(3,1682,190,'keepsake'),qb(4,1240,159,'coin')],
+  boxes:[qb(0,600,190,'keepsake'),qb(1,1080,190,'bag'),qb(2,1660,190,'gift'),qb(3,1682,190,'coin'),qb(4,1240,159,'coin')],
   plats:[spring(430),mover(1342,236,48,0,48,2800),plank(2004,50),plank(2056,52)],
   cps:[45,600,950,1580,1890,2130], trees:[140,620,1150,1650,2230],
   enemies:[{type:'walker',x:120,start:95,end:195,v:.4},{type:'fly',x:600,start:560,end:680,v:.5,base:222,amp:18},
@@ -88,20 +88,21 @@ function buildLevel(n){
 // Underground bonus room behind the glowing pipe (level 3)
 function buildUnder(){return {key:'2u',under:true,end:900,
  map:[gr(0,900),bl(300,60,250),bl(520,60,230)],
- boxes:[qb(0,160,190,'coin'),qb(1,182,190,'bag'),qb(2,204,190,'keepsake')],
+ boxes:[qb(0,160,190,'coin'),qb(1,182,190,'bag'),qb(2,204,190,'coin')],
  plats:[],cps:[70],trees:[],enemies:[],
  objects:[{type:'seed',x:700,y:G-22},{type:'pipe',x:820,w:42,top:G-44,exit:true},{type:'sign',x:640,text:'拿到种子，再从绿色管道出去'},
   ...coins(0,[...arc(226,246,4,18,24),...row(310,215,3,20),...arc(440,240,4,18,30),...row(530,195,3,20),...row(620,250,3,18)])]}}
 function buildSecretRoom(){return {key:'0b',secret:true,end:690,
  map:[gr(0,690),bl(185,95,240),bl(380,100,218)],
- boxes:[qb(0,290,172,'bag')],plats:[],cps:[50],trees:[],enemies:[],
- objects:[{type:'sign',x:95,text:'秘密小屋 ♡'},{type:'sign',x:570,text:'出口 →'},
+ boxes:[qb(0,290,172,'bag'),qb(1,340,177,'snowboard')],plats:[],cps:[50],trees:[],enemies:[],
+ objects:[{type:'sign',x:95,text:'❄ 冬日的秘密'},{type:'sign',x:570,text:'出口 →'},
  ...coins(0,[...row(110,245,3,22),...row(218,198,3,22),...row(402,177,3,22)])]}}
 let secretReturnX=1370;
+let snow=null;
 function enterSecretRoom(){
  if(level!==0||L.under||L.secret||!data.keys.includes('0-q4'))return;
- secretReturnX=p.x;mainL=L;L=buildSecretRoom();L.pops=[];pickups=[];clouds=[];
- respawnAt(50);cam=0;play();flash('✨ 发现秘密小屋！');
+ secretReturnX=p.x;mainL=L;L=buildSecretRoom();L.pops=[];pickups=[];restoreUnclaimedRewards();clouds=[];
+ respawnAt(50);cam=0;play();flash('❄️ 这里竟然藏着一片冬天……');
 }
 function exitSecretRoom(){
  if(!L.secret)return;
@@ -112,7 +113,7 @@ function exitSecretRoom(){
 const PIPE=()=>L.objects.find(o=>o.type==='pipe');
 const LK=()=>L&&L.key||String(level);
 const qKey=b=>LK()+'-q'+b.id, cKey=o=>LK()+'-c'+o.id;
-function totalCoins(){let t=0;for(const l of [buildLevel(0),buildLevel(1),buildLevel(2),buildUnder()])t+=l.objects.filter(o=>o.type==='coin').length+l.boxes.reduce((n,b)=>n+(b.reward==='bag'?5:b.reward==='coin'?1:0),0);return t}
+function totalCoins(){let t=0;for(const l of [buildLevel(0),buildLevel(1),buildLevel(2),buildUnder(),buildSecretRoom()])t+=l.objects.filter(o=>o.type==='coin').length+l.boxes.reduce((n,b)=>n+(b.reward==='bag'?5:b.reward==='coin'?1:0),0);return t}
 const TOTAL_COINS=totalCoins();
 
 function surfaces(){
@@ -137,7 +138,7 @@ function safeX(x){
 
 // ================= Save =================
 function save(){try{localStorage.setItem(SAVE,JSON.stringify(data))}catch(e){}}
-function load(){try{let d=JSON.parse(localStorage.getItem(SAVE)||'null');if(d&&d.version===1){data=Object.assign(freshData(),d);data.hearts=(data.hearts||[]).slice(0,3);while(data.hearts.length<3)data.hearts.push(false);data.story=data.story||{};data.coins=data.coins||[];data.qb=data.qb||[];data.gifts=data.gifts||[];data.keepsakes=data.keepsakes||[];data.keys=data.keys||[];data.secretDoors=data.secretDoors||[];if(!data.rewardMigration){const old=['0-q2','0-q4','1-q2','2-q0','2-q3','2u-q2'];data.qb=data.qb.filter(x=>!old.includes(x));data.rewardMigration=1;save()}assist=data.assist!==false}}catch(e){}}
+function load(){try{let d=JSON.parse(localStorage.getItem(SAVE)||'null');if(d&&d.version===1){data=Object.assign(freshData(),d);data.hearts=(data.hearts||[]).slice(0,3);while(data.hearts.length<3)data.hearts.push(false);data.story=data.story||{};data.coins=data.coins||[];data.qb=data.qb||[];data.gifts=data.gifts||[];data.keepsakes=data.keepsakes||[];data.keys=data.keys||[];data.secretDoors=data.secretDoors||[];data.snowboard=!!data.snowboard;data.winterCard=!!data.winterCard;data.snowBest=data.snowBest||0;if(!data.rewardMigration){const old=['0-q2','0-q4','1-q2','2-q0','2-q3','2u-q2'];data.qb=data.qb.filter(x=>!old.includes(x));data.rewardMigration=1;save()}assist=data.assist!==false}}catch(e){}}
 function gateOk(){try{return localStorage.getItem(GATE)==='1'}catch(e){return false}}
 
 // ================= Flow =================
@@ -150,7 +151,7 @@ function restoreUnclaimedRewards(){
  for(const b of L.boxes){
   const key=qKey(b),r=b.reward||'coin';
   if(!data.qb.includes(key))continue;
-  if(r==='keepsake'&&!data.keepsakes.includes(key)||r==='gift'&&!data.gifts.includes(key)){
+  if((r==='keepsake'&&!data.keepsakes.includes(key))||(r==='gift'&&!data.gifts.includes(key))||(r==='snowboard'&&!data.snowboard)){
    if(!pickups.some(a=>a.key===key))pickups.push({x:b.x+11,y:b.y-27,baseY:b.y-14,kind:r,key,life:500});
   }
   if(r==='key'&&!data.keys.includes(key)){
@@ -225,7 +226,7 @@ function journal(back){
  '🪙 爱心金币 '+data.coins.length+'/'+TOTAL_COINS+'　· 10、20、30枚有小奖励。',
  '🐚 海边贝壳 '+data.shells.length+'/5　· 找到3枚、5枚会解锁回忆卡。'];
  const rewards=rewardLines();
- if(data.keepsakes.length)lines.push('💗 珍藏爱心：收集到了温柔的小心意 ♡');if(data.secretDoors.length)lines.push('🚪 初夏小镇的秘密房间已探索 ♡');if(rewards.length)lines.push('<br><strong>✨ 已解锁的收藏</strong>',...rewards);
+ if(data.winterCard)lines.push('❄️ 冬日回忆卡《未来的冬天》 · 还有好多想和你一起做的事。');else if(data.snowboard)lines.push('🏂 冬日秘密：单板已找到，雪山还在等你。');if(data.keepsakes.length)lines.push('💗 珍藏爱心：收集到了温柔的小心意 ♡');if(data.secretDoors.length)lines.push('🚪 初夏小镇的秘密房间已探索 ♡');if(rewards.length)lines.push('<br><strong>✨ 已解锁的收藏</strong>',...rewards);
  menu('📖 冒险手册',lines.join('<br>'),[['继续冒险 ♡',back]]);
 }
 function rewardToast(kind,count){
@@ -288,7 +289,7 @@ function ending2(){const n=data.shells.length;
  if(cardC())lines.push('🪙 爱心币收集达人！隐藏回忆卡 C 已解锁');
  lines.push('<small>礼物盒内容将在正式版填入；目前是完整流程测试结局。</small>');
  menu('🎁 还有一份礼物',lines.join('<br>'),[['🎁 打开纪念礼物',()=>menu('🎁 给你的礼物','谢谢你陪我走过第一个365天。<br>以后也一起看更多夕阳和烟花吧。<br>To be continued…',[['继续我们的冒险 ♡',home],['回忆相册',album]])],['回忆相册',album],['返回首页',home]])}
-function album(){const n=data.shells.length,c=data.coins.length;menu('📷 我们的回忆相册','🌸 初夏相遇　🎆 夕阳花火　🌱 秘密花园<br>🐚 贝壳 '+n+'/5'+(n>=3?'　回忆卡 A ✓':'')+(n>=5?'　回忆卡 B ✓':'')+'<br>🪙 爱心币 '+c+'/'+TOTAL_COINS+(cardC()?'　隐藏回忆卡 C ✓':'<br>（收集 '+Math.ceil(TOTAL_COINS*.7)+' 枚解锁隐藏卡 C）'),[['📖 冒险手册',()=>journal(home)],['返回',home]])}
+function album(){const n=data.shells.length,c=data.coins.length;menu('📷 我们的回忆相册','🌸 初夏相遇　🎆 夕阳花火　🌱 秘密花园<br>'+(data.winterCard?'❄️《未来的冬天》已收藏<br>':'')+'🐚 贝壳 '+n+'/5'+(n>=3?'　回忆卡 A ✓':'')+(n>=5?'　回忆卡 B ✓':'')+'<br>🪙 爱心币 '+c+'/'+TOTAL_COINS+(cardC()?'　隐藏回忆卡 C ✓':'<br>（收集 '+Math.ceil(TOTAL_COINS*.7)+' 枚解锁隐藏卡 C）'),[['📖 冒险手册',()=>journal(home)],['返回',home]])}
 
 // ================= Fade =================
 function fadeTo(cb,txt){fade.dir=1;fade.cb=cb;fade.text=txt||''}
@@ -317,10 +318,63 @@ function failure(cause,x){
   menu('🦁 我们一起过去吧','可以让小狮子帮你搭好刚才的云桥，但仍需要自己走过这段路。',[["帮我搭桥",()=>{if(gap&&!clouds.some(c=>c.id===gap.id))clouds.push(gap);else sleeping=true;respawnAt(L.cps[cp]);failCount=0;play()}],['继续挑战',play]]);
  }}
 
+// ================= Winter snowboard secret (optional) =================
+const SNOW_LENGTH=15.0, SNOW_SPEED=145;
+const SNOW_OBSTACLES=[300,615,940,1255,1585,1880];
+const SNOW_FLAKES=[190,470,800,1100,1450,1750,2050];
+function startSnow(){
+ if(!L||!L.secret||!data.snowboard)return;
+ snow={distance:0,vy:0,lift:0,onGround:true,flakes:new Set(),done:false};
+ startScene('snow');showUI(true);$('#pause').classList.add('hide');$('#left').classList.add('hide');$('#right').classList.add('hide');$('#jump').classList.remove('hide');
+ $('#hud').classList.add('hide');
+}
+function stopSnow(){
+ snow=null;scene=null;$('#left').classList.remove('hide');$('#right').classList.remove('hide');
+ $('#hud').classList.remove('hide');
+}
+function snowFail(){
+ const got=snow.flakes.size;stopSnow();
+ menu('❄️ 雪堆挡住啦','差一点点！已经收集了 '+got+' 片雪花。', [['再滑一次 ♡',startSnow],['回秘密小屋',()=>{respawnAt(320);play()}]]);
+}
+function snowFinish(){
+ const got=snow.flakes.size;data.snowBest=Math.max(data.snowBest||0,got);data.winterCard=true;save();stopSnow();
+ menu('❄️《未来的冬天》','🏂 小兔子滑过雪坡，小狮子在终点等着她。<br><br>「还有好多想和你一起做的事。」<br><small>冬日回忆卡已收进冒险手册 ♡</small>', [['回到初夏 ♡',()=>{respawnAt(320);play()}],['再滑一次',startSnow]]);
+}
+function updateSnow(dt){
+ if(!snow)return;
+ const k=dt/1000;
+ if(jumpQueue&&snow.onGround){snow.vy=330;snow.onGround=false;jumpQueue=false}
+ else if(jumpQueue)jumpQueue=false;
+ if(!snow.onGround){snow.lift+=snow.vy*k;snow.vy-=860*k;if(snow.lift<=0){snow.lift=0;snow.vy=0;snow.onGround=true}}
+ const before=snow.distance;snow.distance+=SNOW_SPEED*k;
+ for(let i=0;i<SNOW_FLAKES.length;i++){
+  const x=SNOW_FLAKES[i];if(!snow.flakes.has(i)&&snow.distance>=x-16&&snow.distance<x+22&&snow.lift>18)snow.flakes.add(i);
+ }
+ for(const x of SNOW_OBSTACLES){if(before<x+15&&snow.distance>=x-14&&snow.distance<x+19&&snow.lift<25){snowFail();return}}
+ if(snow.distance>=SNOW_SPEED*SNOW_LENGTH){snowFinish();return}
+}
+function drawSnow(){
+ const s=snow;if(!s)return;
+ const sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#83c7e9');sky.addColorStop(1,'#f7dcec');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+ for(let i=0;i<8;i++){const x=i*180-(s.distance*.12%180);ctx.fillStyle=i%2?'#e8f8ff':'#c9e4f4';ctx.beginPath();ctx.moveTo(x-120,270);ctx.lineTo(x+50,90+(i%3)*23);ctx.lineTo(x+210,270);ctx.fill()}
+ for(let i=0;i<55;i++){const x=((i*113-s.distance*.24)%W+W)%W,y=(i*67+timer*.02)%260;circle(x,y,1.8,'#fff')}
+ rect(0,271,W,89,'#f4fbff');rect(0,271,W,5,'#c7e9f9');for(let i=0;i<14;i++){let x=((i*92-s.distance*.8)%W+W)%W;rect(x,291,35,3,'#d4ecfa')}
+ const px=Math.min(W*.30,220),py=270-s.lift;
+ for(const x of SNOW_OBSTACLES){let sx=px+x-s.distance;if(sx>-45&&sx<W+30){rect(sx-12,252,24,19,'#c8e9f7');rect(sx-9,248,18,5,'#fff');rect(sx-2,257,4,4,'#8cbfd6')}}
+ for(let i=0;i<SNOW_FLAKES.length;i++){let sx=px+SNOW_FLAKES[i]-s.distance;if(sx>-15&&sx<W+15&&!s.flakes.has(i)){text('❄',sx,219,'#fff',19,'center')}}
+ // Snowboard beneath the bunny: visible board, fixed collision size.
+ rect(px-7,py+1,42,6,'#f6a9cf');rect(px-5,py,38,2,'#fff4fa');bunny(px,py-27,1,false,false);
+ if(s.distance>SNOW_SPEED*SNOW_LENGTH-150){lionDraw(W-95,244,-1,false);text('终点 ♡',W-90,206,'#805f88',13,'center')}
+ text('❄ 未来的冬天',18,29,'#426b88',20);text('🏂 跳过雪堆 · ❄ '+s.flakes.size+'/'+SNOW_FLAKES.length,18,53,'#426b88',12);
+ rect(18,65,W-36,7,'#ffffff88');rect(18,65,(W-36)*Math.min(1,s.distance/(SNOW_SPEED*SNOW_LENGTH)),7,'#ed9fc8');
+ text('✦ 跳跃',W-28,H-22,'#6d8ba4',13,'right');
+}
+
 // ================= Scenes (cinematics) =================
 function startScene(type,o){mode='scene';scene=Object.assign({type,t:0},o||{});clearInput();showUI(false);$('#shade').classList.add('hide');$('#interact').classList.add('hide');rockets=[];last=performance.now()}
 function sceneDusk(){if(data.story.sunset)return 1;if(scene&&scene.type==='sunset')return Math.min(1,scene.t/6500);return 0}
 function updateScene(dt){const s=scene,k=Math.min(2,dt/16.667);s.t+=dt;timer+=dt;
+ if(s.type==='snow'){updateSnow(dt);return}
  if(s.type==='sunset'){p.x=548;p.y=G-p.h;p.sit=true;lion.x=520;lion.y=G-27;lion.sit=true;lion.face=1;p.face=1;camTo(p.x-W*.3,k);
   if(s.t>7800){scene=null;data.story.sunset=true;save();p.sit=lion.sit=false;cut('🌅 海边的夕阳','小兔子和小狮子坐在沙滩上，静静看着太阳落入海面。<br>那天，我们一起等太阳落下，也一起等烟花升起。',()=>{respawnAt(610);play()})}}
  if(s.type==='plant'){s.t=Math.max(s.t,performance.now()-s.startedAt);if(s.t>=8800&&s.visibleFrames>=8){s.readyToFinish=true;completeFinalPlanting()}return}
@@ -358,12 +412,15 @@ function boxReward(b){
  if(r==='shell'){if(!data.shells.includes(4)){data.shells.push(4);save();rewardToast('shell',data.shells.length)}flash('🐚 从问号砖块里发现贝壳！');return}
  if(r==='key'){if(!data.keys.includes(key))data.keys.push(key);save();flash('🗝️ 找到一把闪闪发光的小钥匙！');return}
  pickups.push({x:b.x+11,y:b.y-14,baseY:b.y-14,kind:r,key,life:0});
- flash(r==='keepsake'?'💗 珍藏爱心出现啦！跳起来收下它！':r==='key'?'🗝️ 发现一把小钥匙！寻找附近的秘密小门吧！':'🎀 神秘礼盒出现了！');
+ flash(r==='snowboard'?'🏂 一块粉白色的单板滑雪板！':r==='keepsake'?'💗 珍藏爱心出现啦！':r==='key'?'🗝️ 找到小钥匙！':'🎀 神秘礼盒出现了！');
 }
 function updateRewards(dt){
  for(const a of pickups){a.life+=dt;a.y=a.baseY-13*Math.min(1,a.life/350)+Math.sin(a.life/210)*2;
   if(p.x<a.x+13&&p.x+p.w>a.x-13&&p.y<a.y+12&&p.y+p.h>a.y-12){
-   if(a.kind==='keepsake'){
+   if(a.kind==='snowboard'){
+    data.snowboard=true;save();a.taken=true;
+    menu('🏂 冬日的秘密','雪山就在眼前。要不要踩上单板，试一试？', [['出发 ♡',startSnow],['等一会儿',play]]);
+   }else if(a.kind==='keepsake'){
     if(!data.keepsakes.includes(a.key)){data.keepsakes.push(a.key);save()}
     flash('💗 珍藏爱心已收进冒险手册 ♡');
    }else if(a.kind==='key'){
@@ -485,6 +542,7 @@ function update(dt){
   }
   /* heart collected on contact below */}}
   if(L.secret&&p.x>555)showInteract='✦ 离开小屋';
+  if(L.secret&&data.snowboard&&!data.winterCard&&p.x>265&&p.x<385)showInteract='🏂 去滑雪';
   if(level===0&&!L.secret&&!L.under&&p.x>1360&&p.x<1430&&data.keys.includes('0-q4'))showInteract='✦ 打开小门';
  const ib=$('#interact');if(showInteract){ib.textContent=showInteract;ib.classList.remove('hide')}else ib.classList.add('hide');
  if(!L.under&&!L.secret&&p.x>L.end-75&&level!==1){finishLevel();return}
@@ -498,7 +556,7 @@ function text(t,x,y,c,size,align){ctx.fillStyle=c;ctx.font='bold '+(size||11)+'p
 function mix(a,b,t){const pa=parseInt(a.slice(1),16),pb=parseInt(b.slice(1),16);const r=Math.round(((pa>>16)&255)*(1-t)+((pb>>16)&255)*t),g=Math.round(((pa>>8)&255)*(1-t)+((pb>>8)&255)*t),bl=Math.round((pa&255)*(1-t)+(pb&255)*t);return 'rgb('+r+','+g+','+bl+')'}
 function mix3(a,b,c,t){return t<.5?mix(a,b,t*2):mix(b,c,(t-.5)*2)}
 function bg(){
- if(L.secret){rect(0,0,W,H,'#ffe9d4');for(let i=0;i<14;i++){rect(i*54-cam*.12,0,3,G,'#f8d6c5');circle(i*66-cam*.1,60+(i%3)*35,8,'#f4b8ce')}return}
+ if(L.secret){const sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#a5d6ed');sky.addColorStop(1,'#f5e8f4');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);for(let i=0;i<8;i++){let x=i*135-cam*.18;ctx.fillStyle=i%2?'#eaf7ff':'#cde8f5';ctx.beginPath();ctx.moveTo(x-110,G);ctx.lineTo(x+35,105+(i%3)*22);ctx.lineTo(x+170,G);ctx.fill()}for(let i=0;i<38;i++){let x=(i*89+timer*.012)%Math.max(W,560),y=(i*43+timer*.024)%G;circle(x,y,1.6,'#fff')}return}
  if(L.under){rect(0,0,W,H,'#2c2440');for(let y=0;y<G;y+=18)for(let x=((y/18)%2)*14-((cam*.6)%28);x<W;x+=28)rect(x,y,26,16,'#3a3054');for(let i=0;i<20;i++)circle((i*137+20)%W,30+(i*53)%200,1.4,'#f6d8ff');return}
  let g=ctx.createLinearGradient(0,0,0,H);
  if(level===1){const d=sceneDusk();
@@ -516,14 +574,15 @@ function bg(){
  if(level===2){for(let i=0;i<14;i++){let x=i*245-cam*.45;rect(x,182,9,100,'#79aa87');circle(x+5,185,24,'#91c69c')}}
  else{for(let i=0;i<16;i++){let x=i*220-cam*.4;rect(x,238,48,46,'#f5c9c8');rect(x-5,232,58,8,'#a783a4')}}}
 function tree(x){let s=x-cam;if(s<-70||s>W+70)return;rect(s-4,G-84,10,86,'#8d647b');circle(s-24,G-91,27,'#f3a3c6');circle(s+8,G-111,30,'#f8b9d3');circle(s+28,G-87,27,'#f5a8c9');circle(s-3,G-78,28,'#ffccdf');for(let i=0;i<7;i++)rect(s+(i*17)%60-30,G-120+(i*13)%48,3,3,'#fff1f5')}
-function terrain(a){let x=a.x-cam;if(x>W||x+a.w<0)return;const u=L.under;rect(x,a.y,a.w,H-a.y,u?'#6b5a7e':level===1?'#c7a38f':level===2?'#a98276':'#b8867c');rect(x,a.y,a.w,9,u?'#a891c4':level===1?'#f1c59c':level===2?'#85c79b':'#82d1a0');rect(x,a.y+8,a.w,6,u?'#584a6b':level===2?'#4b9b77':'#6ca582');for(let i=0;i<a.w/22;i++)for(let j=0;j<4;j++)if((i+j*3)%4===0)rect(x+i*22+5,a.y+21+j*19,4,3,u?'#8c7aa3':'#e0b0a2')}
+function terrain(a){let x=a.x-cam;if(x>W||x+a.w<0)return;const u=L.under;rect(x,a.y,a.w,H-a.y,u?'#6b5a7e':level===1?'#c7a38f':level===2?'#a98276':'#b8867c');rect(x,a.y,a.w,9,L.secret?'#f3faff':u?'#a891c4':level===1?'#f1c59c':level===2?'#85c79b':'#82d1a0');rect(x,a.y+8,a.w,6,u?'#584a6b':level===2?'#4b9b77':'#6ca582');for(let i=0;i<a.w/22;i++)for(let j=0;j<4;j++)if((i+j*3)%4===0)rect(x+i*22+5,a.y+21+j*19,4,3,u?'#8c7aa3':'#e0b0a2')}
 function bridge(a,c1,c2){let x=a.x-cam;rect(x,a.y,a.w,8,c1);rect(x,a.y+8,a.w,3,c2);for(let i=4;i<a.w;i+=12)rect(x+i,a.y+2,2,4,c2)}
 function qbrick(b){const used=data.qb.includes(qKey(b));const x=b.x-cam,y=b.y-(b.bump?Math.sin(b.bump/150*Math.PI)*5:0);if(x<-30||x>W+30)return;
  rect(x,y,b.w,b.h,used?'#b9a294':'#f6b64a');rect(x,y,b.w,2,used?'#d2c0b4':'#ffd98a');rect(x,y+b.h-3,b.w,3,used?'#8b7568':'#c97f22');
- if(!used){text('?',x+b.w/2,y+16,'#fff',15,'center');if(b.reward==='gift')rect(x+b.w-5,y+3,3,3,'#e879ac');if(b.reward==='keepsake')rect(x+3,y+3,3,3,'#ff8caa')}else{rect(x+5,y+9,12,3,'#8b7568')}}
+ if(!used){if(b.reward==='snowboard'){rect(x,y,b.w,b.h,'#9fdcf2');text('❄',x+b.w/2,y+16,'#fff',15,'center')}else text('?',x+b.w/2,y+16,'#fff',15,'center');if(b.reward==='gift')rect(x+b.w-5,y+3,3,3,'#e879ac');if(b.reward==='keepsake')rect(x+3,y+3,3,3,'#ff8caa')}else{rect(x+5,y+9,12,3,'#8b7568')}}
 function coinDraw(x,y){const s=Math.abs(Math.sin(timer/220+x*.05));circle(x,y,6,'#f9c74f');rect(x-1.5*s-1,y-4,3*s+2,8,'#fff1a8');ctx.fillStyle='#f28eaf';ctx.font='bold 8px sans-serif';ctx.textAlign='center';ctx.fillText('♥',x,y+3);ctx.textAlign='left'}
 function pickupDraw(a){const x=a.x-cam,y=a.y;if(x<-25||x>W+25)return;
- if(a.kind==='keepsake'){ctx.save();ctx.translate(x,y);ctx.scale(1.3,1.3);heart(0,0);ctx.restore()}
+ if(a.kind==='snowboard'){rect(x-15,y-3,30,6,'#f8c5dd');rect(x-12,y-5,24,2,'#fff');rect(x-8,y-7,5,3,'#7baed5');rect(x+4,y-7,5,3,'#7baed5')}
+  else if(a.kind==='keepsake'){ctx.save();ctx.translate(x,y);ctx.scale(1.3,1.3);heart(0,0);ctx.restore()}
  else if(a.kind==='key'){circle(x-4,y,6,'#ffe47c');rect(x,y-2,14,4,'#e9b74e');rect(x+9,y+2,3,5,'#e9b74e');text('✦',x-4,y+3,'#fff',8,'center')}
  else{rect(x-10,y-9,20,18,'#f3a5c5');rect(x-10,y-3,20,5,'#fff0a9');rect(x-2,y-9,4,18,'#fff0a9');text('♡',x,y+5,'#fff',11,'center')}
 }
@@ -556,6 +615,7 @@ function heart(x,y){circle(x-5,y-2,6,'#f26d9e');circle(x+5,y-2,6,'#f26d9e');ctx.
 function seedDraw(x,y){const b=Math.sin(timer/300)*2;circle(x,y+b,11,'#fff6b0');circle(x,y+b,7,'#a5d66f');rect(x-1,y-10+b,2,6,'#5fae6a');circle(x+4,y-10+b,3,'#8bd06b')}
 function cloudDraw(c){let x=c.x-cam,y=G-4;circle(x+9,y+4,10,'#eaf8ff');circle(x+c.w/2,y-2,13,'#fff');circle(x+c.w-9,y+4,10,'#eaf8ff');rect(x,y+2,c.w,9,'#eaf8ff');rect(x+4,y+10,c.w-8,3,'#a6d4eb')}
 function draw(){
+ if(scene&&scene.type==='snow'){drawSnow();return}
  if(scene&&scene.type==='plant'){
   scene.visibleFrames=(scene.visibleFrames||0)+1;
   const t=scene.t;
@@ -625,7 +685,7 @@ function loop(t){try{let dt=Math.min(40,t-last||16);last=t;
 
 // ================= Interact =================
 function interact(){if(mode==='scene'&&scene&&scene.type==='plant')return;if(mode!=='play')return;
- if(L.secret){if(p.x>555)exitSecretRoom();return}
+ if(L.secret){if(p.x>555){exitSecretRoom();return}if(data.snowboard&&p.x>265&&p.x<385){startSnow();return}return}
  if(L.under){if(data.seed&&onPipeTop(PIPE()))startScene('pipeOut',{pipe:PIPE()});return}
  if(level===0&&p.x>1360&&p.x<1430&&data.keys.includes('0-q4')){enterSecretRoom();return}
  if(level===1&&!data.story.sunset&&p.x>=535){startScene('sunset');return}
@@ -643,11 +703,11 @@ $('#gate-date').addEventListener('submit',e=>{e.preventDefault();const v=$('#gat
 $('#gate-input').addEventListener('input',e=>{const t=e.target;t.value=t.value.replace(/[^0-9]/g,'').slice(0,8)});
 
 // ================= Input =================
-['left','right','jump'].forEach(key=>{let el=$('#'+key);function down(e){e.preventDefault();if(mode!=='play')return;try{el.setPointerCapture(e.pointerId)}catch(_){}held[key]=true;el.classList.add('pressed');if(key==='jump')jumpQueue=true}function up(e){e.preventDefault();held[key]=false;el.classList.remove('pressed')}el.addEventListener('pointerdown',down);el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up);el.addEventListener('lostpointercapture',up)});
+['left','right','jump'].forEach(key=>{let el=$('#'+key);function down(e){e.preventDefault();if(mode!=='play'&&!(mode==='scene'&&scene&&scene.type==='snow'&&key==='jump'))return;try{el.setPointerCapture(e.pointerId)}catch(_){}held[key]=true;el.classList.add('pressed');if(key==='jump')jumpQueue=true}function up(e){e.preventDefault();held[key]=false;el.classList.remove('pressed')}el.addEventListener('pointerdown',down);el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up);el.addEventListener('lostpointercapture',up)});
 // Pause / interact react on touch-down so they work even while another finger holds a direction key
 $('#pause').addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();pause()});
 $('#interact').addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();interact()});
-window.addEventListener('keydown',e=>{if(mode==='gate')return;if(['ArrowLeft','ArrowRight','Space','ArrowUp','Escape','KeyE'].includes(e.code))e.preventDefault();if(e.code==='Escape'){if(mode==='play')pause();return}if(mode!=='play')return;if(e.code==='KeyE'){interact();return}if(e.code==='ArrowLeft')held.left=true;if(e.code==='ArrowRight')held.right=true;if((e.code==='Space'||e.code==='ArrowUp')&&!held.jump){held.jump=true;jumpQueue=true}});
+window.addEventListener('keydown',e=>{if(mode==='gate')return;if(['ArrowLeft','ArrowRight','Space','ArrowUp','Escape','KeyE'].includes(e.code))e.preventDefault();if(e.code==='Escape'){if(mode==='play')pause();return}if(mode!=='play'&&!(mode==='scene'&&scene&&scene.type==='snow'))return;if(e.code==='KeyE'){interact();return}if(e.code==='ArrowLeft')held.left=true;if(e.code==='ArrowRight')held.right=true;if((e.code==='Space'||e.code==='ArrowUp')&&!held.jump){held.jump=true;jumpQueue=true}});
 window.addEventListener('keyup',e=>{if(e.code==='ArrowLeft')held.left=false;if(e.code==='ArrowRight')held.right=false;if(e.code==='Space'||e.code==='ArrowUp')held.jump=false});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&mode==='play')pause()});
 window.addEventListener('blur',()=>{if(mode==='play')pause()});
