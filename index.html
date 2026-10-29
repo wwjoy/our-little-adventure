@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V2.6.1.1</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V2.6.2</title><style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#2a203f;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;touch-action:none}#stage{position:absolute;inset:0;height:var(--available-height,100%);display:flex;align-items:center;justify-content:center}canvas{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;touch-action:none;-webkit-user-select:none}#hud{position:absolute;top:max(8px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));color:#fff;font-size:clamp(13px,2.2vw,19px);font-weight:800;text-shadow:1px 2px #704b73;pointer-events:none}#pause{position:absolute;right:max(12px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));z-index:2}button{font-family:inherit;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent}#controls{position:absolute;inset:0;pointer-events:none;z-index:3}#left,#right,#jump{opacity:.58;position:absolute;bottom:max(10px,env(safe-area-inset-bottom));width:52px;height:52px;background:#55476655;border:2px solid #ffffff77;color:#fff;border-radius:12px;font-size:22px;font-weight:800;pointer-events:auto}#left{left:max(12px,env(safe-area-inset-left))}#right{left:calc(max(12px,env(safe-area-inset-left)) + 61px)}#jump{right:max(12px,env(safe-area-inset-right));border-radius:50%;font-size:28px}.pressed{background:#ec8eaecc!important;opacity:1!important}#pause{border:2px solid #ffffffaa;background:#55476677;color:#fff;border-radius:11px;width:45px;height:42px;font-size:20px}#shade{position:absolute;inset:0;height:var(--available-height,100%);background:#211b39c9;display:flex;justify-content:center;align-items:center;z-index:4;padding:12px}#card{background:#fff3f6;border:3px solid #ffc2d7;border-radius:17px;color:#68455e;text-align:center;width:min(440px,92%);padding:16px;max-height:90%;overflow:auto;box-shadow:0 6px #a36e9d}#card h1{font-size:clamp(19px,3.2vw,27px);color:#db6394;margin:0 0 8px}#card p{font-size:clamp(12px,1.8vw,15px);line-height:1.65;margin:8px 0}#actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}#actions button{font-size:14px;font-weight:700;border:0;background:#e979a5;color:#fff;border-radius:10px;padding:10px 15px;min-height:43px}#actions button.alt{background:#a88bad}#rotate{position:absolute;inset:0;height:var(--available-height,100%);background:#241b38;color:white;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:8;gap:12px;font-size:20px;padding:24px}#rotate small{font-size:13px;opacity:.8}#error{display:none;position:absolute;z-index:12;inset:10%;background:#fff5f5;color:#a12750;border-radius:12px;padding:16px;overflow:auto;font-size:14px}.hide{display:none!important}@media(orientation:portrait){#rotate{display:flex}}@media(max-height:310px){#card{padding:8px}#card p{margin:3px}#left,#right,#jump{opacity:.58;width:48px;height:48px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 56px)}}
 #interact{position:absolute;bottom:22%;left:50%;transform:translateX(-50%);background:#e979a5;color:white;border:2px solid #fff;border-radius:12px;padding:9px 16px;z-index:3;font-weight:800}#card{max-width:520px!important}#hud{z-index:2;max-width:75%;font-size:clamp(12px,1.7vw,18px)}@media(orientation:landscape){#left,#right,#jump{bottom:max(10px,env(safe-area-inset-bottom))}} 
 #gate{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 30% 20%,#ffd6e6,#f6aed3 45%,#b48ac8);height:var(--available-height,100%)}
@@ -45,7 +45,7 @@ const freshData=()=>({version:1,gifts:[],keepsakes:[],keys:[],secretDoors:[],rew
 let data=freshData();
 let p={x:45,y:G-27,w:22,h:27,vx:0,vy:0,on:false,ride:null,coyote:0,buffer:0,jumpMs:0,face:1,sit:false,hidden:false}, lion={x:30,y:G-27,sit:false,face:1};
 let L=null;
-// V2.6: question-box rewards, visible pickups, and temporary power-ups.
+// V2.6.2: collectible rewards only; no invincibility or damage shields.
 let pickups=[], giftSeen={};
 
 // ================= Level data =================
@@ -64,7 +64,7 @@ function buildLevel(n){
   plats:[spring(1860)],
   cps:[45,360,1000,1515], trees:[105,390,730,1040,1450,1610,2040],
   enemies:[{type:'walker',x:1620,start:1580,end:1670,v:.35}],
-  objects:[{type:'heart',x:1995,y:264},{type:'sign',x:118,text:'从下面顶一下 ？ 砖块'},{type:'sign',x:1420,text:'跳到小怪头上能踩扁它'},{type:'sign',x:1810,text:'踩蘑菇弹簧跳得更高'},
+  objects:[{type:'heart',x:1995,y:264},{type:'sign',x:118,text:'从下面顶一下 ？ 砖块'},{type:'sign',x:1420,text:'跳到小怪头上能踩扁它'},{type:'sign',x:1810,text:'踩蘑菇弹簧跳得更高'},{type:'sign',x:1275,text:'🗝️ 前方问号砖块藏着钥匙'},
    ...coins(0,[...arc(410,250,3,18,12),...row(612,214,4,20),...arc(944,245,3,20,14),...row(1130,212,3,24),...row(1855,120,3,22),...row(1925,150,2,22)])]};
  if(n===1) return {end:2250,
   map:[gr(0,480),gr(520,500),gr(1060,350),gr(1560,330),gr(2010,270),bl(250,95,247),bl(710,115,244),bl(1190,105,242),bl(1660,105,247)],
@@ -125,7 +125,23 @@ function gateOk(){try{return localStorage.getItem(GATE)==='1'}catch(e){return fa
 
 // ================= Flow =================
 function clearInput(){Object.keys(held).forEach(k=>{held[k]=false;$('#'+k).classList.remove('pressed')});jumpQueue=false}
-function layout(n){pickups=[];coop={state:'idle',lionX:1392,lionReady:false,started:false,bridgeTime:0};pendingFlag=-1;flagCrossingArmed=false;finalReviewOpen=false;if(finalSceneTimeout){clearTimeout(finalSceneTimeout);finalSceneTimeout=null}fade={a:0,dir:0,cb:null,text:''};level=n;L=buildLevel(n);mainL=null;L.pops=[];clouds=[];sleeping=false;failCount=0;failCp=-1;scene=null;dying=null;L.enemies.forEach(e=>{e.v=Math.abs(e.v);e.dead=0;e.vy=0;e.hop=0;e.jt=Math.random()*900})}
+function layout(n){pickups=[];coop={state:'idle',lionX:1392,lionReady:false,started:false,bridgeTime:0};pendingFlag=-1;flagCrossingArmed=false;finalReviewOpen=false;if(finalSceneTimeout){clearTimeout(finalSceneTimeout);finalSceneTimeout=null}fade={a:0,dir:0,cb:null,text:''};level=n;L=buildLevel(n);mainL=null;L.pops=[];restoreUnclaimedRewards();clouds=[];sleeping=false;failCount=0;failCp=-1;scene=null;dying=null;L.enemies.forEach(e=>{e.v=Math.abs(e.v);e.dead=0;e.vy=0;e.hop=0;e.jt=Math.random()*900})}
+
+function restoreUnclaimedRewards(){
+ // A struck brick stays used, but its uncollected prize must never disappear on death/reload.
+ if(!L)return;
+ for(const b of L.boxes){
+  const key=qKey(b),r=b.reward||'coin';
+  if(!data.qb.includes(key))continue;
+  if(r==='keepsake'&&!data.keepsakes.includes(key)||r==='gift'&&!data.gifts.includes(key)){
+   if(!pickups.some(a=>a.key===key))pickups.push({x:b.x+11,y:b.y-27,baseY:b.y-14,kind:r,key,life:500});
+  }
+  if(r==='key'&&!data.keys.includes(key)){
+   // Recover a previously opened key brick from older saves.
+   data.keys.push(key);save();
+  }
+ }
+}
 function resetPlanks(){for(const pl of L.plats)if(pl.kind==='fall'){pl.y=pl.y0;pl.t=0;pl.vy=0}}
 function respawnAt(x){if(level===2&&!L.under&&!data.story.bridge&&coop.state==='approaching'){coop.state='waiting';coop.lionReady=true}pendingFlag=-1;flagCrossingArmed=false;x=safeX(x);p.x=x;p.y=G-p.h;p.vx=p.vy=0;p.on=true;p.ride=null;p.sit=false;p.hidden=false;p.coyote=p.buffer=p.jumpMs=0;lion.x=x-34*p.face;lion.y=p.y;lion.sit=false;trail=[];resetPlanks();cam=Math.max(0,Math.min(L.end-W,x-W*.35));respawnGuard=900;clearInput()}
 function startLevel(n,fromSave){layout(n);let cp=(fromSave&&data.cpLevel===n)?Math.max(0,Math.min(L.cps.length-1,data.cp)):0;data.level=Math.max(data.level,n);data.cp=cp;data.cpLevel=n;save();p.face=1;respawnAt(L.cps[cp]);play();if(n===0&&!data.story.introGuide){data.story.introGuide=true;save();cut('🦁 冒险的小目标','听说这片世界里藏着三颗特别的爱心，我们一起把它们找出来吧！<br><br>沿途的金币也值得收集，遇到特别的东西时，小狮子会提醒你。<br>想知道收集进度，可以在暂停菜单打开「📖 冒险手册」。',play,'出发吧 ♡')}}
@@ -323,6 +339,7 @@ function boxReward(b){
  if(r==='coin'){addCoin(key,b.x+11,b.y-8);flash('🪙 找到一枚爱心金币！');return}
  if(r==='bag'){for(let i=0;i<5;i++)addCoin(key+'-bag'+i,b.x+11,b.y-8);flash('💰 金色钱袋！+5 金币');return}
  if(r==='shell'){if(!data.shells.includes(4)){data.shells.push(4);save();rewardToast('shell',data.shells.length)}flash('🐚 从问号砖块里发现贝壳！');return}
+ if(r==='key'){if(!data.keys.includes(key))data.keys.push(key);save();flash('🗝️ 拿到小钥匙！向右寻找带锁的小门 ♡');return}
  pickups.push({x:b.x+11,y:b.y-14,baseY:b.y-14,kind:r,key,life:0});
  flash(r==='keepsake'?'💗 珍藏爱心出现啦！跳起来收下它！':r==='key'?'🗝️ 发现一把小钥匙！寻找附近的秘密小门吧！':'🎀 神秘礼盒出现了！');
 }
