@@ -1,6 +1,6 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V2.6.5</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V2.6.6</title><style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#2a203f;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;touch-action:none}#stage{position:absolute;inset:0;height:var(--available-height,100%);display:flex;align-items:center;justify-content:center}canvas{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;touch-action:none;-webkit-user-select:none}#hud{position:absolute;top:max(8px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));color:#fff;font-size:clamp(13px,2.2vw,19px);font-weight:800;text-shadow:1px 2px #704b73;pointer-events:none}#pause{position:absolute;right:max(12px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));z-index:2}button{font-family:inherit;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent}#controls{position:absolute;inset:0;pointer-events:none;z-index:3}#left,#right,#jump{opacity:.58;position:absolute;bottom:max(10px,env(safe-area-inset-bottom));width:52px;height:52px;background:#55476655;border:2px solid #ffffff77;color:#fff;border-radius:12px;font-size:22px;font-weight:800;pointer-events:auto}#left{left:max(12px,env(safe-area-inset-left))}#right{left:calc(max(12px,env(safe-area-inset-left)) + 61px)}#jump{right:max(12px,env(safe-area-inset-right));border-radius:50%;font-size:28px}.pressed{background:#ec8eaecc!important;opacity:1!important}#pause{border:2px solid #ffffffaa;background:#55476677;color:#fff;border-radius:11px;width:45px;height:42px;font-size:20px}#shade{position:absolute;inset:0;height:var(--available-height,100%);background:#211b39c9;display:flex;justify-content:center;align-items:center;z-index:4;padding:12px}#card{background:#fff3f6;border:3px solid #ffc2d7;border-radius:17px;color:#68455e;text-align:center;width:min(440px,92%);padding:16px;max-height:90%;overflow:auto;box-shadow:0 6px #a36e9d}#card h1{font-size:clamp(19px,3.2vw,27px);color:#db6394;margin:0 0 8px}#card p{font-size:clamp(12px,1.8vw,15px);line-height:1.65;margin:8px 0}#actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}#actions button{font-size:14px;font-weight:700;border:0;background:#e979a5;color:#fff;border-radius:10px;padding:10px 15px;min-height:43px}#actions button.alt{background:#a88bad}#rotate{position:absolute;inset:0;height:var(--available-height,100%);background:#241b38;color:white;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:8;gap:12px;font-size:20px;padding:24px}#rotate small{font-size:13px;opacity:.8}#error{display:none;position:absolute;z-index:12;inset:10%;background:#fff5f5;color:#a12750;border-radius:12px;padding:16px;overflow:auto;font-size:14px}.hide{display:none!important}@media(orientation:portrait){#rotate{display:flex}}@media(max-height:310px){#card{padding:8px}#card p{margin:3px}#left,#right,#jump{opacity:.58;width:48px;height:48px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 56px)}}
-#interact{position:absolute;left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);background:#fff9f0e8;color:#79516c;border:2px solid #e9a7c5;border-radius:7px;padding:6px 12px;min-width:92px;min-height:40px;z-index:3;font-weight:800;font-size:13px;box-shadow:0 3px #a88ba4;white-space:nowrap}#card{max-width:520px!important}#hud{z-index:2;max-width:75%;font-size:clamp(12px,1.7vw,18px)}@media(orientation:landscape){#left,#right,#jump{bottom:max(10px,env(safe-area-inset-bottom))}} 
+#interact{position:absolute;left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);background:#fff9f0e8;color:#79516c;border:2px solid #e9a7c5;border-radius:7px;padding:4px 8px;min-width:66px;min-height:32px;z-index:3;font-weight:800;font-size:11px;box-shadow:0 3px #a88ba4;white-space:nowrap}#card{max-width:520px!important}#hud{z-index:2;max-width:75%;font-size:clamp(12px,1.7vw,18px)}@media(orientation:landscape){#left,#right,#jump{bottom:max(10px,env(safe-area-inset-bottom))}} 
 #gate{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 30% 20%,#ffd6e6,#f6aed3 45%,#b48ac8);height:var(--available-height,100%)}
 #gate-card{background:#fff6f9;border:3px solid #ffc2d7;border-radius:20px;box-shadow:0 6px #a36e9d;color:#68455e;text-align:center;width:min(380px,92%);padding:20px 18px}
 #gate h1{margin:0 0 6px;color:#db6394;font-size:clamp(22px,6vw,30px)}#gate .duo{font-size:clamp(16px,4.5vw,20px);margin:10px 0 16px;font-weight:700}
@@ -32,7 +32,7 @@
 const $=q=>document.querySelector(q), canvas=$('#game'), ctx=canvas.getContext('2d');
 if(!ctx){$('#error').style.display='block';$('#error').textContent='Canvas 无法启动，请使用 Safari 打开链接';return}
 const H=360, G=284, SAVE='our_adventure_full_v1', GATE='our_adventure_gate_v1';
-const LEVELS=['初夏小镇 · 相遇','夕阳花火','秘密花园 · 未来的约定'];
+const LEVELS=['初夏小镇 · 相遇','夕阳花火','星愿花园 · 未来的约定'];
 const ANNIV={label:'2025.11.13 — 2026.11.13'};
 let W=640, cam=0, mode='gate', last=0, level=0, timer=0;
  let coop={state:'idle',lionX:1392,lionReady:false,started:false,bridgeTime:0};
@@ -169,7 +169,7 @@ function menu(title,body,buttons){mode='menu';clearInput();showUI(false);$('#int
 function play(){mode='play';$('#shade').classList.add('hide');showUI(true);last=performance.now()}
 function home(){
  const started=data.met||data.level>0||data.cp>0;
- menu('🐰 我们的奇妙冒险 🦁','恋爱一周年特别篇 · 11月13日<br>初夏相遇 → 夕阳花火 → 秘密花园<br>左右移动，轻点 ✦ 小跳，长按 ✦ 大跳。每关必须亲手收集关键爱心，才能继续。',
+ menu('🐰 我们的奇妙冒险 🦁','听说世界的尽头藏着一份小小的惊喜。<br>要不要一起去找找看？<br><small>左右移动，点击 ✦ 跳跃；长按可以跳得更高。</small>',
  [[data.done?'回忆我们的冒险 ♡':(started?'继续我们的冒险 ♡':'开始我们的冒险 ♡'),()=>data.done?ending():startLevel(data.level,true)],
   ...(started?[['从第一关重新开始',()=>{data=freshData();assist=true;save();startLevel(0,false)}]]:[]),
   ...(data.level>0||data.done?[['选关',chooseLevel]]:[]),...(data.level>=2||data.done?[['🩷 重玩双人机关（保留收藏）',replayCoop]]:[]),['📖 冒险手册',()=>journal(home)]])}
@@ -290,7 +290,7 @@ function ending2(){const n=data.shells.length;
  if(cardC())lines.push('🪙 爱心币收集达人！隐藏回忆卡 C 已解锁');
  lines.push('<small>礼物盒内容将在正式版填入；目前是完整流程测试结局。</small>');
  menu('🎁 还有一份礼物',lines.join('<br>'),[['🎁 打开纪念礼物',()=>menu('🎁 给你的礼物','谢谢你陪我走过第一个365天。<br>以后也一起看更多夕阳和烟花吧。<br>To be continued…',[['继续我们的冒险 ♡',home],['回忆相册',album]])],['回忆相册',album],['返回首页',home]])}
-function album(){const n=data.shells.length,c=data.coins.length;menu('📷 我们的回忆相册','🌸 初夏相遇　🎆 夕阳花火　🌱 秘密花园<br>'+(data.winterCard?'❄️《未来的冬天》已收藏<br>':'')+'🐚 贝壳 '+n+'/5'+(n>=3?'　回忆卡 A ✓':'')+(n>=5?'　回忆卡 B ✓':'')+'<br>🪙 爱心币 '+c+'/'+TOTAL_COINS+(cardC()?'　隐藏回忆卡 C ✓':'<br>（收集 '+Math.ceil(TOTAL_COINS*.7)+' 枚解锁隐藏卡 C）'),[['📖 冒险手册',()=>journal(home)],['返回',home]])}
+function album(){const n=data.shells.length,c=data.coins.length;menu('📷 我们的回忆相册','🌸 初夏相遇　🎆 夕阳花火　🌱 星愿花园<br>'+(data.winterCard?'❄️《未来的冬天》已收藏<br>':'')+'🐚 贝壳 '+n+'/5'+(n>=3?'　回忆卡 A ✓':'')+(n>=5?'　回忆卡 B ✓':'')+'<br>🪙 爱心币 '+c+'/'+TOTAL_COINS+(cardC()?'　隐藏回忆卡 C ✓':'<br>（收集 '+Math.ceil(TOTAL_COINS*.7)+' 枚解锁隐藏卡 C）'),[['📖 冒险手册',()=>journal(home)],['返回',home]])}
 
 // ================= Fade =================
 function fadeTo(cb,txt){fade.dir=1;fade.cb=cb;fade.text=txt||''}
@@ -330,16 +330,30 @@ function startSnow(){
  $('#hud').classList.add('hide');
 }
 function stopSnow(){
- snow=null;scene=null;$('#left').classList.remove('hide');$('#right').classList.remove('hide');
+ snow=null;scene=null;clearInput();$('#left').classList.remove('hide');$('#right').classList.remove('hide');$('#jump').classList.remove('hide');
  $('#hud').classList.remove('hide');
 }
 function snowFail(){
  const got=snow.flakes.size;stopSnow();
- menu('❄️ 雪堆挡住啦','差一点点！已经收集了 '+got+' 片雪花。', [['再滑一次 ♡',startSnow],['回秘密小屋',()=>{respawnAt(320);play()}]]);
+ menu('❄️ 雪堆挡住啦','差一点点！已经收集了 '+got+' 片雪花。', [['再滑一次 ♡',startSnow],['回秘密小屋',returnSnowRoom]]);
+}
+function returnSnowRoom(){
+ stopSnow();if(!L||!L.secret){L=buildSecretRoom();L.pops=[];pickups=[];restoreUnclaimedRewards();}
+ respawnAt(320);mode='play';play();$('#interact').classList.add('hide');
 }
 function snowFinish(){
- const got=snow.flakes.size;data.snowBest=Math.max(data.snowBest||0,got);data.winterCard=true;save();stopSnow();
- menu('❄️《未来的冬天》','🏂 小兔子滑过雪坡，小狮子在终点等着她。<br><br>「还有好多想和你一起做的事。」<br><small>冬日回忆卡已收进冒险手册 ♡</small>', [['回到初夏 ♡',()=>{respawnAt(320);play()}],['再滑一次',startSnow]]);
+ if(!snow||snow.done)return;
+ snow.done=true;snow.endT=0;snow.distance=SNOW_SPEED*SNOW_LENGTH;
+ snow.onGround=true;snow.airY=snowGround(snow.distance);
+ // Keep the snowy scene visible while the characters meet. No modal until the animation ends.
+ scene.type='snowEnding';clearInput();$('#jump').classList.add('hide');
+}
+function finishWinterScene(){
+ if(!snow)return;
+ const got=snow.flakes.size;
+ data.snowBest=Math.max(data.snowBest||0,got);data.winterCard=true;save();
+ stopSnow();menu('❄️《未来的冬天》','「还有好多想和你一起做的事。」<br><small>冬日回忆已收藏 ♡</small>',
+ [['返回小屋',returnSnowRoom],['再滑一次',startSnow]]);
 }
 // Smooth half-pipe terrain: repeated U valleys with rounded transitions.
 function snowGround(x){
@@ -375,15 +389,24 @@ function drawSnow(){
  // Draw the real curved U-shaped snow track in world coordinates.
  ctx.beginPath();ctx.moveTo(0,H);for(let x=0;x<=W+4;x+=4)ctx.lineTo(x,snowGround(offset+x));ctx.lineTo(W,H);ctx.closePath();ctx.fillStyle='#f4fbff';ctx.fill();
  ctx.beginPath();for(let x=0;x<=W+4;x+=4){const y=snowGround(offset+x);if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.strokeStyle='#b1e1f4';ctx.lineWidth=5;ctx.stroke();ctx.lineWidth=1;
- for(let x=0;x<W;x+=22){const y=snowGround(offset+x);rect(x,y+15,12,2,'#d9edf8')}
- for(const x of SNOW_OBSTACLES){const sx=x-offset;if(sx>-40&&sx<W+40){const gy=snowGround(x);rect(sx-12,gy-19,24,19,'#b9deee');rect(sx-10,gy-23,20,6,'#fff');rect(sx-2,gy-12,4,5,'#7fb6d0')}}
+ for(let x=0;x<W;x+=24){const y=snowGround(offset+x);ctx.save();ctx.translate(x,y);ctx.rotate(Math.atan(snowSlope(offset+x)));rect(0,13,12,2,'#d9edf8');ctx.restore()}
+ for(const x of SNOW_OBSTACLES){const sx=x-offset;if(sx>-40&&sx<W+40){const gy=snowGround(x);ctx.save();ctx.translate(sx,gy);ctx.rotate(Math.atan(snowSlope(x)));rect(-12,-19,24,19,'#b9deee');rect(-10,-23,20,6,'#fff');rect(-2,-12,4,5,'#7fb6d0');ctx.restore()}}
  for(let i=0;i<SNOW_FLAKES.length;i++){const x=SNOW_FLAKES[i],sx=x-offset;if(sx>-25&&sx<W+25&&!s.flakes.has(i))text('❄',sx,snowGround(x)-45,'#fff',20,'center')}
  for(const q of s.particles){ctx.globalAlpha=Math.max(0,q.life/.5);circle(q.x-offset,q.y,2,'#fff');ctx.globalAlpha=1}
  const py=s.onGround?snowGround(s.distance):s.airY;
- ctx.save();ctx.translate(px,py);ctx.rotate(s.onGround?s.angle:Math.max(-.24,Math.min(.24,s.angle*.35)));rect(-10,-2,44,6,'#f6a9cf');rect(-8,-4,40,2,'#fff4fa');bunny(-1,-30,1,false,false);ctx.restore();
- if(s.distance>SNOW_SPEED*SNOW_LENGTH-165){const lx=SNOW_SPEED*SNOW_LENGTH-offset;lionDraw(lx,snowGround(SNOW_SPEED*SNOW_LENGTH)-27,-1,false);text('终点 ♡',lx,snowGround(SNOW_SPEED*SNOW_LENGTH)-48,'#805f88',13,'center')}
+ if(!scene||scene.type!=='snowEnding'||s.endT<1700){ctx.save();ctx.translate(px,py);ctx.rotate(s.onGround?s.angle:Math.max(-.24,Math.min(.24,s.angle*.35)));rect(-10,-2,44,6,'#f6a9cf');rect(-8,-4,40,2,'#fff4fa');bunny(-1,-30,1,false,false);ctx.restore();}
+ if(s.distance>SNOW_SPEED*SNOW_LENGTH-165&&(!scene||scene.type!=='snowEnding')){const lx=SNOW_SPEED*SNOW_LENGTH-offset;lionDraw(lx,snowGround(SNOW_SPEED*SNOW_LENGTH)-27,-1,false);text('终点 ♡',lx,snowGround(SNOW_SPEED*SNOW_LENGTH)-48,'#805f88',13,'center')}
  text('❄ 未来的冬天',18,29,'#426b88',20);text('🏂 跳过雪堆 · ❄ '+s.flakes.size+'/'+SNOW_FLAKES.length,18,53,'#426b88',12);
- rect(18,65,W-36,7,'#ffffff88');rect(18,65,(W-36)*Math.min(1,s.distance/(SNOW_SPEED*SNOW_LENGTH)),7,'#ed9fc8');text('✦ 跳跃',W-28,H-22,'#6d8ba4',13,'right');
+ rect(18,65,W-36,7,'#ffffff88');rect(18,65,(W-36)*Math.min(1,s.distance/(SNOW_SPEED*SNOW_LENGTH)),7,'#ed9fc8');if(scene&&scene.type==='snowEnding'){
+ const t=s.endT||0, a=Math.min(1,t/1800),lx=px+58-30*a,py2=snowGround(s.distance);
+ // Lion approaches, rabbit steps off the board, then they share a heart.
+ lionDraw(lx,py2-27,-1,false);
+ if(t>1700){bunny(px,py2-27,1,t>2800,false);}
+ if(t>2600){heart(px+29,py2-67-3*Math.sin(t/240));}
+ if(t>3300){ctx.fillStyle='#fff8f0e9';ctx.fillRect(W/2-205,48,410,58);
+ text('🦁 以后，我们一起去滑雪吧。',W/2,73,'#805878',20,'center');
+ text('还有好多想和你一起做的事 ♡',W/2,95,'#966987',13,'center');}
+ }else text('✦ 跳跃',W-28,H-22,'#6d8ba4',13,'right');
 }
 
 // ================= Scenes (cinematics) =================
@@ -391,6 +414,7 @@ function startScene(type,o){mode='scene';scene=Object.assign({type,t:0},o||{});c
 function sceneDusk(){if(data.story.sunset)return 1;if(scene&&scene.type==='sunset')return Math.min(1,scene.t/6500);return 0}
 function updateScene(dt){const s=scene,k=Math.min(2,dt/16.667);s.t+=dt;timer+=dt;
  if(s.type==='snow'){updateSnow(dt);return}
+ if(s.type==='snowEnding'){if(snow){snow.endT+=dt;if(snow.endT>7500){finishWinterScene()}}return}
  if(s.type==='sunset'){p.x=548;p.y=G-p.h;p.sit=true;lion.x=520;lion.y=G-27;lion.sit=true;lion.face=1;p.face=1;camTo(p.x-W*.3,k);
   if(s.t>7800){scene=null;data.story.sunset=true;save();p.sit=lion.sit=false;cut('🌅 海边的夕阳','小兔子和小狮子坐在沙滩上，静静看着太阳落入海面。<br>那天，我们一起等太阳落下，也一起等烟花升起。',()=>{respawnAt(610);play()})}}
  if(s.type==='plant'){s.t=Math.max(s.t,performance.now()-s.startedAt);if(s.t>=8800&&s.visibleFrames>=8){s.readyToFinish=true;completeFinalPlanting()}return}
@@ -558,12 +582,12 @@ function update(dt){
   }
   /* heart collected on contact below */}}
   if(L.secret&&p.x>555)showInteract='✦ 离开小屋';
-  if(L.secret&&data.snowboard&&!data.winterCard&&p.x>265&&p.x<385)showInteract='🏂 去滑雪';
+  if(L.secret&&data.snowboard&&p.x>305&&p.x<355)showInteract='✦ 滑雪';
   if(level===0&&!L.secret&&!L.under&&p.x>1360&&p.x<1430&&data.keys.includes('0-q4'))showInteract='✦ 打开小门';
  const ib=$('#interact');
  if(showInteract){
   let worldX=p.x+11, worldY=p.y-20;
-  if(L.secret){if(p.x>555){worldX=595;worldY=G-65;showInteract='✦ 离开'}else{worldX=330;worldY=G-72;showInteract='✦ 出发'}}
+  if(L.secret){if(p.x>555){worldX=595;worldY=G-55;showInteract='✦ 离开'}else{worldX=330;worldY=G-48;showInteract='✦ 滑雪'}}
   else if(level===0&&p.x>1360&&p.x<1430){worldX=1412;worldY=G-82;showInteract='✦ 进入'}
   const bounds=canvas.getBoundingClientRect();
   ib.style.left=(bounds.left+(worldX-cam)/W*bounds.width)+'px';
@@ -640,7 +664,7 @@ function heart(x,y){circle(x-5,y-2,6,'#f26d9e');circle(x+5,y-2,6,'#f26d9e');ctx.
 function seedDraw(x,y){const b=Math.sin(timer/300)*2;circle(x,y+b,11,'#fff6b0');circle(x,y+b,7,'#a5d66f');rect(x-1,y-10+b,2,6,'#5fae6a');circle(x+4,y-10+b,3,'#8bd06b')}
 function cloudDraw(c){let x=c.x-cam,y=G-4;circle(x+9,y+4,10,'#eaf8ff');circle(x+c.w/2,y-2,13,'#fff');circle(x+c.w-9,y+4,10,'#eaf8ff');rect(x,y+2,c.w,9,'#eaf8ff');rect(x+4,y+10,c.w-8,3,'#a6d4eb')}
 function draw(){
- if(scene&&scene.type==='snow'){drawSnow();return}
+ if(scene&&(scene.type==='snow'||scene.type==='snowEnding')){drawSnow();return}
  if(scene&&scene.type==='plant'){
   scene.visibleFrames=(scene.visibleFrames||0)+1;
   const t=scene.t;
@@ -710,7 +734,7 @@ function loop(t){try{let dt=Math.min(40,t-last||16);last=t;
 
 // ================= Interact =================
 function interact(){if(mode==='scene'&&scene&&scene.type==='plant')return;if(mode!=='play')return;
- if(L.secret){if(p.x>555){exitSecretRoom();return}if(data.snowboard&&p.x>265&&p.x<385){startSnow();return}return}
+ if(L.secret){if(p.x>555){exitSecretRoom();return}if(data.snowboard&&p.x>305&&p.x<355){startSnow();return}return}
  if(L.under){if(data.seed&&onPipeTop(PIPE()))startScene('pipeOut',{pipe:PIPE()});return}
  if(level===0&&p.x>1360&&p.x<1430&&data.keys.includes('0-q4')){enterSecretRoom();return}
  if(level===1&&!data.story.sunset&&p.x>=535){startScene('sunset');return}
