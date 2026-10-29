@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V2.6.6</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V2.6.7</title><style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#2a203f;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;touch-action:none}#stage{position:absolute;inset:0;height:var(--available-height,100%);display:flex;align-items:center;justify-content:center}canvas{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;touch-action:none;-webkit-user-select:none}#hud{position:absolute;top:max(8px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));color:#fff;font-size:clamp(13px,2.2vw,19px);font-weight:800;text-shadow:1px 2px #704b73;pointer-events:none}#pause{position:absolute;right:max(12px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));z-index:2}button{font-family:inherit;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent}#controls{position:absolute;inset:0;pointer-events:none;z-index:3}#left,#right,#jump{opacity:.58;position:absolute;bottom:max(10px,env(safe-area-inset-bottom));width:52px;height:52px;background:#55476655;border:2px solid #ffffff77;color:#fff;border-radius:12px;font-size:22px;font-weight:800;pointer-events:auto}#left{left:max(12px,env(safe-area-inset-left))}#right{left:calc(max(12px,env(safe-area-inset-left)) + 61px)}#jump{right:max(12px,env(safe-area-inset-right));border-radius:50%;font-size:28px}.pressed{background:#ec8eaecc!important;opacity:1!important}#pause{border:2px solid #ffffffaa;background:#55476677;color:#fff;border-radius:11px;width:45px;height:42px;font-size:20px}#shade{position:absolute;inset:0;height:var(--available-height,100%);background:#211b39c9;display:flex;justify-content:center;align-items:center;z-index:4;padding:12px}#card{background:#fff3f6;border:3px solid #ffc2d7;border-radius:17px;color:#68455e;text-align:center;width:min(440px,92%);padding:16px;max-height:90%;overflow:auto;box-shadow:0 6px #a36e9d}#card h1{font-size:clamp(19px,3.2vw,27px);color:#db6394;margin:0 0 8px}#card p{font-size:clamp(12px,1.8vw,15px);line-height:1.65;margin:8px 0}#actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}#actions button{font-size:14px;font-weight:700;border:0;background:#e979a5;color:#fff;border-radius:10px;padding:10px 15px;min-height:43px}#actions button.alt{background:#a88bad}#rotate{position:absolute;inset:0;height:var(--available-height,100%);background:#241b38;color:white;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:8;gap:12px;font-size:20px;padding:24px}#rotate small{font-size:13px;opacity:.8}#error{display:none;position:absolute;z-index:12;inset:10%;background:#fff5f5;color:#a12750;border-radius:12px;padding:16px;overflow:auto;font-size:14px}.hide{display:none!important}@media(orientation:portrait){#rotate{display:flex}}@media(max-height:310px){#card{padding:8px}#card p{margin:3px}#left,#right,#jump{opacity:.58;width:48px;height:48px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 56px)}}
 #interact{position:absolute;left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);background:#fff9f0e8;color:#79516c;border:2px solid #e9a7c5;border-radius:7px;padding:4px 8px;min-width:66px;min-height:32px;z-index:3;font-weight:800;font-size:11px;box-shadow:0 3px #a88ba4;white-space:nowrap}#card{max-width:520px!important}#hud{z-index:2;max-width:75%;font-size:clamp(12px,1.7vw,18px)}@media(orientation:landscape){#left,#right,#jump{bottom:max(10px,env(safe-area-inset-bottom))}} 
 #gate{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 30% 20%,#ffd6e6,#f6aed3 45%,#b48ac8);height:var(--available-height,100%)}
@@ -64,7 +64,7 @@ function buildLevel(n){
   plats:[spring(1860)],
   cps:[45,360,1000,1515], trees:[105,390,730,1040,1450,1610,2040],
   enemies:[{type:'walker',x:1620,start:1580,end:1670,v:.35}],
-  objects:[{type:'heart',x:1995,y:264},{type:'sign',x:118,text:'从下面顶一下 ？ 砖块'},{type:'sign',x:1420,text:'跳到小怪头上能踩扁它'},{type:'sign',x:1810,text:'踩蘑菇弹簧跳得更高'},
+  objects:[{type:'heart',x:1995,y:264},{type:'sign',x:118,text:'从下面顶一下 ？ 砖块'},{type:'sign',x:1810,text:'踩蘑菇弹簧跳得更高'},
    ...coins(0,[...arc(410,250,3,18,12),...row(612,214,4,20),...arc(944,245,3,20,14),...row(1130,212,3,24),...row(1855,120,3,22),...row(1925,150,2,22)])]};
  if(n===1) return {end:2250,
   map:[gr(0,480),gr(520,500),gr(1060,350),gr(1560,330),gr(2010,270),bl(250,95,247),bl(710,115,244),bl(1190,105,242),bl(1660,105,247)],
@@ -100,6 +100,9 @@ function buildSecretRoom(){return {key:'0b',secret:true,end:690,
 let secretReturnX=1370;
 let snow=null;
 let interactionTarget=null;
+ const DOOR_X=1400;
+ function doorUnlocked(){return data.keys.includes('0-q4')}
+ function doorRevealed(){return doorUnlocked()&&(data.secretDoors.includes('0-secret-door')||Math.abs(p.x+11-(DOOR_X+12))<100)}
 function enterSecretRoom(){
  if(level!==0||L.under||L.secret||!data.keys.includes('0-q4'))return;
  secretReturnX=p.x;mainL=L;L=buildSecretRoom();L.pops=[];pickups=[];restoreUnclaimedRewards();clouds=[];
@@ -355,14 +358,26 @@ function finishWinterScene(){
  stopSnow();menu('❄️《未来的冬天》','「还有好多想和你一起做的事。」<br><small>冬日回忆已收藏 ♡</small>',
  [['返回小屋',returnSnowRoom],['再滑一次',startSnow]]);
 }
-// Smooth half-pipe terrain: repeated U valleys with rounded transitions.
-function snowGround(x){
- const u=(x%720+720)%720;
- // High lips at either side, low middle; smooth continuous join.
- const valley=(1+Math.cos(2*Math.PI*u/720))/2;
- return 292-91*Math.pow(valley,1.65);
-}
-function snowSlope(x){return (snowGround(x+3)-snowGround(x-3))/6}
+ // Continuous half-pipe surface: smooth at the seams, with a broad valley and rising lips.
+ function snowGround(x){
+  const phase=2*Math.PI*x/720;
+  return 249-45*Math.cos(phase);
+ }
+ function snowSlope(x){return (snowGround(x+2)-snowGround(x-2))/4}
+ function snowNormal(x){return Math.atan(snowSlope(x))}
+ function snowObstacle(x,screenX){
+  // All geometry is drawn in slope-local coordinates, so it rests perpendicular to the snow.
+  const gy=snowGround(x), angle=snowNormal(x);
+  ctx.save();ctx.translate(screenX,gy);ctx.rotate(angle);
+  // Rounded snowdrift rather than a floating rectangular obstacle.
+  ctx.fillStyle='#a9d7eb';ctx.beginPath();ctx.moveTo(-14,0);
+  ctx.quadraticCurveTo(-12,-12,-7,-15);ctx.quadraticCurveTo(-2,-23,4,-17);
+  ctx.quadraticCurveTo(12,-15,14,0);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#f7fcff';ctx.beginPath();ctx.moveTo(-13,-5);
+  ctx.quadraticCurveTo(-9,-16,-3,-14);ctx.quadraticCurveTo(3,-24,8,-13);
+  ctx.quadraticCurveTo(13,-9,13,-5);ctx.closePath();ctx.fill();
+  ctx.restore();
+ }
 function updateSnow(dt){
  if(!snow)return;
  const s=snow,k=Math.min(.04,dt/1000),ground=snowGround(s.distance);
@@ -375,7 +390,7 @@ function updateSnow(dt){
  s.angle=Math.atan(snowSlope(s.distance));
  const feet=s.onGround?snowGround(s.distance):s.airY;
  for(let i=0;i<SNOW_FLAKES.length;i++){const x=SNOW_FLAKES[i];if(!s.flakes.has(i)&&Math.abs(s.distance-x)<17&&Math.abs(feet-(snowGround(x)-45))<40)s.flakes.add(i)}
- for(const x of SNOW_OBSTACLES){if(before<x+12&&s.distance>=x-12&&s.distance<x+16&&feet>snowGround(x)-23){snowFail();return}}
+ for(const x of SNOW_OBSTACLES){if(before<x+12&&s.distance>=x-12&&s.distance<x+16&&feet>snowGround(x)-24){snowFail();return}}
  if(s.onGround&&Math.random()<.8)s.particles.push({x:s.distance-14,y:feet,vx:-35-Math.random()*55,vy:-15-Math.random()*20,life:.4});
  for(const q of s.particles){q.x+=q.vx*k;q.y+=q.vy*k;q.vy+=90*k;q.life-=k}s.particles=s.particles.filter(q=>q.life>0).slice(-90);
  if(s.distance>=SNOW_SPEED*SNOW_LENGTH){snowFinish();return}
@@ -386,12 +401,21 @@ function drawSnow(){
  const px=Math.min(W*.30,220),offset=s.distance-px;
  for(let i=0;i<9;i++){const x=i*185-(s.distance*.12%185);ctx.fillStyle=i%2?'#e8f8ff':'#c9e4f4';ctx.beginPath();ctx.moveTo(x-140,270);ctx.lineTo(x+50,92+(i%3)*20);ctx.lineTo(x+230,270);ctx.fill()}
  for(let i=0;i<65;i++){const x=((i*113-s.distance*.24)%W+W)%W,y=(i*67+timer*.02)%265;circle(x,y,1.5,'#fff')}
- // Draw the real curved U-shaped snow track in world coordinates.
- ctx.beginPath();ctx.moveTo(0,H);for(let x=0;x<=W+4;x+=4)ctx.lineTo(x,snowGround(offset+x));ctx.lineTo(W,H);ctx.closePath();ctx.fillStyle='#f4fbff';ctx.fill();
- ctx.beginPath();for(let x=0;x<=W+4;x+=4){const y=snowGround(offset+x);if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.strokeStyle='#b1e1f4';ctx.lineWidth=5;ctx.stroke();ctx.lineWidth=1;
- for(let x=0;x<W;x+=24){const y=snowGround(offset+x);ctx.save();ctx.translate(x,y);ctx.rotate(Math.atan(snowSlope(offset+x)));rect(0,13,12,2,'#d9edf8');ctx.restore()}
- for(const x of SNOW_OBSTACLES){const sx=x-offset;if(sx>-40&&sx<W+40){const gy=snowGround(x);ctx.save();ctx.translate(sx,gy);ctx.rotate(Math.atan(snowSlope(x)));rect(-12,-19,24,19,'#b9deee');rect(-10,-23,20,6,'#fff');rect(-2,-12,4,5,'#7fb6d0');ctx.restore()}}
- for(let i=0;i<SNOW_FLAKES.length;i++){const x=SNOW_FLAKES[i],sx=x-offset;if(sx>-25&&sx<W+25&&!s.flakes.has(i))text('❄',sx,snowGround(x)-45,'#fff',20,'center')}
+   // One continuous snow surface, with no legacy horizontal ground stripe.
+  ctx.beginPath();ctx.moveTo(0,H);
+  for(let x=0;x<=W+4;x+=3)ctx.lineTo(x,snowGround(offset+x));
+  ctx.lineTo(W,H);ctx.closePath();ctx.fillStyle='#f4fbff';ctx.fill();
+  // Follow the SAME surface for the ice edge and its inner contour.
+  for(const [depth,color,width] of [[0,'#9fd8ef',4],[9,'#d7edf9',2]]){
+   ctx.beginPath();for(let x=0;x<=W+3;x+=3){const y=snowGround(offset+x)+depth;if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+   ctx.strokeStyle=color;ctx.lineWidth=width;ctx.stroke();
+  }ctx.lineWidth=1;
+  // Sparse texture placed along the normal rather than in a flat screen-space row.
+  for(let x=10;x<W;x+=35){const wx=offset+x,y=snowGround(wx),a=snowNormal(wx);
+   ctx.save();ctx.translate(x,y);ctx.rotate(a);rect(-4,18,9,1,'#dbeff8');ctx.restore();
+  }
+  for(const x of SNOW_OBSTACLES){const sx=x-offset;if(sx>-40&&sx<W+40)snowObstacle(x,sx)}
+for(let i=0;i<SNOW_FLAKES.length;i++){const x=SNOW_FLAKES[i],sx=x-offset;if(sx>-25&&sx<W+25&&!s.flakes.has(i))text('❄',sx,snowGround(x)-45,'#fff',20,'center')}
  for(const q of s.particles){ctx.globalAlpha=Math.max(0,q.life/.5);circle(q.x-offset,q.y,2,'#fff');ctx.globalAlpha=1}
  const py=s.onGround?snowGround(s.distance):s.airY;
  if(!scene||scene.type!=='snowEnding'||s.endT<1700){ctx.save();ctx.translate(px,py);ctx.rotate(s.onGround?s.angle:Math.max(-.24,Math.min(.24,s.angle*.35)));rect(-10,-2,44,6,'#f6a9cf');rect(-8,-4,40,2,'#fff4fa');bunny(-1,-30,1,false,false);ctx.restore();}
@@ -583,12 +607,12 @@ function update(dt){
   /* heart collected on contact below */}}
   if(L.secret&&p.x>555)showInteract='✦ 离开小屋';
   if(L.secret&&data.snowboard&&p.x>305&&p.x<355)showInteract='✦ 滑雪';
-  if(level===0&&!L.secret&&!L.under&&p.x>1360&&p.x<1430&&data.keys.includes('0-q4'))showInteract='✦ 打开小门';
+  if(level===0&&!L.secret&&!L.under&&p.x>1374&&p.x<1425&&doorRevealed())showInteract='✦ 进入';
  const ib=$('#interact');
  if(showInteract){
   let worldX=p.x+11, worldY=p.y-20;
   if(L.secret){if(p.x>555){worldX=595;worldY=G-55;showInteract='✦ 离开'}else{worldX=330;worldY=G-48;showInteract='✦ 滑雪'}}
-  else if(level===0&&p.x>1360&&p.x<1430){worldX=1412;worldY=G-82;showInteract='✦ 进入'}
+  else if(level===0&&p.x>1374&&p.x<1425){worldX=DOOR_X+12;worldY=G-70;showInteract='✦ 进入'}
   const bounds=canvas.getBoundingClientRect();
   ib.style.left=(bounds.left+(worldX-cam)/W*bounds.width)+'px';
   ib.style.top=(bounds.top+Math.max(40,worldY)/H*bounds.height)+'px';
@@ -720,7 +744,22 @@ function draw(){
  if(pipeOver){for(const o of L.objects)if(o.type==='pipe'||o.type==='exitpipe')pipeDraw(o)}
  if(bubbleMsg&&scene)bubble(lion.x-cam+12,lion.y-6,bubbleMsg.t);
  for(const q of L.pops){const a=1-q.t/600;ctx.globalAlpha=Math.max(0,a);if(q.txt)text(q.txt,q.x-cam,q.y-q.t*.03,'#fff',11,'center');else coinDraw(q.x-cam,q.y-q.t*.05);ctx.globalAlpha=1}
- if(level===0&&!L.under&&!L.secret){const dx=1400-cam;if(dx>-35&&dx<W+35){rect(dx,G-48,24,48,data.keys.includes('0-q4')?'#a7d9b5':'#a88bad');rect(dx+4,G-42,16,36,data.keys.includes('0-q4')?'#d9f6db':'#725d85');text(data.keys.includes('0-q4')?'✦':'🔒',dx+12,G-55,'#fff',11,'center')}}
+ if(level===0&&!L.under&&!L.secret){
+   const dx=DOOR_X-cam;
+   if(dx>-40&&dx<W+40){
+    // Before finding the key, the secret entrance is part of the scenery, not a visible locked door.
+    if(!doorUnlocked()){
+      ctx.globalAlpha=.40;circle(dx+12,G-45,3,'#eaf9ff');circle(dx+17,G-41,2,'#f7ffff');ctx.globalAlpha=1;
+    }else if(doorRevealed()){
+      const proximity=Math.abs(p.x+11-(DOOR_X+12));
+      const alpha=data.secretDoors.includes('0-secret-door')?1:Math.max(.18,Math.min(1,(105-proximity)/65));
+      ctx.save();ctx.globalAlpha=alpha;
+      rect(dx-3,G-52,30,52,'#f6e8fa');rect(dx,G-49,24,49,'#9ccfbf');
+      rect(dx+4,G-43,16,39,'#d8f5e9');rect(dx+18,G-26,3,4,'#f4cf80');
+      circle(dx+12,G-56,3,'#fff7cb');ctx.restore();
+    }
+   }
+  }
  if(!L.under&&!L.secret&&level!==1){rect(L.end-70-cam,G-90,5,90,'#fff4e4');rect(L.end-65-cam,G-90,48,24,'#f18eb2');text('终点',L.end-59-cam,G-73,'#fff',13)}
  for(const r of rockets){if(!r.parts){rect(r.x-1,r.y,2,7,r.c);ctx.globalAlpha=.4;rect(r.x-1,r.y+7,2,10,r.c);ctx.globalAlpha=1}else for(const q of r.parts)if(q.life>0){ctx.globalAlpha=Math.max(0,q.life);circle(q.x,q.y,2.4,r.c);ctx.globalAlpha=Math.max(0,q.life*.4);circle(q.x-q.vx*2,q.y-q.vy*2,1.6,r.c);ctx.globalAlpha=1}}
  if(scene&&scene.type==='sunset'&&scene.t>1500&&scene.t<6000){ctx.globalAlpha=Math.min(1,(scene.t-1500)/600,(6000-scene.t)/600);text('太阳慢慢落进海里……',W/2,58,'#fff',15,'center');ctx.globalAlpha=1}
@@ -736,7 +775,7 @@ function loop(t){try{let dt=Math.min(40,t-last||16);last=t;
 function interact(){if(mode==='scene'&&scene&&scene.type==='plant')return;if(mode!=='play')return;
  if(L.secret){if(p.x>555){exitSecretRoom();return}if(data.snowboard&&p.x>305&&p.x<355){startSnow();return}return}
  if(L.under){if(data.seed&&onPipeTop(PIPE()))startScene('pipeOut',{pipe:PIPE()});return}
- if(level===0&&p.x>1360&&p.x<1430&&data.keys.includes('0-q4')){enterSecretRoom();return}
+ if(level===0&&p.x>1374&&p.x<1425&&doorRevealed()){enterSecretRoom();return}
  if(level===1&&!data.story.sunset&&p.x>=535){startScene('sunset');return}
  if(level===2&&!data.seed&&onPipeTop(PIPE())){startScene('pipeIn',{pipe:PIPE()})}}
 
