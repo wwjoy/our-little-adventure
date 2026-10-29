@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V2.5</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V2.6</title><style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#2a203f;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;touch-action:none}#stage{position:absolute;inset:0;height:var(--available-height,100%);display:flex;align-items:center;justify-content:center}canvas{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;touch-action:none;-webkit-user-select:none}#hud{position:absolute;top:max(8px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));color:#fff;font-size:clamp(13px,2.2vw,19px);font-weight:800;text-shadow:1px 2px #704b73;pointer-events:none}#pause{position:absolute;right:max(12px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));z-index:2}button{font-family:inherit;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent}#controls{position:absolute;inset:0;pointer-events:none;z-index:3}#left,#right,#jump{opacity:.58;position:absolute;bottom:max(10px,env(safe-area-inset-bottom));width:52px;height:52px;background:#55476655;border:2px solid #ffffff77;color:#fff;border-radius:12px;font-size:22px;font-weight:800;pointer-events:auto}#left{left:max(12px,env(safe-area-inset-left))}#right{left:calc(max(12px,env(safe-area-inset-left)) + 61px)}#jump{right:max(12px,env(safe-area-inset-right));border-radius:50%;font-size:28px}.pressed{background:#ec8eaecc!important;opacity:1!important}#pause{border:2px solid #ffffffaa;background:#55476677;color:#fff;border-radius:11px;width:45px;height:42px;font-size:20px}#shade{position:absolute;inset:0;height:var(--available-height,100%);background:#211b39c9;display:flex;justify-content:center;align-items:center;z-index:4;padding:12px}#card{background:#fff3f6;border:3px solid #ffc2d7;border-radius:17px;color:#68455e;text-align:center;width:min(440px,92%);padding:16px;max-height:90%;overflow:auto;box-shadow:0 6px #a36e9d}#card h1{font-size:clamp(19px,3.2vw,27px);color:#db6394;margin:0 0 8px}#card p{font-size:clamp(12px,1.8vw,15px);line-height:1.65;margin:8px 0}#actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}#actions button{font-size:14px;font-weight:700;border:0;background:#e979a5;color:#fff;border-radius:10px;padding:10px 15px;min-height:43px}#actions button.alt{background:#a88bad}#rotate{position:absolute;inset:0;height:var(--available-height,100%);background:#241b38;color:white;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:8;gap:12px;font-size:20px;padding:24px}#rotate small{font-size:13px;opacity:.8}#error{display:none;position:absolute;z-index:12;inset:10%;background:#fff5f5;color:#a12750;border-radius:12px;padding:16px;overflow:auto;font-size:14px}.hide{display:none!important}@media(orientation:portrait){#rotate{display:flex}}@media(max-height:310px){#card{padding:8px}#card p{margin:3px}#left,#right,#jump{opacity:.58;width:48px;height:48px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 56px)}}
 #interact{position:absolute;bottom:22%;left:50%;transform:translateX(-50%);background:#e979a5;color:white;border:2px solid #fff;border-radius:12px;padding:9px 16px;z-index:3;font-weight:800}#card{max-width:520px!important}#hud{z-index:2;max-width:75%;font-size:clamp(12px,1.7vw,18px)}@media(orientation:landscape){#left,#right,#jump{bottom:max(10px,env(safe-area-inset-bottom))}} 
 #gate{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 30% 20%,#ffd6e6,#f6aed3 45%,#b48ac8);height:var(--available-height,100%)}
@@ -41,14 +41,16 @@ let W=640, cam=0, mode='gate', last=0, level=0, timer=0;
 let held={left:false,right:false,jump:false}, jumpQueue=false, assist=true;
 let clouds=[], sleeping=false, failCount=0, failCp=-1, respawnGuard=0, toast=null;
 let scene=null, dying=null, fade={a:0,dir:0,cb:null,text:''}, rockets=[], trail=[], mainL=null, bubbleMsg=null;
-const freshData=()=>({version:1,level:0,hearts:[false,false,false],seed:false,stars:[],shells:[],coins:[],qb:[],met:false,cp:0,cpLevel:0,done:false,story:{},assist:true});
+const freshData=()=>({version:1,gifts:[],level:0,hearts:[false,false,false],seed:false,stars:[],shells:[],coins:[],qb:[],met:false,cp:0,cpLevel:0,done:false,story:{},assist:true});
 let data=freshData();
 let p={x:45,y:G-27,w:22,h:27,vx:0,vy:0,on:false,ride:null,coyote:0,buffer:0,jumpMs:0,face:1,sit:false,hidden:false}, lion={x:30,y:G-27,sit:false,face:1};
 let L=null;
+// V2.6: question-box rewards, visible pickups, and temporary power-ups.
+let pickups=[], power={heart:0,star:0}, giftSeen={};
 
 // ================= Level data =================
 const gr=(x,w)=>({x,y:G,w,kind:'ground'}), bl=(x,w,y)=>({x,y,w,kind:'block'});
-const qb=(id,x,y)=>({kind:'q',id,x,y,w:22,h:22});
+const qb=(id,x,y,reward='coin')=>({kind:'q',id,x,y,w:22,h:22,reward});
 const mover=(x0,y0,w,ax,ay,period)=>({kind:'mover',x0,y0,w,ax,ay,period,x:x0,y:y0,dx:0,dy:0});
 const plank=(x,w)=>({kind:'fall',x,y0:G,y:G,w,t:0,vy:0});
 const spring=(x)=>({kind:'spring',x,y:G-14,w:26,anim:0});
@@ -58,7 +60,7 @@ const arc=(x,y,n,dx=18,h=18)=>Array.from({length:n},(_,i)=>[x+i*dx,y-Math.round(
 function buildLevel(n){
  if(n===0) return {end:2140,
   map:[gr(0,405),gr(451,490),gr(989,460),gr(1497,670),bl(235,92,244),bl(595,98,241),bl(1110,105,238),bl(1690,100,235)],
-  boxes:[qb(0,150,190),qb(1,520,190),qb(2,770,190),qb(3,792,190),qb(4,1320,190)],
+  boxes:[qb(0,150,190,'coin'),qb(1,520,190,'bag'),qb(2,770,190,'heartPower'),qb(3,792,190,'coin'),qb(4,1320,190,'starPower'),qb(5,615,157,'gift'),qb(6,1138,164,'bag')],
   plats:[spring(1860)],
   cps:[45,360,1000,1515], trees:[105,390,730,1040,1450,1610,2040],
   enemies:[{type:'walker',x:1620,start:1580,end:1670,v:.35}],
@@ -66,7 +68,7 @@ function buildLevel(n){
    ...coins(0,[...arc(410,250,3,18,12),...row(612,214,4,20),...arc(944,245,3,20,14),...row(1130,212,3,24),...row(1855,120,3,22),...row(1925,150,2,22)])]};
  if(n===1) return {end:2250,
   map:[gr(0,480),gr(520,500),gr(1060,350),gr(1560,330),gr(2010,270),bl(250,95,247),bl(710,115,244),bl(1190,105,242),bl(1660,105,247)],
-  boxes:[qb(0,380,190),qb(1,640,190),qb(2,1110,186),qb(3,1700,170)],
+  boxes:[qb(0,380,190,'shell'),qb(1,640,190,'bag'),qb(2,1110,186,'starPower'),qb(3,1700,170,'gift'),qb(4,735,157,'coin')],
   plats:[mover(1922,G-2,58,40,0,3400),spring(1600)],
   cps:[45,650,1070,1580], trees:[],
   enemies:[{type:'walker',x:180,start:140,end:232,v:.35},{type:'walker',x:880,start:835,end:955,v:.45}],
@@ -75,7 +77,7 @@ function buildLevel(n){
    ...coins(0,[...arc(484,260,3,16,12),...row(735,218,4,22),...arc(1024,262,3,14,10),...row(1580,130,2,26),...row(1906,236,5,20),...row(2040,250,3,22)])]};
  return {end:2350,
   map:[gr(0,490),gr(535,475),gr(1050,455),gr(1550,450),gr(2110,290),bl(240,110,240),bl(700,110,241),bl(1220,115,229),bl(1750,110,241)],
-  boxes:[qb(0,600,190),qb(1,1080,190),qb(2,1660,190),qb(3,1682,190)],
+  boxes:[qb(0,600,190,'heartPower'),qb(1,1080,190,'bag'),qb(2,1660,190,'gift'),qb(3,1682,190,'starPower'),qb(4,1240,159,'coin')],
   plats:[spring(430),mover(1342,236,48,0,48,2800),plank(2004,50),plank(2056,52)],
   cps:[45,600,950,1580,1890,2130], trees:[140,620,1150,1650,2230],
   enemies:[{type:'walker',x:120,start:95,end:195,v:.4},{type:'fly',x:600,start:560,end:680,v:.5,base:222,amp:18},
@@ -86,14 +88,14 @@ function buildLevel(n){
 // Underground bonus room behind the glowing pipe (level 3)
 function buildUnder(){return {key:'2u',under:true,end:900,
  map:[gr(0,900),bl(300,60,250),bl(520,60,230)],
- boxes:[qb(0,160,190),qb(1,182,190),qb(2,204,190)],
+ boxes:[qb(0,160,190,'coin'),qb(1,182,190,'bag'),qb(2,204,190,'heartPower')],
  plats:[],cps:[70],trees:[],enemies:[],
  objects:[{type:'seed',x:700,y:G-22},{type:'pipe',x:820,w:42,top:G-44,exit:true},{type:'sign',x:640,text:'拿到种子，再从绿色管道出去'},
   ...coins(0,[...arc(226,246,4,18,24),...row(310,215,3,20),...arc(440,240,4,18,30),...row(530,195,3,20),...row(620,250,3,18)])]}}
 const PIPE=()=>L.objects.find(o=>o.type==='pipe');
 const LK=()=>L&&L.key||String(level);
 const qKey=b=>LK()+'-q'+b.id, cKey=o=>LK()+'-c'+o.id;
-function totalCoins(){let t=0;for(const l of [buildLevel(0),buildLevel(1),buildLevel(2),buildUnder()])t+=l.objects.filter(o=>o.type==='coin').length+l.boxes.length;return t}
+function totalCoins(){let t=0;for(const l of [buildLevel(0),buildLevel(1),buildLevel(2),buildUnder()])t+=l.objects.filter(o=>o.type==='coin').length+l.boxes.reduce((n,b)=>n+(b.reward==='bag'?5:b.reward==='coin'?1:0),0);return t}
 const TOTAL_COINS=totalCoins();
 
 function surfaces(){
@@ -118,12 +120,12 @@ function safeX(x){
 
 // ================= Save =================
 function save(){try{localStorage.setItem(SAVE,JSON.stringify(data))}catch(e){}}
-function load(){try{let d=JSON.parse(localStorage.getItem(SAVE)||'null');if(d&&d.version===1){data=Object.assign(freshData(),d);data.hearts=(data.hearts||[]).slice(0,3);while(data.hearts.length<3)data.hearts.push(false);data.story=data.story||{};data.coins=data.coins||[];data.qb=data.qb||[];assist=data.assist!==false}}catch(e){}}
+function load(){try{let d=JSON.parse(localStorage.getItem(SAVE)||'null');if(d&&d.version===1){data=Object.assign(freshData(),d);data.hearts=(data.hearts||[]).slice(0,3);while(data.hearts.length<3)data.hearts.push(false);data.story=data.story||{};data.coins=data.coins||[];data.qb=data.qb||[];data.gifts=data.gifts||[];assist=data.assist!==false}}catch(e){}}
 function gateOk(){try{return localStorage.getItem(GATE)==='1'}catch(e){return false}}
 
 // ================= Flow =================
 function clearInput(){Object.keys(held).forEach(k=>{held[k]=false;$('#'+k).classList.remove('pressed')});jumpQueue=false}
-function layout(n){coop={state:'idle',lionX:1392,lionReady:false,started:false,bridgeTime:0};pendingFlag=-1;flagCrossingArmed=false;finalReviewOpen=false;if(finalSceneTimeout){clearTimeout(finalSceneTimeout);finalSceneTimeout=null}fade={a:0,dir:0,cb:null,text:''};level=n;L=buildLevel(n);mainL=null;L.pops=[];clouds=[];sleeping=false;failCount=0;failCp=-1;scene=null;dying=null;L.enemies.forEach(e=>{e.v=Math.abs(e.v);e.dead=0;e.vy=0;e.hop=0;e.jt=Math.random()*900})}
+function layout(n){pickups=[];power={heart:0,star:0};coop={state:'idle',lionX:1392,lionReady:false,started:false,bridgeTime:0};pendingFlag=-1;flagCrossingArmed=false;finalReviewOpen=false;if(finalSceneTimeout){clearTimeout(finalSceneTimeout);finalSceneTimeout=null}fade={a:0,dir:0,cb:null,text:''};level=n;L=buildLevel(n);mainL=null;L.pops=[];clouds=[];sleeping=false;failCount=0;failCp=-1;scene=null;dying=null;L.enemies.forEach(e=>{e.v=Math.abs(e.v);e.dead=0;e.vy=0;e.hop=0;e.jt=Math.random()*900})}
 function resetPlanks(){for(const pl of L.plats)if(pl.kind==='fall'){pl.y=pl.y0;pl.t=0;pl.vy=0}}
 function respawnAt(x){if(level===2&&!L.under&&!data.story.bridge&&coop.state==='approaching'){coop.state='waiting';coop.lionReady=true}pendingFlag=-1;flagCrossingArmed=false;x=safeX(x);p.x=x;p.y=G-p.h;p.vx=p.vy=0;p.on=true;p.ride=null;p.sit=false;p.hidden=false;p.coyote=p.buffer=p.jumpMs=0;lion.x=x-34*p.face;lion.y=p.y;lion.sit=false;trail=[];resetPlanks();cam=Math.max(0,Math.min(L.end-W,x-W*.35));respawnGuard=900;clearInput()}
 function startLevel(n,fromSave){layout(n);let cp=(fromSave&&data.cpLevel===n)?Math.max(0,Math.min(L.cps.length-1,data.cp)):0;data.level=Math.max(data.level,n);data.cp=cp;data.cpLevel=n;save();p.face=1;respawnAt(L.cps[cp]);play();if(n===0&&!data.story.introGuide){data.story.introGuide=true;save();cut('🦁 冒险的小目标','听说这片世界里藏着三颗特别的爱心，我们一起把它们找出来吧！<br><br>沿途的金币也值得收集，遇到特别的东西时，小狮子会提醒你。<br>想知道收集进度，可以在暂停菜单打开「📖 冒险手册」。',play,'出发吧 ♡')}}
@@ -184,7 +186,7 @@ function rewardLines(){
 }
 function journal(back){
  const h=data.hearts.filter(Boolean).length;
- const lines=['❤️ 特别爱心 '+h+'/3　· 每段旅程藏着一颗，试着全部找到吧。',
+ const lines=['🎀 神秘礼盒 '+(data.gifts||[]).length+' 个 · 藏着特别的收藏。', '❤️ 特别爱心 '+h+'/3　· 每段旅程藏着一颗，试着全部找到吧。',
  '⭐ 回忆星星 '+data.stars.length+'/3　· 集齐星光，路就会出现。',
  '🌱 神秘种子 '+(data.seed?'已发现':'尚未发现')+'　· 花园深处似乎藏着什么。',
  '🪙 爱心金币 '+data.coins.length+'/'+TOTAL_COINS+'　· 10、20、30枚有小奖励。',
@@ -198,7 +200,7 @@ function rewardToast(kind,count){
  if(kind==='shell'&&[3,5].includes(count))flash('🐚 '+count+'/5！新的海边回忆卡已解锁');
 }
 function stageCoins(n){return data.coins.filter(x=>x.startsWith(String(n)+'-')).length}
-function stageCoinTotal(n){const z=buildLevel(n);return z.objects.filter(o=>o.type==='coin').length+z.boxes.length}
+function stageCoinTotal(n){const z=buildLevel(n);return z.objects.filter(o=>o.type==='coin').length+z.boxes.reduce((v,b)=>v+(b.reward==='bag'?5:b.reward==='coin'?1:0),0)}
 function stageReview(n,done){
  const c=stageCoins(n),tot=stageCoinTotal(n);
  const lines=['❤️ 特别爱心：'+(data.hearts[n]?'已找到 ✓':'未找到'),
@@ -261,7 +263,7 @@ function updateFade(dt){if(fade.dir===1){fade.a=Math.min(1,fade.a+dt/260);if(fad
 
 // ================= Death & assist =================
 function findGap(x){const g=L.map.filter(a=>a.kind==='ground').sort((a,b)=>a.x-b.x);let best=null,bd=1e9;for(let i=0;i<g.length-1;i++){const s=g[i].x+g[i].w,e=g[i+1].x;if(e-s<8)continue;const d=x<s?s-x:x>e?x-e:0;if(d<bd){bd=d;best={id:LK()+'-'+i,x:s,w:e-s}}}return bd<200?best:null}
-function die(cause){if(mode!=='play')return;pendingFlag=-1;flagCrossingArmed=false;mode='dying';dying={cause,t:0,x:p.x};clearInput();showUI(false);$('#interact').classList.add('hide');p.ride=null;p.vx=0;p.vy=cause==='enemy'?-7:0}
+function die(cause){power={heart:0,star:0};pickups=[];if(mode!=='play')return;pendingFlag=-1;flagCrossingArmed=false;mode='dying';dying={cause,t:0,x:p.x};clearInput();showUI(false);$('#interact').classList.add('hide');p.ride=null;p.vx=0;p.vy=cause==='enemy'?-7:0}
 function updateDying(dt){const k=Math.min(2,dt/16.667);dying.t+=dt;
  if(dying.cause==='enemy'&&dying.t>250){p.vy=Math.min(9,p.vy+.4*k);p.y+=p.vy*k}
  const wait=dying.cause==='enemy'?1050:350;
@@ -313,6 +315,29 @@ function exitUnder(){L=mainL;mainL=null;const ep=L.objects.find(o=>o.type==='exi
 function overlap(o,r){return p.x<o.x+r&&p.x+p.w>o.x-r&&p.y<o.y+r&&p.y+p.h>o.y-r}
 function flash(t){toast={t,until:timer+1800}}
 function addCoin(key,x,y){if(data.coins.includes(key))return;data.coins.push(key);save();rewardToast('coin',data.coins.length);L.pops.push({x,y,t:0})}
+function boxReward(b){
+ const key=qKey(b),r=b.reward||'coin';
+ if(data.qb.includes(key))return;
+ data.qb.push(key);save();b.bump=150;
+ // Reward rises from the box and must be touched to collect (except coins and bags).
+ if(r==='coin'){addCoin(key,b.x+11,b.y-8);flash('🪙 找到一枚爱心金币！');return}
+ if(r==='bag'){for(let i=0;i<5;i++)addCoin(key+'-bag'+i,b.x+11,b.y-8);flash('💰 金色钱袋！+5 金币');return}
+ if(r==='shell'){if(!data.shells.includes(4)){data.shells.push(4);save();rewardToast('shell',data.shells.length)}flash('🐚 从问号砖块里发现贝壳！');return}
+ pickups.push({x:b.x+11,y:b.y-14,baseY:b.y-14,kind:r,key,life:0});
+ flash(r==='heartPower'?'💗 大爱心出现了！快碰到它！':r==='starPower'?'⭐ 幸运星星出现了！快碰到它！':'🎀 神秘礼盒出现了！');
+}
+function updateRewards(dt){
+ power.heart=Math.max(0,power.heart-dt);power.star=Math.max(0,power.star-dt);
+ for(const a of pickups){a.life+=dt;a.y=a.baseY-13*Math.min(1,a.life/350)+Math.sin(a.life/210)*2;
+  if(p.x<a.x+13&&p.x+p.w>a.x-13&&p.y<a.y+12&&p.y+p.h>a.y-12){
+   if(a.kind==='heartPower'){power.heart=15000;flash('💗 大爱心：15秒内可抵挡一次怪物伤害！')}
+   else if(a.kind==='starPower'){power.star=8000;flash('⭐ 幸运星星：8秒内免疫普通怪物！')}
+   else {if(!data.gifts.includes(a.key)){data.gifts.push(a.key);save()}flash('🎀 获得一份神秘收藏！去冒险手册看看吧')}
+   a.taken=true;
+  }
+ }
+ pickups=pickups.filter(a=>!a.taken);
+}
 function enemyBox(e){const top=e.type==='fly'?e.y-10:G-22-e.hop;const bottom=e.type==='fly'?e.y+10:G-e.hop;return {l:e.x-11,r:e.x+11,t:top,b:bottom}}
 function updatePlats(dt,k){
  for(const pl of L.plats){
@@ -342,6 +367,7 @@ function update(dt){
  timer+=dt;respawnGuard=Math.max(0,respawnGuard-dt);
  const k=Math.min(2,dt/16.667),dir=(held.right?1:0)-(held.left?1:0);
  updatePlats(dt,k);
+ updateRewards(dt);
  if(p.ride&&p.on){const r=p.ride;if(r.kind==='mover'){p.x+=r.dx;p.y+=r.dy}else if(r.kind==='fall'&&r.t>=450){p.y=r.y-p.h}}
  const prevY=p.y,prevX=p.x,sol=surfaces();
  if(dir)p.face=dir;
@@ -374,7 +400,7 @@ function update(dt){
    if(a.kind==='spring'){p.y=a.y-p.h;p.vy=held.jump?-13.2:-12;p.jumpMs=999;a.ref.anim=250;continue}
    p.y=a.y-p.h;p.vy=0;p.on=true;ride=a.ref||null}
   else if(a.box&&p.vy<0&&prevY>=a.y+a.h-6&&p.y<a.y+a.h){p.y=a.y+a.h;p.vy=.5;p.jumpMs=999;
-   if(a.kind==='q'){const b=a.ref;if(!data.qb.includes(qKey(b))){data.qb.push(qKey(b));addCoin(qKey(b),b.x+11,b.y-8)}b.bump=150}}}
+   if(a.kind==='q'){boxReward(a.ref)}}}
  p.ride=p.on?ride:null;
  if(p.y>H+30){die('fall');return}
  updateFlags(prevX);
@@ -394,7 +420,7 @@ function update(dt){
   const bx=enemyBox(e);
   if(p.x+p.w-3>bx.l&&p.x+3<bx.r&&p.y+p.h>bx.t&&p.y<bx.b){
    if(p.vy>0&&prevY+p.h<=bx.t+10){e.dead=1;p.vy=held.jump?-8.6:-6.4;p.jumpMs=999;p.on=false;p.ride=null;L.pops.push({x:e.x,y:bx.t-6,t:0,txt:'踩扁啦！'})}
-   else if(!sleeping&&respawnGuard===0){die('enemy');return}}}
+   else if(!sleeping&&respawnGuard===0){if(power.star>0){e.dead=1;flash('⭐ 幸运星星保护了小兔子！')}else if(power.heart>0){power.heart=0;respawnGuard=1100;flash('💗 大爱心抵挡了一次伤害！')}else{die('enemy');return}}}}
  L.enemies=L.enemies.filter(e=>!e.dead||e.dead<500);
  let showInteract=false;
  if(L.under){const ex=PIPE();if(onPipeTop(ex))showInteract=data.seed?'✦ 回到花园':false;if(onPipeTop(ex)&&!data.seed&&!toast)flash('先拿到种子哦～')}
@@ -450,8 +476,13 @@ function terrain(a){let x=a.x-cam;if(x>W||x+a.w<0)return;const u=L.under;rect(x,
 function bridge(a,c1,c2){let x=a.x-cam;rect(x,a.y,a.w,8,c1);rect(x,a.y+8,a.w,3,c2);for(let i=4;i<a.w;i+=12)rect(x+i,a.y+2,2,4,c2)}
 function qbrick(b){const used=data.qb.includes(qKey(b));const x=b.x-cam,y=b.y-(b.bump?Math.sin(b.bump/150*Math.PI)*5:0);if(x<-30||x>W+30)return;
  rect(x,y,b.w,b.h,used?'#b9a294':'#f6b64a');rect(x,y,b.w,2,used?'#d2c0b4':'#ffd98a');rect(x,y+b.h-3,b.w,3,used?'#8b7568':'#c97f22');
- if(!used){text('?',x+b.w/2,y+16,'#fff',15,'center')}else{rect(x+5,y+9,12,3,'#8b7568')}}
+ if(!used){text('?',x+b.w/2,y+16,'#fff',15,'center');if(b.reward==='gift')rect(x+b.w-5,y+3,3,3,'#e879ac');if(b.reward==='heartPower')rect(x+3,y+3,3,3,'#ff8caa')}else{rect(x+5,y+9,12,3,'#8b7568')}}
 function coinDraw(x,y){const s=Math.abs(Math.sin(timer/220+x*.05));circle(x,y,6,'#f9c74f');rect(x-1.5*s-1,y-4,3*s+2,8,'#fff1a8');ctx.fillStyle='#f28eaf';ctx.font='bold 8px sans-serif';ctx.textAlign='center';ctx.fillText('♥',x,y+3);ctx.textAlign='left'}
+function pickupDraw(a){const x=a.x-cam,y=a.y;if(x<-25||x>W+25)return;
+ if(a.kind==='heartPower'){ctx.save();ctx.translate(x,y);ctx.scale(1.3,1.3);heart(0,0);ctx.restore()}
+ else if(a.kind==='starPower'){circle(x,y,11,'#ffe47c');text('★',x,y+6,'#fff',19,'center')}
+ else{rect(x-10,y-9,20,18,'#f3a5c5');rect(x-10,y-3,20,5,'#fff0a9');rect(x-2,y-9,4,18,'#fff0a9');text('♡',x,y+5,'#fff',11,'center')}
+}
 function platDraw(pl){const x=pl.x-cam;if(x<-80||x>W+80)return;
  if(pl.kind==='mover'){const y=pl.y;circle(x+10,y+4,10,'#f2fbff');circle(x+pl.w/2,y-1,13,'#fff');circle(x+pl.w-10,y+4,10,'#f2fbff');rect(x,y+2,pl.w,9,'#eef8ff');rect(x+4,y+10,pl.w-8,3,'#a6d4eb')}
  if(pl.kind==='fall'){const sh=pl.t>0&&pl.t<450?Math.sin(timer/25)*1.5:0;rect(x+sh,pl.y,pl.w,9,'#c69468');rect(x+sh,pl.y+9,pl.w,3,'#8d6248');for(let i=6;i<pl.w;i+=14)rect(x+sh+i,pl.y+2,2,5,'#8d6248')}
@@ -504,7 +535,7 @@ function draw(){
  if(level===2&&!L.under&&(data.story.bridge||(scene&&scene.type==='switch'))){const r=data.story.bridge?1:Math.min(1,coop.bridgeTime/2000);bridge({x:1500,y:G+(1-r)*70,w:55},'#c99a6b','#8d6248')}
  if(!L.under)for(let i=1;i<L.cps.length;i++){let x=L.cps[i]-cam;if(x<-30||x>W+30)continue;rect(x,G-62,4,62,'#8b6a85');rect(x+4,G-62,18,12,data.cpLevel===level&&data.cp>=i?'#f28eaf':'#ffe5a1')}
  for(const o of L.objects)if(o.type==='sign')sign(o);
- L.plats.forEach(platDraw);L.boxes.forEach(qbrick);
+ L.plats.forEach(platDraw);L.boxes.forEach(qbrick);pickups.forEach(pickupDraw);
  for(const o of L.objects){let x=o.x-cam;if(x<-60||x>W+60)continue;
   if(o.type==='coin'&&!data.coins.includes(cKey(o)))coinDraw(x,o.y);
   if(o.type==='heart'&&!data.hearts[level])heart(x,o.y+Math.sin(timer/300)*2);
@@ -532,7 +563,7 @@ function draw(){
  if(!pipeOver)for(const o of L.objects)if(o.type==='pipe')pipeDraw(o);
  L.enemies.forEach(enemyDraw);
  if(!L.under){if(level===0&&!data.met){lionDraw(350-cam,G-28,-1,false);circle(363-cam,G-56,10,'#fff6e8');text('!',359-cam,G-51,'#9d6492',14)}else lionDraw(lion.x-cam,lion.y,lion.face,lion.sit)}
- if(!p.hidden)bunny(p.x-cam,p.y,p.face,p.sit,!!dying);
+ if(!p.hidden){if(power.heart>0){ctx.save();ctx.translate(p.x-cam+11,p.y+14);ctx.scale(1.2,1.2);bunny(-11,-14,p.face,p.sit,!!dying);ctx.restore();}else bunny(p.x-cam,p.y,p.face,p.sit,!!dying);if(power.star>0){ctx.globalAlpha=.65+.3*Math.sin(timer/100);circle(p.x-cam+11,p.y+12,21,'#fff3a444');text('✦',p.x-cam+12,p.y-14,'#ffe46d',17,'center');ctx.globalAlpha=1}}
  if(pipeOver){for(const o of L.objects)if(o.type==='pipe'||o.type==='exitpipe')pipeDraw(o)}
  if(bubbleMsg&&scene)bubble(lion.x-cam+12,lion.y-6,bubbleMsg.t);
  for(const q of L.pops){const a=1-q.t/600;ctx.globalAlpha=Math.max(0,a);if(q.txt)text(q.txt,q.x-cam,q.y-q.t*.03,'#fff',11,'center');else coinDraw(q.x-cam,q.y-q.t*.05);ctx.globalAlpha=1}
@@ -542,7 +573,7 @@ function draw(){
  if(scene&&scene.type==='fireworks'&&scene.t<3000){ctx.globalAlpha=Math.min(1,scene.t/600,(3000-scene.t)/600);text('花火大会开始啦！',W/2,76,'#fff4dc',25,'center');ctx.globalAlpha=1}
  if(toast&&timer<toast.until&&mode==='play'){ctx.font='bold 14px sans-serif';const w=ctx.measureText(toast.t).width+20;rect(W/2-w/2,48,w,26,'#00000055');text(toast.t,W/2,66,'#fff',14,'center')}
  if(fade.a>0){ctx.globalAlpha=fade.a;rect(0,0,W,H,'#1c1530');if(fade.text){text(fade.text,W/2,H/2,'#ffd6e6',15,'center')}ctx.globalAlpha=1}
- $('#hud').textContent='❤️ '+data.hearts.filter(Boolean).length+'/3　🌱 '+(data.seed?1:0)+'/1　🪙 '+data.coins.length+'　'+(L.under?'地下花园':LEVELS[level])+(level===1?'　🐚 '+data.shells.length+'/5　⭐ '+data.stars.length+'/3':'')}
+ $('#hud').textContent='❤️ '+data.hearts.filter(Boolean).length+'/3　🌱 '+(data.seed?1:0)+'/1　🪙 '+data.coins.length+'　'+(L.under?'地下花园':LEVELS[level])+(level===1?'　🐚 '+data.shells.length+'/5　⭐ '+data.stars.length+'/3':'')+(power.heart>0?'　💗'+Math.ceil(power.heart/1000)+'s':'')+(power.star>0?'　✨'+Math.ceil(power.star/1000)+'s':'')}
 function loop(t){try{let dt=Math.min(40,t-last||16);last=t;
  if(mode==='play')update(dt);else if(mode==='scene'&&scene)updateScene(dt);else if(mode==='dying'&&dying)updateDying(dt);
  updateFade(dt);draw()}catch(e){$('#error').style.display='block';$('#error').textContent='游戏运行异常：'+e.message+'。请截图反馈。';return}requestAnimationFrame(loop)}
