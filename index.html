@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V2.8.1</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V2.8.2</title><style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#2a203f;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;touch-action:none}#stage{position:absolute;inset:0;height:var(--available-height,100%);display:flex;align-items:center;justify-content:center}canvas{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;touch-action:none;-webkit-user-select:none}#hud{position:absolute;top:max(8px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));color:#fff;font-size:clamp(13px,2.2vw,19px);font-weight:800;text-shadow:1px 2px #704b73;pointer-events:none}#pause{position:absolute;right:max(12px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));z-index:2}button{font-family:inherit;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent}#controls{position:absolute;inset:0;pointer-events:none;z-index:3}#left,#right,#jump{opacity:.58;position:absolute;bottom:max(10px,env(safe-area-inset-bottom));width:52px;height:52px;background:#55476655;border:2px solid #ffffff77;color:#fff;border-radius:12px;font-size:22px;font-weight:800;pointer-events:auto}#left{left:max(12px,env(safe-area-inset-left))}#right{left:calc(max(12px,env(safe-area-inset-left)) + 61px)}#jump{right:max(12px,env(safe-area-inset-right));border-radius:50%;font-size:28px}.pressed{background:#ec8eaecc!important;opacity:1!important}#pause{border:2px solid #ffffffaa;background:#55476677;color:#fff;border-radius:11px;width:45px;height:42px;font-size:20px}#shade{position:absolute;inset:0;height:var(--available-height,100%);background:#211b39c9;display:flex;justify-content:center;align-items:center;z-index:4;padding:12px}#card{background:#fff3f6;border:3px solid #ffc2d7;border-radius:17px;color:#68455e;text-align:center;width:min(440px,92%);padding:16px;max-height:90%;overflow:auto;box-shadow:0 6px #a36e9d}#card h1{font-size:clamp(19px,3.2vw,27px);color:#db6394;margin:0 0 8px}#card p{font-size:clamp(12px,1.8vw,15px);line-height:1.65;margin:8px 0}#actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}#actions button{font-size:14px;font-weight:700;border:0;background:#e979a5;color:#fff;border-radius:10px;padding:10px 15px;min-height:43px}#actions button.alt{background:#a88bad}#rotate{position:absolute;inset:0;height:var(--available-height,100%);background:#241b38;color:white;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:8;gap:12px;font-size:20px;padding:24px}#rotate small{font-size:13px;opacity:.8}#error{display:none;position:absolute;z-index:12;inset:10%;background:#fff5f5;color:#a12750;border-radius:12px;padding:16px;overflow:auto;font-size:14px}.hide{display:none!important}@media(orientation:portrait){#rotate{display:flex}}@media(max-height:310px){#card{padding:8px}#card p{margin:3px}#left,#right,#jump{opacity:.58;width:48px;height:48px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 56px)}}
 #interact{position:absolute;left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);background:#fff9f0e8;color:#79516c;border:2px solid #e9a7c5;border-radius:7px;padding:4px 8px;min-width:66px;min-height:32px;z-index:3;font-weight:800;font-size:11px;box-shadow:0 3px #a88ba4;white-space:nowrap}#card{max-width:520px!important}#hud{z-index:2;max-width:75%;font-size:clamp(12px,1.7vw,18px)}@media(orientation:landscape){#left,#right,#jump{bottom:max(10px,env(safe-area-inset-bottom))}} 
 #gate{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 30% 20%,#ffd6e6,#f6aed3 45%,#b48ac8);height:var(--available-height,100%)}
@@ -70,15 +70,15 @@ function buildLevel(n){
  if(n===1) return {end:2250,
   // Beach / tidal boardwalk / fireworks shore. Raised rocks are low enough to jump.
   map:[gr(0,480),gr(520,500),gr(1060,350),gr(1560,330),gr(2010,270),
-   bl(280,86,267),bl(720,96,263),bl(1190,98,264),bl(1650,96,266),
-   bl(380,55,244),bl(925,55,239),bl(1740,56,241)],
-  boxes:[qb(0,390,197,'shell'),qb(1,645,190,'bag'),qb(2,1110,186,'gift'),qb(3,1700,192,'coin'),qb(4,740,188,'coin')],
+   bl(280,72,267),bl(720,96,263),bl(1190,98,264),bl(1650,96,266),
+   bl(385,68,250),bl(925,55,239),bl(1740,56,241)],
+  boxes:[qb(0,235,213,'shell'),qb(1,645,190,'bag'),qb(2,1110,186,'gift'),qb(3,1700,192,'coin'),qb(4,740,188,'coin')],
   plats:[mover(1030,G-13,55,0,12,3600),mover(1910,G-13,68,15,7,4000),mover(1980,G-13,55,0,9,3500),spring(1600)],
   cps:[45,650,1070,1580,1810,2040], trees:[],
   enemies:[{type:'walker',x:175,start:125,end:225,v:.35},{type:'walker',x:865,start:825,end:900,v:.35}],
   objects:[{type:'heart',x:2170,y:264},{type:'star',id:0,x:820,y:214},{type:'star',id:1,x:1150,y:228},{type:'star',id:2,x:1365,y:219},
    {type:'shell',id:0,x:185,y:G-18},{type:'shell',id:1,x:445,y:G-18},{type:'shell',id:2,x:930,y:G-18},{type:'shell',id:3,x:1242,y:244},{type:'shell',id:4,x:1615,y:155},
-   ...coins(0,[...arc(484,250,3,16,12),...row(735,213,4,22),...arc(1024,248,3,14,10),...row(1580,170,2,26),...row(1906,232,5,20),...row(2040,248,3,22),...row(380,204,3,17),...row(925,198,3,17),...row(1740,201,3,17)])]};
+   ...coins(0,[...arc(484,250,3,16,12),...row(735,213,4,22),...arc(1024,248,3,14,10),...row(1580,170,2,26),...row(1906,232,5,20),...row(2040,248,3,22),...row(320,226,3,25),...row(925,198,3,17),...row(1740,201,3,17)])]};
  return {end:2350,
   map:[gr(0,490),gr(535,475),gr(1050,455),gr(1550,450),gr(2110,290),bl(240,110,240),bl(700,110,241),bl(1220,115,229),bl(1750,110,241)],
   boxes:[qb(0,600,190,'keepsake'),qb(1,1080,190,'bag'),qb(2,1660,190,'gift'),qb(3,1682,190,'coin'),qb(4,1240,159,'coin')],
@@ -669,6 +669,15 @@ function bg(){
 function tree(x){let s=x-cam;if(s<-70||s>W+70)return;rect(s-4,G-84,10,86,'#8d647b');circle(s-24,G-91,27,'#f3a3c6');circle(s+8,G-111,30,'#f8b9d3');circle(s+28,G-87,27,'#f5a8c9');circle(s-3,G-78,28,'#ffccdf');for(let i=0;i<7;i++)rect(s+(i*17)%60-30,G-120+(i*13)%48,3,3,'#fff1f5')}
 function terrain(a){let x=a.x-cam;if(x>W||x+a.w<0)return;
  if(level===1&&!L.under&&!L.secret&&a.kind==='block'){
+  if(a.x===280||a.x===385){
+   // Low, climbable rock steps: collision stays solid, art follows the same geometry.
+   rect(x,a.y+6,a.w,H-a.y-6,'#92959d');
+   rect(x+2,a.y+2,a.w-4,9,'#d8c5b7');
+   rect(x+5,a.y,a.w-10,5,'#eee0cc');
+   rect(x+7,a.y+19,12,3,'#b9b7bb');
+   rect(x+a.w-23,a.y+29,13,3,'#b9b7bb');
+   return;
+  }
   rect(x,a.y+5,a.w,H-a.y-5,'#99959b');rect(x+5,a.y,a.w-10,8,'#e5c7ae');rect(x,a.y+8,a.w,7,'#afa4a3');rect(x+3,a.y+16,5,H-a.y-16,'#b5a6a4');
   for(let i=12;i<a.w;i+=27){rect(x+i,a.y+24+(i%3)*15,11,3,'#c6b7ae');rect(x+i+5,a.y+41+(i%4)*11,3,3,'#e1d0c5')}return;
  }
