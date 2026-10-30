@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V2.6.9</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V2.8</title><style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#2a203f;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;touch-action:none}#stage{position:absolute;inset:0;height:var(--available-height,100%);display:flex;align-items:center;justify-content:center}canvas{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;touch-action:none;-webkit-user-select:none}#hud{position:absolute;top:max(8px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));color:#fff;font-size:clamp(13px,2.2vw,19px);font-weight:800;text-shadow:1px 2px #704b73;pointer-events:none}#pause{position:absolute;right:max(12px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));z-index:2}button{font-family:inherit;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent}#controls{position:absolute;inset:0;pointer-events:none;z-index:3}#left,#right,#jump{opacity:.58;position:absolute;bottom:max(10px,env(safe-area-inset-bottom));width:52px;height:52px;background:#55476655;border:2px solid #ffffff77;color:#fff;border-radius:12px;font-size:22px;font-weight:800;pointer-events:auto}#left{left:max(12px,env(safe-area-inset-left))}#right{left:calc(max(12px,env(safe-area-inset-left)) + 61px)}#jump{right:max(12px,env(safe-area-inset-right));border-radius:50%;font-size:28px}.pressed{background:#ec8eaecc!important;opacity:1!important}#pause{border:2px solid #ffffffaa;background:#55476677;color:#fff;border-radius:11px;width:45px;height:42px;font-size:20px}#shade{position:absolute;inset:0;height:var(--available-height,100%);background:#211b39c9;display:flex;justify-content:center;align-items:center;z-index:4;padding:12px}#card{background:#fff3f6;border:3px solid #ffc2d7;border-radius:17px;color:#68455e;text-align:center;width:min(440px,92%);padding:16px;max-height:90%;overflow:auto;box-shadow:0 6px #a36e9d}#card h1{font-size:clamp(19px,3.2vw,27px);color:#db6394;margin:0 0 8px}#card p{font-size:clamp(12px,1.8vw,15px);line-height:1.65;margin:8px 0}#actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}#actions button{font-size:14px;font-weight:700;border:0;background:#e979a5;color:#fff;border-radius:10px;padding:10px 15px;min-height:43px}#actions button.alt{background:#a88bad}#rotate{position:absolute;inset:0;height:var(--available-height,100%);background:#241b38;color:white;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:8;gap:12px;font-size:20px;padding:24px}#rotate small{font-size:13px;opacity:.8}#error{display:none;position:absolute;z-index:12;inset:10%;background:#fff5f5;color:#a12750;border-radius:12px;padding:16px;overflow:auto;font-size:14px}.hide{display:none!important}@media(orientation:portrait){#rotate{display:flex}}@media(max-height:310px){#card{padding:8px}#card p{margin:3px}#left,#right,#jump{opacity:.58;width:48px;height:48px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 56px)}}
 #interact{position:absolute;left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);background:#fff9f0e8;color:#79516c;border:2px solid #e9a7c5;border-radius:7px;padding:4px 8px;min-width:66px;min-height:32px;z-index:3;font-weight:800;font-size:11px;box-shadow:0 3px #a88ba4;white-space:nowrap}#card{max-width:520px!important}#hud{z-index:2;max-width:75%;font-size:clamp(12px,1.7vw,18px)}@media(orientation:landscape){#left,#right,#jump{bottom:max(10px,env(safe-area-inset-bottom))}} 
 #gate{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 30% 20%,#ffd6e6,#f6aed3 45%,#b48ac8);height:var(--available-height,100%)}
@@ -67,14 +67,18 @@ function buildLevel(n){
   objects:[{type:'heart',x:1995,y:264},{type:'sign',x:118,text:'从下面顶一下 ？ 砖块'},{type:'sign',x:1810,text:'踩蘑菇弹簧跳得更高'},
    ...coins(0,[...arc(410,250,3,18,12),...row(612,214,4,20),...arc(944,245,3,20,14),...row(1130,212,3,24),...row(1855,120,3,22),...row(1925,150,2,22)])]};
  if(n===1) return {end:2250,
-  map:[gr(0,480),gr(520,500),gr(1060,350),gr(1560,330),gr(2010,270),bl(250,95,247),bl(710,115,244),bl(1190,105,242),bl(1660,105,247)],
+  // V2.8: three coastal sections: rocky beach, tidal boardwalk, fireworks shore.
+  // The sunset trigger and star bridge stay in their established locations.
+  map:[gr(0,480),gr(520,500),gr(1060,350),gr(1560,330),gr(2010,270),
+   bl(250,95,247),bl(710,115,244),bl(1190,105,242),bl(1660,105,247),
+   bl(355,44,219),bl(900,52,211),bl(1745,54,212)],
   boxes:[qb(0,380,190,'shell'),qb(1,640,190,'bag'),qb(2,1110,186,'gift'),qb(3,1700,170,'coin'),qb(4,735,157,'coin')],
-  plats:[mover(1922,G-2,58,40,0,3400),spring(1600)],
+  plats:[mover(1030,G-17,48,0,25,2800),mover(1908,G-16,60,34,15,3100),mover(1970,G-32,45,0,20,2600),spring(1600)],
   cps:[45,650,1070,1580], trees:[],
   enemies:[{type:'walker',x:180,start:140,end:232,v:.35},{type:'walker',x:880,start:835,end:955,v:.45}],
   objects:[{type:'heart',x:2170,y:264},{type:'star',id:0,x:820,y:214},{type:'star',id:1,x:1150,y:228},{type:'star',id:2,x:1365,y:219},
    {type:'shell',id:0,x:185,y:G-8},{type:'shell',id:1,x:445,y:G-8},{type:'shell',id:2,x:930,y:G-8},{type:'shell',id:3,x:1242,y:242-8},{type:'shell',id:4,x:1615,y:96},
-   ...coins(0,[...arc(484,260,3,16,12),...row(735,218,4,22),...arc(1024,262,3,14,10),...row(1580,130,2,26),...row(1906,236,5,20),...row(2040,250,3,22)])]};
+   ...coins(0,[...arc(484,260,3,16,12),...row(735,218,4,22),...arc(1024,262,3,14,10),...row(1580,130,2,26),...row(1906,236,5,20),...row(2040,250,3,22),...row(350,180,3,17),...row(904,177,3,17),...row(1750,175,3,17)])]};
  return {end:2350,
   map:[gr(0,490),gr(535,475),gr(1050,455),gr(1550,450),gr(2110,290),bl(240,110,240),bl(700,110,241),bl(1220,115,229),bl(1750,110,241)],
   boxes:[qb(0,600,190,'keepsake'),qb(1,1080,190,'bag'),qb(2,1660,190,'gift'),qb(3,1682,190,'coin'),qb(4,1240,159,'coin')],
@@ -443,19 +447,19 @@ for(let i=0;i<SNOW_FLAKES.length;i++){const x=SNOW_FLAKES[i],sx=x-offset;if(sx>-
 
 // ================= Scenes (cinematics) =================
 function startScene(type,o){mode='scene';scene=Object.assign({type,t:0},o||{});clearInput();showUI(false);$('#shade').classList.add('hide');$('#interact').classList.add('hide');rockets=[];last=performance.now()}
-function sceneDusk(){if(data.story.sunset)return 1;if(scene&&scene.type==='sunset')return Math.min(1,scene.t/6500);return 0}
+function sceneDusk(){if(data.story.sunset)return 1;if(scene&&scene.type==='sunset')return Math.min(1,scene.t/8000);return 0}
 function updateScene(dt){const s=scene,k=Math.min(2,dt/16.667);s.t+=dt;timer+=dt;
  if(s.type==='snow'){updateSnow(dt);return}
  if(s.type==='snowEnding'){if(snow){snow.endT+=dt;if(snow.endT>3500){finishWinterScene()}}return}
  if(s.type==='sunset'){p.x=548;p.y=G-p.h;p.sit=true;lion.x=520;lion.y=G-27;lion.sit=true;lion.face=1;p.face=1;camTo(p.x-W*.3,k);
-  if(s.t>7800){scene=null;data.story.sunset=true;save();p.sit=lion.sit=false;cut('🌅 海边的夕阳','小兔子和小狮子坐在沙滩上，静静看着太阳落入海面。<br>那天，我们一起等太阳落下，也一起等烟花升起。',()=>{respawnAt(610);play()})}}
+  if(s.t>9200){scene=null;data.story.sunset=true;save();p.sit=lion.sit=false;cut('🌅 海边的夕阳','那天，我们一起等太阳落下，也一起等烟花升起。',()=>{respawnAt(610);play()})}}
  if(s.type==='plant'){s.t=Math.max(s.t,performance.now()-s.startedAt);if(s.t>=8800&&s.visibleFrames>=8){s.readyToFinish=true;completeFinalPlanting()}return}
  if(s.type==='fireworks'){p.x=2140;p.y=G-p.h;p.sit=true;lion.x=2112;lion.y=G-27;lion.sit=true;lion.face=1;camTo(p.x-W*.45,k);
   if(s.t<8600&&(s.next||0)<s.t){s.next=s.t+260+Math.random()*300;if(Math.random()<.35)rockets.push({x:W*(.15+Math.random()*.75),y:H-110,vy:-4.8-Math.random()*1.4,c:'#ffd6f0',parts:null});rockets.push({x:W*(.15+Math.random()*.75),y:H-110,vy:-4.6-Math.random()*1.6,c:['#ffcb8e','#ff91c1','#9ad7ff','#c8f7a6','#fff1a8'][Math.floor(Math.random()*5)],parts:null})}
   for(const r of rockets){if(!r.parts){r.y+=r.vy*k;r.vy+=.07*k;if(r.vy>-.6){r.parts=[];const n=34;for(let i=0;i<n;i++){const a=i/n*Math.PI*2,sp=1.8+Math.random()*1.6;r.parts.push({x:r.x,y:r.y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:1})}}}
    else for(const q of r.parts){q.x+=q.vx*k;q.y+=q.vy*k;q.vy+=.035*k;q.vx*=.985;q.life-=dt/1300}}
   rockets=rockets.filter(r=>!r.parts||r.parts.some(q=>q.life>0));
-  if(s.t>10000){scene=null;p.sit=lion.sit=false;cut('🎆 海边的花火','夜空里，粉色、金色、蓝色的烟花一朵朵绽放。<br>那天，我们一起看了夕阳，也一起等到了烟花。',()=>{mode='play';finishLevel()})}}
+  if(s.t>10000){scene=null;p.sit=lion.sit=false;cut('🎆 夕阳花火','那天的夕阳和烟花，我都想一直记得。',()=>{mode='play';finishLevel()})}}
  if(s.type==='switch'){
   coop.bridgeTime+=dt;
   // Show the cooperation for long enough to see the two beams and bridge.
@@ -655,7 +659,12 @@ function bg(){
  if(level===2){for(let i=0;i<14;i++){let x=i*245-cam*.45;rect(x,182,9,100,'#79aa87');circle(x+5,185,24,'#91c69c')}}
  else{for(let i=0;i<16;i++){let x=i*220-cam*.4;rect(x,238,48,46,'#f5c9c8');rect(x-5,232,58,8,'#a783a4')}}}
 function tree(x){let s=x-cam;if(s<-70||s>W+70)return;rect(s-4,G-84,10,86,'#8d647b');circle(s-24,G-91,27,'#f3a3c6');circle(s+8,G-111,30,'#f8b9d3');circle(s+28,G-87,27,'#f5a8c9');circle(s-3,G-78,28,'#ffccdf');for(let i=0;i<7;i++)rect(s+(i*17)%60-30,G-120+(i*13)%48,3,3,'#fff1f5')}
-function terrain(a){let x=a.x-cam;if(x>W||x+a.w<0)return;const u=L.under;rect(x,a.y,a.w,H-a.y,L.secret?'#c4e0ed':u?'#6b5a7e':level===1?'#c7a38f':level===2?'#a98276':'#b8867c');rect(x,a.y,a.w,9,L.secret?'#f3faff':L.secret?'#f6fdff':u?'#a891c4':level===1?'#f1c59c':level===2?'#85c79b':'#82d1a0');rect(x,a.y+8,a.w,6,L.secret?'#9bcfe1':u?'#584a6b':level===2?'#4b9b77':'#6ca582');for(let i=0;i<a.w/22;i++)for(let j=0;j<4;j++)if((i+j*3)%4===0)rect(x+i*22+5,a.y+21+j*19,4,3,u?'#8c7aa3':'#e0b0a2')}
+function terrain(a){let x=a.x-cam;if(x>W||x+a.w<0)return;
+ if(level===1&&!L.under&&!L.secret&&a.kind==='block'){
+  rect(x,a.y,a.w,H-a.y,'#a8a0a0');rect(x,a.y,a.w,8,'#e9d0b5');rect(x,a.y+8,a.w,6,'#b4a9a1');
+  for(let i=12;i<a.w;i+=27){rect(x+i,a.y+24+(i%3)*15,11,3,'#c6b7ae');rect(x+i+5,a.y+41+(i%4)*11,3,3,'#e1d0c5')}return;
+ }
+ const u=L.under;rect(x,a.y,a.w,H-a.y,L.secret?'#c4e0ed':u?'#6b5a7e':level===1?'#c7a38f':level===2?'#a98276':'#b8867c');rect(x,a.y,a.w,9,L.secret?'#f3faff':L.secret?'#f6fdff':u?'#a891c4':level===1?'#f1c59c':level===2?'#85c79b':'#82d1a0');rect(x,a.y+8,a.w,6,L.secret?'#9bcfe1':u?'#584a6b':level===2?'#4b9b77':'#6ca582');for(let i=0;i<a.w/22;i++)for(let j=0;j<4;j++)if((i+j*3)%4===0)rect(x+i*22+5,a.y+21+j*19,4,3,u?'#8c7aa3':'#e0b0a2')}
 function bridge(a,c1,c2){let x=a.x-cam;rect(x,a.y,a.w,8,c1);rect(x,a.y+8,a.w,3,c2);for(let i=4;i<a.w;i+=12)rect(x+i,a.y+2,2,4,c2)}
 function qbrick(b){const used=data.qb.includes(qKey(b));const x=b.x-cam,y=b.y-(b.bump?Math.sin(b.bump/150*Math.PI)*5:0);if(x<-30||x>W+30)return;
  rect(x,y,b.w,b.h,used?'#b9a294':'#f6b64a');rect(x,y,b.w,2,used?'#d2c0b4':'#ffd98a');rect(x,y+b.h-3,b.w,3,used?'#8b7568':'#c97f22');
@@ -668,7 +677,9 @@ function pickupDraw(a){const x=a.x-cam,y=a.y;if(x<-25||x>W+25)return;
  else{rect(x-10,y-9,20,18,'#f3a5c5');rect(x-10,y-3,20,5,'#fff0a9');rect(x-2,y-9,4,18,'#fff0a9');text('♡',x,y+5,'#fff',11,'center')}
 }
 function platDraw(pl){const x=pl.x-cam;if(x<-80||x>W+80)return;
- if(pl.kind==='mover'){const y=pl.y;circle(x+10,y+4,10,'#f2fbff');circle(x+pl.w/2,y-1,13,'#fff');circle(x+pl.w-10,y+4,10,'#f2fbff');rect(x,y+2,pl.w,9,'#eef8ff');rect(x+4,y+10,pl.w-8,3,'#a6d4eb')}
+ if(pl.kind==='mover'){const y=pl.y;
+  if(level===1&&!L.secret&&!L.under){rect(x,y,pl.w,8,'#e7bd86');rect(x,y+8,pl.w,5,'#9d765a');for(let i=7;i<pl.w;i+=13)rect(x+i,y+2,2,5,'#b58b68');circle(x+6,y+13,3,'#f4e2b9');circle(x+pl.w-6,y+13,3,'#f4e2b9')}
+  else{circle(x+10,y+4,10,'#f2fbff');circle(x+pl.w/2,y-1,13,'#fff');circle(x+pl.w-10,y+4,10,'#f2fbff');rect(x,y+2,pl.w,9,'#eef8ff');rect(x+4,y+10,pl.w-8,3,'#a6d4eb')}}
  if(pl.kind==='fall'){const sh=pl.t>0&&pl.t<450?Math.sin(timer/25)*1.5:0;rect(x+sh,pl.y,pl.w,9,'#c69468');rect(x+sh,pl.y+9,pl.w,3,'#8d6248');for(let i=6;i<pl.w;i+=14)rect(x+sh+i,pl.y+2,2,5,'#8d6248')}
  if(pl.kind==='spring'){const sq=pl.anim?4:0;rect(x+2,pl.y+8,pl.w-4,7,'#9d5b73');rect(x+9,pl.y+6,8,9-sq,'#f5e6d3');rect(x+1,pl.y+sq,pl.w-2,8,'#e8577f');rect(x+1,pl.y+sq,pl.w-2,2,'#ffc3d8');circle(x+7,pl.y+3+sq,2.2,'#fff');circle(x+18,pl.y+4+sq,2,'#fff')}}
 function pipeDraw(o){const x=o.x-cam;if(x<-60||x>W+60)return;rect(x,o.top+5,o.w,G-o.top-5,'#4bba83');rect(x+4,o.top+5,5,G-o.top-5,'#7cdda0');rect(x-5,o.top,o.w+10,10,'#7cdda0');rect(x-5,o.top+8,o.w+10,2,'#3f9a6c');
@@ -713,7 +724,11 @@ function draw(){
  }
  if(!L){ctx.fillStyle='#2a203f';ctx.fillRect(0,0,W,H);return}
  bg();L.trees.forEach(tree);
- if(level===1&&scene&&(scene.type==='sunset'||scene.type==='fireworks')){rect(0,G-8,W,H-G+8,'#efcf9e');for(let i=0;i<35;i++)rect((i*47-cam*.18+W*3)%W,G+5+i%4*9,5,2,'#f7e6c4')}
+ if(level===1&&!L.under){
+  for(let i=0;i<19;i++){const sx=((i*91-cam*.24)%(W+110)+(W+110))%(W+110)-45;rect(sx,253+i%4*7,26+i%3*7,2,'#f6d3bd')}
+  if(scene&&(scene.type==='sunset'||scene.type==='fireworks')){
+   rect(0,G-8,W,H-G+8,'#efcf9e');for(let i=0;i<35;i++)rect((i*47-cam*.18+W*3)%W,G+5+i%4*9,5,2,'#f7e6c4')}
+ }
  for(const o of L.objects)if(o.type==='exitpipe')pipeDraw(o);
  L.map.forEach(terrain);clouds.forEach(cloudDraw);
  if(level===1&&!L.under)for(let i=0;i<3;i++)if(data.stars.includes(i))bridge({x:1410+i*49,y:G,w:51},'#ffe9a6','#e8b85c');
