@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V2.8.3.6</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V2.8.3.7</title><style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#2a203f;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;touch-action:none}#stage{position:absolute;inset:0;height:var(--available-height,100%);display:flex;align-items:center;justify-content:center}canvas{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;touch-action:none;-webkit-user-select:none}#hud{position:absolute;top:max(8px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));color:#fff;font-size:clamp(13px,2.2vw,19px);font-weight:800;text-shadow:1px 2px #704b73;pointer-events:none}#pause{position:absolute;right:max(12px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));z-index:2}button{font-family:inherit;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent}#controls{position:absolute;inset:0;pointer-events:none;z-index:3}#left,#right,#jump{opacity:.58;position:absolute;bottom:max(10px,env(safe-area-inset-bottom));width:52px;height:52px;background:#55476655;border:2px solid #ffffff77;color:#fff;border-radius:12px;font-size:22px;font-weight:800;pointer-events:auto}#left{left:max(12px,env(safe-area-inset-left))}#right{left:calc(max(12px,env(safe-area-inset-left)) + 61px)}#jump{right:max(12px,env(safe-area-inset-right));border-radius:50%;font-size:28px}.pressed{background:#ec8eaecc!important;opacity:1!important}#pause{border:2px solid #ffffffaa;background:#55476677;color:#fff;border-radius:11px;width:45px;height:42px;font-size:20px}#shade{position:absolute;inset:0;height:var(--available-height,100%);background:#211b39c9;display:flex;justify-content:center;align-items:center;z-index:4;padding:12px}#card{background:#fff3f6;border:3px solid #ffc2d7;border-radius:17px;color:#68455e;text-align:center;width:min(440px,92%);padding:16px;max-height:90%;overflow:auto;box-shadow:0 6px #a36e9d}#card h1{font-size:clamp(19px,3.2vw,27px);color:#db6394;margin:0 0 8px}#card p{font-size:clamp(12px,1.8vw,15px);line-height:1.65;margin:8px 0}#actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}#actions button{font-size:14px;font-weight:700;border:0;background:#e979a5;color:#fff;border-radius:10px;padding:10px 15px;min-height:43px}#actions button.alt{background:#a88bad}#rotate{position:absolute;inset:0;height:var(--available-height,100%);background:#241b38;color:white;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:8;gap:12px;font-size:20px;padding:24px}#rotate small{font-size:13px;opacity:.8}#error{display:none;position:absolute;z-index:12;inset:10%;background:#fff5f5;color:#a12750;border-radius:12px;padding:16px;overflow:auto;font-size:14px}.hide{display:none!important}@media(orientation:portrait){#rotate{display:flex}}@media(max-height:310px){#card{padding:8px}#card p{margin:3px}#left,#right,#jump{opacity:.58;width:48px;height:48px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 56px)}}
 #interact{position:absolute;left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);background:#fff9f0e8;color:#79516c;border:2px solid #e9a7c5;border-radius:7px;padding:4px 8px;min-width:66px;min-height:32px;z-index:3;font-weight:800;font-size:11px;box-shadow:0 3px #a88ba4;white-space:nowrap}#card{max-width:520px!important}#hud{z-index:2;max-width:75%;font-size:clamp(12px,1.7vw,18px)}@media(orientation:landscape){#left,#right,#jump{bottom:max(10px,env(safe-area-inset-bottom))}} 
 #gate{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 30% 20%,#ffd6e6,#f6aed3 45%,#b48ac8);height:var(--available-height,100%)}
@@ -69,12 +69,12 @@ function buildLevel(n){
    ...coins(0,[...arc(410,250,3,18,12),...row(612,214,4,20),...arc(944,245,3,20,14),...row(1130,212,3,24),...row(1855,120,3,22),...row(1925,150,2,22)])]};
  if(n===1) return {end:3370,
   // V2.8.3.5: spaced shore -> stepping rocks -> safe flag -> cooperative tidal crossing -> quiet final beach.
-  map:[gr(0,920),gr(985,610),gr(1660,585),gr(2470,1080),
+  map:[gr(0,900),gr(1065,520),gr(1730,515),gr(2470,1080),
    bl(425,96,274),bl(580,92,254),bl(1150,110,267),bl(1350,100,251),bl(1810,105,266)],
   boxes:[qb(0,220,184,'coin'),qb(1,1050,178,'bag'),qb(2,1690,182,'coin'),qb(3,2580,183,'gift')],
   // The 225px gap cannot be crossed by an ordinary jump: rafts carry the bunny across.
-  plats:[mover(2260,G-18,108,42,7,3500),mover(2390,G-30,106,36,8,3800),spring(1770)],
-  cps:[45,760,1500,2050,2550,2990],trees:[],
+  plats:[mover(941,G-20,83,20,4,3200),mover(1622,G-20,78,21,4,3400),mover(2284,G-23,100,8,4,3500),mover(2398,G-26,100,9,4,3800),spring(1770)],
+  cps:[45,755,1475,2070,2550,2990],trees:[],
   enemies:[{type:'walker',x:845,start:805,end:885,v:.35},{type:'walker',x:1910,start:1880,end:1990,v:.35}],
   objects:[{type:'heart',x:3280,y:263},
    {type:'star',id:0,x:1550,y:203},{type:'star',id:1,x:2430,y:178},{type:'star',id:2,x:2850,y:198},
@@ -518,7 +518,16 @@ function coastFloor(x){let y=G;for(const a of L.map)if(a.kind==='block'&&x>=a.x+
 function enemyBox(e){const ground=(level===1&&!L.secret&&!L.under?coastFloor(e.x):G);const top=e.type==='fly'?e.y-10:ground-22-e.hop;const bottom=e.type==='fly'?e.y+10:ground-e.hop;return {l:e.x-11,r:e.x+11,t:top,b:bottom}}
 function updatePlats(dt,k){
  for(const pl of L.plats){
-  if(pl.kind==='mover'){if(level===1&&coastCoop.phase===2&&pl.x0>2250){pl.dx=0;pl.dy=0;continue}const ph=Math.sin(timer/pl.period*Math.PI*2);const nx=pl.x0+pl.ax*ph,ny=pl.y0+pl.ay*ph;pl.dx=nx-pl.x;pl.dy=ny-pl.y;pl.x=nx;pl.y=ny}
+  if(pl.kind==='mover'){if(level===1&&pl.x0>=2280){
+    // Before cooperation, both boarding platforms are submerged: no crossing is possible.
+    // When the lion secures the rope, the boards rise visibly into a usable path.
+    const active=coastCoop.phase>=2;
+    const targetX=pl.x0;
+    const targetY=active?pl.y0:pl.y0+80;
+    const nx=pl.x+Math.max(-4,Math.min(4,targetX-pl.x));
+    const ny=pl.y+Math.max(-2.5,Math.min(2.5,targetY-pl.y));
+    pl.dx=nx-pl.x;pl.dy=ny-pl.y;pl.x=nx;pl.y=ny;continue
+   }const ph=Math.sin(timer/pl.period*Math.PI*2);const nx=pl.x0+pl.ax*ph,ny=pl.y0+pl.ay*ph;pl.dx=nx-pl.x;pl.dy=ny-pl.y;pl.x=nx;pl.y=ny}
   if(pl.kind==='fall'){if(p.ride===pl&&pl.t<450)pl.t+=dt;if(pl.t>=450){pl.vy=Math.min(9,pl.vy+.35*k);pl.y+=pl.vy*k}}
   if(pl.kind==='spring'&&pl.anim>0)pl.anim=Math.max(0,pl.anim-dt)}}
 function onPipeTop(o){return p.on&&p.x+p.w>o.x-5&&p.x<o.x+o.w+5&&Math.abs(p.y+p.h-o.top)<2}
@@ -548,11 +557,11 @@ function update(dt){
  if(level===1&&!L.under&&!L.secret){
   // Cooperation requires the bunny to activate the plate. The lion then runs to the rope.
   const onPlate=p.on&&p.x+p.w>2130&&p.x<2188&&Math.abs(p.y+p.h-G)<8;
-  if(coastCoop.phase===0&&onPlate){coastCoop.phase=1;coastCoop.t=0;flash('🦁 我来帮你稳住木筏！')}
+  if(coastCoop.phase===0&&onPlate){coastCoop.phase=1;coastCoop.t=0;flash('🦁 我来拉住绳索，把木筏拉到岸边！')}
   if(coastCoop.phase===1){coastCoop.t+=dt;const d=coastCoop.lionTarget-lion.x;
    lion.x+=Math.sign(d)*Math.min(Math.abs(d),3.4*k);lion.y=G-27;lion.face=d>=0?1:-1;
-   if(Math.abs(d)<3){coastCoop.phase=2;coastCoop.t=0;flash('🦁 木筏稳住啦，快跳过来！')}}
-  if(coastCoop.phase===2){for(const raft of L.plats.filter(a=>a.kind==='mover'&&a.x0>2250)){raft.x=raft.x0;raft.y=raft.y0;raft.dy=0;raft.dx=0}
+   if(Math.abs(d)<3){coastCoop.phase=2;coastCoop.t=0;flash('🦁 木筏靠岸了！现在可以跳上去啦！')}}
+  if(coastCoop.phase===2){for(const raft of L.plats.filter(a=>a.kind==='mover'&&a.x0>=2280)){raft.dx=0;raft.dy=0}
    if(p.x>2475){coastCoop.phase=3;flash('🦁 我们成功啦！')}}
   if(coastCoop.phase===3){lion.x+=(p.x-35-lion.x)*Math.min(1,.14*k)}
  }
@@ -763,8 +772,9 @@ function draw(){
  for(const o of L.objects)if(o.type==='sign')sign(o);
  if(level===1&&!L.under&&!L.secret){
   const px=2140-cam;rect(px,G-7,48,7,coastCoop.phase?'#ffcf87':'#e9a2b2');
+  if(coastCoop.phase===0&&p.x>1900&&p.x<2230)text('两个人一起，才能让木筏靠岸 ♡',px-34,G-34,'#fff7e8',12,'center');
   const rx=2206-cam;rect(rx,G-64,3,64,'#94777d');circle(rx+1,G-66,5,'#ffe5b6');
-  if(coastCoop.phase>0){ctx.strokeStyle='#e7cfac';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(rx,G-64);ctx.lineTo(2265-cam,G-13);ctx.stroke()}
+  if(coastCoop.phase>0){ctx.strokeStyle='#e7cfac';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(rx,G-64);ctx.lineTo((coastCoop.phase>=2?2284:2444)-cam,(coastCoop.phase>=2?G-23:G-2));ctx.stroke()}
   if(coastCoop.phase===0&&p.x>2010&&p.x<2210)text('♡',px+20,G-17,'#fff4d8',14,'center');
  }
  L.plats.forEach(platDraw);L.boxes.forEach(qbrick);pickups.forEach(pickupDraw);if(L.secret&&data.snowboard){const bx=330-cam;rect(bx-20,G-17,40,5,'#f3a3c9');rect(bx-16,G-19,32,2,'#fff');rect(bx-9,G-22,5,5,'#80bdd5');rect(bx+5,G-22,5,5,'#80bdd5');}
