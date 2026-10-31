@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V2.8.3.9</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V2.8.4</title><style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#2a203f;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;touch-action:none}#stage{position:absolute;inset:0;height:var(--available-height,100%);display:flex;align-items:center;justify-content:center}canvas{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;touch-action:none;-webkit-user-select:none}#hud{position:absolute;top:max(8px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));color:#fff;font-size:clamp(13px,2.2vw,19px);font-weight:800;text-shadow:1px 2px #704b73;pointer-events:none}#pause{position:absolute;right:max(12px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));z-index:2}button{font-family:inherit;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent}#controls{position:absolute;inset:0;pointer-events:none;z-index:3}#left,#right,#jump{opacity:.58;position:absolute;bottom:max(10px,env(safe-area-inset-bottom));width:52px;height:52px;background:#55476655;border:2px solid #ffffff77;color:#fff;border-radius:12px;font-size:22px;font-weight:800;pointer-events:auto}#left{left:max(12px,env(safe-area-inset-left))}#right{left:calc(max(12px,env(safe-area-inset-left)) + 61px)}#jump{right:max(12px,env(safe-area-inset-right));border-radius:50%;font-size:28px}.pressed{background:#ec8eaecc!important;opacity:1!important}#pause{border:2px solid #ffffffaa;background:#55476677;color:#fff;border-radius:11px;width:45px;height:42px;font-size:20px}#shade{position:absolute;inset:0;height:var(--available-height,100%);background:#211b39c9;display:flex;justify-content:center;align-items:center;z-index:4;padding:12px}#card{background:#fff3f6;border:3px solid #ffc2d7;border-radius:17px;color:#68455e;text-align:center;width:min(440px,92%);padding:16px;max-height:90%;overflow:auto;box-shadow:0 6px #a36e9d}#card h1{font-size:clamp(19px,3.2vw,27px);color:#db6394;margin:0 0 8px}#card p{font-size:clamp(12px,1.8vw,15px);line-height:1.65;margin:8px 0}#actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}#actions button{font-size:14px;font-weight:700;border:0;background:#e979a5;color:#fff;border-radius:10px;padding:10px 15px;min-height:43px}#actions button.alt{background:#a88bad}#rotate{position:absolute;inset:0;height:var(--available-height,100%);background:#241b38;color:white;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:8;gap:12px;font-size:20px;padding:24px}#rotate small{font-size:13px;opacity:.8}#error{display:none;position:absolute;z-index:12;inset:10%;background:#fff5f5;color:#a12750;border-radius:12px;padding:16px;overflow:auto;font-size:14px}.hide{display:none!important}@media(orientation:portrait){#rotate{display:flex}}@media(max-height:310px){#card{padding:8px}#card p{margin:3px}#left,#right,#jump{opacity:.58;width:48px;height:48px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 56px)}}
 #interact{position:absolute;left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);background:#fff9f0e8;color:#79516c;border:2px solid #e9a7c5;border-radius:7px;padding:4px 8px;min-width:66px;min-height:32px;z-index:3;font-weight:800;font-size:11px;box-shadow:0 3px #a88ba4;white-space:nowrap}#card{max-width:520px!important}#hud{z-index:2;max-width:75%;font-size:clamp(12px,1.7vw,18px)}@media(orientation:landscape){#left,#right,#jump{bottom:max(10px,env(safe-area-inset-bottom))}} 
 #gate{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 30% 20%,#ffd6e6,#f6aed3 45%,#b48ac8);height:var(--available-height,100%)}
@@ -133,7 +133,10 @@ function surfaces(){
  for(const a of L.map)arr.push(a.kind==='block'?{x:a.x,y:a.y,w:a.w,h:H+200,kind:'block',box:true}:a);
  for(const b of L.boxes)arr.push({x:b.x,y:b.y,w:b.w,h:b.h,kind:'q',box:true,ref:b});
  clouds.forEach(c=>arr.push({x:c.x,y:G,w:c.w,kind:'cloud'}));
- if(starBridgeReady()&&starBridgeProgress()>=.98)arr.push({x:2750,y:G-47,w:245,kind:'starbridge'});
+ if(starBridgeReady()&&starBridgeProgress()>=.98){
+  // Optional vertical star steps: do not cover the main ground or substitute for rafts.
+  for(const a of [{x:2740,y:G-49,w:43},{x:2792,y:G-79,w:45},{x:2847,y:G-105,w:46},{x:2903,y:G-105,w:100}])arr.push({...a,kind:'starbridge'});
+ }
  for(const o of L.objects)if(o.type==='pipe')arr.push({x:o.x-5,y:o.top,w:o.w+10,h:G-o.top,kind:'pipe',box:true,ref:o});
  if(level===2&&!L.under){arr.push({x:1430,y:G-38,w:65,h:38,kind:'block',box:true});if(data.story.bridge)arr.push({x:1500,y:G,w:55,kind:'bridge'});}
  for(const pl of L.plats){if(pl.kind==='fall'&&pl.y>H+40)continue;arr.push({x:pl.x,y:pl.y,w:pl.w,h:pl.kind==='spring'?14:10,kind:pl.kind,box:pl.kind==='spring',ref:pl})}
@@ -233,7 +236,7 @@ function rewardLines(){
 function journal(back){
  const h=data.hearts.filter(Boolean).length;
  const lines=['💗 珍藏爱心 '+data.keepsakes.length+' 个 · 特别收藏。','🗝️ 小钥匙 '+data.keys.length+' 把。','🚪 秘密房间 '+data.secretDoors.length+' 处。','🎀 神秘礼盒 '+(data.gifts||[]).length+' 个 · 藏着特别的收藏。', '❤️ 特别爱心 '+h+'/3　· 每段旅程藏着一颗，试着全部找到吧。',
- '⭐ 回忆星星 '+data.stars.length+'/3　· 集齐星光，路就会出现。',
+ '⭐ 回忆星星 '+data.stars.length+'/3　· 集齐星光，发现隐藏观景台。',
  '🌱 神秘种子 '+(data.seed?'已发现':'尚未发现')+'　· 花园深处似乎藏着什么。',
  '🪙 爱心金币 '+data.coins.length+'/'+TOTAL_COINS+'　· 10、20、30枚有小奖励。',
  '🐚 海边贝壳 '+data.shells.length+'/5　· 找到3枚、5枚会解锁回忆卡。'];
@@ -567,7 +570,7 @@ function update(dt){
   if(coastCoop.phase===2){for(const raft of L.plats.filter(a=>a.kind==='mover'&&a.x0>=2280)){raft.dx=0;raft.dy=0}
    if(p.x>2475){coastCoop.phase=3;flash('🦁 我们成功啦！')}}
   if(coastCoop.phase===3){lion.x+=(p.x-35-lion.x)*Math.min(1,.14*k)}
-  if(starBridgeReady()&&!starBridgeAnnounced){starBridgeAnnounced=true;starBridgeBorn=timer;flash('✨ 星光照亮了前方的浅海……')}
+  if(starBridgeReady()&&!starBridgeAnnounced){starBridgeAnnounced=true;starBridgeBorn=timer;flash('✨ 海岸上方出现了通往秘密观景台的星光台阶……')}
  }
  updateRewards(dt);secretDoor();
  if(p.ride&&p.on){const r=p.ride;if(r.kind==='mover'){p.x+=r.dx;p.y+=r.dy}else if(r.kind==='fall'&&r.t>=450){p.y=r.y-p.h}}
@@ -704,50 +707,64 @@ function terrain(a){let x=a.x-cam;if(x>W||x+a.w<0)return;
   for(let i=12;i<a.w;i+=27){rect(x+i,a.y+24+(i%3)*15,11,3,'#c6b7ae');rect(x+i+5,a.y+41+(i%4)*11,3,3,'#e1d0c5')}return;
  }
  const u=L.under;rect(x,a.y,a.w,H-a.y,L.secret?'#c4e0ed':u?'#6b5a7e':level===1?'#c7a38f':level===2?'#a98276':'#b8867c');rect(x,a.y,a.w,9,L.secret?'#f3faff':L.secret?'#f6fdff':u?'#a891c4':level===1?'#f1c59c':level===2?'#85c79b':'#82d1a0');rect(x,a.y+8,a.w,6,L.secret?'#9bcfe1':u?'#584a6b':level===2?'#4b9b77':'#6ca582');for(let i=0;i<a.w/22;i++)for(let j=0;j<4;j++)if((i+j*3)%4===0)rect(x+i*22+5,a.y+21+j*19,4,3,u?'#8c7aa3':'#e0b0a2')}
-// V2.8.3.9: optional elevated starlight promenade AFTER both raft crossings.
+// V2.8.4: optional elevated starlight promenade AFTER both raft crossings.
 // The beach below remains walkable; it never replaces a raft or the cooperative puzzle.
 function drawStarBridge(){
  if(!starBridgeReady())return;
- const t=starBridgeProgress(),left=2750,right=2995,y=G-47;
- const span=(right-left)*t;
- ctx.save();ctx.globalAlpha=Math.min(1,.2+t*.8);
- const g=ctx.createLinearGradient(0,y-10,0,y+12);
- g.addColorStop(0,'#fffef0');g.addColorStop(.45,'#ffe7a8');g.addColorStop(1,'#f4b6da');
- ctx.shadowColor='#fff3a6';ctx.shadowBlur=20;
- rect(left-cam,y,span,9,g);ctx.shadowBlur=0;
- rect(left-cam,y+9,span,3,'#b69ace');
- for(let i=0;i<Math.floor(span/17);i++){
-  const x=left+i*17+8-cam,tw=(Math.sin(timer/240+i*1.7)+1)/2;
-  circle(x,y-7-(i%3)*3,2+tw*1.5,'#fff8b8');
-  if(i%3===0){rect(x-1,y-18,2,12,'#fffbd4');rect(x-6,y-13,12,2,'#fffbd4')}
+ const t=starBridgeProgress();
+ const pieces=[{x:2740,y:G-49,w:43},{x:2792,y:G-79,w:45},{x:2847,y:G-105,w:46},{x:2903,y:G-105,w:100}];
+ ctx.save();
+ for(let j=0;j<pieces.length;j++){
+  const local=Math.max(0,Math.min(1,(t-j*.17)/.43));
+  if(local<=0)continue;
+  const a=pieces[j],xx=a.x-cam,w=a.w*local;
+  ctx.globalAlpha=.22+.78*local;ctx.shadowColor='#fff3af';ctx.shadowBlur=18;
+  rect(xx,a.y,w,8,'#fff0bb');ctx.shadowBlur=0;
+  rect(xx,a.y+8,w,3,'#dca5d3');
+  for(let k=0;k<Math.floor(w/13);k++){const x=xx+8+k*13;
+    circle(x,a.y-8-2*Math.sin(timer/240+k),2.5,'#fffce3');
+    if(k%3===0){rect(x-1,a.y-17,2,11,'#fff9d0');rect(x-5,a.y-13,10,2,'#fff9d0')}
+  }
  }
+ if(t>.85){ctx.globalAlpha=Math.min(1,(t-.85)*7);const x=2952-cam;
+   circle(x,G-139,21,'#fff2cc');circle(x,G-139,16,'#ffdbef');
+   text('♡',x,G-132,'#ce78a4',24,'center');
+   text('星光观景台',x,G-160,'#fff8d8',13,'center');}
  ctx.restore();
 }
-// A dedicated quiet beach: pale sand, wave foam, shells and reflected sunset.
+// V2.8.4: full-width sand scene above the physics floor instead of recoloring the dirt underneath.
 function drawFinalBeach(){
  if(level!==1||L.under||L.secret)return;
- const start=3010,finish=3370,left=Math.max(0,start-cam),right=Math.min(W,finish-cam);
+ const start=3000,finish=3370,left=Math.max(0,start-cam),right=Math.min(W,finish-cam);
  if(right<=left)return;
  const w=right-left;
  ctx.save();
- // Shallow water washes onto the last strip of coast, with a smooth curved shoreline.
- rect(left,G-8,w,H-G+8,'#f5ddb5');
- rect(left,G+26,w,H-G-26,'#ead0a9');
- const wave=2*Math.sin(timer/450);
- ctx.fillStyle='#9bcfdb';ctx.globalAlpha=.75;ctx.beginPath();ctx.moveTo(left,G+5);
- for(let x=left;x<=right;x+=6){const local=x+cam-start;ctx.lineTo(x,G+6+wave+Math.sin(local/23+timer/850)*3)}
- ctx.lineTo(right,G+15);ctx.lineTo(left,G+15);ctx.fill();
- ctx.globalAlpha=.95;ctx.strokeStyle='#fff9e7';ctx.lineWidth=2;ctx.beginPath();
- for(let x=left;x<=right;x+=6){const local=x+cam-start;const y=G+7+wave+Math.sin(local/23+timer/850)*3;if(x===left)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
- ctx.globalAlpha=.85;
- for(let i=0;i<22;i++){
-  const x=start+12+i*17-cam,y=G+21+(i%5)*12;
-  if(x>left&&x<right){rect(x,y,3+(i%3),2,i%3?'#f8ebd1':'#d8ae91');}
- }
- // Two tiny decorative shells, never collectible and not confused with a star.
- for(const xx of [3105,3340]){
-  const x=xx-cam;if(x<left||x>right)continue;
-  circle(x,G+29,5,'#f5b7ad');rect(x-4,G+29,8,2,'#fff0dc');
+ // Gentle dune skyline between the ocean and the walkable sand.
+ ctx.fillStyle='#f4d7b3';ctx.beginPath();ctx.moveTo(left,G+5);
+ for(let x=left;x<=right+3;x+=4){const wx=x+cam-start;
+  const dune=-12-3*Math.sin(wx/63)-4*Math.sin(wx/127+1.2);
+  ctx.lineTo(x,G+dune)}
+ ctx.lineTo(right,H+12);ctx.lineTo(left,H+12);ctx.closePath();ctx.fill();
+ rect(left,G+17,w,H-G-17,'#f5dbb7');
+ // Foreground ripples are soft, curved; no horizontal turf edge remains.
+ ctx.fillStyle='#c9e5e3';ctx.globalAlpha=.72;ctx.beginPath();ctx.moveTo(left,G+48);
+ for(let x=left;x<=right;x+=5){ctx.lineTo(x,G+44+3*Math.sin((x+cam)/31+timer/510))}
+ ctx.lineTo(right,H+2);ctx.lineTo(left,H+2);ctx.closePath();ctx.fill();
+ ctx.globalAlpha=.9;ctx.strokeStyle='#fff7e6';ctx.lineWidth=2;ctx.beginPath();
+ for(let x=left;x<=right;x+=5){const y=G+43+3*Math.sin((x+cam)/31+timer/510);if(x===left)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+ ctx.globalAlpha=.9;
+ for(let i=0;i<48;i++){const wx=start+13+i*8,x=wx-cam;
+  if(x<left||x>right)continue;
+  const y=G+3+(i*13)%32;
+  rect(x,y,2+(i%3),1+(i%2),i%3?'#e8bfa0':'#fff0d5');}
+ // Two uncollectible shell decorations remain off the walking line.
+ for(const wx of [3050,3344]){const x=wx-cam;if(x<left||x>right)continue;
+  circle(x,G+29,5,'#e9ada8');rect(x-4,G+29,8,2,'#fff2e0');}
+ // Heart-shaped beach mat, the focal point of the final shared memory.
+ const mx=3234-cam;if(mx>left-55&&mx<right+55){
+   ctx.globalAlpha=.92;rect(mx-46,G-2,88,4,'#ebafc1');
+   rect(mx-43,G+2,82,3,'#f8e8d8');
+   circle(mx-26,G-4,3,'#fff7e8');circle(mx+24,G-4,3,'#fff7e8');
  }
  ctx.restore();
 }
@@ -825,7 +842,7 @@ function draw(){
  }
  for(const o of L.objects)if(o.type==='exitpipe')pipeDraw(o);
  L.map.forEach(terrain);drawShallowCove();drawFinalBeach();clouds.forEach(cloudDraw);
- // Stars are keepsakes, not a shortcut bridge across the tidal section.
+ // Stars uncover an optional elevated lookout, not a shortcut across the tidal section.
  if(level===2&&!L.under&&(data.story.bridge||(scene&&scene.type==='switch'))){const r=data.story.bridge?1:Math.min(1,coop.bridgeTime/2000);bridge({x:1500,y:G+(1-r)*70,w:55},'#c99a6b','#8d6248')}
  if(!L.under&&!L.secret)for(let i=1;i<L.cps.length;i++){let x=L.cps[i]-cam;if(x<-30||x>W+30)continue;rect(x,G-62,4,62,'#8b6a85');rect(x+4,G-62,18,12,data.cpLevel===level&&data.cp>=i?'#f28eaf':'#ffe5a1')}
  for(const o of L.objects)if(o.type==='sign')sign(o);
