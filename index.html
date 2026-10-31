@@ -48,7 +48,7 @@ let L=null;
 // V2.6.2: collectible rewards only; no invincibility or damage shields.
 let pickups=[], giftSeen={};
 let coastCoop={phase:0,t:0,lionTarget:2206};
-let starBridgeBorn=-1,starBridgeAnnounced=false;
+let starBridgeBorn=-1,starBridgeAnnounced=false,starLionReunion=false;
 
 // ================= Level data =================
 const gr=(x,w)=>({x,y:G,w,kind:'ground'}), bl=(x,w,y)=>({x,y,w,kind:'block'});
@@ -72,7 +72,7 @@ function buildLevel(n){
   // V2.8.3.5: spaced shore -> stepping rocks -> safe flag -> cooperative tidal crossing -> quiet final beach.
   map:[gr(0,900),gr(1065,520),gr(1730,515),gr(2470,1080),
    bl(425,96,274),bl(580,92,254),bl(1150,110,267),bl(1350,100,251),bl(1810,105,266)],
-  boxes:[qb(0,220,184,'coin'),qb(1,1050,178,'bag'),qb(2,1690,182,'coin'),qb(3,2580,183,'gift')],
+  boxes:[qb(0,220,184,'coin'),qb(1,1050,178,'bag'),qb(2,1690,182,'coin'),qb(3,2580,183,'gift'),qb(4,1787,116,'gift')],
   // The 225px gap cannot be crossed by an ordinary jump: rafts carry the bunny across.
   plats:[mover(941,G-20,83,20,4,3200),mover(1622,G-20,78,21,4,3400),mover(2284,G-23,100,8,4,3500),mover(2398,G-26,100,9,4,3800),spring(1770)],
   cps:[45,755,1475,2070,2550,2990],trees:[],
@@ -80,7 +80,7 @@ function buildLevel(n){
   objects:[{type:'heart',x:3280,y:263},
    {type:'star',id:0,x:1550,y:203},{type:'star',id:1,x:1995,y:202},{type:'star',id:2,x:2160,y:202},
    {type:'shell',id:0,x:815,y:231},{type:'shell',id:1,x:1535,y:217},{type:'shell',id:2,x:2020,y:221},{type:'shell',id:3,x:2700,y:222},{type:'shell',id:4,x:2890,y:218},
-   ...coins(0,[[485,195],[637,174],[1190,193],[1420,179],[1850,190],[2090,190],[2380,183],[2830,211]])]};
+   ...coins(0,[[485,195],[637,174],[1190,193],[1420,179],[1718,148],[1767,132],[1823,148],[2090,190],[2380,183],[2830,211]])]};
  return {end:2350,
   map:[gr(0,490),gr(535,475),gr(1050,455),gr(1550,450),gr(2110,290),bl(240,110,240),bl(700,110,241),bl(1220,115,229),bl(1750,110,241)],
   boxes:[qb(0,600,190,'keepsake'),qb(1,1080,190,'bag'),qb(2,1660,190,'gift'),qb(3,1682,190,'coin'),qb(4,1240,159,'coin')],
@@ -158,7 +158,7 @@ function gateOk(){try{return localStorage.getItem(GATE)==='1'}catch(e){return fa
 
 // ================= Flow =================
 function clearInput(){Object.keys(held).forEach(k=>{held[k]=false;$('#'+k).classList.remove('pressed')});jumpQueue=false}
-function layout(n){starBridgeBorn=-1;starBridgeAnnounced=false;coastCoop={phase:0,t:0,lionTarget:2206};pickups=[];coop={state:'idle',lionX:1392,lionReady:false,started:false,bridgeTime:0};pendingFlag=-1;flagCrossingArmed=false;finalReviewOpen=false;if(finalSceneTimeout){clearTimeout(finalSceneTimeout);finalSceneTimeout=null}fade={a:0,dir:0,cb:null,text:''};level=n;L=buildLevel(n);mainL=null;L.pops=[];restoreUnclaimedRewards();clouds=[];sleeping=false;failCount=0;failCp=-1;scene=null;dying=null;L.enemies.forEach(e=>{e.v=Math.abs(e.v);e.dead=0;e.vy=0;e.hop=0;e.jt=Math.random()*900})}
+function layout(n){starBridgeBorn=-1;starBridgeAnnounced=false;starLionReunion=false;coastCoop={phase:0,t:0,lionTarget:2206};pickups=[];coop={state:'idle',lionX:1392,lionReady:false,started:false,bridgeTime:0};pendingFlag=-1;flagCrossingArmed=false;finalReviewOpen=false;if(finalSceneTimeout){clearTimeout(finalSceneTimeout);finalSceneTimeout=null}fade={a:0,dir:0,cb:null,text:''};level=n;L=buildLevel(n);mainL=null;L.pops=[];restoreUnclaimedRewards();clouds=[];sleeping=false;failCount=0;failCp=-1;scene=null;dying=null;L.enemies.forEach(e=>{e.v=Math.abs(e.v);e.dead=0;e.vy=0;e.hop=0;e.jt=Math.random()*900})}
 
 function restoreUnclaimedRewards(){
  // A struck brick stays used, but its uncollected prize must never disappear on death/reload.
@@ -538,6 +538,28 @@ function updatePlats(dt,k){
   if(pl.kind==='spring'&&pl.anim>0)pl.anim=Math.max(0,pl.anim-dt)}}
 function onPipeTop(o){return p.on&&p.x+p.w>o.x-5&&p.x<o.x+o.w+5&&Math.abs(p.y+p.h-o.top)<2}
 function updateLion(k){
+ // The secret lookout is a shared discovery: climb its actual stepped silhouette
+ // rather than leaving the companion on the ground or teleporting her to the top.
+ if(level===1&&starBridgeReady()&&starBridgeProgress()>=.98&&p.x>=2705&&p.x<3070&&p.y<G-35){
+  const steps=[{x:2740,y:G-49,w:43},{x:2792,y:G-79,w:45},{x:2847,y:G-105,w:46},{x:2903,y:G-105,w:100}];
+  const followingX=Math.max(2700,Math.min(2970,p.x-31));
+  const d=followingX-lion.x;
+  lion.x+=Math.max(-4.0*k,Math.min(4.0*k,d*.22*k));
+  lion.face=d>=0?1:-1;
+  let floor=G-27;
+  // Approach each stair from the left, then rise smoothly onto it.
+  for(const a of steps){if(lion.x+22>a.x&&lion.x<a.x+a.w){
+   const blend=Math.max(0,Math.min(1,(lion.x+22-a.x)/22));
+   floor=Math.min(floor,G-27+(a.y-G)*blend);
+  }}
+  // Sync to bunny height during a jump while retaining visible following motion.
+  if(p.y<floor-8&&Math.abs(p.x-lion.x)<78)floor=Math.min(floor,p.y+8);
+  lion.y+=(floor-lion.y)*Math.min(1,.16*k);
+  if(p.x>2912&&p.y<G-94&&lion.x>2872&&lion.y<G-94&&!starLionReunion){
+   starLionReunion=true;flash('🦁 原来这里能看到这么美的风景。 ♡');
+  }
+  return;
+ }
  if(level===1&&(coastCoop.phase===1||coastCoop.phase===2))return;
  if(level===2&&!L.under&&!data.story.bridge&&['approaching','waiting','raising'].includes(coop.state)){
   if(coop.state==='approaching'){const dx=coop.lionX-lion.x;lion.x+=Math.sign(dx)*Math.min(Math.abs(dx),3.5*k);lion.face=dx>=0?1:-1;if(Math.abs(dx)<2){lion.x=coop.lionX;coop.state='waiting';coop.lionReady=true;flash('🦁 小狮子已站上粉色机关，轮到你啦！')}}
