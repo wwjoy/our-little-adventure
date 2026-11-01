@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V2.8.4</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V2.8.4.3</title><style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#2a203f;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;touch-action:none}#stage{position:absolute;inset:0;height:var(--available-height,100%);display:flex;align-items:center;justify-content:center}canvas{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;touch-action:none;-webkit-user-select:none}#hud{position:absolute;top:max(8px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));color:#fff;font-size:clamp(13px,2.2vw,19px);font-weight:800;text-shadow:1px 2px #704b73;pointer-events:none}#pause{position:absolute;right:max(12px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));z-index:2}button{font-family:inherit;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent}#controls{position:absolute;inset:0;pointer-events:none;z-index:3}#left,#right,#jump{opacity:.58;position:absolute;bottom:max(10px,env(safe-area-inset-bottom));width:52px;height:52px;background:#55476655;border:2px solid #ffffff77;color:#fff;border-radius:12px;font-size:22px;font-weight:800;pointer-events:auto}#left{left:max(12px,env(safe-area-inset-left))}#right{left:calc(max(12px,env(safe-area-inset-left)) + 61px)}#jump{right:max(12px,env(safe-area-inset-right));border-radius:50%;font-size:28px}.pressed{background:#ec8eaecc!important;opacity:1!important}#pause{border:2px solid #ffffffaa;background:#55476677;color:#fff;border-radius:11px;width:45px;height:42px;font-size:20px}#shade{position:absolute;inset:0;height:var(--available-height,100%);background:#211b39c9;display:flex;justify-content:center;align-items:center;z-index:4;padding:12px}#card{background:#fff3f6;border:3px solid #ffc2d7;border-radius:17px;color:#68455e;text-align:center;width:min(440px,92%);padding:16px;max-height:90%;overflow:auto;box-shadow:0 6px #a36e9d}#card h1{font-size:clamp(19px,3.2vw,27px);color:#db6394;margin:0 0 8px}#card p{font-size:clamp(12px,1.8vw,15px);line-height:1.65;margin:8px 0}#actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}#actions button{font-size:14px;font-weight:700;border:0;background:#e979a5;color:#fff;border-radius:10px;padding:10px 15px;min-height:43px}#actions button.alt{background:#a88bad}#rotate{position:absolute;inset:0;height:var(--available-height,100%);background:#241b38;color:white;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:8;gap:12px;font-size:20px;padding:24px}#rotate small{font-size:13px;opacity:.8}#error{display:none;position:absolute;z-index:12;inset:10%;background:#fff5f5;color:#a12750;border-radius:12px;padding:16px;overflow:auto;font-size:14px}.hide{display:none!important}@media(orientation:portrait){#rotate{display:flex}}@media(max-height:310px){#card{padding:8px}#card p{margin:3px}#left,#right,#jump{opacity:.58;width:48px;height:48px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 56px)}}
 #interact{position:absolute;left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);background:#fff9f0e8;color:#79516c;border:2px solid #e9a7c5;border-radius:7px;padding:4px 8px;min-width:66px;min-height:32px;z-index:3;font-weight:800;font-size:11px;box-shadow:0 3px #a88ba4;white-space:nowrap}#card{max-width:520px!important}#hud{z-index:2;max-width:75%;font-size:clamp(12px,1.7vw,18px)}@media(orientation:landscape){#left,#right,#jump{bottom:max(10px,env(safe-area-inset-bottom))}} 
 #gate{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 30% 20%,#ffd6e6,#f6aed3 45%,#b48ac8);height:var(--available-height,100%)}
@@ -246,7 +246,7 @@ function journal(back){
  '🪙 爱心金币 '+data.coins.length+'/'+TOTAL_COINS+'　· 10、20、30枚有小奖励。',
  '🐚 海边贝壳 '+data.shells.length+'/5　· 找到3枚、5枚会解锁回忆卡。'];
  const rewards=rewardLines();
- if(data.winterCard)lines.push('❄️ 冬日回忆卡《未来的冬天》 · 还有好多想和你一起做的事。');else if(data.snowboard)lines.push('🏂 冬日秘密：单板已找到，雪山还在等你。');if(data.keepsakes.length)lines.push('💗 珍藏爱心：收集到了温柔的小心意 ♡');if(data.secretDoors.length)lines.push('🚪 初夏小镇的秘密房间已探索 ♡');if(rewards.length)lines.push('<br><strong>✨ 已解锁的收藏</strong>',...rewards);
+ if(data.story.sunsetPhoto)lines.push('📸 隐藏回忆《夕阳下的你》 · 小狮子为小兔子拍下了心形云与夕阳。');if(data.winterCard)lines.push('❄️ 冬日回忆卡《未来的冬天》 · 还有好多想和你一起做的事。');else if(data.snowboard)lines.push('🏂 冬日秘密：单板已找到，雪山还在等你。');if(data.keepsakes.length)lines.push('💗 珍藏爱心：收集到了温柔的小心意 ♡');if(data.secretDoors.length)lines.push('🚪 初夏小镇的秘密房间已探索 ♡');if(rewards.length)lines.push('<br><strong>✨ 已解锁的收藏</strong>',...rewards);
  menu('📖 冒险手册',lines.join('<br>'),[['继续冒险 ♡',back]]);
 }
 function rewardToast(kind,count){
@@ -461,6 +461,15 @@ for(let i=0;i<SNOW_FLAKES.length;i++){const x=SNOW_FLAKES[i],sx=x-offset;if(sx>-
 function startScene(type,o){mode='scene';scene=Object.assign({type,t:0},o||{});clearInput();showUI(false);$('#shade').classList.add('hide');$('#interact').classList.add('hide');rockets=[];last=performance.now()}
 function sceneDusk(){if(scene&&scene.type==='sunset')return Math.min(1,scene.t/4600);if(scene&&scene.type==='fireworks')return 1;if(data.story.sunset)return 1;return 0}
 function updateScene(dt){const s=scene,k=Math.min(2,dt/16.667);s.t+=dt;timer+=dt;
+ if(s.type==='sunsetPhoto'){
+  // Both companions remain visible on the lookout; camera stays at the same position.
+  p.x=2928;p.y=G-105-p.h;p.vx=p.vy=0;p.on=true;
+  lion.x=2901;lion.y=G-105-27;lion.face=1;p.face=1;
+  camTo(p.x-W*.58,k);
+  if(s.t>1900&&!s.shot&&(held.jump||jumpQueue||s.t>4300)){s.shot=true;s.shotAt=s.t;clearInput();}
+  if(s.shot&&s.t-s.shotAt>3000){data.story.sunsetPhoto=true;save();scene=null;play();flash('📸 夕阳下的你 · 已收进冒险手册 ♡');}
+  return;
+ }
  if(s.type==='snow'){updateSnow(dt);return}
  if(s.type==='snowEnding'){if(snow){snow.endT+=dt;if(snow.endT>3500){finishWinterScene()}}return}
  if(s.type==='beachArrival'){p.x=3250;p.y=G-p.h;lion.x=3223;lion.y=G-27;p.sit=false;lion.sit=false;camTo(p.x-W*.45,k);if(s.t>2400){startScene('sunset');return}}
@@ -561,7 +570,8 @@ function updateLion(k){
   if(p.y<floor-8&&Math.abs(p.x-lion.x)<78)floor=Math.min(floor,p.y+8);
   lion.y+=(floor-lion.y)*Math.min(1,.16*k);
   if(p.x>2912&&p.y<G-94&&lion.x>2872&&lion.y<G-94&&!starLionReunion){
-   starLionReunion=true;flash('🦁 原来这里能看到这么美的风景。 ♡');
+   starLionReunion=true;
+   if(!data.story.sunsetPhoto){startScene('sunsetPhoto');return;}
   }
   return;
  }
@@ -930,12 +940,47 @@ function draw(){
   }
  if(!L.under&&!L.secret&&level!==1){rect(L.end-70-cam,G-90,5,90,'#fff4e4');rect(L.end-65-cam,G-90,48,24,'#f18eb2');text('终点',L.end-59-cam,G-73,'#fff',13)}
  for(const r of rockets){if(!r.parts){rect(r.x-1,r.y,2,7,r.c);ctx.globalAlpha=.4;rect(r.x-1,r.y+7,2,10,r.c);ctx.globalAlpha=1}else for(const q of r.parts)if(q.life>0){ctx.globalAlpha=Math.max(0,q.life);circle(q.x,q.y,2.4,r.c);ctx.globalAlpha=Math.max(0,q.life*.4);circle(q.x-q.vx*2,q.y-q.vy*2,1.6,r.c);ctx.globalAlpha=1}}
+ if(scene&&scene.type==='sunsetPhoto')drawSunsetPhoto();
  if(scene&&scene.type==='beachArrival'){text('🦁 我们就在这里等烟花吧。',W/2,64,'#fff5e8',17,'center')}
  if(scene&&scene.type==='sunset'&&scene.t>1500&&scene.t<6000){ctx.globalAlpha=Math.min(1,(scene.t-1500)/600,(6000-scene.t)/600);text('太阳慢慢落进海里……',W/2,58,'#fff',15,'center');ctx.globalAlpha=1}
  if(scene&&scene.type==='fireworks'&&scene.t<3000){ctx.globalAlpha=Math.min(1,scene.t/600,(3000-scene.t)/600);text('花火大会开始啦！',W/2,76,'#fff4dc',25,'center');ctx.globalAlpha=1}
  if(toast&&timer<toast.until&&mode==='play'){ctx.font='bold 14px sans-serif';const w=ctx.measureText(toast.t).width+20;rect(W/2-w/2,48,w,26,'#00000055');text(toast.t,W/2,66,'#fff',14,'center')}
  if(fade.a>0){ctx.globalAlpha=fade.a;rect(0,0,W,H,'#1c1530');if(fade.text){text(fade.text,W/2,H/2,'#ffd6e6',15,'center')}ctx.globalAlpha=1}
  $('#hud').textContent='❤️ '+data.hearts.filter(Boolean).length+'/3　🌱 '+(data.seed?1:0)+'/1　🪙 '+data.coins.length+'　'+(L.secret?'秘密小屋':L.under?'地下花园':LEVELS[level])+(level===1?'　🐚 '+data.shells.length+'/5　⭐ '+data.stars.length+'/3':'')}
+// Photo event and reusable pixel-polaroid illustration, drawn by the real game canvas.
+function drawSunsetPhoto(){
+ const s=scene,t=s.t,center=W/2;
+ // Slow-moving heart-shaped cloud remains in the golden hour, not a night sky.
+ ctx.save();ctx.globalAlpha=Math.min(1,Math.max(0,(t-600)/650));
+ const cx=center+120,cy=83;
+ for(const [dx,dy,r] of [[-21,-6,15],[-8,-17,17],[10,-17,17],[23,-6,15],[0,4,22]])circle(cx+dx,cy+dy,r,'#ffe3e7');
+ ctx.restore();
+ // Camera held by lion; small lens and camera body are clearly visible.
+ const lx=lion.x-cam;
+ rect(lx+14,lion.y+9,13,10,'#a78ca8');rect(lx+16,lion.y+6,5,3,'#f1cad8');circle(lx+21,lion.y+14,3,'#fce9ed');
+ if(!s.shot){
+  text('🦁 这里好漂亮，我给你拍张照吧！',center,34,'#fffaf1',17,'center');
+  if(t>1200)text('✦ 按跳跃键摆姿势并拍照',center,57,'#ffebed',12,'center');
+ }else{
+  const elapsed=t-s.shotAt;
+  if(elapsed<180){ctx.globalAlpha=1-elapsed/180;rect(0,0,W,H,'#fff9ed');ctx.globalAlpha=1;}
+  // A designed pixel postcard, not a screenshot with touch controls.
+  const x=center-106,y=50;
+  ctx.save();ctx.fillStyle='#fffaf6';ctx.fillRect(x-8,y-8,212,224);
+  ctx.fillStyle='#f4e6ee';ctx.fillRect(x-3,y-3,202,178);
+  const grad=ctx.createLinearGradient(0,y,0,y+175);
+  grad.addColorStop(0,'#f7a2ad');grad.addColorStop(1,'#ffd8a6');ctx.fillStyle=grad;ctx.fillRect(x,y,196,172);
+  circle(x+146,y+73,26,'#ffedb0');rect(x,y+123,196,49,'#a2bec1');
+  for(let j=0;j<6;j++)rect(x+(j*37)%188,y+138+(j%3)*10,22,2,'#ffe9bc');
+  // Puffy heart cloud in the background.
+  for(const [dx,dy,r] of [[-14,-3,10],[-7,-12,12],[7,-12,12],[15,-3,10],[0,5,14]])circle(x+69+dx,y+58+dy,r,'#fff0ef');
+  // The bunny is the photo subject, lion stays behind the camera.
+  bunny(x+89,y+125,1,false,false);
+  text('夕阳下的你 ♡',center,y+204,'#b36c94',15,'center');
+  ctx.restore();
+  text('📸 咔嚓！',center,31,'#fff9ed',17,'center');
+ }
+}
 function loop(t){try{let dt=Math.min(40,t-last||16);last=t;
  if(mode==='play')update(dt);else if(mode==='scene'&&scene)updateScene(dt);else if(mode==='dying'&&dying)updateDying(dt);
  updateFade(dt);draw()}catch(e){$('#error').style.display='block';$('#error').textContent='游戏运行异常：'+e.message+'。请截图反馈。';return}requestAnimationFrame(loop)}
