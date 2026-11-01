@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V3.0.6 · 蓝冰洞与约定之树修复</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V3.0.7 · 小屋与终点双人种树</title><style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#2a203f;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;touch-action:none}#stage{position:absolute;inset:0;height:var(--available-height,100%);display:flex;align-items:center;justify-content:center}canvas{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;touch-action:none;-webkit-user-select:none}#hud{position:absolute;top:max(8px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));color:#fff;font-size:clamp(13px,2.2vw,19px);font-weight:800;text-shadow:1px 2px #704b73;pointer-events:none}#pause{position:absolute;right:max(12px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));z-index:2}button{font-family:inherit;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent}#controls{position:absolute;inset:0;pointer-events:none;z-index:3}#left,#right,#jump{opacity:.58;position:absolute;bottom:max(10px,env(safe-area-inset-bottom));width:52px;height:52px;background:#55476655;border:2px solid #ffffff77;color:#fff;border-radius:12px;font-size:22px;font-weight:800;pointer-events:auto}#left{left:max(12px,env(safe-area-inset-left))}#right{left:calc(max(12px,env(safe-area-inset-left)) + 61px)}#jump{right:max(12px,env(safe-area-inset-right));border-radius:50%;font-size:28px}.pressed{background:#ec8eaecc!important;opacity:1!important}#pause{border:2px solid #ffffffaa;background:#55476677;color:#fff;border-radius:11px;width:45px;height:42px;font-size:20px}#shade{position:absolute;inset:0;height:var(--available-height,100%);background:#211b39c9;display:flex;justify-content:center;align-items:center;z-index:4;padding:12px}#card{background:#fff3f6;border:3px solid #ffc2d7;border-radius:17px;color:#68455e;text-align:center;width:min(440px,92%);padding:16px;max-height:90%;overflow:auto;box-shadow:0 6px #a36e9d}#card h1{font-size:clamp(19px,3.2vw,27px);color:#db6394;margin:0 0 8px}#card p{font-size:clamp(12px,1.8vw,15px);line-height:1.65;margin:8px 0}#actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}#actions button{font-size:14px;font-weight:700;border:0;background:#e979a5;color:#fff;border-radius:10px;padding:10px 15px;min-height:43px}#actions button.alt{background:#a88bad}#rotate{position:absolute;inset:0;height:var(--available-height,100%);background:#241b38;color:white;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:8;gap:12px;font-size:20px;padding:24px}#rotate small{font-size:13px;opacity:.8}#error{display:none;position:absolute;z-index:12;inset:10%;background:#fff5f5;color:#a12750;border-radius:12px;padding:16px;overflow:auto;font-size:14px}.hide{display:none!important}@media(orientation:portrait){#rotate{display:flex}}@media(max-height:310px){#card{padding:8px}#card p{margin:3px}#left,#right,#jump{opacity:.58;width:48px;height:48px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 56px)}}
 #interact{position:absolute;left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);background:#fff9f0e8;color:#79516c;border:2px solid #e9a7c5;border-radius:7px;padding:4px 8px;min-width:66px;min-height:32px;z-index:3;font-weight:800;font-size:11px;box-shadow:0 3px #a88ba4;white-space:nowrap}#card{max-width:520px!important}#hud{z-index:2;max-width:75%;font-size:clamp(12px,1.7vw,18px)}@media(orientation:landscape){#left,#right,#jump{bottom:max(10px,env(safe-area-inset-bottom))}} 
 #gate{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 30% 20%,#ffd6e6,#f6aed3 45%,#b48ac8);height:var(--available-height,100%)}
@@ -247,7 +247,7 @@ function journal(back){
  const lines=['💗 珍藏爱心 '+data.keepsakes.length+' 个 · 特别收藏。','🗝️ 小钥匙 '+data.keys.length+' 把。','🚪 秘密房间 '+data.secretDoors.length+' 处。','🎀 神秘礼盒 '+(data.gifts||[]).length+' 个 · 藏着特别的收藏。', '❤️ 特别爱心 '+h+'/3　· 每段旅程藏着一颗，试着全部找到吧。',
  '⭐ 回忆星星 '+data.stars.length+'/3　· 集齐星光，发现隐藏观景台。',
  '🌱 地下神秘种子 '+(data.seed?'已发现':'尚未发现')+'　· 隐藏收藏。',
- '🌱 未来的种子 '+(data.seed?'已找到':'尚未找到')+'，约定花坛 '+(gardenPlanted().includes(0)?'已盛开':'尚未种植')+'。',
+ '🌱 未来的种子 '+(data.seed?'已找到':'尚未找到')+'；通过终点后双人种树。',
  '🪙 爱心金币 '+data.coins.length+'/'+TOTAL_COINS+'　· 10、20、30枚有小奖励。',
  '🐚 海边贝壳 '+data.shells.length+'/5　· 找到3枚、5枚会解锁回忆卡。'];
  const rewards=rewardLines();
@@ -282,7 +282,7 @@ function stageReview(n,done){
  const lines=['❤️ 特别爱心：'+(data.hearts[n]?'已找到 ✓':'未找到'),
  '🪙 爱心金币：'+c+'/'+tot];
  if(n===1)lines.push('⭐ 回忆星星：'+data.stars.length+'/3','🐚 海边贝壳：'+data.shells.length+'/5');
- if(n===2)lines.push('🌷 约定花坛：'+(gardenPlanted().includes(0)?'已盛开':'未种植'),'🦁 双人机关：'+(data.story.bridge?'已完成 ✓':'未完成'));
+ if(n===2)lines.push('🌱 未来的种子：'+(data.seed?'已获得 ✓':'未找到'),'🦁 双人机关：'+(data.story.bridge?'已完成 ✓':'未完成'),'🌳 通过终点后一起种树 ♡');
  const optional=(n===1&&data.shells.length<5)||c<tot;
  if(optional)lines.push('<br>还有可爱的收藏品留在路上，想再逛逛吗？');
  const buttons=[];
@@ -307,6 +307,7 @@ function beginFinalPlanting(){
 function completeFinalPlanting(){
   if(mode!=='scene'||!scene||scene.type!=='plant'||!scene.readyToFinish)return;
   scene=null;
+  data.story.finalTreePlanted=true;save();
   $('#interact').classList.add('hide');
   $('#interact').style.bottom='';
   ending();
@@ -319,11 +320,11 @@ function finishLevel(){
  }
  if(level===0){stageReview(0,()=>nextLevel(1))}
  else if(level===1){stageReview(1,()=>nextLevel(2))}
- else{if(!data.seed||!gardenPlanted().includes(0)){cut('🌷 约定之树还在等待',data.seed?'未来的种子已经找到了！请回到约定之树旁，点击「种下花种」，让小狮子一起浇水。':'请先去森林小屋的蓝冰洞找到未来的种子，再回到约定之树旁种下它。',()=>{respawnAt(L.cps[Math.min(data.cp,L.cps.length-1)]);play()});return}
+ else{if(!data.seed){cut('🌷 约定之树还在等待','请先去森林小屋的蓝冰洞找到未来的种子，再回来通过终点，和小狮子一起种树。',()=>{respawnAt(L.cps[Math.min(data.cp,L.cps.length-1)]);play()});return}
   if(!data.story.bridge){cut('🦁 双人机关还没完成','先和小狮子一起启动花园机关，再前往终点。',()=>{respawnAt(L.cps[Math.min(data.cp,L.cps.length-1)]);play()});return}
   finalReviewOpen=true;stageReview(2,beginFinalPlanting);}}
 function cardC(){return data.coins.length>=Math.ceil(TOTAL_COINS*.7)}
-function ending(){if(!data.hearts.every(Boolean)||!data.seed||!gardenPlanted().includes(0)||!data.story.bridge){menu('✨ 旅程还没完成','还需要找到未来的种子、完成双人机关，并让约定花坛盛开。',[['继续冒险',()=>startLevel(Math.min(2,data.level),true)],['返回首页',home]]);return}data.done=true;save();
+function ending(){if(!data.hearts.every(Boolean)||!data.seed||!data.story.bridge){menu('✨ 旅程还没完成','还需要找到未来的种子、完成双人机关，并在终点一起种树。',[['继续冒险',()=>startLevel(Math.min(2,data.level),true)],['返回首页',home]]);return}data.done=true;save();
  menu('🌸 我们的第一个365天',ANNIV.label+'<br>🐰 ❤️ 🦁<br>我们一起种下未来的种子，<br>等它长成樱花树。<br><strong>一周年快乐 ♡</strong>',[['下一页 ♡',ending2]])}
 function ending2(){const n=data.shells.length;
  const lines=[];if(n>=5)lines.push('🐚 还记得海边的贝壳吗？我们把那一天收藏起来。');else if(n>=3)lines.push('🐚 海边的夕阳，是我们珍贵的回忆。');
@@ -514,7 +515,7 @@ function updateScene(dt){const s=scene,k=Math.min(2,dt/16.667);s.t+=dt;timer+=dt
  if(s.type==='rise'){const ep=L.objects.find(o=>o.type==='exitpipe');p.x=ep.x+ep.w/2-11;p.y=Math.max(ep.top-p.h,p.y-1.2*k);if(p.y<=ep.top-p.h&&s.t>500){scene=null;p.vy=-3;p.on=false;p.x=ep.x+ep.w+4;play()}}
 }
 function camTo(x,k){cam+=(Math.max(0,Math.min(L.end-W,x))-cam)*Math.min(1,.08*k)}
-function buildCabin(){return {key:'2c',cabin:true,end:480,map:[gr(0,480)],boxes:[],plats:[],cps:[55],trees:[],enemies:[],objects:[]}}
+function buildCabin(){return {key:'2c',cabin:true,end:900,map:[gr(0,900)],boxes:[],plats:[],cps:[55],trees:[],enemies:[],objects:[]}}
 let forestReturnX=852, cabinL=null;
 function enterCabin(){if(level!==2||L.under||L.cabin)return;forestReturnX=p.x;mainL=L;L=buildCabin();L.pops=[];clouds=[];respawnAt(60);play();flash('🏡 森林小屋 · 地板下似乎有暗门')}
 function exitCabin(){if(!L.cabin)return;L=mainL;mainL=null;cabinL=null;respawnAt(forestReturnX);play()}
@@ -692,7 +693,7 @@ function update(dt){
    else if(!sleeping&&respawnGuard===0){die('enemy');return}}}
  L.enemies=L.enemies.filter(e=>!e.dead||e.dead<500);
  let showInteract=false;
- if(L.under){if(p.x>765)showInteract='✦ 返回小屋'}else if(L.cabin){if(p.x<110)showInteract='✦ 返回森林';if(p.x>335)showInteract='✦ 打开地下暗门'}
+ if(L.under){if(p.x>765)showInteract='✦ 返回小屋'}else if(L.cabin){if(p.x<110)showInteract='✦ 返回森林';if(p.x>335&&p.x<475)showInteract='✦ 打开地下暗门'}
  else{
  if(level===0&&!L.secret){if(!data.met&&p.x>340){data.met=true;checkpoint(1);cut('🦁 遇见你，真好','小兔子：「你也要去冒险吗？」<br>小狮子：「那我们一起走吧！」<br><br>记得寻找特别的爱心，还有路上闪闪发光的收藏品哦。',play);return}
   /* heart collected on contact below */}
@@ -707,7 +708,6 @@ function update(dt){
    finishLevel();return;
   }}
  if(level===2){
-  if(!L.under&&!L.cabin&&!L.secret){for(let i=0;i<1;i++)if(data.seed&&!gardenPlanted().includes(i)&&Math.abs(p.x+11-GARDEN_BEDS[i])<53&&p.y+p.h>=G-45)showInteract='🌱 种下花种';}
   if(!L.cabin&&Math.abs(p.x+11-980)<58)showInteract='✦ 进入小屋';
   if(!data.story.bridge){
    if(coop.state==='idle'&&p.x>=1360&&p.x<1410){
@@ -932,19 +932,7 @@ function drawFourSeasons(){
   text('♡',tx-8,G-206,'#fff5d7',24);
  }
 }
-function drawGardenItems(){
- for(let i=0;i<1;i++){
-  const s=GARDEN_SEEDS[i],x=s?.x-cam;
-  if(s&&!gardenCollected().includes(i)&&x>-30&&x<W+30){circle(x,s.y,12,'#fff1b7');circle(x,s.y,6,'#c28b55');rect(x-2,s.y-11,4,8,'#8ccf8d');circle(x+4,s.y-8,4,'#91cd83')}
-  const bx=GARDEN_BEDS[i]-cam;if(bx<-65||bx>W+65)continue;
-  rect(bx-28,G-9,56,8,'#b98477');rect(bx-22,G-12,44,5,'#8dcd9c');
-  if(gardenPlanted().includes(i)){
-   for(let j=0;j<5;j++){const fx=bx+(j-2)*9;rect(fx-1,G-35-j%2*5,3,26+j%2*5,'#6eae70');circle(fx,G-39-j%2*5+Math.sin(timer/500+j)*2,8,['#ffaecf','#ffe68a','#e3c5ff'][i]);circle(fx,G-40-j%2*5,3,'#fff4ba')}
-  }else{rect(bx-3,G-22,6,13,'#9b755c');circle(bx,G-23,4,'#83ba82');text('约定之树',bx-28,G-51,'#fff6db',12)}
-  if(gardenWater&&gardenWater.id===i){const lx=bx+28;rect(lx-2,G-57,19,15,'#a3d8f6');rect(lx+13,G-55,9,3,'#a3d8f6');for(let n=0;n<6;n++)circle(lx+10-n*7,G-52+n*4,2,'#9bd8fa')}
- }
- if(p.x>2290&&!gardenPlanted().includes(0))text(data.seed?'和小狮子一起种下未来的种子 ♡':'未来的种子藏在森林小屋的地下洞穴 ♡',W/2,96,'#fff7d6',14,'center');
-}
+function drawGardenItems(){/* The only planting happens in the ending cinematic. */}
 
 function draw(){
  if(scene&&(scene.type==='snow'||scene.type==='snowEnding')){drawSnow();return}
@@ -970,10 +958,15 @@ function draw(){
  }
  for(const o of L.objects)if(o.type==='exitpipe')pipeDraw(o);
 
- if(L.cabin){rect(0,0,W,G,'#705b64');for(let x=0;x<W;x+=40)rect(x,20,2,G-20,'#866d70');rect(0,0,W,24,'#a77e68');rect(0,G-60,W,60,'#a47759');rect(55,115,75,110,'#8e6659');for(let i=0;i<3;i++)rect(63,135+i*26,59,5,'#d7aa7e');rect(190,160,90,54,'#bb8c6b');rect(195,154,80,8,'#f5d6aa');rect(295,120,72,65,'#b98e78');rect(302,126,58,52,'#ffdda5');rect(305,130,52,45,'#e7bc93');rect(327,126,5,52,'#ad806b');rect(301,151,59,4,'#ad806b');rect(255,G-50,63,31,'#9c745e');rect(260,G-54,54,7,'#efd0a0');rect(270,G-44,9,21,'#d2a27c');rect(70,G-9,200,6,'#b78c82');rect(110,G-10,80,7,'#e3a3ad');rect(344,G-18,88,18,'#463c51');rect(352,G-26,71,8,'#a98f8b');circle(388,G-33,9,'#ffdfa0');text('↓ 蓝冰洞暗门',388,G-59,'#fff2ce',13,'center');text('← 森林',58,G-47,'#fff2ce',12,'center');}
+ if(L.cabin){rect(0,0,W,G,'#705b64');for(let x=0;x<W;x+=40)rect(x,20,2,G-20,'#866d70');rect(0,0,W,24,'#a77e68');rect(0,G-60,W,60,'#a47759');rect(55,115,75,110,'#8e6659');for(let i=0;i<3;i++)rect(63,135+i*26,59,5,'#d7aa7e');rect(190,160,90,54,'#bb8c6b');rect(195,154,80,8,'#f5d6aa');rect(295,120,72,65,'#b98e78');rect(302,126,58,52,'#ffdda5');rect(305,130,52,45,'#e7bc93');rect(327,126,5,52,'#ad806b');rect(301,151,59,4,'#ad806b');rect(255,G-50,63,31,'#9c745e');rect(260,G-54,54,7,'#efd0a0');rect(270,G-44,9,21,'#d2a27c');rect(70,G-9,200,6,'#b78c82');rect(110,G-10,80,7,'#e3a3ad');rect(344,G-18,88,18,'#463c51');rect(352,G-26,71,8,'#a98f8b');circle(388,G-33,9,'#ffdfa0');text('↓ 蓝冰洞暗门',388,G-59,'#fff2ce',13,'center');text('← 森林',58,G-47,'#fff2ce',12,'center');
+  // Extend the room with a cozy reading corner instead of an empty right half.
+  rect(490,112,125,133,'#8d675b');for(let j=0;j<4;j++){rect(501,132+j*27,102,5,'#d9a87c');for(let k=0;k<6;k++)rect(507+k*16,113+j*27,9,18,['#d7a7b2','#e9c88e','#a5b7a2'][k%3]);}
+  rect(665,G-63,108,11,'#d5aa87');rect(675,G-52,9,52,'#a77d66');rect(749,G-52,9,52,'#a77d66');
+  circle(714,G-81,15,'#f6d7a8');rect(708,G-111,12,24,'#ad866f');circle(714,G-113,7,'#ffe4a5');
+  rect(792,G-80,40,60,'#967566');rect(799,G-99,26,20,'#e6b2c6');circle(811,G-105,9,'#f7c3d8');
+  rect(470,G-10,360,7,'#b78c82');rect(525,G-11,180,7,'#d99da9');}
  if(L.under){rect(0,0,W,G,'#0b2946');for(let i=0;i<22;i++){let x=(i*67-cam*.2)%W;ctx.fillStyle=i%2?'#1c567d':'#2b7da5';ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+22,0);ctx.lineTo(x+10,35+i%4*13);ctx.fill()}for(let i=0;i<13;i++){let x=i*75-cam*.3;circle(x,110+i%4*28,14,i%2?'#357ba9':'#55b6d6');circle(x,110+i%4*28,5,'#d7f9ff')}const lx=lion.x-cam+12,ly=lion.y+3;const facing=p.face>=0?1:-1;
   let glow=ctx.createRadialGradient(lx,ly,2,lx+facing*55,ly-5,145);glow.addColorStop(0,'#ffe9ad88');glow.addColorStop(1,'#ffe6a300');ctx.fillStyle=glow;ctx.fillRect(0,0,W,G);
-  ctx.save();ctx.fillStyle='#ffe6a52e';ctx.beginPath();ctx.moveTo(lx+facing*9,ly);ctx.lineTo(lx+facing*170,ly-76);ctx.lineTo(lx+facing*170,ly+58);ctx.closePath();ctx.fill();ctx.restore();
   rect(lx-7,ly-22,15,5,'#555e70');circle(lx+facing*7,ly-19,5,'#ffe7a8');for(let i=0;i<9;i++){const xx=i*106+25-cam*.12;ctx.fillStyle=i%2?'#7de1f0':'#a9efff';ctx.globalAlpha=.42;ctx.beginPath();ctx.moveTo(xx,15);ctx.lineTo(xx+18,15);ctx.lineTo(xx+8,65+(i%3)*18);ctx.fill();ctx.globalAlpha=1;}text('蓝冰洞',W/2,52,'#d8f7ff',16,'center');text('出口 →',785-cam,G-53,'#fff3cf',13,'center');}
  L.map.forEach(terrain);drawShallowCove();drawFinalBeach();if(level!==2)clouds.forEach(cloudDraw);
  // Stars uncover an optional elevated lookout, not a shortcut across the tidal section.
@@ -1087,10 +1080,10 @@ function loop(t){try{let dt=Math.min(40,t-last||16);last=t;
 // ================= Interact =================
 function interact(){if(mode==='scene'&&scene&&scene.type==='plant')return;if(mode!=='play')return;
  if(L.secret){if(p.x>555){exitSecretRoom();return}if(data.snowboard&&p.x>305&&p.x<355){startSnow();return}return}
- if(L.under){if(p.x>790)exitUnder();return}if(L.cabin){if(p.x<100){exitCabin();return}if(p.x>335){enterUnder();return}return}
+ if(L.under){if(p.x>790)exitUnder();return}if(L.cabin){if(p.x<100){exitCabin();return}if(p.x>335&&p.x<475){enterUnder();return}return}
  if(level===0&&p.x>1374&&p.x<1425&&doorRevealed()){enterSecretRoom();return}
  // Sitting is automatic only at the final beach; no early interaction.
- if(level===2&&!L.under&&!L.cabin){for(let i=0;i<1;i++)if(data.seed&&!gardenPlanted().includes(i)&&Math.abs(p.x+11-GARDEN_BEDS[i])<53&&p.y+p.h>=G-45){data.story.gardenFlowers=[...gardenPlanted(),i];save();gardenWater={x:GARDEN_BEDS[i],t:0,id:i};lion.x=GARDEN_BEDS[i]+28;lion.y=G-27;flash('🌸 小狮子正在浇水，未来的种子发芽了 ♡');return}}
+
  if(level===2&&!L.cabin&&Math.abs(p.x+11-980)<58){enterCabin();return}}
 
 // ================= Gate (welcome + anniversary date) =================
