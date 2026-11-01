@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V3.0 · 四季秘密花园</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V3.0.3 · 红杉森林与地下洞穴</title><style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#2a203f;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;touch-action:none}#stage{position:absolute;inset:0;height:var(--available-height,100%);display:flex;align-items:center;justify-content:center}canvas{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;touch-action:none;-webkit-user-select:none}#hud{position:absolute;top:max(8px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));color:#fff;font-size:clamp(13px,2.2vw,19px);font-weight:800;text-shadow:1px 2px #704b73;pointer-events:none}#pause{position:absolute;right:max(12px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));z-index:2}button{font-family:inherit;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent}#controls{position:absolute;inset:0;pointer-events:none;z-index:3}#left,#right,#jump{opacity:.58;position:absolute;bottom:max(10px,env(safe-area-inset-bottom));width:52px;height:52px;background:#55476655;border:2px solid #ffffff77;color:#fff;border-radius:12px;font-size:22px;font-weight:800;pointer-events:auto}#left{left:max(12px,env(safe-area-inset-left))}#right{left:calc(max(12px,env(safe-area-inset-left)) + 61px)}#jump{right:max(12px,env(safe-area-inset-right));border-radius:50%;font-size:28px}.pressed{background:#ec8eaecc!important;opacity:1!important}#pause{border:2px solid #ffffffaa;background:#55476677;color:#fff;border-radius:11px;width:45px;height:42px;font-size:20px}#shade{position:absolute;inset:0;height:var(--available-height,100%);background:#211b39c9;display:flex;justify-content:center;align-items:center;z-index:4;padding:12px}#card{background:#fff3f6;border:3px solid #ffc2d7;border-radius:17px;color:#68455e;text-align:center;width:min(440px,92%);padding:16px;max-height:90%;overflow:auto;box-shadow:0 6px #a36e9d}#card h1{font-size:clamp(19px,3.2vw,27px);color:#db6394;margin:0 0 8px}#card p{font-size:clamp(12px,1.8vw,15px);line-height:1.65;margin:8px 0}#actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}#actions button{font-size:14px;font-weight:700;border:0;background:#e979a5;color:#fff;border-radius:10px;padding:10px 15px;min-height:43px}#actions button.alt{background:#a88bad}#rotate{position:absolute;inset:0;height:var(--available-height,100%);background:#241b38;color:white;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:8;gap:12px;font-size:20px;padding:24px}#rotate small{font-size:13px;opacity:.8}#error{display:none;position:absolute;z-index:12;inset:10%;background:#fff5f5;color:#a12750;border-radius:12px;padding:16px;overflow:auto;font-size:14px}.hide{display:none!important}@media(orientation:portrait){#rotate{display:flex}}@media(max-height:310px){#card{padding:8px}#card p{margin:3px}#left,#right,#jump{opacity:.58;width:48px;height:48px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 56px)}}
 #interact{position:absolute;left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);background:#fff9f0e8;color:#79516c;border:2px solid #e9a7c5;border-radius:7px;padding:4px 8px;min-width:66px;min-height:32px;z-index:3;font-weight:800;font-size:11px;box-shadow:0 3px #a88ba4;white-space:nowrap}#card{max-width:520px!important}#hud{z-index:2;max-width:75%;font-size:clamp(12px,1.7vw,18px)}@media(orientation:landscape){#left,#right,#jump{bottom:max(10px,env(safe-area-inset-bottom))}} 
 #gate{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 30% 20%,#ffd6e6,#f6aed3 45%,#b48ac8);height:var(--available-height,100%)}
@@ -32,9 +32,9 @@
 const $=q=>document.querySelector(q), canvas=$('#game'), ctx=canvas.getContext('2d');
 if(!ctx){$('#error').style.display='block';$('#error').textContent='Canvas 无法启动，请使用 Safari 打开链接';return}
 const H=360, G=284, SAVE='our_adventure_full_v1', GATE='our_adventure_gate_v1';
-const LEVELS=['初夏小镇 · 相遇','夕阳花火','四季冒险 · 未来的约定'];
-const GARDEN_SEEDS=[{x:365,y:225},{x:885,y:195},{x:1365,y:190}];
-const GARDEN_BEDS=[970,1500,1900];
+const LEVELS=['初夏小镇 · 相遇','夕阳花火','秘密花园 · 未来的约定'];
+const GARDEN_SEEDS=[];
+const GARDEN_BEDS=[2040];
 let gardenWater=null;
 function gardenCollected(){return data.story.gardenSeeds||[]}
 function gardenPlanted(){return data.story.gardenFlowers||[]}
@@ -86,22 +86,21 @@ function buildLevel(n){
    {type:'star',id:0,x:1550,y:203},{type:'star',id:1,x:1770,y:151},{type:'star',id:2,x:2160,y:202},
    {type:'shell',id:0,x:815,y:231},{type:'shell',id:1,x:1535,y:217},{type:'shell',id:2,x:2020,y:221},{type:'shell',id:3,x:2700,y:222},{type:'shell',id:4,x:2890,y:218},
    ...coins(0,[[485,195],[637,174],[1190,193],[1420,179],[1718,148],[1823,148],[2090,190],[2380,183],[2830,211]])]};
- return {end:2350,
-  map:[gr(0,490),gr(535,475),gr(1050,455),gr(1550,450),gr(2110,290),bl(580,75,235),bl(810,78,230),bl(1220,115,229),bl(1750,110,241)],
-  boxes:[qb(0,680,185,'keepsake'),qb(1,1080,190,'bag'),qb(2,1660,190,'gift'),qb(3,1682,190,'coin'),qb(4,1240,159,'coin')],
-  plats:[mover(720,238,60,20,0,2600),mover(1342,236,48,0,48,2800),plank(2004,50),plank(2056,52)],
-  cps:[45,600,950,1580,1890,2130], trees:[140,620,1150,1650,2230],
-  enemies:[{type:'walker',x:1120,start:1070,end:1195,v:.35}],
-  objects:[{type:'pipe',x:860,w:42,top:G-44},{type:'exitpipe',x:925,w:34,top:G-30},{type:'switch',x:1392},{type:'heart',x:2160,y:264},
-   ...GARDEN_SEEDS.map((s,id)=>({type:'gardenSeed',id,x:s.x,y:s.y})),
-   ...coins(0,[...row(420,110,3,20),...arc(495,258,3,18,10),...row(1346,100,3,20),...row(1236,150,5,20),...row(1012,250,2,22),...row(2015,246,5,20)])]};
+ return {end:2450,
+  map:[gr(0,510),gr(550,520),gr(1115,440),gr(1595,855),bl(295,90,245),bl(635,92,237),bl(1170,105,235)],
+  boxes:[qb(0,300,181,'coin'),qb(1,615,173,'bag'),qb(2,1215,170,'coin')],
+  plats:[mover(485,245,75,22,0,3000),mover(1525,241,68,0,27,2900)],
+  cps:[45,560,990,1510,1850,2180],trees:[100,245,435,640,820,1030,1290,1680,1850,2240],
+  enemies:[{type:'walker',x:1320,start:1280,end:1390,v:.30}],
+  objects:[{type:'pipe',x:860,w:42,top:G-44},{type:'exitpipe',x:925,w:34,top:G-30},{type:'switch',x:1392},{type:'heart',x:2320,y:264},
+   ...coins(0,[[175,216],[335,177],[710,194],[1155,185],[1710,190],[1950,170]])]};
 }
 // Underground bonus room behind the glowing pipe (level 3)
 function buildUnder(){return {key:'2u',under:true,end:900,
  map:[gr(0,900),bl(300,60,250),bl(520,60,230)],
  boxes:[qb(0,160,190,'coin'),qb(1,182,190,'bag'),qb(2,204,190,'coin')],
  plats:[],cps:[70],trees:[],enemies:[],
- objects:[{type:'seed',x:700,y:G-22},{type:'pipe',x:820,w:42,top:G-44,exit:true},{type:'sign',x:640,text:'拿到种子，再从绿色管道出去'},
+ objects:[{type:'seed',x:700,y:G-22},{type:'pipe',x:820,w:42,top:G-44,exit:true},{type:'sign',x:640,text:'找到未来的种子，再从出口返回森林'},
   ...coins(0,[...arc(226,246,4,18,24),...row(310,215,3,20),...arc(440,240,4,18,30),...row(530,195,3,20),...row(620,250,3,18)])]}}
 function buildSecretRoom(){return {key:'0b',secret:true,end:690,
  map:[gr(0,690),bl(185,95,240),bl(380,100,218)],
@@ -187,7 +186,7 @@ function restoreUnclaimedRewards(){
 }
 function resetPlanks(){for(const pl of L.plats)if(pl.kind==='fall'){pl.y=pl.y0;pl.t=0;pl.vy=0}}
 function respawnAt(x){if(level===2&&!L.under&&!data.story.bridge&&coop.state==='approaching'){coop.state='waiting';coop.lionReady=true}pendingFlag=-1;flagCrossingArmed=false;x=safeX(x);p.x=x;p.y=G-p.h;p.vx=p.vy=0;p.on=true;p.ride=null;p.sit=false;p.hidden=false;p.coyote=p.buffer=p.jumpMs=0;lion.x=x-34*p.face;lion.y=p.y;lion.sit=false;trail=[];resetPlanks();cam=Math.max(0,Math.min(L.end-W,x-W*.35));respawnGuard=900;clearInput()}
-function startLevel(n,fromSave){layout(n);let cp=(fromSave&&data.cpLevel===n)?Math.max(0,Math.min(L.cps.length-1,data.cp)):0;data.level=Math.max(data.level,n);data.cp=cp;data.cpLevel=n;save();p.face=1;respawnAt(L.cps[cp]);play();if(n===2&&!data.story.gardenIntro){data.story.gardenIntro=true;save();cut('🌷 四季冒险','春天潜入珊瑚海寻找花种，夏天探索发光洞穴，秋天穿过红杉公园，冬天来到雪屋。<br>找到三颗花种后，在花坛种下，小狮子会帮忙浇水。',play,'一起出发 ♡')}if(n===0&&!data.story.introGuide){data.story.introGuide=true;save();cut('🦁 冒险的小目标','听说这片世界里藏着三颗特别的爱心，我们一起把它们找出来吧！<br><br>沿途的金币也值得收集，遇到特别的东西时，小狮子会提醒你。<br>想知道收集进度，可以在暂停菜单打开「📖 冒险手册」。',play,'出发吧 ♡')}}
+function startLevel(n,fromSave){layout(n);let cp=(fromSave&&data.cpLevel===n)?Math.max(0,Math.min(L.cps.length-1,data.cp)):0;data.level=Math.max(data.level,n);data.cp=cp;data.cpLevel=n;save();p.face=1;respawnAt(L.cps[cp]);play();if(n===2&&!data.story.gardenIntro){data.story.gardenIntro=true;save();cut('🌲 红杉森林的秘密','沿着红杉森林找到秘密小屋，打开地下入口，和小狮子一起探索水晶洞穴。<br>找到「未来的种子」后，带它回到约定之树旁的花坛，一起种下。',play,'一起出发 ♡')}if(n===0&&!data.story.introGuide){data.story.introGuide=true;save();cut('🦁 冒险的小目标','听说这片世界里藏着三颗特别的爱心，我们一起把它们找出来吧！<br><br>沿途的金币也值得收集，遇到特别的东西时，小狮子会提醒你。<br>想知道收集进度，可以在暂停菜单打开「📖 冒险手册」。',play,'出发吧 ♡')}}
 function showUI(on){$('#controls').classList.toggle('hide',!on);$('#pause').classList.toggle('hide',!on);$('#hud').classList.toggle('hide',mode==='gate')}
 function menu(title,body,buttons){mode='menu';clearInput();showUI(false);$('#interact').classList.add('hide');$('#shade').classList.remove('hide');$('#heading').textContent=title;$('#message').innerHTML=body;const el=$('#actions');el.textContent='';buttons.forEach((b,i)=>{let btn=document.createElement('button');btn.type='button';btn.textContent=b[0];if(i)btn.className='alt';btn.addEventListener('click',b[1]);el.appendChild(btn)});$('#card').scrollTop=0}
 function play(){mode='play';$('#shade').classList.add('hide');showUI(true);last=performance.now()}
@@ -248,7 +247,7 @@ function journal(back){
  const lines=['💗 珍藏爱心 '+data.keepsakes.length+' 个 · 特别收藏。','🗝️ 小钥匙 '+data.keys.length+' 把。','🚪 秘密房间 '+data.secretDoors.length+' 处。','🎀 神秘礼盒 '+(data.gifts||[]).length+' 个 · 藏着特别的收藏。', '❤️ 特别爱心 '+h+'/3　· 每段旅程藏着一颗，试着全部找到吧。',
  '⭐ 回忆星星 '+data.stars.length+'/3　· 集齐星光，发现隐藏观景台。',
  '🌱 地下神秘种子 '+(data.seed?'已发现':'尚未发现')+'　· 隐藏收藏。',
- '🌷 四季花种 '+gardenCollected().length+'/3，已盛开 '+gardenPlanted().length+'/3。',
+ '🌱 未来的种子 '+(data.seed?'已找到':'尚未找到')+'，约定花坛 '+(gardenPlanted().includes(0)?'已盛开':'尚未种植')+'。',
  '🪙 爱心金币 '+data.coins.length+'/'+TOTAL_COINS+'　· 10、20、30枚有小奖励。',
  '🐚 海边贝壳 '+data.shells.length+'/5　· 找到3枚、5枚会解锁回忆卡。'];
  const rewards=rewardLines();
@@ -283,7 +282,7 @@ function stageReview(n,done){
  const lines=['❤️ 特别爱心：'+(data.hearts[n]?'已找到 ✓':'未找到'),
  '🪙 爱心金币：'+c+'/'+tot];
  if(n===1)lines.push('⭐ 回忆星星：'+data.stars.length+'/3','🐚 海边贝壳：'+data.shells.length+'/5');
- if(n===2)lines.push('🌷 四季花坛：'+gardenPlanted().length+'/3','🦁 双人机关：'+(data.story.bridge?'已完成 ✓':'未完成'));
+ if(n===2)lines.push('🌷 约定花坛：'+(gardenPlanted().includes(0)?'已盛开':'未种植'),'🦁 双人机关：'+(data.story.bridge?'已完成 ✓':'未完成'));
  const optional=(n===1&&data.shells.length<5)||c<tot;
  if(optional)lines.push('<br>还有可爱的收藏品留在路上，想再逛逛吗？');
  const buttons=[];
@@ -320,16 +319,16 @@ function finishLevel(){
  }
  if(level===0){stageReview(0,()=>nextLevel(1))}
  else if(level===1){stageReview(1,()=>nextLevel(2))}
- else{if(gardenPlanted().length<3){cut('🌷 花园还没有全部盛开','收集三颗四季花种，分别在三个花坛种下，等小狮子浇水后再到约定之树吧。',()=>{respawnAt(L.cps[Math.min(data.cp,L.cps.length-1)]);play()});return}
+ else{if(!data.seed||!gardenPlanted().includes(0)){cut('🌷 约定之树还在等待','请先去森林小屋的地下洞穴找到未来的种子，再和小狮子一起种下它。',()=>{respawnAt(L.cps[Math.min(data.cp,L.cps.length-1)]);play()});return}
   if(!data.story.bridge){cut('🦁 双人机关还没完成','先和小狮子一起启动花园机关，再前往终点。',()=>{respawnAt(L.cps[Math.min(data.cp,L.cps.length-1)]);play()});return}
   finalReviewOpen=true;stageReview(2,beginFinalPlanting);}}
 function cardC(){return data.coins.length>=Math.ceil(TOTAL_COINS*.7)}
-function ending(){if(!data.hearts.every(Boolean)||gardenPlanted().length<3||!data.story.bridge||data.stars.length<3){menu('✨ 旅程还没完成','还有未收集的特别爱心、星星或种子，或尚未完成的双人机关。翻翻冒险手册，看看遗漏了什么吧。',[['继续冒险',()=>startLevel(Math.min(2,data.level),true)],['返回首页',home]]);return}data.done=true;save();
+function ending(){if(!data.hearts.every(Boolean)||!data.seed||!gardenPlanted().includes(0)||!data.story.bridge){menu('✨ 旅程还没完成','还需要找到未来的种子、完成双人机关，并让约定花坛盛开。',[['继续冒险',()=>startLevel(Math.min(2,data.level),true)],['返回首页',home]]);return}data.done=true;save();
  menu('🌸 我们的第一个365天',ANNIV.label+'<br>🐰 ❤️ 🦁<br>我们一起种下未来的种子，<br>等它长成樱花树。<br><strong>一周年快乐 ♡</strong>',[['下一页 ♡',ending2]])}
 function ending2(){const n=data.shells.length;
  const lines=[];if(n>=5)lines.push('🐚 还记得海边的贝壳吗？我们把那一天收藏起来。');else if(n>=3)lines.push('🐚 海边的夕阳，是我们珍贵的回忆。');
  if(cardC())lines.push('🪙 爱心币收集达人！隐藏回忆卡 C 已解锁');
- lines.push('🌷 三座花坛已盛开，秘密礼盒正在等待打开。');
+ lines.push('🌷 未来的种子已经发芽，秘密礼盒正在等待打开。');
  menu('🎁 还有一份礼物',lines.join('<br>'),[['🎁 打开纪念礼物',()=>menu('🎁 给你的礼物','🐰♡🦁<br>谢谢你陪我走过第一个365天。<br>从初夏小镇，到海边夕阳，再到四季花园——<br>未来还想和你一起走过很多很多季节。<br><strong>我们的故事，未完待续。</strong>',[['继续我们的冒险 ♡',home],['回忆相册',album]])],['回忆相册',album],['返回首页',home]])}
 function album(){const n=data.shells.length,c=data.coins.length;menu('📷 我们的回忆相册','🌸 初夏相遇　🎆 夕阳花火　🌱 星愿花园<br>'+(data.winterCard?'❄️《未来的冬天》已收藏<br>':'')+'🐚 贝壳 '+n+'/5'+(n>=3?'　回忆卡 A ✓':'')+(n>=5?'　回忆卡 B ✓':'')+'<br>🪙 爱心币 '+c+'/'+TOTAL_COINS+(cardC()?'　隐藏回忆卡 C ✓':'<br>（收集 '+Math.ceil(TOTAL_COINS*.7)+' 枚解锁隐藏卡 C）'),[['📖 冒险手册',()=>journal(home)],['返回',home]])}
 
@@ -704,7 +703,7 @@ function update(dt){
    finishLevel();return;
   }}
  if(level===2){
-  if(!L.under&&!L.secret){for(let i=0;i<3;i++)if(!gardenPlanted().includes(i)&&gardenCollected().length>gardenPlanted().length&&Math.abs(p.x+11-GARDEN_BEDS[i])<53&&p.y+p.h>=G-45)showInteract='🌱 种下花种';}
+  if(!L.under&&!L.secret){for(let i=0;i<1;i++)if(data.seed&&!gardenPlanted().includes(i)&&Math.abs(p.x+11-GARDEN_BEDS[i])<53&&p.y+p.h>=G-45)showInteract='🌱 种下花种';}
   if(!data.seed&&onPipeTop(PIPE()))showInteract='✦ 秘密管道';
   if(!data.story.bridge){
    if(coop.state==='idle'&&p.x>=1360&&p.x<1410){
@@ -889,41 +888,50 @@ function cloudDraw(c){let x=c.x-cam,y=G-4;circle(x+9,y+4,10,'#eaf8ff');circle(x+
 
 // V3.0.2 — spring diving, summer cave, redwood autumn, winter cabin, seed pickups and cooperative watering.
 function drawFourSeasons(){
- const zones=[{x:0,w:490,t:'春 · 海底潜水',c:'#82e5e8',flower:'#9ee7f4'},{x:490,w:560,t:'夏 · 探秘洞穴',c:'#7771b3',flower:'#d1b2fa'},{x:1050,w:500,t:'秋 · 红杉公园',c:'#f5c78b',flower:'#ffb46d'},{x:1550,w:560,t:'冬 · 雪屋回忆',c:'#c4e8f4',flower:'#dff8ff'},{x:2110,w:240,t:'约定之树',c:'#ffc2db',flower:'#ffd7ed'}];
- for(let z=0;z<zones.length;z++){
-  const a=zones[z],x=a.x-cam;if(x>W+100||x+a.w<-100)continue;
-  ctx.globalAlpha=.17;rect(Math.max(0,x),0,Math.min(a.w,W-Math.max(0,x)),G,a.c);ctx.globalAlpha=1;
-  for(let i=0;i<14;i++){
-   const wx=a.x+22+i*37, sx=wx-cam;if(sx<-12||sx>W+12)continue;
-   const bob=Math.sin(timer/600+i*2+z)*3;
-   if(z===3){circle(sx,96+i%4*30+bob,2,'#f1faff');circle(sx+10,170+i%3*21,1.5,'#fff');}
-   else{circle(sx,58+(i*31)%145+bob,2.6,a.flower);circle(sx+3,61+(i*31)%145+bob,1.5,'#fff8e9')}
-  }
-  if(x>-a.w&&x<W)text(a.t,Math.max(25,x+35),46,z===3?'#597d9d':'#9b648a',15);
+ // One continuous forest-to-garden palette; no hard seasonal panels.
+ const sky=ctx.createLinearGradient(0,0,0,G);sky.addColorStop(0,'#c7e4db');sky.addColorStop(.7,'#dff0cf');sky.addColorStop(1,'#b7d8b9');
+ ctx.fillStyle=sky;ctx.fillRect(0,0,W,G);
+ for(let i=0;i<24;i++){
+  const wx=i*115+25, x=wx-cam*.38;if(x<-130||x>W+130)continue;
+  rect(x-7,105,14,G-105,'#a3b6a1');circle(x,108,36,'#9cc5a8');
  }
- // V3.0.2: distinct seasonal environments; spring water, summer cave and autumn redwoods.
- const seaX=-cam;
- if(seaX< W && seaX+490>0){
-  ctx.save();ctx.globalAlpha=.74;const wg=ctx.createLinearGradient(0,74,0,G);wg.addColorStop(0,'#8de9e8');wg.addColorStop(1,'#247ca8');ctx.fillStyle=wg;ctx.fillRect(Math.max(0,seaX),74,Math.min(W,seaX+490)-Math.max(0,seaX),G-74);ctx.globalAlpha=1;
-  for(let i=0;i<11;i++){const wx=22+i*42-cam;if(wx<0||wx>W)continue;const h=12+(i%4)*8;rect(wx,G-h,4,h,'#4bbaaa');circle(wx-5,G-h,6,i%2?'#ff9cb5':'#f7b979');circle(wx+5,G-h-5,5,'#e9a0d5');for(let b=0;b<3;b++)circle(wx+Math.sin(timer/850+i+b)*4,100+(i*23+b*51)%160-(timer/70)%26,2,'#ddffff')}
-  for(let i=0;i<5;i++){let fx=48+i*87-cam+Math.sin(timer/750+i)*5,fy=135+(i*31)%90;circle(fx,fy,6,'#f6ce79');circle(fx+7,fy,3,'#f6ce79');circle(fx-3,fy-2,1,'#354c65')}
-  ctx.restore();
-  if(p.x<490){const sx=p.x-cam+11,sy=p.y+12;circle(sx,sy-4,19,'#ffffff33');text('◌',sx,sy-17,'#eaffff',16,'center')}
+ // Redwood trunks with vertical bark, layered canopies and warm sunbeams.
+ for(let i=0;i<15;i++){
+  const wx=90+i*137,x=wx-cam;if(x<-115||x>W+115)continue;
+  const h=205+(i%3)*20;
+  rect(x-21,G-h,42,h,'#965e43');rect(x-13,G-h,4,h,'#bd8058');rect(x+9,G-h,3,h,'#6d443c');
+  for(let j=0;j<4;j++){circle(x+(j%2?19:-17),G-h-18+j*10,27+(j%2)*6,j%2?'#638f69':'#7da978')}
+  for(let j=0;j<5;j++)circle(x+(j-2)*8,G-h+70+j*20,2,'#d49c72');
  }
- const caveX=490-cam;
- if(caveX<W&&caveX+560>0){ctx.save();ctx.fillStyle='#292343d9';ctx.fillRect(Math.max(0,caveX),65,Math.min(W,caveX+560)-Math.max(0,caveX),G-65);
-  for(let i=0;i<13;i++){let x=505+i*41-cam;if(x<0||x>W)continue;ctx.fillStyle=i%2?'#494066':'#64517d';ctx.beginPath();ctx.moveTo(x,65);ctx.lineTo(x+16,65);ctx.lineTo(x+8,92+(i%4)*13);ctx.fill();circle(x+5,G-9-(i%3)*10,5+i%3*3,i%2?'#9ad9f3':'#c99af3')}
-  const lampX=lion.x-cam+11,lampY=lion.y-6;const halo=ctx.createRadialGradient(lampX,lampY,5,lampX,lampY,85);halo.addColorStop(0,'#ffe4a888');halo.addColorStop(1,'#ffe4a800');ctx.fillStyle=halo;ctx.fillRect(lampX-85,lampY-85,170,170);circle(lampX,lampY,5,'#ffe8a2');ctx.restore();}
- for(let i=0;i<7;i++){const x=1090+i*66-cam;if(x<-30||x>W+30)continue;rect(x-8,G-205,16,205,'#86543d');rect(x-12,G-205,24,14,'#a16b4c');for(let j=0;j<4;j++)circle(x+(j-1.5)*14,G-212-j%2*12,16,j%2?'#c86f3f':'#e3a05b');}
- // Spring arch, summer windmill, autumn lanterns, winter cottage, and final blossom tree.
- for(let i=0;i<4;i++){let x=1110+i*110-cam;if(x>-20&&x<W+20){rect(x,G-110,3,110,'#a88163');circle(x+2,G-107,6,'#ffe29e')}}
- const cabin=1760-cam;if(cabin>-130&&cabin<W+130){rect(cabin-54,G-98,108,98,'#e7f1f6');ctx.fillStyle='#95b5dc';ctx.beginPath();ctx.moveTo(cabin-70,G-98);ctx.lineTo(cabin,G-158);ctx.lineTo(cabin+70,G-98);ctx.fill();rect(cabin-18,G-47,36,47,'#b5a4c8');rect(cabin+30,G-75,18,22,'#ffe5a3');rect(cabin-48,G-75,19,22,'#ffe5a3')}
- const tx=2230-cam;if(tx>-140&&tx<W+150){rect(tx-13,G-160,26,160,'#92667b');for(let i=0;i<20;i++){let ang=i*2.4,r=38+(i%5)*14;circle(tx+Math.cos(ang)*r,G-166+Math.sin(ang)*r*.65,20+(i%3)*3,gardenPlanted().length===3?(i%2?'#ffb2d3':'#ffd8e8'):'#c3acbd')}for(let i=0;i<6;i++)circle(tx+(i-2.5)*17,G-175+Math.sin(timer/500+i)*7,2.8,'#fff5bd');text('♡',tx-8,G-198,'#fff5d7',25)}
+ for(let i=0;i<12;i++){const x=70+i*195-cam;if(x<-20||x>W+20)continue;
+  circle(x,G-8,8,'#72a77a');circle(x+11,G-11,7,'#8cc58b');circle(x-9,G-5,3,'#f3c6dc');
+ }
+ // The cabin sits naturally in the forest and conceals the underground cave.
+ const cx=852-cam;if(cx>-150&&cx<W+150){
+  rect(cx-83,G-137,166,137,'#b88465');rect(cx-73,G-124,146,110,'#dfb38a');
+  ctx.fillStyle='#7c584f';ctx.beginPath();ctx.moveTo(cx-100,G-135);ctx.lineTo(cx,G-205);ctx.lineTo(cx+100,G-135);ctx.fill();
+  rect(cx-64,G-95,34,35,'#ffe6a9');rect(cx+35,G-95,33,35,'#ffe6a9');rect(cx-16,G-74,32,74,'#755b53');
+  circle(cx,G-91,5,'#ffde9e');text('森林小屋',cx,G-220,'#785a67',13,'center');
+  if(!data.seed){circle(cx,G-237+Math.sin(timer/350)*3,7,'#fff2b8');text('地下藏着秘密',cx,G-250,'#8e667b',11,'center')}
+ }
+ // Gradual blossom density toward the final garden.
+ for(let i=0;i<19;i++){
+  const wx=1510+i*52,x=wx-cam;if(x<-20||x>W+20)continue;
+  circle(x,G-24-(i%3)*9,7,i%2?'#f4b9d4':'#ffe2a4');circle(x+6,G-22-(i%3)*9,4,'#fff4c4');
+ }
+ const tx=2270-cam;if(tx>-160&&tx<W+160){
+  rect(tx-17,G-163,34,163,'#986b78');
+  for(let i=0;i<24;i++){const a=i*2.4,r=35+(i%6)*12;
+   circle(tx+Math.cos(a)*r,G-171+Math.sin(a)*r*.68,19+(i%3)*4,
+    gardenPlanted().includes(0)?(i%2?'#ffb0d0':'#ffe0ec'):'#c6a8b9')}
+  for(let i=0;i<7;i++)circle(tx+(i-3)*17,G-183+Math.sin(timer/480+i)*6,2.6,'#fff4b9');
+  text('♡',tx-8,G-206,'#fff5d7',24);
+ }
 }
 function drawGardenItems(){
- for(let i=0;i<3;i++){
-  const s=GARDEN_SEEDS[i],x=s.x-cam;
-  if(!gardenCollected().includes(i)&&x>-30&&x<W+30){circle(x,s.y,12,'#fff1b7');circle(x,s.y,6,'#c28b55');rect(x-2,s.y-11,4,8,'#8ccf8d');circle(x+4,s.y-8,4,'#91cd83')}
+ for(let i=0;i<1;i++){
+  const s=GARDEN_SEEDS[i],x=s?.x-cam;
+  if(s&&!gardenCollected().includes(i)&&x>-30&&x<W+30){circle(x,s.y,12,'#fff1b7');circle(x,s.y,6,'#c28b55');rect(x-2,s.y-11,4,8,'#8ccf8d');circle(x+4,s.y-8,4,'#91cd83')}
   const bx=GARDEN_BEDS[i]-cam;if(bx<-65||bx>W+65)continue;
   rect(bx-28,G-9,56,8,'#b98477');rect(bx-22,G-12,44,5,'#8dcd9c');
   if(gardenPlanted().includes(i)){
@@ -931,7 +939,7 @@ function drawGardenItems(){
   }else{rect(bx-3,G-22,6,13,'#9b755c');circle(bx,G-23,4,'#83ba82');text('花坛 '+(i+1),bx-25,G-51,'#fff6db',12)}
   if(gardenWater&&gardenWater.id===i){const lx=bx+28;rect(lx-2,G-57,19,15,'#a3d8f6');rect(lx+13,G-55,9,3,'#a3d8f6');for(let n=0;n<6;n++)circle(lx+10-n*7,G-52+n*4,2,'#9bd8fa')}
  }
- if(p.x>2040&&gardenPlanted().length<3)text('让三座花坛都盛开，再去约定之树 ♡',W/2,96,'#fff7d6',14,'center');
+ if(p.x>2040&&!gardenPlanted().includes(0))text(data.seed?'和小狮子一起种下未来的种子 ♡':'未来的种子藏在森林小屋的地下洞穴 ♡',W/2,96,'#fff7d6',14,'center');
 }
 
 function draw(){
@@ -970,6 +978,7 @@ function draw(){
   if(coastCoop.phase===0&&p.x>2010&&p.x<2210)text('♡',px+20,G-17,'#fff4d8',14,'center');
  }
  if(level===2&&!L.under&&!L.secret)drawGardenItems();
+ if(level===2&&!L.under&&!L.secret){const x=860-cam;if(x>-40&&x<W+40){rect(x-8,G-9,62,9,'#8b6551');text(data.seed?'洞穴已探索 ✓':'✦ 小屋暗门',x+21,G-57,'#fff3d4',12,'center')}}
  L.plats.forEach(platDraw);drawStarBridge();L.boxes.forEach(qbrick);pickups.forEach(pickupDraw);if(L.secret&&data.snowboard){const bx=330-cam;rect(bx-20,G-17,40,5,'#f3a3c9');rect(bx-16,G-19,32,2,'#fff');rect(bx-9,G-22,5,5,'#80bdd5');rect(bx+5,G-22,5,5,'#80bdd5');}
  for(const o of L.objects){let x=o.x-cam;if(x<-60||x>W+60)continue;
   if(o.type==='coin'&&!data.coins.includes(cKey(o)))coinDraw(x,o.y);
@@ -1071,7 +1080,7 @@ function interact(){if(mode==='scene'&&scene&&scene.type==='plant')return;if(mod
  if(L.under){if(data.seed&&onPipeTop(PIPE()))startScene('pipeOut',{pipe:PIPE()});return}
  if(level===0&&p.x>1374&&p.x<1425&&doorRevealed()){enterSecretRoom();return}
  // Sitting is automatic only at the final beach; no early interaction.
- if(level===2&&!L.under){for(let i=0;i<3;i++)if(!gardenPlanted().includes(i)&&gardenCollected().length>gardenPlanted().length&&Math.abs(p.x+11-GARDEN_BEDS[i])<53&&p.y+p.h>=G-45){data.story.gardenFlowers=[...gardenPlanted(),i];save();gardenWater={x:GARDEN_BEDS[i],t:0,id:i};lion.x=GARDEN_BEDS[i]+28;lion.y=G-27;flash(['🌸 春之花开啦！小狮子正在浇水 ♡','🌼 夏日的花朵绽放了 ♡','🌷 四季花园又亮起来啦 ♡'][i]);return}}
+ if(level===2&&!L.under){for(let i=0;i<1;i++)if(data.seed&&!gardenPlanted().includes(i)&&Math.abs(p.x+11-GARDEN_BEDS[i])<53&&p.y+p.h>=G-45){data.story.gardenFlowers=[...gardenPlanted(),i];save();gardenWater={x:GARDEN_BEDS[i],t:0,id:i};lion.x=GARDEN_BEDS[i]+28;lion.y=G-27;flash('🌸 小狮子正在浇水，未来的种子发芽了 ♡');return}}
  if(level===2&&!data.seed&&onPipeTop(PIPE())){startScene('pipeIn',{pipe:PIPE()})}}
 
 // ================= Gate (welcome + anniversary date) =================
