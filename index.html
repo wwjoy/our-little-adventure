@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V3.0.4 · 森林小屋与机关修复</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V3.0.6 · 蓝冰洞与约定之树修复</title><style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#2a203f;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;touch-action:none}#stage{position:absolute;inset:0;height:var(--available-height,100%);display:flex;align-items:center;justify-content:center}canvas{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;touch-action:none;-webkit-user-select:none}#hud{position:absolute;top:max(8px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));color:#fff;font-size:clamp(13px,2.2vw,19px);font-weight:800;text-shadow:1px 2px #704b73;pointer-events:none}#pause{position:absolute;right:max(12px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));z-index:2}button{font-family:inherit;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent}#controls{position:absolute;inset:0;pointer-events:none;z-index:3}#left,#right,#jump{opacity:.58;position:absolute;bottom:max(10px,env(safe-area-inset-bottom));width:52px;height:52px;background:#55476655;border:2px solid #ffffff77;color:#fff;border-radius:12px;font-size:22px;font-weight:800;pointer-events:auto}#left{left:max(12px,env(safe-area-inset-left))}#right{left:calc(max(12px,env(safe-area-inset-left)) + 61px)}#jump{right:max(12px,env(safe-area-inset-right));border-radius:50%;font-size:28px}.pressed{background:#ec8eaecc!important;opacity:1!important}#pause{border:2px solid #ffffffaa;background:#55476677;color:#fff;border-radius:11px;width:45px;height:42px;font-size:20px}#shade{position:absolute;inset:0;height:var(--available-height,100%);background:#211b39c9;display:flex;justify-content:center;align-items:center;z-index:4;padding:12px}#card{background:#fff3f6;border:3px solid #ffc2d7;border-radius:17px;color:#68455e;text-align:center;width:min(440px,92%);padding:16px;max-height:90%;overflow:auto;box-shadow:0 6px #a36e9d}#card h1{font-size:clamp(19px,3.2vw,27px);color:#db6394;margin:0 0 8px}#card p{font-size:clamp(12px,1.8vw,15px);line-height:1.65;margin:8px 0}#actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}#actions button{font-size:14px;font-weight:700;border:0;background:#e979a5;color:#fff;border-radius:10px;padding:10px 15px;min-height:43px}#actions button.alt{background:#a88bad}#rotate{position:absolute;inset:0;height:var(--available-height,100%);background:#241b38;color:white;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:8;gap:12px;font-size:20px;padding:24px}#rotate small{font-size:13px;opacity:.8}#error{display:none;position:absolute;z-index:12;inset:10%;background:#fff5f5;color:#a12750;border-radius:12px;padding:16px;overflow:auto;font-size:14px}.hide{display:none!important}@media(orientation:portrait){#rotate{display:flex}}@media(max-height:310px){#card{padding:8px}#card p{margin:3px}#left,#right,#jump{opacity:.58;width:48px;height:48px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 56px)}}
 #interact{position:absolute;left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);background:#fff9f0e8;color:#79516c;border:2px solid #e9a7c5;border-radius:7px;padding:4px 8px;min-width:66px;min-height:32px;z-index:3;font-weight:800;font-size:11px;box-shadow:0 3px #a88ba4;white-space:nowrap}#card{max-width:520px!important}#hud{z-index:2;max-width:75%;font-size:clamp(12px,1.7vw,18px)}@media(orientation:landscape){#left,#right,#jump{bottom:max(10px,env(safe-area-inset-bottom))}} 
 #gate{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 30% 20%,#ffd6e6,#f6aed3 45%,#b48ac8);height:var(--available-height,100%)}
@@ -34,7 +34,7 @@ if(!ctx){$('#error').style.display='block';$('#error').textContent='Canvas 无�
 const H=360, G=284, SAVE='our_adventure_full_v1', GATE='our_adventure_gate_v1';
 const LEVELS=['初夏小镇 · 相遇','夕阳花火','秘密花园 · 未来的约定'];
 const GARDEN_SEEDS=[];
-const GARDEN_BEDS=[2240];
+const GARDEN_BEDS=[2390];
 let gardenWater=null;
 function gardenCollected(){return data.story.gardenSeeds||[]}
 function gardenPlanted(){return data.story.gardenFlowers||[]}
@@ -87,12 +87,12 @@ function buildLevel(n){
    {type:'shell',id:0,x:815,y:231},{type:'shell',id:1,x:1535,y:217},{type:'shell',id:2,x:2020,y:221},{type:'shell',id:3,x:2700,y:222},{type:'shell',id:4,x:2890,y:218},
    ...coins(0,[[485,195],[637,174],[1190,193],[1420,179],[1718,148],[1823,148],[2090,190],[2380,183],[2830,211]])]};
  return {end:2450,
-  map:[gr(0,510),gr(700,370),gr(1115,440),gr(1780,670),bl(295,90,245),bl(735,92,237),bl(1170,105,235)],
+  map:[gr(0,510),gr(700,370),gr(1115,440),gr(1780,670),bl(295,90,245),bl(715,92,237),bl(1170,105,235)],
   boxes:[qb(0,300,181,'coin'),qb(1,615,173,'bag'),qb(2,1215,170,'coin')],
   plats:[mover(551,G-17,118,0,26,3600)],
   cps:[45,560,990,1510,1850,2180],trees:[100,245,435,640,820,1030,1290,1680,1850,2240],
   enemies:[{type:'walker',x:1320,start:1280,end:1390,v:.30}],
-  objects:[{type:'switch',x:1392},{type:'heart',x:2370,y:264},
+  objects:[{type:'switch',x:1392},{type:'heart',x:2310,y:264},
    ...coins(0,[[175,216],[335,177],[710,194],[1155,185],[1710,190],[1950,170]])]};
 }
 // Underground bonus room behind the glowing pipe (level 3)
@@ -319,7 +319,7 @@ function finishLevel(){
  }
  if(level===0){stageReview(0,()=>nextLevel(1))}
  else if(level===1){stageReview(1,()=>nextLevel(2))}
- else{if(!data.seed||!gardenPlanted().includes(0)){cut('🌷 约定之树还在等待','请先去森林小屋的地下洞穴找到未来的种子，再和小狮子一起种下它。',()=>{respawnAt(L.cps[Math.min(data.cp,L.cps.length-1)]);play()});return}
+ else{if(!data.seed||!gardenPlanted().includes(0)){cut('🌷 约定之树还在等待',data.seed?'未来的种子已经找到了！请回到约定之树旁，点击「种下花种」，让小狮子一起浇水。':'请先去森林小屋的蓝冰洞找到未来的种子，再回到约定之树旁种下它。',()=>{respawnAt(L.cps[Math.min(data.cp,L.cps.length-1)]);play()});return}
   if(!data.story.bridge){cut('🦁 双人机关还没完成','先和小狮子一起启动花园机关，再前往终点。',()=>{respawnAt(L.cps[Math.min(data.cp,L.cps.length-1)]);play()});return}
   finalReviewOpen=true;stageReview(2,beginFinalPlanting);}}
 function cardC(){return data.coins.length>=Math.ceil(TOTAL_COINS*.7)}
@@ -514,12 +514,12 @@ function updateScene(dt){const s=scene,k=Math.min(2,dt/16.667);s.t+=dt;timer+=dt
  if(s.type==='rise'){const ep=L.objects.find(o=>o.type==='exitpipe');p.x=ep.x+ep.w/2-11;p.y=Math.max(ep.top-p.h,p.y-1.2*k);if(p.y<=ep.top-p.h&&s.t>500){scene=null;p.vy=-3;p.on=false;p.x=ep.x+ep.w+4;play()}}
 }
 function camTo(x,k){cam+=(Math.max(0,Math.min(L.end-W,x))-cam)*Math.min(1,.08*k)}
-function buildCabin(){return {key:'2c',cabin:true,end:510,map:[gr(0,510)],boxes:[],plats:[],cps:[55],trees:[],enemies:[],objects:[]}}
+function buildCabin(){return {key:'2c',cabin:true,end:480,map:[gr(0,480)],boxes:[],plats:[],cps:[55],trees:[],enemies:[],objects:[]}}
 let forestReturnX=852, cabinL=null;
 function enterCabin(){if(level!==2||L.under||L.cabin)return;forestReturnX=p.x;mainL=L;L=buildCabin();L.pops=[];clouds=[];respawnAt(60);play();flash('🏡 森林小屋 · 地板下似乎有暗门')}
 function exitCabin(){if(!L.cabin)return;L=mainL;mainL=null;cabinL=null;respawnAt(forestReturnX);play()}
 function enterUnder(){if(L.cabin){cabinL=L;}else if(!mainL){mainL=L;}L=buildUnder();L.pops=[];clouds=[];p.face=1;respawnAt(70);cam=0;play();flash('💎 地下蓝冰洞')}
-function exitUnder(){L=cabinL||mainL;cabinL=null;respawnAt(390);play();flash('🏡 回到了小屋 · 随时可以再次探洞')}
+function exitUnder(){L=cabinL||mainL;cabinL=null;respawnAt(350);play();flash('🏡 回到了小屋 · 随时可以再次探洞')}
 
 // ================= Update =================
 function overlap(o,r){return p.x<o.x+r&&p.x+p.w>o.x-r&&p.y<o.y+r&&p.y+p.h>o.y-r}
@@ -692,7 +692,7 @@ function update(dt){
    else if(!sleeping&&respawnGuard===0){die('enemy');return}}}
  L.enemies=L.enemies.filter(e=>!e.dead||e.dead<500);
  let showInteract=false;
- if(L.under){if(p.x>765)showInteract='✦ 返回小屋'}else if(L.cabin){if(p.x<110)showInteract='✦ 返回森林';if(p.x>355)showInteract='✦ 进入地下洞穴'}
+ if(L.under){if(p.x>765)showInteract='✦ 返回小屋'}else if(L.cabin){if(p.x<110)showInteract='✦ 返回森林';if(p.x>335)showInteract='✦ 打开地下暗门'}
  else{
  if(level===0&&!L.secret){if(!data.met&&p.x>340){data.met=true;checkpoint(1);cut('🦁 遇见你，真好','小兔子：「你也要去冒险吗？」<br>小狮子：「那我们一起走吧！」<br><br>记得寻找特别的爱心，还有路上闪闪发光的收藏品哦。',play);return}
   /* heart collected on contact below */}
@@ -708,7 +708,7 @@ function update(dt){
   }}
  if(level===2){
   if(!L.under&&!L.cabin&&!L.secret){for(let i=0;i<1;i++)if(data.seed&&!gardenPlanted().includes(i)&&Math.abs(p.x+11-GARDEN_BEDS[i])<53&&p.y+p.h>=G-45)showInteract='🌱 种下花种';}
-  if(!L.cabin&&Math.abs(p.x+11-852)<58)showInteract='✦ 进入小屋';
+  if(!L.cabin&&Math.abs(p.x+11-980)<58)showInteract='✦ 进入小屋';
   if(!data.story.bridge){
    if(coop.state==='idle'&&p.x>=1360&&p.x<1410){
     coop.state='prompt';cut('🦁 一起启动机关吧！','前面有两块机关：<br>🩷 小狮子负责地面的粉色机关。<br>💛 你要跳上右边的高台，踩住黄色机关。<br>两个人都到位，木桥才会升起。',()=>{coop.state='approaching';play()},'一起试试 ♡');return;
@@ -732,7 +732,7 @@ function update(dt){
   ib.style.top=(bounds.top+Math.max(40,worldY)/H*bounds.height)+'px';
   ib.textContent=showInteract;ib.classList.remove('hide');
  }else ib.classList.add('hide');
- if(!L.under&&!L.secret&&p.x>L.end-75&&level!==1){finishLevel();return}
+ if(!L.under&&!L.cabin&&!L.secret&&p.x>L.end-60&&level!==1){finishLevel();return}
  updateLion(k);
  // Coast cooperation is controlled by the plate/rope state machine above; do not overwrite it here.
  cam+=(Math.max(0,Math.min(L.end-W,p.x-W*.37))-cam)*Math.min(1,.12*k)}
@@ -911,7 +911,7 @@ function drawFourSeasons(){
   circle(x,G-8,8,'#72a77a');circle(x+11,G-11,7,'#8cc58b');circle(x-9,G-5,3,'#f3c6dc');
  }
  // The cabin sits naturally in the forest and conceals the underground cave.
- const cx=852-cam;if(cx>-150&&cx<W+150){
+ const cx=980-cam;if(cx>-150&&cx<W+150){
   rect(cx-83,G-137,166,137,'#b88465');rect(cx-73,G-124,146,110,'#dfb38a');
   ctx.fillStyle='#7c584f';ctx.beginPath();ctx.moveTo(cx-100,G-135);ctx.lineTo(cx,G-205);ctx.lineTo(cx+100,G-135);ctx.fill();
   rect(cx-64,G-95,34,35,'#ffe6a9');rect(cx+35,G-95,33,35,'#ffe6a9');rect(cx-16,G-74,32,74,'#755b53');
@@ -923,7 +923,7 @@ function drawFourSeasons(){
   const wx=1510+i*52,x=wx-cam;if(x<-20||x>W+20)continue;
   circle(x,G-24-(i%3)*9,7,i%2?'#f4b9d4':'#ffe2a4');circle(x+6,G-22-(i%3)*9,4,'#fff4c4');
  }
- const tx=2270-cam;if(tx>-160&&tx<W+160){
+ const tx=2380-cam;if(tx>-160&&tx<W+160){
   rect(tx-17,G-163,34,163,'#986b78');
   for(let i=0;i<24;i++){const a=i*2.4,r=35+(i%6)*12;
    circle(tx+Math.cos(a)*r,G-171+Math.sin(a)*r*.68,19+(i%3)*4,
@@ -940,10 +940,10 @@ function drawGardenItems(){
   rect(bx-28,G-9,56,8,'#b98477');rect(bx-22,G-12,44,5,'#8dcd9c');
   if(gardenPlanted().includes(i)){
    for(let j=0;j<5;j++){const fx=bx+(j-2)*9;rect(fx-1,G-35-j%2*5,3,26+j%2*5,'#6eae70');circle(fx,G-39-j%2*5+Math.sin(timer/500+j)*2,8,['#ffaecf','#ffe68a','#e3c5ff'][i]);circle(fx,G-40-j%2*5,3,'#fff4ba')}
-  }else{rect(bx-3,G-22,6,13,'#9b755c');circle(bx,G-23,4,'#83ba82');text('花坛 '+(i+1),bx-25,G-51,'#fff6db',12)}
+  }else{rect(bx-3,G-22,6,13,'#9b755c');circle(bx,G-23,4,'#83ba82');text('约定之树',bx-28,G-51,'#fff6db',12)}
   if(gardenWater&&gardenWater.id===i){const lx=bx+28;rect(lx-2,G-57,19,15,'#a3d8f6');rect(lx+13,G-55,9,3,'#a3d8f6');for(let n=0;n<6;n++)circle(lx+10-n*7,G-52+n*4,2,'#9bd8fa')}
  }
- if(p.x>2150&&!gardenPlanted().includes(0))text(data.seed?'和小狮子一起种下未来的种子 ♡':'未来的种子藏在森林小屋的地下洞穴 ♡',W/2,96,'#fff7d6',14,'center');
+ if(p.x>2290&&!gardenPlanted().includes(0))text(data.seed?'和小狮子一起种下未来的种子 ♡':'未来的种子藏在森林小屋的地下洞穴 ♡',W/2,96,'#fff7d6',14,'center');
 }
 
 function draw(){
@@ -970,8 +970,11 @@ function draw(){
  }
  for(const o of L.objects)if(o.type==='exitpipe')pipeDraw(o);
 
- if(L.cabin){rect(0,0,W,G,'#705b64');for(let x=0;x<W;x+=40)rect(x,20,2,G-20,'#866d70');rect(0,0,W,24,'#a77e68');rect(0,G-60,W,60,'#a47759');rect(55,115,75,110,'#8e6659');for(let i=0;i<3;i++)rect(63,135+i*26,59,5,'#d7aa7e');rect(190,160,90,54,'#bb8c6b');rect(195,154,80,8,'#f5d6aa');rect(375,G-15,68,15,'#463c51');rect(382,G-22,54,8,'#a98f8b');circle(409,G-31,9,'#ffdfa0');text('通往蓝冰洞',409,G-57,'#fff2ce',13,'center');text('← 森林',58,G-47,'#fff2ce',12,'center');}
- if(L.under){rect(0,0,W,G,'#0b2946');for(let i=0;i<22;i++){let x=(i*67-cam*.2)%W;ctx.fillStyle=i%2?'#1c567d':'#2b7da5';ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+22,0);ctx.lineTo(x+10,35+i%4*13);ctx.fill()}for(let i=0;i<13;i++){let x=i*75-cam*.3;circle(x,110+i%4*28,14,i%2?'#357ba9':'#55b6d6');circle(x,110+i%4*28,5,'#d7f9ff')}const lx=lion.x-cam+12;let glow=ctx.createRadialGradient(lx,lion.y+10,4,lx,lion.y+10,115);glow.addColorStop(0,'#ffe6a344');glow.addColorStop(1,'#ffe6a300');ctx.fillStyle=glow;ctx.fillRect(0,0,W,G);text('🔦',lx,lion.y-12,'#ffe7a8',14,'center');for(let i=0;i<9;i++){const xx=i*106+25-cam*.12;ctx.fillStyle=i%2?'#7de1f0':'#a9efff';ctx.globalAlpha=.42;ctx.beginPath();ctx.moveTo(xx,15);ctx.lineTo(xx+18,15);ctx.lineTo(xx+8,65+(i%3)*18);ctx.fill();ctx.globalAlpha=1;}text('蓝冰洞',W/2,52,'#d8f7ff',16,'center');text('出口 →',785-cam,G-53,'#fff3cf',13,'center');}
+ if(L.cabin){rect(0,0,W,G,'#705b64');for(let x=0;x<W;x+=40)rect(x,20,2,G-20,'#866d70');rect(0,0,W,24,'#a77e68');rect(0,G-60,W,60,'#a47759');rect(55,115,75,110,'#8e6659');for(let i=0;i<3;i++)rect(63,135+i*26,59,5,'#d7aa7e');rect(190,160,90,54,'#bb8c6b');rect(195,154,80,8,'#f5d6aa');rect(295,120,72,65,'#b98e78');rect(302,126,58,52,'#ffdda5');rect(305,130,52,45,'#e7bc93');rect(327,126,5,52,'#ad806b');rect(301,151,59,4,'#ad806b');rect(255,G-50,63,31,'#9c745e');rect(260,G-54,54,7,'#efd0a0');rect(270,G-44,9,21,'#d2a27c');rect(70,G-9,200,6,'#b78c82');rect(110,G-10,80,7,'#e3a3ad');rect(344,G-18,88,18,'#463c51');rect(352,G-26,71,8,'#a98f8b');circle(388,G-33,9,'#ffdfa0');text('↓ 蓝冰洞暗门',388,G-59,'#fff2ce',13,'center');text('← 森林',58,G-47,'#fff2ce',12,'center');}
+ if(L.under){rect(0,0,W,G,'#0b2946');for(let i=0;i<22;i++){let x=(i*67-cam*.2)%W;ctx.fillStyle=i%2?'#1c567d':'#2b7da5';ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+22,0);ctx.lineTo(x+10,35+i%4*13);ctx.fill()}for(let i=0;i<13;i++){let x=i*75-cam*.3;circle(x,110+i%4*28,14,i%2?'#357ba9':'#55b6d6');circle(x,110+i%4*28,5,'#d7f9ff')}const lx=lion.x-cam+12,ly=lion.y+3;const facing=p.face>=0?1:-1;
+  let glow=ctx.createRadialGradient(lx,ly,2,lx+facing*55,ly-5,145);glow.addColorStop(0,'#ffe9ad88');glow.addColorStop(1,'#ffe6a300');ctx.fillStyle=glow;ctx.fillRect(0,0,W,G);
+  ctx.save();ctx.fillStyle='#ffe6a52e';ctx.beginPath();ctx.moveTo(lx+facing*9,ly);ctx.lineTo(lx+facing*170,ly-76);ctx.lineTo(lx+facing*170,ly+58);ctx.closePath();ctx.fill();ctx.restore();
+  rect(lx-7,ly-22,15,5,'#555e70');circle(lx+facing*7,ly-19,5,'#ffe7a8');for(let i=0;i<9;i++){const xx=i*106+25-cam*.12;ctx.fillStyle=i%2?'#7de1f0':'#a9efff';ctx.globalAlpha=.42;ctx.beginPath();ctx.moveTo(xx,15);ctx.lineTo(xx+18,15);ctx.lineTo(xx+8,65+(i%3)*18);ctx.fill();ctx.globalAlpha=1;}text('蓝冰洞',W/2,52,'#d8f7ff',16,'center');text('出口 →',785-cam,G-53,'#fff3cf',13,'center');}
  L.map.forEach(terrain);drawShallowCove();drawFinalBeach();if(level!==2)clouds.forEach(cloudDraw);
  // Stars uncover an optional elevated lookout, not a shortcut across the tidal section.
  if(level===2&&!L.under&&(data.story.bridge||(scene&&scene.type==='switch'))){const r=data.story.bridge?1:Math.min(1,coop.bridgeTime/2000);bridge({x:1555,y:G-7-(1-r)*75,w:225},'#c99a6b','#8d6248')}
@@ -1084,11 +1087,11 @@ function loop(t){try{let dt=Math.min(40,t-last||16);last=t;
 // ================= Interact =================
 function interact(){if(mode==='scene'&&scene&&scene.type==='plant')return;if(mode!=='play')return;
  if(L.secret){if(p.x>555){exitSecretRoom();return}if(data.snowboard&&p.x>305&&p.x<355){startSnow();return}return}
- if(L.under){if(p.x>790)exitUnder();return}if(L.cabin){if(p.x<100){exitCabin();return}if(p.x>370){enterUnder();return}return}
+ if(L.under){if(p.x>790)exitUnder();return}if(L.cabin){if(p.x<100){exitCabin();return}if(p.x>335){enterUnder();return}return}
  if(level===0&&p.x>1374&&p.x<1425&&doorRevealed()){enterSecretRoom();return}
  // Sitting is automatic only at the final beach; no early interaction.
  if(level===2&&!L.under&&!L.cabin){for(let i=0;i<1;i++)if(data.seed&&!gardenPlanted().includes(i)&&Math.abs(p.x+11-GARDEN_BEDS[i])<53&&p.y+p.h>=G-45){data.story.gardenFlowers=[...gardenPlanted(),i];save();gardenWater={x:GARDEN_BEDS[i],t:0,id:i};lion.x=GARDEN_BEDS[i]+28;lion.y=G-27;flash('🌸 小狮子正在浇水，未来的种子发芽了 ♡');return}}
- if(level===2&&!L.cabin&&Math.abs(p.x+11-852)<58){enterCabin();return}}
+ if(level===2&&!L.cabin&&Math.abs(p.x+11-980)<58){enterCabin();return}}
 
 // ================= Gate (welcome + anniversary date) =================
 function parseDate(v){const d=(v||'').replace(/[^0-9]/g,'');if(d.length===4)return d==='1113';if(d.length===8)return d.slice(4)==='1113';return false}
