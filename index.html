@@ -32,9 +32,9 @@
 const $=q=>document.querySelector(q), canvas=$('#game'), ctx=canvas.getContext('2d');
 if(!ctx){$('#error').style.display='block';$('#error').textContent='Canvas 无法启动，请使用 Safari 打开链接';return}
 const H=360, G=284, SAVE='our_adventure_full_v1', GATE='our_adventure_gate_v1';
-const LEVELS=['初夏小镇 · 相遇','夕阳花火','星愿花园 · 未来的约定'];
-const GARDEN_SEEDS=[{x:354,y:191},{x:1135,y:188},{x:1725,y:188}];
-const GARDEN_BEDS=[690,1250,1835];
+const LEVELS=['初夏小镇 · 相遇','夕阳花火','四季冒险 · 未来的约定'];
+const GARDEN_SEEDS=[{x:365,y:225},{x:885,y:195},{x:1365,y:190}];
+const GARDEN_BEDS=[970,1500,1900];
 let gardenWater=null;
 function gardenCollected(){return data.story.gardenSeeds||[]}
 function gardenPlanted(){return data.story.gardenFlowers||[]}
@@ -87,9 +87,9 @@ function buildLevel(n){
    {type:'shell',id:0,x:815,y:231},{type:'shell',id:1,x:1535,y:217},{type:'shell',id:2,x:2020,y:221},{type:'shell',id:3,x:2700,y:222},{type:'shell',id:4,x:2890,y:218},
    ...coins(0,[[485,195],[637,174],[1190,193],[1420,179],[1718,148],[1823,148],[2090,190],[2380,183],[2830,211]])]};
  return {end:2350,
-  map:[gr(0,490),gr(535,475),gr(1050,455),gr(1550,450),gr(2110,290),bl(240,110,240),bl(700,110,241),bl(1220,115,229),bl(1750,110,241)],
-  boxes:[qb(0,600,190,'keepsake'),qb(1,1080,190,'bag'),qb(2,1660,190,'gift'),qb(3,1682,190,'coin'),qb(4,1240,159,'coin')],
-  plats:[spring(430),mover(1342,236,48,0,48,2800),plank(2004,50),plank(2056,52)],
+  map:[gr(0,490),gr(535,475),gr(1050,455),gr(1550,450),gr(2110,290),bl(580,75,235),bl(810,78,230),bl(1220,115,229),bl(1750,110,241)],
+  boxes:[qb(0,680,185,'keepsake'),qb(1,1080,190,'bag'),qb(2,1660,190,'gift'),qb(3,1682,190,'coin'),qb(4,1240,159,'coin')],
+  plats:[mover(720,238,60,20,0,2600),mover(1342,236,48,0,48,2800),plank(2004,50),plank(2056,52)],
   cps:[45,600,950,1580,1890,2130], trees:[140,620,1150,1650,2230],
   enemies:[{type:'walker',x:1120,start:1070,end:1195,v:.35}],
   objects:[{type:'pipe',x:860,w:42,top:G-44},{type:'exitpipe',x:925,w:34,top:G-30},{type:'switch',x:1392},{type:'heart',x:2160,y:264},
@@ -187,7 +187,7 @@ function restoreUnclaimedRewards(){
 }
 function resetPlanks(){for(const pl of L.plats)if(pl.kind==='fall'){pl.y=pl.y0;pl.t=0;pl.vy=0}}
 function respawnAt(x){if(level===2&&!L.under&&!data.story.bridge&&coop.state==='approaching'){coop.state='waiting';coop.lionReady=true}pendingFlag=-1;flagCrossingArmed=false;x=safeX(x);p.x=x;p.y=G-p.h;p.vx=p.vy=0;p.on=true;p.ride=null;p.sit=false;p.hidden=false;p.coyote=p.buffer=p.jumpMs=0;lion.x=x-34*p.face;lion.y=p.y;lion.sit=false;trail=[];resetPlanks();cam=Math.max(0,Math.min(L.end-W,x-W*.35));respawnGuard=900;clearInput()}
-function startLevel(n,fromSave){layout(n);let cp=(fromSave&&data.cpLevel===n)?Math.max(0,Math.min(L.cps.length-1,data.cp)):0;data.level=Math.max(data.level,n);data.cp=cp;data.cpLevel=n;save();p.face=1;respawnAt(L.cps[cp]);play();if(n===2&&!data.story.gardenIntro){data.story.gardenIntro=true;save();cut('🌷 四季秘密花园','沿途找到三颗发光的花种，在花坛附近点击「🌱 种下花种」。小狮子会帮你浇水。<br>花园保留双人机关，最后一起走到约定之树。',play,'一起去种花 ♡')}if(n===0&&!data.story.introGuide){data.story.introGuide=true;save();cut('🦁 冒险的小目标','听说这片世界里藏着三颗特别的爱心，我们一起把它们找出来吧！<br><br>沿途的金币也值得收集，遇到特别的东西时，小狮子会提醒你。<br>想知道收集进度，可以在暂停菜单打开「📖 冒险手册」。',play,'出发吧 ♡')}}
+function startLevel(n,fromSave){layout(n);let cp=(fromSave&&data.cpLevel===n)?Math.max(0,Math.min(L.cps.length-1,data.cp)):0;data.level=Math.max(data.level,n);data.cp=cp;data.cpLevel=n;save();p.face=1;respawnAt(L.cps[cp]);play();if(n===2&&!data.story.gardenIntro){data.story.gardenIntro=true;save();cut('🌷 四季冒险','春天潜入珊瑚海寻找花种，夏天探索发光洞穴，秋天穿过红杉公园，冬天来到雪屋。<br>找到三颗花种后，在花坛种下，小狮子会帮忙浇水。',play,'一起出发 ♡')}if(n===0&&!data.story.introGuide){data.story.introGuide=true;save();cut('🦁 冒险的小目标','听说这片世界里藏着三颗特别的爱心，我们一起把它们找出来吧！<br><br>沿途的金币也值得收集，遇到特别的东西时，小狮子会提醒你。<br>想知道收集进度，可以在暂停菜单打开「📖 冒险手册」。',play,'出发吧 ♡')}}
 function showUI(on){$('#controls').classList.toggle('hide',!on);$('#pause').classList.toggle('hide',!on);$('#hud').classList.toggle('hide',mode==='gate')}
 function menu(title,body,buttons){mode='menu';clearInput();showUI(false);$('#interact').classList.add('hide');$('#shade').classList.remove('hide');$('#heading').textContent=title;$('#message').innerHTML=body;const el=$('#actions');el.textContent='';buttons.forEach((b,i)=>{let btn=document.createElement('button');btn.type='button';btn.textContent=b[0];if(i)btn.className='alt';btn.addEventListener('click',b[1]);el.appendChild(btn)});$('#card').scrollTop=0}
 function play(){mode='play';$('#shade').classList.add('hide');showUI(true);last=performance.now()}
@@ -655,9 +655,9 @@ function update(dt){
  }
  p.buffer=Math.max(0,p.buffer-dt);if(jumpQueue){p.buffer=120;jumpQueue=false}
  p.coyote=p.on?105:Math.max(0,p.coyote-dt);
- if(p.buffer>0&&p.coyote>0){p.vy=-7.8;p.on=false;p.ride=null;p.coyote=0;p.buffer=0;p.jumpMs=0}
+ if(level===2&&!L.under&&p.x<480&&p.y>76&&p.buffer>0){p.vy=-3.2;p.buffer=0;}if(p.buffer>0&&p.coyote>0){p.vy=-7.8;p.on=false;p.ride=null;p.coyote=0;p.buffer=0;p.jumpMs=0}
  if(held.jump&&p.vy<0&&p.jumpMs<175){p.vy-=.18*k;p.jumpMs+=dt}
- p.vy=Math.min(11,p.vy+.43*k);p.y+=p.vy*k;p.on=false;let ride=null;
+ const swimming=level===2&&!L.under&&!L.secret&&p.x<480&&p.y>76; if(swimming){p.vy=Math.max(-3.4,Math.min(3.4,p.vy+.12*k-(held.jump?.38*k:0)));}else p.vy=Math.min(11,p.vy+.43*k);p.y+=p.vy*k;p.on=false;let ride=null;
  for(const a of sol){
   if(!(p.x+p.w>a.x+3&&p.x<a.x+a.w-3))continue;
   if(p.vy>=0&&prevY+p.h<=a.y+7+(a.kind==='mover'?Math.abs(a.ref.dy)+2:0)&&p.y+p.h>=a.y){
@@ -666,7 +666,7 @@ function update(dt){
   else if(a.box&&p.vy<0&&prevY>=a.y+a.h-6&&p.y<a.y+a.h){p.y=a.y+a.h;p.vy=.5;p.jumpMs=999;
    if(a.kind==='q'){boxReward(a.ref)}}}
  p.ride=p.on?ride:null;
- if(p.y>H+30){die('fall');return}
+ if(level===2&&!L.under&&p.x<480&&p.y<80){p.y=80;p.vy=Math.max(0,p.vy)}if(p.y>H+30){die('fall');return}
  updateFlags(prevX);
  for(const o of L.objects){
   if(o.type==='heart'&&!data.hearts[level]&&overlap(o,16)){collectHeart(level);flash('❤️ 珍贵爱心 '+data.hearts.filter(Boolean).length+'/3，集齐会发生什么呢？')}
@@ -887,9 +887,9 @@ function heart(x,y){circle(x-5,y-2,6,'#f26d9e');circle(x+5,y-2,6,'#f26d9e');ctx.
 function seedDraw(x,y){const b=Math.sin(timer/300)*2;circle(x,y+b,11,'#fff6b0');circle(x,y+b,7,'#a5d66f');rect(x-1,y-10+b,2,6,'#5fae6a');circle(x+4,y-10+b,3,'#8bd06b')}
 function cloudDraw(c){let x=c.x-cam,y=G-4;circle(x+9,y+4,10,'#eaf8ff');circle(x+c.w/2,y-2,13,'#fff');circle(x+c.w-9,y+4,10,'#eaf8ff');rect(x,y+2,c.w,9,'#eaf8ff');rect(x+4,y+10,c.w-8,3,'#a6d4eb')}
 
-// V3.0 — four-season playable garden, seed pickups and cooperative watering.
+// V3.0.2 — spring diving, summer cave, redwood autumn, winter cabin, seed pickups and cooperative watering.
 function drawFourSeasons(){
- const zones=[{x:0,w:490,t:'春 · 花园入口',c:'#ffd5e9',flower:'#ffc7e2'},{x:490,w:560,t:'夏 · 魔法花坛',c:'#b7ecb3',flower:'#ffda70'},{x:1050,w:500,t:'秋 · 回忆小径',c:'#f5c78b',flower:'#ffb46d'},{x:1550,w:560,t:'冬 · 小屋回忆',c:'#c4e8f4',flower:'#dff8ff'},{x:2110,w:240,t:'约定之树',c:'#ffc2db',flower:'#ffd7ed'}];
+ const zones=[{x:0,w:490,t:'春 · 海底潜水',c:'#82e5e8',flower:'#9ee7f4'},{x:490,w:560,t:'夏 · 探秘洞穴',c:'#7771b3',flower:'#d1b2fa'},{x:1050,w:500,t:'秋 · 红杉公园',c:'#f5c78b',flower:'#ffb46d'},{x:1550,w:560,t:'冬 · 雪屋回忆',c:'#c4e8f4',flower:'#dff8ff'},{x:2110,w:240,t:'约定之树',c:'#ffc2db',flower:'#ffd7ed'}];
  for(let z=0;z<zones.length;z++){
   const a=zones[z],x=a.x-cam;if(x>W+100||x+a.w<-100)continue;
   ctx.globalAlpha=.17;rect(Math.max(0,x),0,Math.min(a.w,W-Math.max(0,x)),G,a.c);ctx.globalAlpha=1;
@@ -901,9 +901,21 @@ function drawFourSeasons(){
   }
   if(x>-a.w&&x<W)text(a.t,Math.max(25,x+35),46,z===3?'#597d9d':'#9b648a',15);
  }
+ // V3.0.2: distinct seasonal environments; spring water, summer cave and autumn redwoods.
+ const seaX=-cam;
+ if(seaX< W && seaX+490>0){
+  ctx.save();ctx.globalAlpha=.74;const wg=ctx.createLinearGradient(0,74,0,G);wg.addColorStop(0,'#8de9e8');wg.addColorStop(1,'#247ca8');ctx.fillStyle=wg;ctx.fillRect(Math.max(0,seaX),74,Math.min(W,seaX+490)-Math.max(0,seaX),G-74);ctx.globalAlpha=1;
+  for(let i=0;i<11;i++){const wx=22+i*42-cam;if(wx<0||wx>W)continue;const h=12+(i%4)*8;rect(wx,G-h,4,h,'#4bbaaa');circle(wx-5,G-h,6,i%2?'#ff9cb5':'#f7b979');circle(wx+5,G-h-5,5,'#e9a0d5');for(let b=0;b<3;b++)circle(wx+Math.sin(timer/850+i+b)*4,100+(i*23+b*51)%160-(timer/70)%26,2,'#ddffff')}
+  for(let i=0;i<5;i++){let fx=48+i*87-cam+Math.sin(timer/750+i)*5,fy=135+(i*31)%90;circle(fx,fy,6,'#f6ce79');circle(fx+7,fy,3,'#f6ce79');circle(fx-3,fy-2,1,'#354c65')}
+  ctx.restore();
+  if(p.x<490){const sx=p.x-cam+11,sy=p.y+12;circle(sx,sy-4,19,'#ffffff33');text('◌',sx,sy-17,'#eaffff',16,'center')}
+ }
+ const caveX=490-cam;
+ if(caveX<W&&caveX+560>0){ctx.save();ctx.fillStyle='#292343d9';ctx.fillRect(Math.max(0,caveX),65,Math.min(W,caveX+560)-Math.max(0,caveX),G-65);
+  for(let i=0;i<13;i++){let x=505+i*41-cam;if(x<0||x>W)continue;ctx.fillStyle=i%2?'#494066':'#64517d';ctx.beginPath();ctx.moveTo(x,65);ctx.lineTo(x+16,65);ctx.lineTo(x+8,92+(i%4)*13);ctx.fill();circle(x+5,G-9-(i%3)*10,5+i%3*3,i%2?'#9ad9f3':'#c99af3')}
+  const lampX=lion.x-cam+11,lampY=lion.y-6;const halo=ctx.createRadialGradient(lampX,lampY,5,lampX,lampY,85);halo.addColorStop(0,'#ffe4a888');halo.addColorStop(1,'#ffe4a800');ctx.fillStyle=halo;ctx.fillRect(lampX-85,lampY-85,170,170);circle(lampX,lampY,5,'#ffe8a2');ctx.restore();}
+ for(let i=0;i<7;i++){const x=1090+i*66-cam;if(x<-30||x>W+30)continue;rect(x-8,G-205,16,205,'#86543d');rect(x-12,G-205,24,14,'#a16b4c');for(let j=0;j<4;j++)circle(x+(j-1.5)*14,G-212-j%2*12,16,j%2?'#c86f3f':'#e3a05b');}
  // Spring arch, summer windmill, autumn lanterns, winter cottage, and final blossom tree.
- const arch=145-cam;if(arch>-120&&arch<W+120){rect(arch-47,G-112,12,112,'#e2d8d9');rect(arch+38,G-112,12,112,'#e2d8d9');rect(arch-35,G-122,74,14,'#faf0dd');for(let i=0;i<9;i++)circle(arch-40+i*10,G-130+Math.abs(i-4)*2,9,'#f4a4c8')}
- const mill=650-cam;if(mill>-100&&mill<W+100){rect(mill-17,G-136,34,134,'#f6e9cd');rect(mill-22,G-139,44,8,'#b3889d');for(let i=0;i<4;i++){ctx.save();ctx.translate(mill,G-142);ctx.rotate(timer/2500+i*Math.PI/2);rect(-5,-51,10,49,'#fff3d8');ctx.restore()}}
  for(let i=0;i<4;i++){let x=1110+i*110-cam;if(x>-20&&x<W+20){rect(x,G-110,3,110,'#a88163');circle(x+2,G-107,6,'#ffe29e')}}
  const cabin=1760-cam;if(cabin>-130&&cabin<W+130){rect(cabin-54,G-98,108,98,'#e7f1f6');ctx.fillStyle='#95b5dc';ctx.beginPath();ctx.moveTo(cabin-70,G-98);ctx.lineTo(cabin,G-158);ctx.lineTo(cabin+70,G-98);ctx.fill();rect(cabin-18,G-47,36,47,'#b5a4c8');rect(cabin+30,G-75,18,22,'#ffe5a3');rect(cabin-48,G-75,19,22,'#ffe5a3')}
  const tx=2230-cam;if(tx>-140&&tx<W+150){rect(tx-13,G-160,26,160,'#92667b');for(let i=0;i<20;i++){let ang=i*2.4,r=38+(i%5)*14;circle(tx+Math.cos(ang)*r,G-166+Math.sin(ang)*r*.65,20+(i%3)*3,gardenPlanted().length===3?(i%2?'#ffb2d3':'#ffd8e8'):'#c3acbd')}for(let i=0;i<6;i++)circle(tx+(i-2.5)*17,G-175+Math.sin(timer/500+i)*7,2.8,'#fff5bd');text('♡',tx-8,G-198,'#fff5d7',25)}
