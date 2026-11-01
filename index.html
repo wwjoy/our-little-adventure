@@ -34,7 +34,7 @@ if(!ctx){$('#error').style.display='block';$('#error').textContent='Canvas 无�
 const H=360, G=284, SAVE='our_adventure_full_v1', GATE='our_adventure_gate_v1';
 const LEVELS=['初夏小镇 · 相遇','夕阳花火','秘密花园 · 未来的约定'];
 const GARDEN_SEEDS=[];
-const GARDEN_BEDS=[2040];
+const GARDEN_BEDS=[2240];
 let gardenWater=null;
 function gardenCollected(){return data.story.gardenSeeds||[]}
 function gardenPlanted(){return data.story.gardenFlowers||[]}
@@ -87,12 +87,12 @@ function buildLevel(n){
    {type:'shell',id:0,x:815,y:231},{type:'shell',id:1,x:1535,y:217},{type:'shell',id:2,x:2020,y:221},{type:'shell',id:3,x:2700,y:222},{type:'shell',id:4,x:2890,y:218},
    ...coins(0,[[485,195],[637,174],[1190,193],[1420,179],[1718,148],[1823,148],[2090,190],[2380,183],[2830,211]])]};
  return {end:2450,
-  map:[gr(0,510),gr(550,520),gr(1115,440),gr(1595,855),bl(295,90,245),bl(635,92,237),bl(1170,105,235)],
+  map:[gr(0,510),gr(700,370),gr(1115,440),gr(1780,670),bl(295,90,245),bl(735,92,237),bl(1170,105,235)],
   boxes:[qb(0,300,181,'coin'),qb(1,615,173,'bag'),qb(2,1215,170,'coin')],
-  plats:[mover(485,245,75,22,0,3000)],
+  plats:[mover(551,G-17,118,0,26,3600)],
   cps:[45,560,990,1510,1850,2180],trees:[100,245,435,640,820,1030,1290,1680,1850,2240],
   enemies:[{type:'walker',x:1320,start:1280,end:1390,v:.30}],
-  objects:[{type:'switch',x:1392},{type:'heart',x:2320,y:264},
+  objects:[{type:'switch',x:1392},{type:'heart',x:2370,y:264},
    ...coins(0,[[175,216],[335,177],[710,194],[1155,185],[1710,190],[1950,170]])]};
 }
 // Underground bonus room behind the glowing pipe (level 3)
@@ -136,13 +136,13 @@ function surfaces(){
  const arr=[];
  for(const a of L.map)arr.push(a.kind==='block'?{x:a.x,y:a.y,w:a.w,h:H+200,kind:'block',box:true}:a);
  for(const b of L.boxes)arr.push({x:b.x,y:b.y,w:b.w,h:b.h,kind:'q',box:true,ref:b});
- clouds.forEach(c=>arr.push({x:c.x,y:G,w:c.w,kind:'cloud'}));
+ if(level!==2)clouds.forEach(c=>arr.push({x:c.x,y:G,w:c.w,kind:'cloud'}));
  if(starBridgeReady()&&starBridgeProgress()>=.98){
   // Optional vertical star steps: do not cover the main ground or substitute for rafts.
   for(const a of [{x:2740,y:G-49,w:43},{x:2792,y:G-79,w:45},{x:2847,y:G-105,w:46},{x:2903,y:G-105,w:100}])arr.push({...a,kind:'starbridge'});
  }
  for(const o of L.objects)if(o.type==='pipe')arr.push({x:o.x-5,y:o.top,w:o.w+10,h:G-o.top,kind:'pipe',box:true,ref:o});
- if(level===2&&!L.under&&!L.cabin){arr.push({x:1430,y:G-38,w:65,h:38,kind:'block',box:true});if(data.story.bridge)arr.push({x:1500,y:G-7,w:95,kind:'bridge'});}
+ if(level===2&&!L.under&&!L.cabin){arr.push({x:1430,y:G-38,w:65,h:38,kind:'block',box:true});if(data.story.bridge)arr.push({x:1555,y:G-7,w:225,kind:'bridge'});}
  for(const pl of L.plats){if(pl.kind==='fall'&&pl.y>H+40)continue;arr.push({x:pl.x,y:pl.y,w:pl.w,h:pl.kind==='spring'?14:10,kind:pl.kind,box:pl.kind==='spring',ref:pl})}
  return arr}
 function onFloor(x){return L.map.some(a=>a.kind==='ground'&&x+p.w>a.x+4&&x<a.x+a.w-4)}
@@ -186,7 +186,7 @@ function restoreUnclaimedRewards(){
 }
 function resetPlanks(){for(const pl of L.plats)if(pl.kind==='fall'){pl.y=pl.y0;pl.t=0;pl.vy=0}}
 function respawnAt(x){if(level===2&&!L.under&&!data.story.bridge&&coop.state==='approaching'){coop.state='waiting';coop.lionReady=true}pendingFlag=-1;flagCrossingArmed=false;x=safeX(x);p.x=x;p.y=G-p.h;p.vx=p.vy=0;p.on=true;p.ride=null;p.sit=false;p.hidden=false;p.coyote=p.buffer=p.jumpMs=0;lion.x=x-34*p.face;lion.y=p.y;lion.sit=false;trail=[];resetPlanks();cam=Math.max(0,Math.min(L.end-W,x-W*.35));respawnGuard=900;clearInput()}
-function startLevel(n,fromSave){layout(n);let cp=(fromSave&&data.cpLevel===n)?Math.max(0,Math.min(L.cps.length-1,data.cp)):0;data.level=Math.max(data.level,n);data.cp=cp;data.cpLevel=n;save();p.face=1;respawnAt(L.cps[cp]);play();if(n===2&&!data.story.gardenIntro){data.story.gardenIntro=true;save();cut('🌲 红杉森林的秘密','沿着红杉森林找到秘密小屋，打开地下入口，和小狮子一起探索水晶洞穴。<br>找到「未来的种子」后，带它回到约定之树旁的花坛，一起种下。',play,'一起出发 ♡')}if(n===0&&!data.story.introGuide){data.story.introGuide=true;save();cut('🦁 冒险的小目标','听说这片世界里藏着三颗特别的爱心，我们一起把它们找出来吧！<br><br>沿途的金币也值得收集，遇到特别的东西时，小狮子会提醒你。<br>想知道收集进度，可以在暂停菜单打开「📖 冒险手册」。',play,'出发吧 ♡')}}
+function startLevel(n,fromSave){layout(n);let cp=(fromSave&&data.cpLevel===n)?Math.max(0,Math.min(L.cps.length-1,data.cp)):0;data.level=Math.max(data.level,n);data.cp=cp;data.cpLevel=n;save();p.face=1;respawnAt(L.cps[cp]);play();if(n===2&&!data.story.gardenIntro){data.story.gardenIntro=true;save();cut('🌲 红杉森林的秘密','沿着红杉森林找到秘密小屋，打开地下入口，和小狮子一起探索蓝冰洞。<br>找到「未来的种子」后，带它回到约定之树旁的花坛，一起种下。',play,'一起出发 ♡')}if(n===0&&!data.story.introGuide){data.story.introGuide=true;save();cut('🦁 冒险的小目标','听说这片世界里藏着三颗特别的爱心，我们一起把它们找出来吧！<br><br>沿途的金币也值得收集，遇到特别的东西时，小狮子会提醒你。<br>想知道收集进度，可以在暂停菜单打开「📖 冒险手册」。',play,'出发吧 ♡')}}
 function showUI(on){$('#controls').classList.toggle('hide',!on);$('#pause').classList.toggle('hide',!on);$('#hud').classList.toggle('hide',mode==='gate')}
 function menu(title,body,buttons){mode='menu';clearInput();showUI(false);$('#interact').classList.add('hide');$('#shade').classList.remove('hide');$('#heading').textContent=title;$('#message').innerHTML=body;const el=$('#actions');el.textContent='';buttons.forEach((b,i)=>{let btn=document.createElement('button');btn.type='button';btn.textContent=b[0];if(i)btn.className='alt';btn.addEventListener('click',b[1]);el.appendChild(btn)});$('#card').scrollTop=0}
 function play(){mode='play';$('#shade').classList.add('hide');showUI(true);last=performance.now()}
@@ -517,8 +517,8 @@ function camTo(x,k){cam+=(Math.max(0,Math.min(L.end-W,x))-cam)*Math.min(1,.08*k)
 function buildCabin(){return {key:'2c',cabin:true,end:510,map:[gr(0,510)],boxes:[],plats:[],cps:[55],trees:[],enemies:[],objects:[]}}
 let forestReturnX=852, cabinL=null;
 function enterCabin(){if(level!==2||L.under||L.cabin)return;forestReturnX=p.x;mainL=L;L=buildCabin();L.pops=[];clouds=[];respawnAt(60);play();flash('🏡 森林小屋 · 地板下似乎有暗门')}
-function exitCabin(){if(!L.cabin)return;L=mainL;mainL=null;respawnAt(forestReturnX);play()}
-function enterUnder(){if(L.cabin){cabinL=L;}else if(!mainL){mainL=L;}L=buildUnder();L.pops=[];clouds=[];p.face=1;respawnAt(70);cam=0;play();flash('💎 地下水晶洞穴')}
+function exitCabin(){if(!L.cabin)return;L=mainL;mainL=null;cabinL=null;respawnAt(forestReturnX);play()}
+function enterUnder(){if(L.cabin){cabinL=L;}else if(!mainL){mainL=L;}L=buildUnder();L.pops=[];clouds=[];p.face=1;respawnAt(70);cam=0;play();flash('💎 地下蓝冰洞')}
 function exitUnder(){L=cabinL||mainL;cabinL=null;respawnAt(390);play();flash('🏡 回到了小屋 · 随时可以再次探洞')}
 
 // ================= Update =================
@@ -676,7 +676,7 @@ function update(dt){
   if(o.type==='coin'&&!data.coins.includes(cKey(o))&&overlap(o,8)){data.coins.push(cKey(o));save();rewardToast('coin',data.coins.length)}
   if(o.type==='star'&&!data.stars.includes(o.id)&&overlap(o,10)){data.stars.push(o.id);save();flash(data.stars.length===3?'✨ 三颗星光已汇聚，和小狮子一起启动木筏吧！':'⭐ 回忆星星 '+data.stars.length+'/3')}
   if(o.type==='shell'&&!data.shells.includes(o.id)&&overlap(o,8)){data.shells.push(o.id);save();flash('🐚 海边收藏 '+data.shells.length+'/5');rewardToast('shell',data.shells.length)}
-  if(o.type==='seed'&&!data.seed&&overlap(o,12)){data.seed=true;save();cut('🌱 找到未来的种子','小兔子在水晶洞穴里找到未来的种子。<br>「我们一起把它带回约定之树吧。」<br>从右侧出口回到森林小屋。',play);return}}
+  if(o.type==='seed'&&!data.seed&&overlap(o,12)){data.seed=true;save();cut('🌱 找到未来的种子','小兔子在蓝冰洞里找到未来的种子。<br>「我们一起把它带回约定之树吧。」<br>从右侧出口回到森林小屋。',play);return}}
  if(level===2&&!L.under&&!L.secret){for(const s of GARDEN_SEEDS){if(!gardenCollected().includes(GARDEN_SEEDS.indexOf(s))&&Math.abs(p.x+11-s.x)<24&&Math.abs(p.y+13-s.y)<27){const id=GARDEN_SEEDS.indexOf(s);data.story.gardenSeeds=[...gardenCollected(),id];save();flash('🌱 找到花种 '+gardenCollected().length+'/3，带去花坛种下吧 ♡')}}}
  if(gardenWater){gardenWater.t+=dt;if(gardenWater.t>2100)gardenWater=null;}
  for(const b of L.boxes)if(b.bump)b.bump=Math.max(0,b.bump-dt);
@@ -943,7 +943,7 @@ function drawGardenItems(){
   }else{rect(bx-3,G-22,6,13,'#9b755c');circle(bx,G-23,4,'#83ba82');text('花坛 '+(i+1),bx-25,G-51,'#fff6db',12)}
   if(gardenWater&&gardenWater.id===i){const lx=bx+28;rect(lx-2,G-57,19,15,'#a3d8f6');rect(lx+13,G-55,9,3,'#a3d8f6');for(let n=0;n<6;n++)circle(lx+10-n*7,G-52+n*4,2,'#9bd8fa')}
  }
- if(p.x>2040&&!gardenPlanted().includes(0))text(data.seed?'和小狮子一起种下未来的种子 ♡':'未来的种子藏在森林小屋的地下洞穴 ♡',W/2,96,'#fff7d6',14,'center');
+ if(p.x>2150&&!gardenPlanted().includes(0))text(data.seed?'和小狮子一起种下未来的种子 ♡':'未来的种子藏在森林小屋的地下洞穴 ♡',W/2,96,'#fff7d6',14,'center');
 }
 
 function draw(){
@@ -970,11 +970,11 @@ function draw(){
  }
  for(const o of L.objects)if(o.type==='exitpipe')pipeDraw(o);
 
- if(L.cabin){rect(0,0,W,G,'#705b64');for(let x=0;x<W;x+=40)rect(x,20,2,G-20,'#866d70');rect(0,0,W,24,'#a77e68');rect(0,G-60,W,60,'#a47759');rect(55,115,75,110,'#8e6659');for(let i=0;i<3;i++)rect(63,135+i*26,59,5,'#d7aa7e');rect(190,160,90,54,'#bb8c6b');rect(195,154,80,8,'#f5d6aa');rect(375,G-15,68,15,'#463c51');rect(382,G-22,54,8,'#a98f8b');circle(409,G-31,9,'#ffdfa0');text('地下暗门',409,G-57,'#fff2ce',13,'center');text('← 森林',58,G-47,'#fff2ce',12,'center');}
- if(L.under){rect(0,0,W,G,'#20243f');for(let i=0;i<22;i++){let x=(i*67-cam*.2)%W;ctx.fillStyle=i%2?'#343252':'#45405f';ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+22,0);ctx.lineTo(x+10,35+i%4*13);ctx.fill()}for(let i=0;i<13;i++){let x=i*75-cam*.3;circle(x,110+i%4*28,14,i%2?'#554a91':'#4c79a3');circle(x,110+i%4*28,5,'#a7dfff')}const lx=lion.x-cam+12;let glow=ctx.createRadialGradient(lx,lion.y+10,4,lx,lion.y+10,115);glow.addColorStop(0,'#ffe6a344');glow.addColorStop(1,'#ffe6a300');ctx.fillStyle=glow;ctx.fillRect(0,0,W,G);text('💡',lx,lion.y-12,'#ffe7a8',14,'center');text('水晶洞穴',W/2,52,'#d8ccff',16,'center');text('出口 →',785-cam,G-53,'#fff3cf',13,'center');}
- L.map.forEach(terrain);drawShallowCove();drawFinalBeach();clouds.forEach(cloudDraw);
+ if(L.cabin){rect(0,0,W,G,'#705b64');for(let x=0;x<W;x+=40)rect(x,20,2,G-20,'#866d70');rect(0,0,W,24,'#a77e68');rect(0,G-60,W,60,'#a47759');rect(55,115,75,110,'#8e6659');for(let i=0;i<3;i++)rect(63,135+i*26,59,5,'#d7aa7e');rect(190,160,90,54,'#bb8c6b');rect(195,154,80,8,'#f5d6aa');rect(375,G-15,68,15,'#463c51');rect(382,G-22,54,8,'#a98f8b');circle(409,G-31,9,'#ffdfa0');text('通往蓝冰洞',409,G-57,'#fff2ce',13,'center');text('← 森林',58,G-47,'#fff2ce',12,'center');}
+ if(L.under){rect(0,0,W,G,'#0b2946');for(let i=0;i<22;i++){let x=(i*67-cam*.2)%W;ctx.fillStyle=i%2?'#1c567d':'#2b7da5';ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+22,0);ctx.lineTo(x+10,35+i%4*13);ctx.fill()}for(let i=0;i<13;i++){let x=i*75-cam*.3;circle(x,110+i%4*28,14,i%2?'#357ba9':'#55b6d6');circle(x,110+i%4*28,5,'#d7f9ff')}const lx=lion.x-cam+12;let glow=ctx.createRadialGradient(lx,lion.y+10,4,lx,lion.y+10,115);glow.addColorStop(0,'#ffe6a344');glow.addColorStop(1,'#ffe6a300');ctx.fillStyle=glow;ctx.fillRect(0,0,W,G);text('🔦',lx,lion.y-12,'#ffe7a8',14,'center');for(let i=0;i<9;i++){const xx=i*106+25-cam*.12;ctx.fillStyle=i%2?'#7de1f0':'#a9efff';ctx.globalAlpha=.42;ctx.beginPath();ctx.moveTo(xx,15);ctx.lineTo(xx+18,15);ctx.lineTo(xx+8,65+(i%3)*18);ctx.fill();ctx.globalAlpha=1;}text('蓝冰洞',W/2,52,'#d8f7ff',16,'center');text('出口 →',785-cam,G-53,'#fff3cf',13,'center');}
+ L.map.forEach(terrain);drawShallowCove();drawFinalBeach();if(level!==2)clouds.forEach(cloudDraw);
  // Stars uncover an optional elevated lookout, not a shortcut across the tidal section.
- if(level===2&&!L.under&&(data.story.bridge||(scene&&scene.type==='switch'))){const r=data.story.bridge?1:Math.min(1,coop.bridgeTime/2000);bridge({x:1500,y:G-7-(1-r)*75,w:95},'#c99a6b','#8d6248')}
+ if(level===2&&!L.under&&(data.story.bridge||(scene&&scene.type==='switch'))){const r=data.story.bridge?1:Math.min(1,coop.bridgeTime/2000);bridge({x:1555,y:G-7-(1-r)*75,w:225},'#c99a6b','#8d6248')}
  if(!L.under&&!L.secret)for(let i=1;i<L.cps.length;i++){let x=L.cps[i]-cam;if(x<-30||x>W+30)continue;rect(x,G-62,4,62,'#8b6a85');rect(x+4,G-62,18,12,data.cpLevel===level&&data.cp>=i?'#f28eaf':'#ffe5a1')}
  for(const o of L.objects)if(o.type==='sign')sign(o);
  if(level===1&&!L.under&&!L.secret){
@@ -1013,7 +1013,7 @@ function draw(){
  const pipeOver=scene&&(scene.type==='pipeIn'||scene.type==='pipeOut'||scene.type==='rise');
  if(!pipeOver)for(const o of L.objects)if(o.type==='pipe')pipeDraw(o);
  L.enemies.forEach(enemyDraw);
- if(!L.under||L.cabin){if(level===0&&!data.met){lionDraw(350-cam,G-28,-1,false);circle(363-cam,G-56,10,'#fff6e8');text('!',359-cam,G-51,'#9d6492',14)}else lionDraw(lion.x-cam,lion.y,lion.face,lion.sit)}
+ if(!L.secret){if(level===0&&!data.met){lionDraw(350-cam,G-28,-1,false);circle(363-cam,G-56,10,'#fff6e8');text('!',359-cam,G-51,'#9d6492',14)}else lionDraw(lion.x-cam,lion.y,lion.face,lion.sit)}
  if(!p.hidden)bunny(p.x-cam,p.y,p.face,p.sit,!!dying);
  if(pipeOver){for(const o of L.objects)if(o.type==='pipe'||o.type==='exitpipe')pipeDraw(o)}
  if(bubbleMsg&&scene)bubble(lion.x-cam+12,lion.y-6,bubbleMsg.t);
@@ -1034,7 +1034,7 @@ function draw(){
     }
    }
   }
- if(!L.under&&!L.secret&&level!==1){rect(L.end-70-cam,G-90,5,90,'#fff4e4');rect(L.end-65-cam,G-90,48,24,'#f18eb2');text('终点',L.end-59-cam,G-73,'#fff',13)}
+ if(!L.under&&!L.secret&&!L.cabin&&level!==1){rect(L.end-70-cam,G-90,5,90,'#fff4e4');rect(L.end-65-cam,G-90,48,24,'#f18eb2');text('终点',L.end-59-cam,G-73,'#fff',13)}
  for(const r of rockets){if(!r.parts){rect(r.x-1,r.y,2,7,r.c);ctx.globalAlpha=.4;rect(r.x-1,r.y+7,2,10,r.c);ctx.globalAlpha=1}else for(const q of r.parts)if(q.life>0){ctx.globalAlpha=Math.max(0,q.life);circle(q.x,q.y,2.4,r.c);ctx.globalAlpha=Math.max(0,q.life*.4);circle(q.x-q.vx*2,q.y-q.vy*2,1.6,r.c);ctx.globalAlpha=1}}
  if(scene&&scene.type==='sunsetPhoto')drawSunsetPhoto();
  if(scene&&scene.type==='beachArrival'){text('🦁 我们就在这里等烟花吧。',W/2,64,'#fff5e8',17,'center')}
@@ -1042,7 +1042,7 @@ function draw(){
  if(scene&&scene.type==='fireworks'&&scene.t<3000){ctx.globalAlpha=Math.min(1,scene.t/600,(3000-scene.t)/600);text('花火大会开始啦！',W/2,76,'#fff4dc',25,'center');ctx.globalAlpha=1}
  if(toast&&timer<toast.until&&mode==='play'){ctx.font='bold 14px sans-serif';const w=ctx.measureText(toast.t).width+20;rect(W/2-w/2,48,w,26,'#00000055');text(toast.t,W/2,66,'#fff',14,'center')}
  if(fade.a>0){ctx.globalAlpha=fade.a;rect(0,0,W,H,'#1c1530');if(fade.text){text(fade.text,W/2,H/2,'#ffd6e6',15,'center')}ctx.globalAlpha=1}
- $('#hud').textContent='❤️ '+data.hearts.filter(Boolean).length+'/3　🌱 '+(data.seed?1:0)+'/1　🪙 '+data.coins.length+'　'+(L.secret?'秘密小屋':L.under?'水晶洞穴':L.cabin?'森林小屋':LEVELS[level])+(level===1?'　🐚 '+data.shells.length+'/5　⭐ '+data.stars.length+'/3':'')}
+ $('#hud').textContent='❤️ '+data.hearts.filter(Boolean).length+'/3　🌱 '+(data.seed?1:0)+'/1　🪙 '+data.coins.length+'　'+(L.secret?'秘密小屋':L.under?'蓝冰洞':L.cabin?'森林小屋':LEVELS[level])+(level===1?'　🐚 '+data.shells.length+'/5　⭐ '+data.stars.length+'/3':'')}
 // Photo event and reusable pixel-polaroid illustration, drawn by the real game canvas.
 function drawSunsetPhoto(){
  const s=scene,t=s.t,center=W/2;
