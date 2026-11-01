@@ -319,8 +319,7 @@ function finishLevel(){
   cut('❤️ 还差一颗关键爱心','这一关的爱心还没有拿到哦！请回到地图寻找粉色爱心，触碰它才能解锁下一关。',()=>{respawnAt(L.cps[Math.min(data.cp,L.cps.length-1)]);play()});return;
  }
  if(level===0){stageReview(0,()=>nextLevel(1))}
- else if(level===1){if(data.stars.length<3){cut('⭐ 星星还没集齐','请先收集三颗回忆星星，再继续去看烟花。',()=>{respawnAt(L.cps[Math.min(data.cp,L.cps.length-1)]);play()});return}
-  stageReview(1,()=>nextLevel(2))}
+ else if(level===1){stageReview(1,()=>nextLevel(2))}
  else{if(gardenPlanted().length<3){cut('🌷 花园还没有全部盛开','收集三颗四季花种，分别在三个花坛种下，等小狮子浇水后再到约定之树吧。',()=>{respawnAt(L.cps[Math.min(data.cp,L.cps.length-1)]);play()});return}
   if(!data.story.bridge){cut('🦁 双人机关还没完成','先和小狮子一起启动花园机关，再前往终点。',()=>{respawnAt(L.cps[Math.min(data.cp,L.cps.length-1)]);play()});return}
   finalReviewOpen=true;stageReview(2,beginFinalPlanting);}}
@@ -504,7 +503,7 @@ function updateScene(dt){const s=scene,k=Math.min(2,dt/16.667);s.t+=dt;timer+=dt
   for(const r of rockets){if(!r.parts){r.y+=r.vy*k;r.vy+=.07*k;if(r.vy>-.6){r.parts=[];const n=34;for(let i=0;i<n;i++){const a=i/n*Math.PI*2,sp=1.8+Math.random()*1.6;r.parts.push({x:r.x,y:r.y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:1})}}}
    else for(const q of r.parts){q.x+=q.vx*k;q.y+=q.vy*k;q.vy+=.035*k;q.vx*=.985;q.life-=dt/1300}}
   rockets=rockets.filter(r=>!r.parts||r.parts.some(q=>q.life>0));
-  if(s.t>10000){scene=null;p.sit=lion.sit=false;cut('🎆 夕阳花火','那天的夕阳和烟花，我都想一直记得。',()=>{mode='play';finishLevel()})}}
+  if(s.t>10000){scene=null;p.sit=lion.sit=false;collectHeart(1);p.x=3250;p.y=G-p.h;lion.x=3223;lion.y=G-27;cut('🎆 夕阳花火','那天的夕阳和烟花，我都想一直记得。<br>❤️ 这一刻的特别爱心已经收藏。',()=>{play();finishLevel()})}}
  if(s.type==='switch'){
   coop.bridgeTime+=dt;
   // Show the cooperation for long enough to see the two beams and bridge.
@@ -697,7 +696,13 @@ function update(dt){
  if(level===1){
   // No early sitting prompt: sunset and fireworks play together at the final beach.
   if(p.x>2080&&!data.story.starHint){data.story.starHint=true;save();flash('✨ 前方是潮汐木筏，留意海浪的节奏！')}
-  if(p.x>3230&&!data.story.fireworks){data.story.fireworks=true;save();startScene('beachArrival');return}}
+  if(p.x>3230&&!data.story.fireworks){data.story.fireworks=true;save();startScene('beachArrival');return}
+  // Old saves could have finished the fireworks but returned to a checkpoint
+  // before the heart; let the pair finish at the beach without replaying the level.
+  if(p.x>3180&&data.story.fireworks&&data.story.sunset){
+   collectHeart(1);
+   finishLevel();return;
+  }}
  if(level===2){
   if(!L.under&&!L.secret){for(let i=0;i<3;i++)if(!gardenPlanted().includes(i)&&gardenCollected().length>gardenPlanted().length&&Math.abs(p.x+11-GARDEN_BEDS[i])<53&&p.y+p.h>=G-45)showInteract='🌱 种下花种';}
   if(!data.seed&&onPipeTop(PIPE()))showInteract='✦ 秘密管道';
