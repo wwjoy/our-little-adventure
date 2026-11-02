@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V3.0.12 · 蓝冰洞双人探险</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V3.0.13 · 蓝冰洞隐藏回忆</title><style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#2a203f;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;touch-action:none}#stage{position:absolute;inset:0;height:var(--available-height,100%);display:flex;align-items:center;justify-content:center}canvas{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;touch-action:none;-webkit-user-select:none}#hud{position:absolute;top:max(8px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));color:#fff;font-size:clamp(13px,2.2vw,19px);font-weight:800;text-shadow:1px 2px #704b73;pointer-events:none}#pause{position:absolute;right:max(12px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));z-index:2}button{font-family:inherit;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent}#controls{position:absolute;inset:0;pointer-events:none;z-index:3}#left,#right,#jump{opacity:.58;position:absolute;bottom:max(10px,env(safe-area-inset-bottom));width:52px;height:52px;background:#55476655;border:2px solid #ffffff77;color:#fff;border-radius:12px;font-size:22px;font-weight:800;pointer-events:auto}#left{left:max(12px,env(safe-area-inset-left))}#right{left:calc(max(12px,env(safe-area-inset-left)) + 61px)}#jump{right:max(12px,env(safe-area-inset-right));border-radius:50%;font-size:28px}.pressed{background:#ec8eaecc!important;opacity:1!important}#pause{border:2px solid #ffffffaa;background:#55476677;color:#fff;border-radius:11px;width:45px;height:42px;font-size:20px}#shade{position:absolute;inset:0;height:var(--available-height,100%);background:#211b39c9;display:flex;justify-content:center;align-items:center;z-index:4;padding:12px}#card{background:#fff3f6;border:3px solid #ffc2d7;border-radius:17px;color:#68455e;text-align:center;width:min(440px,92%);padding:16px;max-height:90%;overflow:auto;box-shadow:0 6px #a36e9d}#card h1{font-size:clamp(19px,3.2vw,27px);color:#db6394;margin:0 0 8px}#card p{font-size:clamp(12px,1.8vw,15px);line-height:1.65;margin:8px 0}#actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}#actions button{font-size:14px;font-weight:700;border:0;background:#e979a5;color:#fff;border-radius:10px;padding:10px 15px;min-height:43px}#actions button.alt{background:#a88bad}#rotate{position:absolute;inset:0;height:var(--available-height,100%);background:#241b38;color:white;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:8;gap:12px;font-size:20px;padding:24px}#rotate small{font-size:13px;opacity:.8}#error{display:none;position:absolute;z-index:12;inset:10%;background:#fff5f5;color:#a12750;border-radius:12px;padding:16px;overflow:auto;font-size:14px}.hide{display:none!important}@media(orientation:portrait){#rotate{display:flex}}@media(max-height:310px){#card{padding:8px}#card p{margin:3px}#left,#right,#jump{opacity:.58;width:48px;height:48px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 56px)}}
 #interact{position:absolute;left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);background:#fff9f0e8;color:#79516c;border:2px solid #e9a7c5;border-radius:7px;padding:4px 8px;min-width:66px;min-height:32px;z-index:3;font-weight:800;font-size:11px;box-shadow:0 3px #a88ba4;white-space:nowrap}#card{max-width:520px!important}#hud{z-index:2;max-width:75%;font-size:clamp(12px,1.7vw,18px)}@media(orientation:landscape){#left,#right,#jump{bottom:max(10px,env(safe-area-inset-bottom))}} 
 #gate{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 30% 20%,#ffd6e6,#f6aed3 45%,#b48ac8);height:var(--available-height,100%)}
@@ -108,6 +108,11 @@ let icePuzzle={cubeX:345,cubeStart:345,plateX:480,gateX:590,gateOpen:false,light
 function resetIcePuzzle(){icePuzzle={cubeX:345,cubeStart:345,plateX:480,gateX:590,gateOpen:false,light:'idle',lightT:0}}
 function iceBridgePieces(){return [
  {x:864,y:G-19,w:51},{x:921,y:G-29,w:51},{x:979,y:G-25,w:51},{x:1037,y:G-18,w:52}];}
+// V3.0.13: optional high ledge on the far side of the ice bridge. Never blocks the seed route.
+const ICE_MEMORY_LEDGE={x:1155,y:G-110,w:76};
+const ICE_MEMORY={x:1192,y:G-146};
+function iceMemoryOwned(){return !!data.story.iceCourage;}
+
 function buildSecretRoom(){return {key:'0b',secret:true,end:690,
  map:[gr(0,690),bl(185,95,240),bl(380,100,218)],
  boxes:[qb(0,290,172,'bag'),qb(1,340,177,'snowboard')],plats:[],cps:[50],trees:[],enemies:[],
@@ -143,7 +148,7 @@ function surfaces(){
  for(const a of L.map)arr.push(a.kind==='block'?{x:a.x,y:a.y,w:a.w,h:H+200,kind:'block',box:true}:a);
  for(const b of L.boxes)arr.push({x:b.x,y:b.y,w:b.w,h:b.h,kind:'q',box:true,ref:b});
  clouds.forEach(c=>{if(!c.building)arr.push({x:c.x,y:G-5,w:c.w,kind:'cloud'});});
- if(L.under){if(!icePuzzle.gateOpen)arr.push({x:icePuzzle.gateX,y:G-214,w:24,h:214,kind:'block',box:true});if(icePuzzle.light==='ready')for(const s of iceBridgePieces())arr.push({...s,kind:'icebridge'});}
+ if(L.under){if(!icePuzzle.gateOpen)arr.push({x:icePuzzle.gateX,y:G-214,w:24,h:214,kind:'block',box:true});if(icePuzzle.light==='ready')for(const s of iceBridgePieces())arr.push({...s,kind:'icebridge'});arr.push({...ICE_MEMORY_LEDGE,kind:'icebridge'});}
  if(starBridgeReady()&&starBridgeProgress()>=.98){
   // Optional vertical star steps: do not cover the main ground or substitute for rafts.
   for(const a of [{x:2740,y:G-49,w:43},{x:2792,y:G-79,w:45},{x:2847,y:G-105,w:46},{x:2903,y:G-105,w:100}])arr.push({...a,kind:'starbridge'});
@@ -258,11 +263,12 @@ function journal(back){
  '⭐ 回忆星星 '+data.stars.length+'/3　· 集齐星光，发现隐藏观景台。',
  '🌱 地下神秘种子 '+(data.seed?'已发现':'尚未发现')+'　· 隐藏收藏。',
  '🌱 未来的种子 '+(data.seed?'已找到':'尚未找到')+'；通过终点后双人种树。',
+ '💎 蓝冰洞隐藏回忆《我们的勇气》 '+(iceMemoryOwned()?'已收藏':'尚未发现')+' · 可选探索，不影响通关。',
  '🪙 爱心金币 '+data.coins.length+'/'+TOTAL_COINS+'　· 10、20、30枚有小奖励。',
  '🐚 海边贝壳 '+data.shells.length+'/5　· 找到3枚、5枚会解锁回忆卡。'];
  const rewards=rewardLines();
  if(data.story.sunsetPhoto)lines.push('📸 隐藏回忆《夕阳下的你》 · 小狮子为小兔子拍下了心形云与夕阳。');if(data.winterCard)lines.push('❄️ 冬日回忆卡《未来的冬天》 · 还有好多想和你一起做的事。');else if(data.snowboard)lines.push('🏂 冬日秘密：单板已找到，雪山还在等你。');if(data.keepsakes.length)lines.push('💗 珍藏爱心：收集到了温柔的小心意 ♡');if(data.secretDoors.length)lines.push('🚪 初夏小镇的秘密房间已探索 ♡');if(rewards.length)lines.push('<br><strong>✨ 已解锁的收藏</strong>',...rewards);
- menu('📖 冒险手册',lines.join('<br>'),[...(data.story.sunsetPhoto? [['📸 查看《夕阳下的你》',()=>showSavedPhoto(back)]]:[]),['继续冒险 ♡',back]]);
+ menu('📖 冒险手册',lines.join('<br>'),[...(data.story.sunsetPhoto? [['📸 查看《夕阳下的你》',()=>showSavedPhoto(back)]]:[]),...(iceMemoryOwned()?[['💎 查看《我们的勇气》',()=>showIceMemory(back)]]:[]),['继续冒险 ♡',back]]);
 }
 // The album opens a fresh rendering of the already-unlocked polaroid. No need to replay the event.
 function showSavedPhoto(back){
@@ -280,6 +286,27 @@ function showSavedPhoto(back){
  }finally{scene=oldScene;}
  const image=url?'<img alt="夕阳下的你：小兔子与心形云、夕阳、大海的拍立得照片" src="'+url+'" style="display:block;max-width:min(212px,80%);max-height:46vh;width:auto;height:auto;margin:5px auto 9px;image-rendering:pixelated;border-radius:3px;box-shadow:0 4px 12px #bb9aaa">':'📸 夕阳下的你';
  menu('📸 夕阳下的你',image+'<br>🦁「拍好啦！这张我要好好保存。」', [['返回冒险手册',()=>journal(back)],['继续冒险 ♡',back]]);
+}
+// V3.0.13: inspect a permanently saved keepsake in the journal.
+function showIceMemory(back){
+ if(!iceMemoryOwned()){journal(back);return}
+ const c=document.createElement('canvas');c.width=272;c.height=166;
+ const g=c.getContext('2d');g.imageSmoothingEnabled=false;
+ const sky=g.createLinearGradient(0,0,0,166);sky.addColorStop(0,'#173a70');sky.addColorStop(1,'#78c9e5');g.fillStyle=sky;g.fillRect(0,0,272,166);
+ g.fillStyle='#2c739e';for(let i=0;i<8;i++){const x=i*39;g.beginPath();g.moveTo(x,115);g.lineTo(x+19,40+i%3*9);g.lineTo(x+36,115);g.fill()}
+ g.fillStyle='#b9eff7';g.fillRect(0,125,272,41);g.fillStyle='#e4faff';g.fillRect(0,125,272,5);
+ const x=136,y=79;g.fillStyle='#bff9ff';g.beginPath();g.moveTo(x,y-36);g.lineTo(x+27,y-8);g.lineTo(x+17,y+27);g.lineTo(x,y+42);g.lineTo(x-18,y+26);g.lineTo(x-28,y-8);g.closePath();g.fill();
+ g.fillStyle='#6ac9ee';g.beginPath();g.moveTo(x,y-30);g.lineTo(x+18,y-7);g.lineTo(x,y+29);g.closePath();g.fill();
+ g.strokeStyle='#fff';g.lineWidth=3;g.strokeRect(6,6,260,154);
+ g.fillStyle='#fff';g.font='bold 15px sans-serif';g.textAlign='center';g.fillText('💎 我们的勇气',136,151);
+ const url=c.toDataURL('image/png');
+ menu('💎 我们的勇气','<img alt="蓝冰洞的冰晶收藏：我们的勇气" src="'+url+'" style="width:min(272px,86%);max-height:38vh;object-fit:contain;image-rendering:pixelated;border-radius:8px;display:block;margin:0 auto 10px">🦁「原来一起冒险，也能发现这么漂亮的东西。」', [['返回冒险手册',()=>journal(back)],['继续冒险 ♡',back]]);
+}
+function drawIceMemoryCrystal(x,y){
+ ctx.save();ctx.translate(x,y+Math.sin(timer/420)*3);
+ ctx.fillStyle='#d9ffff';ctx.beginPath();ctx.moveTo(0,-14);ctx.lineTo(12,-2);ctx.lineTo(8,12);ctx.lineTo(0,17);ctx.lineTo(-10,10);ctx.lineTo(-13,-2);ctx.closePath();ctx.fill();
+ ctx.fillStyle='#73cdec';ctx.beginPath();ctx.moveTo(0,-12);ctx.lineTo(9,-1);ctx.lineTo(0,12);ctx.closePath();ctx.fill();
+ ctx.fillStyle='#fff';ctx.fillRect(-2,-18,4,4);ctx.fillRect(-17,0,3,3);ctx.fillRect(15,5,3,3);ctx.restore();
 }
 function rewardToast(kind,count){
  if(kind==='coin'&&[10,20,30].includes(count))flash('✨ '+count+'枚金币！收藏奖励已解锁，暂停菜单可查看手册');
@@ -716,6 +743,9 @@ function update(dt){
   if(o.type==='star'&&!data.stars.includes(o.id)&&overlap(o,10)){data.stars.push(o.id);save();flash(data.stars.length===3?'✨ 三颗星光已汇聚，和小狮子一起启动木筏吧！':'⭐ 回忆星星 '+data.stars.length+'/3')}
   if(o.type==='shell'&&!data.shells.includes(o.id)&&overlap(o,8)){data.shells.push(o.id);save();flash('🐚 海边收藏 '+data.shells.length+'/5');rewardToast('shell',data.shells.length)}
   if(o.type==='seed'&&!data.seed&&overlap(o,12)){data.seed=true;save();cut('🌱 找到未来的种子','小兔子在蓝冰洞里找到未来的种子。<br>「我们一起把它带回约定之树吧。」<br>从右侧出口回到森林小屋。',play);return}}
+ // Optional keepsake: saved only after touching it, and persistent across death and cave re-entry.
+ if(L.under&&!iceMemoryOwned()&&overlap(ICE_MEMORY,18)){data.story.iceCourage=true;save();cut('💎 隐藏回忆 · 我们的勇气','🦁「原来一起冒险，也能发现这么漂亮的东西。」<br><br>💎《我们的勇气》已收藏到冒险手册。',play,'继续探险 ♡');return}
+
  if(level===2&&!L.under&&!L.secret){for(const s of GARDEN_SEEDS){if(!gardenCollected().includes(GARDEN_SEEDS.indexOf(s))&&Math.abs(p.x+11-s.x)<24&&Math.abs(p.y+13-s.y)<27){const id=GARDEN_SEEDS.indexOf(s);data.story.gardenSeeds=[...gardenCollected(),id];save();flash('🌱 找到花种 '+gardenCollected().length+'/3，带去花坛种下吧 ♡')}}}
  if(gardenWater){gardenWater.t+=dt;if(gardenWater.t>2100)gardenWater=null;}
  for(const b of L.boxes)if(b.bump)b.bump=Math.max(0,b.bump-dt);
@@ -1052,6 +1082,10 @@ function draw(){
   if(bridgeAlpha){ctx.save();ctx.globalAlpha=bridgeAlpha;
    for(const s of iceBridgePieces()){rect(s.x-cam,s.y,s.w,12,'#a2efff');rect(s.x+5-cam,s.y+3,s.w-10,4,'#e1ffff');circle(s.x+8-cam,s.y-8,3,'#d8ffff');}
    ctx.restore();}
+  // A raised, optional collectible ledge on the far bank. Leave the main seed path untouched.
+  const ledge=ICE_MEMORY_LEDGE;
+  rect(ledge.x-cam,ledge.y,ledge.w,11,'#9ce2f3');rect(ledge.x+5-cam,ledge.y+2,ledge.w-10,4,'#d7f8ff');
+  if(!iceMemoryOwned()){drawIceMemoryCrystal(ICE_MEMORY.x-cam,ICE_MEMORY.y);if(Math.abs(p.x-ICE_MEMORY.x)<125)text('💎 隐藏的冰晶',ICE_MEMORY.x-cam,ICE_MEMORY.y-29,'#e6ffff',12,'center')}
   if(c.light==='idle'&&p.x>720)text('让小狮子的头灯照亮前方',820-cam,G-83,'#d6f9ff',12,'center');
   if(c.light==='revealing')text('✨ 隐藏的冰桥正在显现',930-cam,G-95,'#e5fdff',12,'center');
   // Seed altar at the end of the puzzle.
