@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · Beta V3.0.19 · 深蓝色的秘密</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · Beta V3.0.20 · 回忆花径</title><style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#2a203f;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;touch-action:none}#stage{position:absolute;inset:0;height:var(--available-height,100%);display:flex;align-items:center;justify-content:center}canvas{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;touch-action:none;-webkit-user-select:none}#hud{position:absolute;top:max(8px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));color:#fff;font-size:clamp(13px,2.2vw,19px);font-weight:800;text-shadow:1px 2px #704b73;pointer-events:none}#pause{position:absolute;right:max(12px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));z-index:2}button{font-family:inherit;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent}#controls{position:absolute;inset:0;pointer-events:none;z-index:3}#left,#right,#jump{opacity:.58;position:absolute;bottom:max(10px,env(safe-area-inset-bottom));width:52px;height:52px;background:#55476655;border:2px solid #ffffff77;color:#fff;border-radius:12px;font-size:22px;font-weight:800;pointer-events:auto}#left{left:max(12px,env(safe-area-inset-left))}#right{left:calc(max(12px,env(safe-area-inset-left)) + 61px)}#jump{right:max(12px,env(safe-area-inset-right));border-radius:50%;font-size:28px}.pressed{background:#ec8eaecc!important;opacity:1!important}#pause{border:2px solid #ffffffaa;background:#55476677;color:#fff;border-radius:11px;width:45px;height:42px;font-size:20px}#shade{position:absolute;inset:0;height:var(--available-height,100%);background:#211b39c9;display:flex;justify-content:center;align-items:center;z-index:4;padding:12px}#card{background:#fff3f6;border:3px solid #ffc2d7;border-radius:17px;color:#68455e;text-align:center;width:min(440px,92%);padding:16px;max-height:90%;overflow:auto;box-shadow:0 6px #a36e9d}#card h1{font-size:clamp(19px,3.2vw,27px);color:#db6394;margin:0 0 8px}#card p{font-size:clamp(12px,1.8vw,15px);line-height:1.65;margin:8px 0}#actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}#actions button{font-size:14px;font-weight:700;border:0;background:#e979a5;color:#fff;border-radius:10px;padding:10px 15px;min-height:43px}#actions button.alt{background:#a88bad}#rotate{position:absolute;inset:0;height:var(--available-height,100%);background:#241b38;color:white;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:8;gap:12px;font-size:20px;padding:24px}#rotate small{font-size:13px;opacity:.8}#error{display:none;position:absolute;z-index:12;inset:10%;background:#fff5f5;color:#a12750;border-radius:12px;padding:16px;overflow:auto;font-size:14px}.hide{display:none!important}@media(orientation:portrait){#rotate{display:flex}}@media(max-height:310px){#card{padding:8px}#card p{margin:3px}#left,#right,#jump{opacity:.58;width:48px;height:48px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 56px)}}
 #interact{position:absolute;left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);background:#fff9f0e8;color:#79516c;border:2px solid #e9a7c5;border-radius:7px;padding:4px 8px;min-width:66px;min-height:32px;z-index:3;font-weight:800;font-size:11px;box-shadow:0 3px #a88ba4;white-space:nowrap}#card{max-width:520px!important}#hud{z-index:2;max-width:75%;font-size:clamp(12px,1.7vw,18px)}@media(orientation:landscape){#left,#right,#jump{bottom:max(10px,env(safe-area-inset-bottom))}} 
 #gate{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 30% 20%,#ffd6e6,#f6aed3 45%,#b48ac8);height:var(--available-height,100%)}
@@ -36,6 +36,8 @@ const LEVELS=['初夏小镇 · 相遇','夕阳花火','秘密花园 · 未来的
 const GARDEN_SEEDS=[];
 const GARDEN_BEDS=[2390];
 let gardenWater=null;
+// V3.0.20: ornamental memory path; never gates the existing ending.
+let memoryTrailSeen=[false,false,false], memoryTrailGreeting=false;
 function gardenCollected(){return data.story.gardenSeeds||[]}
 function gardenPlanted(){return data.story.gardenFlowers||[]}
 const ANNIV={label:'2025.11.13 — 2026.11.13'};
@@ -95,7 +97,7 @@ function buildLevel(n){
    ...coins(0,[[485,195],[637,174],[1190,193],[1420,179],[1718,148],[1823,148],[2090,190],[2380,183],[2830,211]])]};
  return {end:2450,
   map:[gr(0,510),gr(700,370),gr(1115,440),gr(1780,670),bl(295,90,245),bl(715,92,237),bl(1170,105,235)],
-  boxes:[qb(0,300,181,'coin'),qb(1,615,173,'bag'),qb(2,1215,170,'coin')],
+  boxes:[qb(0,300,159,'coin'),qb(1,615,151,'bag'),qb(2,1215,148,'coin')],
   plats:[mover(560,G-20,82,49,0,3600)], // Independent moving platform at first chasm only; second chasm uses the lion-operated wooden bridge.
   cps:[45,560,990,1510,2180],trees:[],
   enemies:[{type:'walker',x:1320,start:1280,end:1390,v:.30}],
@@ -186,7 +188,7 @@ function gateOk(){try{return localStorage.getItem(GATE)==='1'}catch(e){return fa
 
 // ================= Flow =================
 function clearInput(){Object.keys(held).forEach(k=>{held[k]=false;$('#'+k).classList.remove('pressed')});jumpQueue=false}
-function layout(n){starBridgeBorn=-1;starBridgeAnnounced=false;starLionReunion=false;coastCoop={phase:0,t:0,lionTarget:2206};pickups=[];coop={state:'idle',lionX:1392,lionReady:false,started:false,bridgeTime:0};pendingFlag=-1;flagCrossingArmed=false;finalReviewOpen=false;if(finalSceneTimeout){clearTimeout(finalSceneTimeout);finalSceneTimeout=null}fade={a:0,dir:0,cb:null,text:''};level=n;L=buildLevel(n);mainL=null;L.pops=[];restoreUnclaimedRewards();clouds=[];forestClouds=[];sleeping=false;failCount=0;failCp=-1;chasmFailures={};chasmHelpDeclined={};chasmCleared={};scene=null;dying=null;gardenWater=null;L.enemies.forEach(e=>{e.v=Math.abs(e.v);e.dead=0;e.vy=0;e.hop=0;e.jt=Math.random()*900})}
+function layout(n){memoryTrailSeen=[false,false,false];memoryTrailGreeting=false;starBridgeBorn=-1;starBridgeAnnounced=false;starLionReunion=false;coastCoop={phase:0,t:0,lionTarget:2206};pickups=[];coop={state:'idle',lionX:1392,lionReady:false,started:false,bridgeTime:0};pendingFlag=-1;flagCrossingArmed=false;finalReviewOpen=false;if(finalSceneTimeout){clearTimeout(finalSceneTimeout);finalSceneTimeout=null}fade={a:0,dir:0,cb:null,text:''};level=n;L=buildLevel(n);mainL=null;L.pops=[];restoreUnclaimedRewards();clouds=[];forestClouds=[];sleeping=false;failCount=0;failCp=-1;chasmFailures={};chasmHelpDeclined={};chasmCleared={};scene=null;dying=null;gardenWater=null;L.enemies.forEach(e=>{e.v=Math.abs(e.v);e.dead=0;e.vy=0;e.hop=0;e.jt=Math.random()*900})}
 
 function restoreUnclaimedRewards(){
  // Uncollected physical prizes return INSIDE their question bricks on retry/reload.
@@ -788,6 +790,15 @@ function update(dt){
    finishLevel();return;
   }}
  if(level===2){
+  // Three decorative blossoms open as the pair walks toward the existing finish.
+  // They are NOT requirements, collectibles or planting interactions.
+  if(!L.under&&!L.secret&&!L.cabin){
+   for(let i=0;i<3;i++)if(!memoryTrailSeen[i]&&p.x+11>=MEMORY_FLOWER_X[i]-18){
+    memoryTrailSeen[i]=true;
+    if(i===0)flash('🦁 兔兔，我们是不是快到了？');
+    if(i===2&&!memoryTrailGreeting){memoryTrailGreeting=true;flash('🦁 再往前一点点，就是我们的未来啦 ♡')}
+   }
+  }
   if(!L.cabin&&Math.abs(p.x+11-980)<58)showInteract='✦ 进入小屋';
   if(!data.story.bridge){
    if(coop.state==='idle'&&p.x>=1360&&p.x<1410){
@@ -1024,7 +1035,56 @@ function drawFourSeasons(){
   text('♡',tx-8,G-206,'#fff5d7',24);
  }
 }
-function drawGardenItems(){/* The only planting happens in the ending cinematic. */}
+const MEMORY_FLOWER_X=[1845,2010,2170];
+function drawMemoryPath(){
+ // A calm transition from redwood forest into the garden. World-space, no collision.
+ if(level!==2||L.under||L.secret||L.cabin)return;
+ ctx.save();
+ const begin=1775,end=2350;
+ // Small warm highlights in the grass, growing denser toward the garden.
+ for(let i=0;i<34;i++){
+  const wx=begin+i*17,x=wx-cam;
+  if(x<-15||x>W+15)continue;
+  const density=(wx-begin)/(end-begin);
+  const yy=G-7-(i%4)*5;
+  circle(x,yy,1.5+(i%3)*.45,i%4===0?'#fff5c2':'#f7c1d6');
+  if(density>.32&&i%5===0){rect(x-1,G-14,2,10,'#7fb48c');circle(x,G-16,3.3,'#f1b5ca')}
+ }
+ for(let i=0;i<MEMORY_FLOWER_X.length;i++){
+  const wx=MEMORY_FLOWER_X[i],x=wx-cam;
+  if(x<-35||x>W+35)continue;
+  const open=memoryTrailSeen[i];
+  // Delicate buds in the forest; they open when the bunny passes.
+  rect(x-2,G-24,4,22,'#6d9f79');
+  rect(x-10,G-14,8,3,'#79a982');rect(x+4,G-18,7,3,'#79a982');
+  if(open){
+   ctx.save();ctx.shadowBlur=12;ctx.shadowColor='#ffe1b2';
+   for(let j=0;j<5;j++){
+    const a=j*Math.PI*2/5+Math.sin(timer/900+i)*.07;
+    circle(x+Math.cos(a)*7,G-28+Math.sin(a)*7,5,j%2?'#ffd5e6':'#f7a9ca');
+   }
+   circle(x,G-28,4,'#ffec99');ctx.restore();
+   for(let j=0;j<4;j++)circle(x+Math.sin(timer/600+j*2+i)*15,G-39-j*8,1.4,'#fff3c8');
+  }else{circle(x,G-27,6,'#b9a5b3');circle(x-2,G-28,2,'#ead2df')}
+ }
+ // Garden entrance: two vine-wrapped posts replace the anonymous final flag visually.
+ // Preserve the ORIGINAL level completion coordinate and physics.
+ const left=2280-cam,right=2350-cam;
+ if(right>-40&&left<W+40){
+  for(const x of [left,right]){
+   rect(x-4,G-70,8,70,'#ac8176');rect(x-6,G-72,12,5,'#f0d6a7');
+   for(let k=0;k<5;k++){
+    circle(x+(k%2?5:-4),G-16-k*12,4,'#7fab83');
+    if(k%2===0)circle(x+(k%2?5:-4),G-19-k*12,2.3,'#fac6d8');
+   }
+  }
+  ctx.strokeStyle='#c49a80';ctx.lineWidth=3;
+  ctx.beginPath();ctx.moveTo(left,G-72);ctx.quadraticCurveTo((left+right)/2,G-100,right,G-72);ctx.stroke();
+  text('约定花园', (left+right)/2,G-93,'#866179',12,'center');
+ }
+ ctx.restore();
+}
+function drawGardenItems(){drawMemoryPath();/* The only planting happens in the ending cinematic. */}
 
 function draw(){
  if(scene&&(scene.type==='snow'||scene.type==='snowEnding')){drawSnow();return}
@@ -1281,7 +1341,7 @@ function draw(){
     }
    }
   }
- if(!L.under&&!L.secret&&!L.cabin&&level!==1){rect(L.end-70-cam,G-90,5,90,'#fff4e4');rect(L.end-65-cam,G-90,48,24,'#f18eb2');text('终点',L.end-59-cam,G-73,'#fff',13)}
+ if(!L.under&&!L.secret&&!L.cabin&&level===0){rect(L.end-70-cam,G-90,5,90,'#fff4e4');rect(L.end-65-cam,G-90,48,24,'#f18eb2');text('终点',L.end-59-cam,G-73,'#fff',13)}
  for(const r of rockets){if(!r.parts){rect(r.x-1,r.y,2,7,r.c);ctx.globalAlpha=.4;rect(r.x-1,r.y+7,2,10,r.c);ctx.globalAlpha=1}else for(const q of r.parts)if(q.life>0){ctx.globalAlpha=Math.max(0,q.life);circle(q.x,q.y,2.4,r.c);ctx.globalAlpha=Math.max(0,q.life*.4);circle(q.x-q.vx*2,q.y-q.vy*2,1.6,r.c);ctx.globalAlpha=1}}
  if(scene&&scene.type==='sunsetPhoto')drawSunsetPhoto();
  if(scene&&scene.type==='beachArrival'){text('🦁 我们就在这里等烟花吧。',W/2,64,'#fff5e8',17,'center')}
