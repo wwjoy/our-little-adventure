@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · Beta V3.0.18 · 深蓝色的秘密</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · Beta V3.0.19 · 深蓝色的秘密</title><style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#2a203f;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;touch-action:none}#stage{position:absolute;inset:0;height:var(--available-height,100%);display:flex;align-items:center;justify-content:center}canvas{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;touch-action:none;-webkit-user-select:none}#hud{position:absolute;top:max(8px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));color:#fff;font-size:clamp(13px,2.2vw,19px);font-weight:800;text-shadow:1px 2px #704b73;pointer-events:none}#pause{position:absolute;right:max(12px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));z-index:2}button{font-family:inherit;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent}#controls{position:absolute;inset:0;pointer-events:none;z-index:3}#left,#right,#jump{opacity:.58;position:absolute;bottom:max(10px,env(safe-area-inset-bottom));width:52px;height:52px;background:#55476655;border:2px solid #ffffff77;color:#fff;border-radius:12px;font-size:22px;font-weight:800;pointer-events:auto}#left{left:max(12px,env(safe-area-inset-left))}#right{left:calc(max(12px,env(safe-area-inset-left)) + 61px)}#jump{right:max(12px,env(safe-area-inset-right));border-radius:50%;font-size:28px}.pressed{background:#ec8eaecc!important;opacity:1!important}#pause{border:2px solid #ffffffaa;background:#55476677;color:#fff;border-radius:11px;width:45px;height:42px;font-size:20px}#shade{position:absolute;inset:0;height:var(--available-height,100%);background:#211b39c9;display:flex;justify-content:center;align-items:center;z-index:4;padding:12px}#card{background:#fff3f6;border:3px solid #ffc2d7;border-radius:17px;color:#68455e;text-align:center;width:min(440px,92%);padding:16px;max-height:90%;overflow:auto;box-shadow:0 6px #a36e9d}#card h1{font-size:clamp(19px,3.2vw,27px);color:#db6394;margin:0 0 8px}#card p{font-size:clamp(12px,1.8vw,15px);line-height:1.65;margin:8px 0}#actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}#actions button{font-size:14px;font-weight:700;border:0;background:#e979a5;color:#fff;border-radius:10px;padding:10px 15px;min-height:43px}#actions button.alt{background:#a88bad}#rotate{position:absolute;inset:0;height:var(--available-height,100%);background:#241b38;color:white;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:8;gap:12px;font-size:20px;padding:24px}#rotate small{font-size:13px;opacity:.8}#error{display:none;position:absolute;z-index:12;inset:10%;background:#fff5f5;color:#a12750;border-radius:12px;padding:16px;overflow:auto;font-size:14px}.hide{display:none!important}@media(orientation:portrait){#rotate{display:flex}}@media(max-height:310px){#card{padding:8px}#card p{margin:3px}#left,#right,#jump{opacity:.58;width:48px;height:48px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 56px)}}
 #interact{position:absolute;left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);background:#fff9f0e8;color:#79516c;border:2px solid #e9a7c5;border-radius:7px;padding:4px 8px;min-width:66px;min-height:32px;z-index:3;font-weight:800;font-size:11px;box-shadow:0 3px #a88ba4;white-space:nowrap}#card{max-width:520px!important}#hud{z-index:2;max-width:75%;font-size:clamp(12px,1.7vw,18px)}@media(orientation:landscape){#left,#right,#jump{bottom:max(10px,env(safe-area-inset-bottom))}} 
 #gate{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 30% 20%,#ffd6e6,#f6aed3 45%,#b48ac8);height:var(--available-height,100%)}
@@ -1176,7 +1176,7 @@ function draw(){
   rect(215,G-49,54,29,'#9c745e');rect(219,G-54,46,7,'#efd0a0');
   // The blue-ice-cave trapdoor is the only passage underground.
   rect(344,G-17,88,17,'#463c51');rect(352,G-25,71,8,'#a98f8b');
-  circle(388,G-33,9,'#ffdfa0');text('↓ 蓝冰洞暗门',388,G-58,'#fff2ce',12,'center');
+  circle(388,G-33,9,'#ffdfa0');text('↓ 暗门',388,G-58,'#fff2ce',12,'center');
   text('← 森林',53,G-47,'#fff2ce',12,'center');
   // Compact reading corner fully inside the cabin, not behind an off-screen camera boundary.
   rect(456,105,104,125,'#8d675b');for(let j=0;j<4;j++){
@@ -1348,7 +1348,7 @@ function startDive(){
  dive={x:60,y:210,vx:0,vy:0,lionX:36,lionY:210,view:0,t:0,updraft:false,updraftFlash:0,shipOpened:false};
  clearInput();diveBack();flash('🫧 上浮到高处找宝藏！泡泡水流会把我们轻轻托起来。');
 }
-function pauseDive(){menu('🌊 海底冒险暂停','已经找到藏宝图碎片 '+data.dive.pieces.length+'/3，进度自动保存。',[['继续潜水',diveBack],['🗺️ 已完成的藏宝图',()=>data.dive.finished?showTreasureMap(diveBack):diveBack()],['返回首页',home]])}
+function pauseDive(){if(mode!=='dive')return;save();menu('🌊 海底冒险暂停','已经找到藏宝图碎片 '+data.dive.pieces.length+'/3，进度自动保存；下次从潜水入口出发。',[['▶ 继续潜水',diveBack],...(data.dive.finished?[['🗺️ 查看藏宝图',()=>showTreasureMap(diveBack)]]:[]),['📖 冒险手册',()=>journal(diveBack)],['🏠 返回冒险首页',()=>{clearInput();dive=null;home()}]])}
 function diveTarget(){if(!dive)return null;let n=data.dive.pieces.length;return n>=3?null:DIVE_STOPS[n]}
 function diveInteract(){
  if(!dive)return;const d=dive,n=data.dive.pieces.length;
@@ -1400,7 +1400,7 @@ function drawDive(){
  for(let i=0;i<15;i++){const x=i*175-v*.17;ctx.globalAlpha=.11;ctx.fillStyle='#f5ffff';ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+28,0);ctx.lineTo(x+126,300);ctx.lineTo(x+46,300);ctx.fill();ctx.globalAlpha=1}
  for(let i=0;i<80;i++){const wx=(i*79+20)%DIVE_WORLD,sy=28+((i*41+d.t*.020)%260);circle(wx-v,sy,1+i%3,'#b8f6f8bb')}
  // Sloping ocean floor and a dark canyon, no more featureless full-width strip.
- ctx.fillStyle='#d4c59c';ctx.beginPath();ctx.moveTo(0,300);for(let x=0;x<=W+12;x+=12){const world=x+v;let y=288+5*Math.sin(world/75);if(world>760&&world<1230)y=H+80;ctx.lineTo(x,y)}ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.closePath();ctx.fill();
+ ctx.fillStyle='#d4c59c';ctx.beginPath();ctx.moveTo(0,300);for(let x=0;x<=W+12;x+=12){const world=x+v;let y=288+5*Math.sin(world/75);if(world>=670&&world<795){const s=(world-670)/125;y+=(H+80-y)*(s*s*(3-2*s))}else if(world>=795&&world<=1130)y=H+80;else if(world>1130&&world<=1280){const s=(1280-world)/150;y+=(H+80-y)*(s*s*(3-2*s))}ctx.lineTo(x,y)}ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.closePath();ctx.fill();
  // Canyon left and right faces, far underwater mountains.
  for(let i=0;i<18;i++){const wx=i*145-v*.42,base=290;ctx.fillStyle=i%2?'#20547755':'#2a6f8155';ctx.beginPath();ctx.moveTo(wx-110,base);ctx.lineTo(wx,165+(i%3)*19);ctx.lineTo(wx+130,base);ctx.fill()}
  for(let i=0;i<26;i++){let wx=i*88+12;let sx=wx-v;if(sx<-80||sx>W+80||wx>770&&wx<1220)continue;rect(sx,266,6,24,'#369a88');rect(sx+9,257,5,32,'#58b9a5');if(i%2===0)diveCoral(sx+12,281,.63)}
@@ -1410,10 +1410,25 @@ function drawDive(){
  for(const x of [210,266,333,438,490])if(x-v>-45&&x-v<W+45)diveCoral(x-v,225+(x%3)*13,.77);
  let sx=355-v;if(sx>-120&&sx<W+120){circle(sx,218,29,'#e892bb');circle(sx,223,23,'#ffd2e4');circle(sx,226,17,'#fff3e0');text('珊瑚浅海',sx,168,'#fff6de',15,'center');if(!data.dive.pieces.includes(0))text('🗺️',sx,213,'#fff',20,'center')}
  // Second stop: vertical gorge and timed bubble updraft, reward at the TOP.
- for(const [x,y,w,h] of [[735,320,110,190],[1105,320,125,180],[780,188,82,33],[970,115,180,32]]){let vx=x-v;if(vx>-210&&vx<W+210)diveRock(vx,y,w,h)}
+ // Layered rock shelves and coral bind the updraft visually to the surrounding seafloor.
+ for(const [x,y,w,h] of [[700,320,128,98],[786,320,117,150],[1090,320,139,142],[1175,320,90,88],[780,191,86,48],[972,115,180,47]]){let vx=x-v;if(vx>-220&&vx<W+220)diveRock(vx,y,w,h)}
+ // Broken coral shelves, sea anemones and tiny bioluminescent marks guide the eye upward.
+ for(const [x,y,s] of [[714,267,.7],[784,176,.55],[844,222,.42],[1100,176,.62],[1208,263,.72],[1009,105,.45]]){
+  const dx=x-v;if(dx>-70&&dx<W+70)diveCoral(dx,y,s);
+ }
+ for(const [x,y] of [[765,255],[820,157],[989,115],[1112,240],[1176,287]]){
+  const dx=x-v;if(dx>-30&&dx<W+30){circle(dx,y,3.5,'#bff8f3');circle(dx+9,y-5,2.5,'#b7e3fc')}
+ }
  sx=908-v;if(sx>-160&&sx<W+160){
-  const strong=d.updraft;ctx.fillStyle=strong?'#80f8f82a':'#68d5e81c';ctx.fillRect(sx-62,50,125,235);
-  for(let i=0;i<24;i++){let bx=sx+Math.sin(i*8.7)*39,by=284-((i*49+d.t*(strong?.14:.055))%252);circle(bx,by,4+i%4,strong?'#c7fdffbb':'#79dcea88')}
+  const strong=d.updraft;
+  // A luminous vent anchors the rising bubbles; the stream is softly feathered rather than boxed in.
+  const flow=ctx.createRadialGradient(sx,260,10,sx,175,155);
+  flow.addColorStop(0,strong?'#7bf6e54b':'#64d5d52f');flow.addColorStop(.7,'#5ad9e31a');flow.addColorStop(1,'#5ad9e300');
+  ctx.fillStyle=flow;ctx.fillRect(sx-155,28,310,270);
+  ctx.fillStyle='#335f86';ctx.beginPath();ctx.ellipse(sx,285,45,13,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#77d9d6';ctx.beginPath();ctx.ellipse(sx,283,29,6,0,0,Math.PI*2);ctx.fill();
+  for(let i=0;i<35;i++){let bx=sx+Math.sin(i*8.7+d.t/1100)*39,by=278-((i*37+d.t*(strong?.14:.065))%254);circle(bx,by,2.3+i%4,strong?'#c7fdffcc':'#79dcea99')}
+  for(let i=0;i<10;i++){let bx=sx-47+i*10,by=255+Math.sin(d.t/300+i)*4;circle(bx,by,1.5,'#d5fff2aa')}
   text('🫧 升流峡谷',sx,36,'#fff6de',15,'center');text('▲ 跟着泡泡向上游',sx,57,'#f7f8dd',11,'center');
  }
  sx=1040-v;if(sx>-100&&sx<W+100){circle(sx,81,28,'#a7e8f0aa');circle(sx,81,19,'#ffe5f1');text('🐚',sx,88,'#fff',28,'center');if(!data.dive.pieces.includes(1))text('🗺️',sx,67,'#fff',15,'center');text('高处藏宝贝壳',sx,29,'#fff7dd',14,'center')}
@@ -1436,7 +1451,7 @@ function showFinalHomeClue(back){
 }
 function showTreasureMap(back){
  if(!data.dive.finished){menu('🗺️ 还没拼好','还需要收集三块海底藏宝图碎片。',[['继续寻宝',startDive],['返回',back||home]]);return}
- menu('🗺️ 我们的藏宝图 · 3/3','<div style="background:#fff9e8;border:3px dashed #d5aa82;border-radius:14px;padding:13px;color:#8b6474;line-height:1.8">🐚 珊瑚浅海　→　🫧 泡泡升流峡谷　→　🚢 月光沉船<br>✨ 三块碎片已经拼成完整的藏宝图！<hr style="border:0;border-top:1px solid #e8c8ac"><strong>'+HOME_CLUE+'</strong></div><small>地图指向家里。具体位置请打开独立的最后线索卡，尚未配置时不会提前剧透。</small>',[['🏡 查看最后的家中线索',()=>showFinalHomeClue(back)],['继续潜水',diveBack],['返回',back||home]]);
+ menu('🗺️ 我们的藏宝图 · 3/3','<div style="background:#fff9e8;border:3px dashed #d5aa82;border-radius:14px;padding:13px;color:#8b6474;line-height:1.8">🐚 珊瑚浅海　→　🫧 泡泡升流峡谷　→　🚢 月光沉船<br>✨ 三块碎片已经拼成完整的藏宝图！<hr style="border:0;border-top:1px solid #e8c8ac"><strong>'+HOME_CLUE+'</strong></div><small>地图指向家里。具体位置请打开独立的最后线索卡，尚未配置时不会提前剧透。</small>',[['🏡 查看最后的家中线索',()=>showFinalHomeClue(back)],['继续潜水',diveBack],['🏠 返回首页',home],['返回',back||home]]);
 }
 
 // ================= Gate (welcome + anniversary date) =================
@@ -1453,11 +1468,11 @@ $('#gate-input').addEventListener('input',e=>{const t=e.target;t.value=t.value.r
 // ================= Input =================
 ['left','right','jump'].forEach(key=>{let el=$('#'+key);function down(e){e.preventDefault();if(mode!=='play'&&mode!=='dive'&&!(mode==='scene'&&scene&&scene.type==='snow'&&key==='jump'))return;try{el.setPointerCapture(e.pointerId)}catch(_){}held[key]=true;el.classList.add('pressed');if(key==='jump')jumpQueue=true}function up(e){e.preventDefault();held[key]=false;el.classList.remove('pressed')}el.addEventListener('pointerdown',down);el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up);el.addEventListener('lostpointercapture',up)});
 // Pause / interact react on touch-down so they work even while another finger holds a direction key
-$('#pause').addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();pause()});
+$('#pause').addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();if(mode==='dive')pauseDive();else pause()});
 $('#interact').addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();interact()});
 window.addEventListener('keydown',e=>{if(mode==='gate')return;if(['ArrowLeft','ArrowRight','Space','ArrowUp','Escape','KeyE'].includes(e.code))e.preventDefault();if(e.code==='Escape'){if(mode==='play')pause();else if(mode==='dive')pauseDive();return}if(mode!=='play'&&mode!=='dive'&&!(mode==='scene'&&scene&&scene.type==='snow'))return;if(e.code==='KeyE'){interact();return}if(e.code==='ArrowLeft')held.left=true;if(e.code==='ArrowRight')held.right=true;if((e.code==='Space'||e.code==='ArrowUp')&&!held.jump){held.jump=true;jumpQueue=true}});
 window.addEventListener('keyup',e=>{if(e.code==='ArrowLeft')held.left=false;if(e.code==='ArrowRight')held.right=false;if(e.code==='Space'||e.code==='ArrowUp')held.jump=false});
-document.addEventListener('visibilitychange',()=>{if(document.hidden&&mode==='play')pause()});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){if(mode==='play')pause();else if(mode==='dive')pauseDive()}});
 window.addEventListener('blur',()=>{if(mode==='play')pause();else if(mode==='dive')pauseDive()});
 document.addEventListener('contextmenu',e=>{if(e.target.tagName!=='INPUT')e.preventDefault()});
 ['gesturestart','gesturechange','gestureend'].forEach(n=>document.addEventListener(n,e=>e.preventDefault(),{passive:false}));
