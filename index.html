@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V3.0.13 · 蓝冰洞隐藏回忆</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V3.0.15 · 约定之树周年演出</title><style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#2a203f;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;touch-action:none}#stage{position:absolute;inset:0;height:var(--available-height,100%);display:flex;align-items:center;justify-content:center}canvas{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;touch-action:none;-webkit-user-select:none}#hud{position:absolute;top:max(8px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));color:#fff;font-size:clamp(13px,2.2vw,19px);font-weight:800;text-shadow:1px 2px #704b73;pointer-events:none}#pause{position:absolute;right:max(12px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));z-index:2}button{font-family:inherit;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent}#controls{position:absolute;inset:0;pointer-events:none;z-index:3}#left,#right,#jump{opacity:.58;position:absolute;bottom:max(10px,env(safe-area-inset-bottom));width:52px;height:52px;background:#55476655;border:2px solid #ffffff77;color:#fff;border-radius:12px;font-size:22px;font-weight:800;pointer-events:auto}#left{left:max(12px,env(safe-area-inset-left))}#right{left:calc(max(12px,env(safe-area-inset-left)) + 61px)}#jump{right:max(12px,env(safe-area-inset-right));border-radius:50%;font-size:28px}.pressed{background:#ec8eaecc!important;opacity:1!important}#pause{border:2px solid #ffffffaa;background:#55476677;color:#fff;border-radius:11px;width:45px;height:42px;font-size:20px}#shade{position:absolute;inset:0;height:var(--available-height,100%);background:#211b39c9;display:flex;justify-content:center;align-items:center;z-index:4;padding:12px}#card{background:#fff3f6;border:3px solid #ffc2d7;border-radius:17px;color:#68455e;text-align:center;width:min(440px,92%);padding:16px;max-height:90%;overflow:auto;box-shadow:0 6px #a36e9d}#card h1{font-size:clamp(19px,3.2vw,27px);color:#db6394;margin:0 0 8px}#card p{font-size:clamp(12px,1.8vw,15px);line-height:1.65;margin:8px 0}#actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}#actions button{font-size:14px;font-weight:700;border:0;background:#e979a5;color:#fff;border-radius:10px;padding:10px 15px;min-height:43px}#actions button.alt{background:#a88bad}#rotate{position:absolute;inset:0;height:var(--available-height,100%);background:#241b38;color:white;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:8;gap:12px;font-size:20px;padding:24px}#rotate small{font-size:13px;opacity:.8}#error{display:none;position:absolute;z-index:12;inset:10%;background:#fff5f5;color:#a12750;border-radius:12px;padding:16px;overflow:auto;font-size:14px}.hide{display:none!important}@media(orientation:portrait){#rotate{display:flex}}@media(max-height:310px){#card{padding:8px}#card p{margin:3px}#left,#right,#jump{opacity:.58;width:48px;height:48px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 56px)}}
 #interact{position:absolute;left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);background:#fff9f0e8;color:#79516c;border:2px solid #e9a7c5;border-radius:7px;padding:4px 8px;min-width:66px;min-height:32px;z-index:3;font-weight:800;font-size:11px;box-shadow:0 3px #a88ba4;white-space:nowrap}#card{max-width:520px!important}#hud{z-index:2;max-width:75%;font-size:clamp(12px,1.7vw,18px)}@media(orientation:landscape){#left,#right,#jump{bottom:max(10px,env(safe-area-inset-bottom))}} 
 #gate{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 30% 20%,#ffd6e6,#f6aed3 45%,#b48ac8);height:var(--available-height,100%)}
@@ -363,10 +363,10 @@ function finishLevel(){
  else if(level===1){stageReview(1,()=>nextLevel(2))}
  else{if(!data.seed){cut('🌷 约定之树还在等待','请先去森林小屋的蓝冰洞找到未来的种子，再回来通过终点，和小狮子一起种树。',()=>{respawnAt(L.cps[Math.min(data.cp,L.cps.length-1)]);play()});return}
   if(!data.story.bridge){cut('🦁 双人机关还没完成','先和小狮子一起启动花园机关，再前往终点。',()=>{respawnAt(L.cps[Math.min(data.cp,L.cps.length-1)]);play()});return}
-  finalReviewOpen=true;stageReview(2,beginFinalPlanting);}}
+  finalReviewOpen=true;beginFinalPlanting();}}
 function cardC(){return data.coins.length>=Math.ceil(TOTAL_COINS*.7)}
 function ending(){if(!data.hearts.every(Boolean)||!data.seed||!data.story.bridge){menu('✨ 旅程还没完成','还需要找到未来的种子、完成双人机关，并在终点一起种树。',[['继续冒险',()=>startLevel(Math.min(2,data.level),true)],['返回首页',home]]);return}data.done=true;save();
- menu('🌸 我们的第一个365天',ANNIV.label+'<br>🐰 ❤️ 🦁<br>我们一起种下未来的种子，<br>等它长成樱花树。<br><strong>一周年快乐 ♡</strong>',[['下一页 ♡',ending2]])}
+ menu('🌸 我们的第一个365天',ANNIV.label+'<br>🐰 ❤️ 🦁<br>我们一起种下未来的种子，<br>看它慢慢长成属于我们的约定之树。<br><strong>一周年快乐 ♡</strong>',[['下一页 ♡',ending2]])}
 function ending2(){const n=data.shells.length;
  const lines=[];if(n>=5)lines.push('🐚 还记得海边的贝壳吗？我们把那一天收藏起来。');else if(n>=3)lines.push('🐚 海边的夕阳，是我们珍贵的回忆。');
  if(cardC())lines.push('🪙 爱心币收集达人！隐藏回忆卡 C 已解锁');
@@ -539,7 +539,7 @@ function updateScene(dt){const s=scene,k=Math.min(2,dt/16.667);s.t+=dt;timer+=dt
  if(s.type==='beachArrival'){p.x=3250;p.y=G-p.h;lion.x=3223;lion.y=G-27;p.sit=false;lion.sit=false;camTo(p.x-W*.45,k);if(s.t>2400){startScene('sunset');return}}
  if(s.type==='sunset'){p.x=3250;p.y=G-p.h;p.sit=true;lion.x=3223;lion.y=G-27;lion.sit=true;lion.face=1;p.face=1;camTo(p.x-W*.45,k);
   if(s.t>5000){data.story.sunset=true;save();startScene('fireworks');return}}
- if(s.type==='plant'){s.t=Math.max(s.t,performance.now()-s.startedAt);if(s.t>=8800&&s.visibleFrames>=8){s.readyToFinish=true;completeFinalPlanting()}return}
+ if(s.type==='plant'){s.t=Math.max(s.t,performance.now()-s.startedAt);if(s.t>=19500&&s.visibleFrames>=8){s.readyToFinish=true;completeFinalPlanting()}return}
  if(s.type==='fireworks'){p.x=3250;p.y=G-p.h;p.sit=true;lion.x=3223;lion.y=G-27;lion.sit=true;lion.face=1;camTo(p.x-W*.45,k);
   if(s.t<8600&&(s.next||0)<s.t){s.next=s.t+260+Math.random()*300;if(Math.random()<.35)rockets.push({x:W*(.15+Math.random()*.75),y:H-110,vy:-4.8-Math.random()*1.4,c:'#ffd6f0',parts:null});rockets.push({x:W*(.15+Math.random()*.75),y:H-110,vy:-4.6-Math.random()*1.6,c:['#ffcb8e','#ff91c1','#9ad7ff','#c8f7a6','#fff1a8'][Math.floor(Math.random()*5)],parts:null})}
   for(const r of rockets){if(!r.parts){r.y+=r.vy*k;r.vy+=.07*k;if(r.vy>-.6){r.parts=[];const n=34;for(let i=0;i<n;i++){const a=i/n*Math.PI*2,sp=1.8+Math.random()*1.6;r.parts.push({x:r.x,y:r.y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:1})}}}
@@ -1021,17 +1021,106 @@ function drawGardenItems(){/* The only planting happens in the ending cinematic.
 function draw(){
  if(scene&&(scene.type==='snow'||scene.type==='snowEnding')){drawSnow();return}
  if(scene&&scene.type==='plant'){
+  // V3.0.15: Full cinematic, played after passing the *only* finish flag.
+  // All animation is clock-driven and cannot be interrupted by normal movement.
   scene.visibleFrames=(scene.visibleFrames||0)+1;
-  const t=scene.t;
-  const grad=ctx.createLinearGradient(0,0,0,H);grad.addColorStop(0,'#f7c8e1');grad.addColorStop(1,'#d5f1ce');ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
-  rect(0,G,W,H-G,'#b9897e');rect(0,G,W,9,'#7bcaa0');
-  const cx=W/2;
-  const growth=Math.max(0,Math.min(1,(t-1800)/3900));
-  if(t>850){rect(cx-12,G-6,24,7,'#765746');circle(cx,G-8,5,'#9b6a55')}
-  if(t>1500){rect(cx-3,G-8-growth*100,6,100*growth,'#926b61');
-   for(let i=0;i<9;i++){const a=i*2.4,rr=17+growth*34;circle(cx+Math.sin(a)*rr*.8,G-108*growth+Math.cos(a)*rr*.42,Math.max(2,growth*22),i%2?'#f7a4c8':'#ffcfdf')}}
-  bunny(cx-66,G-27,1,true,false);lionDraw(cx+40,G-27,-1,true);
-  text(t<1700?'一起种下未来的种子 ♡':t<5600?'愿我们的故事慢慢开花 ♡':'我们的第一个365天',W/2,66,'#7b4d6e',20,'center');
+  const t=scene.t,cx=W/2,ground=G;
+  const clamp=(v)=>Math.max(0,Math.min(1,v));
+  const smooth=(v)=>{v=clamp(v);return v*v*(3-2*v)};
+  const fadeIn=(a,b)=>smooth((t-a)/(b-a));
+  const sky=ctx.createLinearGradient(0,0,0,H);
+  sky.addColorStop(0,'#f8cbdf');sky.addColorStop(.63,'#fbe4ce');sky.addColorStop(1,'#d7eed3');
+  ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+  // Redwood forest recedes gently into the final garden.
+  for(let i=0;i<10;i++){
+    const x=(i*127+37)%(W+90)-30;
+    rect(x,72,19,ground-72,'#aebfae');circle(x+10,84,42,'#b2cbb2');
+  }
+  for(let i=0;i<7;i++){
+    const x=i*117+12;rect(x,36,24,ground-36,'#b48b7b');
+    circle(x+12,36,44,'#93b99d');circle(x-9,25,27,'#a0c2a4');
+  }
+  rect(0,ground,W,H-ground,'#b9897e');rect(0,ground,W,10,'#7cc69b');
+  // Flowers, little glowing lanterns and swaying particles.
+  for(let i=0;i<30;i++){
+    const x=(i*73+21)%W,y=ground-8-(i%3)*7;
+    circle(x,y,3,i%3?'#f4a9cb':'#ffe3a4');
+  }
+  for(let i=0;i<20;i++){
+    const x=(i*89+timer*.008*(i%3+1))%W,y=80+(i*37)%174+Math.sin(timer/550+i)*4;
+    circle(x,y,1.4+(i%2),i%3?'#fff7c4':'#ffcee2');
+  }
+  // Neither character teleports: they appear beside the same tree throughout the scene.
+  const bx=cx-75, lx=cx+48;
+  const digging=t>750&&t<2200;
+  const watering=t>2350&&t<4950;
+  const bunnySit=t>11800;
+  const lionSit=t>11800;
+  bunny(bx,ground-27+(digging?4:0),1,bunnySit||digging,false);
+  lionDraw(lx,ground-27+(watering?3:0),-1,lionSit||watering);
+  // Soil opening, actual seed placement and covering.
+  if(t>=650){const dig=fadeIn(650,1650);rect(cx-28,ground-7,56,7,'#8b6554');
+    rect(cx-18,ground-8,36,Math.max(2,6*dig),'#684e49');
+    for(let i=0;i<5;i++){const x=cx-17+i*8;
+      circle(x,ground-9-8*Math.abs(Math.sin((t-720)/240+i)),2.2,'#b58a74');}}
+  if(t>1400&&t<3000){const drop=fadeIn(1400,2500);seedDraw(cx,ground-27+drop*22)}
+  // Blue watering can held by lion, tilted while watering; falling droplets.
+  if(watering){const xx=lx-10,yy=ground-30+(t>3400?2:0);
+    ctx.save();ctx.translate(xx,yy);ctx.rotate(t>2750?.36:0);
+    rect(-8,-7,16,13,'#8ccadb');rect(-8,-9,14,3,'#d9f4f9');
+    rect(8,-5,7,3,'#90d6e8');rect(-12,-4,4,7,'#b8edf5');ctx.restore();
+    if(t>2850){for(let i=0;i<5;i++){
+      const phase=((t-2850)/260+i*.25)%1;
+      circle(xx+8-(phase*18),yy+phase*22,2.5,'#a4ddf7');}}
+  }
+  // Growth: sprout -> trunk -> branching leaves -> clustered blossoms, not an instant tree.
+  const grow=fadeIn(4600,9700),bloom=fadeIn(8650,13300),glow=fadeIn(12100,15300);
+  const treeBase=ground-7, treeH=140*grow;
+  if(grow>0){
+    const trunkW=3+8*grow;
+    rect(cx-trunkW/2,treeBase-treeH,trunkW,treeH,'#926b61');
+    if(grow>.13){
+      ctx.strokeStyle='#996f66';ctx.lineWidth=3+4*grow;
+      ctx.beginPath();ctx.moveTo(cx,treeBase-treeH*.54);ctx.lineTo(cx-53*grow,treeBase-treeH*.90);
+      ctx.moveTo(cx,treeBase-treeH*.72);ctx.lineTo(cx+58*grow,treeBase-treeH*1.04);ctx.stroke();}
+    if(grow<.22){circle(cx,treeBase-treeH-7,7+grow*18,'#91ce86')}
+    const clusters=25;
+    for(let i=0;i<clusters;i++){
+      const a=i*2.39996;const spread=(28+(i%6)*9)*grow;
+      const px=cx+Math.cos(a)*spread,py=treeBase-treeH+(Math.sin(a)*.61-.05)*spread;
+      const f=fadeIn(8600+i*90,10400+i*120);
+      const r=(9+i%4*3)*grow;
+      circle(px,py,r,'#a7c89a');
+      if(f>0){ctx.save();ctx.globalAlpha=f;
+        circle(px,py,r+1,i%3===0?'#ffe4ef':i%3===1?'#f7b2d1':'#f9c8df');
+        circle(px+3,py-3,Math.max(1,r*.28),'#fff1f3');ctx.restore();}
+    }
+    if(glow>0){ctx.save();ctx.globalAlpha=glow;
+      for(let i=0;i<7;i++){const a=(i-3)*.65;
+        circle(cx+Math.sin(a)*72,treeBase-treeH*.88+Math.cos(a)*24,3.5,'#ffedae');}
+      heart(cx,treeBase-treeH*.69);ctx.restore();}
+  }
+  // Flower petals spiral only once blossoms have appeared.
+  if(bloom>.05){ctx.save();ctx.globalAlpha=bloom;
+    for(let i=0;i<30;i++){
+      const x=cx-150+(i*61+timer*.017*(i%3+1))%300;
+      const y=50+(i*41+timer*.026)%220;
+      rect(x,y,3+(i%2),2,'#f6a9cf');}
+    ctx.restore();}
+  // Dialogue and the anniversary typography appear AFTER planting and flowering.
+  const lines=t<2200?'把未来的种子轻轻种下 ♡':
+    t<5000?'小狮子认真地为它浇水…':
+    t<9600?'一起长大，一起开花 ♡':
+    t<13600?'以后，我们一起照顾它吧。':
+    'Happy 1st Anniversary ♡';
+  text(lines,cx,43,t<13600?'#805d77':'#bb5f91',t<13600?17:24,'center');
+  if(t>=13800){ctx.save();ctx.globalAlpha=fadeIn(13800,15100);
+    text(ANNIV.label,cx,74,'#8e5b7a',16,'center');
+    text('我们一起走过了第一个四季。',cx,100,'#936578',15,'center');
+    ctx.restore();}
+  if(t>=16900){ctx.save();ctx.globalAlpha=fadeIn(16900,18000);
+    text('我们的第一年结束了，冒险才刚刚开始。',cx,133,'#936578',14,'center');
+    ctx.restore();}
   return;
  }
  if(!L){ctx.fillStyle='#2a203f';ctx.fillRect(0,0,W,H);return}
@@ -1217,14 +1306,14 @@ function interact(){if(mode==='scene'&&scene&&scene.type==='plant')return;if(mod
  if(level===2&&!L.cabin&&Math.abs(p.x+11-980)<58){enterCabin();return}}
 
 // ================= Gate (welcome + anniversary date) =================
-function parseDate(v){const d=(v||'').replace(/[^0-9]/g,'');if(d.length===4)return d==='1113';if(d.length===8)return d.slice(4)==='1113';return false}
+function parseDate(v){const d=(v||'').replace(/[^0-9]/g,'');if(d.length===4)return d==='0718';if(d.length===8)return d.slice(4)==='0718';return false}
 let wrong=0;
 function showGate(step){mode='gate';showUI(false);$('#shade').classList.add('hide');$('#gate').classList.remove('hide');$('#gate-welcome').classList.toggle('hide',step!=='welcome');$('#gate-date').classList.toggle('hide',step!=='date');if(step==='date'){$('#gate-msg').textContent='';setTimeout(()=>{try{$('#gate-input').focus()}catch(e){}},50)}}
 function passGate(){try{localStorage.setItem(GATE,'1')}catch(e){}$('#gate-input').blur();$('#gate').classList.add('hide');mode='menu';home()}
 $('#gate-enter').addEventListener('click',()=>gateOk()?passGate():showGate('date'));
 $('#gate-date').addEventListener('submit',e=>{e.preventDefault();const v=$('#gate-input').value;
  if(parseDate(v)){$('#gate-msg').textContent='答对啦 ♡';setTimeout(passGate,350)}
- else{wrong++;$('#gate-msg').textContent=wrong>=3?'提示：是 11 月的某一天，输入 4 位数字，比如 0101':'再想想～是我们在一起的那一天哦';const c=$('#gate-card');c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake')}});
+ else{wrong++;$('#gate-msg').textContent=wrong>=3?'提示：是 7 月的某一天，输入 4 位数字，比如 0101':'再想想～是我们在一起的那一天哦';const c=$('#gate-card');c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake')}});
 $('#gate-input').addEventListener('input',e=>{const t=e.target;t.value=t.value.replace(/[^0-9]/g,'').slice(0,8)});
 
 // ================= Input =================
