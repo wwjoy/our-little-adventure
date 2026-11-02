@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V3.0.10 · 云桥合作与小屋边界修复</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · 完整版 Beta V3.0.12 · 蓝冰洞双人探险</title><style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#2a203f;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;touch-action:none}#stage{position:absolute;inset:0;height:var(--available-height,100%);display:flex;align-items:center;justify-content:center}canvas{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;touch-action:none;-webkit-user-select:none}#hud{position:absolute;top:max(8px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));color:#fff;font-size:clamp(13px,2.2vw,19px);font-weight:800;text-shadow:1px 2px #704b73;pointer-events:none}#pause{position:absolute;right:max(12px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));z-index:2}button{font-family:inherit;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent}#controls{position:absolute;inset:0;pointer-events:none;z-index:3}#left,#right,#jump{opacity:.58;position:absolute;bottom:max(10px,env(safe-area-inset-bottom));width:52px;height:52px;background:#55476655;border:2px solid #ffffff77;color:#fff;border-radius:12px;font-size:22px;font-weight:800;pointer-events:auto}#left{left:max(12px,env(safe-area-inset-left))}#right{left:calc(max(12px,env(safe-area-inset-left)) + 61px)}#jump{right:max(12px,env(safe-area-inset-right));border-radius:50%;font-size:28px}.pressed{background:#ec8eaecc!important;opacity:1!important}#pause{border:2px solid #ffffffaa;background:#55476677;color:#fff;border-radius:11px;width:45px;height:42px;font-size:20px}#shade{position:absolute;inset:0;height:var(--available-height,100%);background:#211b39c9;display:flex;justify-content:center;align-items:center;z-index:4;padding:12px}#card{background:#fff3f6;border:3px solid #ffc2d7;border-radius:17px;color:#68455e;text-align:center;width:min(440px,92%);padding:16px;max-height:90%;overflow:auto;box-shadow:0 6px #a36e9d}#card h1{font-size:clamp(19px,3.2vw,27px);color:#db6394;margin:0 0 8px}#card p{font-size:clamp(12px,1.8vw,15px);line-height:1.65;margin:8px 0}#actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}#actions button{font-size:14px;font-weight:700;border:0;background:#e979a5;color:#fff;border-radius:10px;padding:10px 15px;min-height:43px}#actions button.alt{background:#a88bad}#rotate{position:absolute;inset:0;height:var(--available-height,100%);background:#241b38;color:white;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:8;gap:12px;font-size:20px;padding:24px}#rotate small{font-size:13px;opacity:.8}#error{display:none;position:absolute;z-index:12;inset:10%;background:#fff5f5;color:#a12750;border-radius:12px;padding:16px;overflow:auto;font-size:14px}.hide{display:none!important}@media(orientation:portrait){#rotate{display:flex}}@media(max-height:310px){#card{padding:8px}#card p{margin:3px}#left,#right,#jump{opacity:.58;width:48px;height:48px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 56px)}}
 #interact{position:absolute;left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);background:#fff9f0e8;color:#79516c;border:2px solid #e9a7c5;border-radius:7px;padding:4px 8px;min-width:66px;min-height:32px;z-index:3;font-weight:800;font-size:11px;box-shadow:0 3px #a88ba4;white-space:nowrap}#card{max-width:520px!important}#hud{z-index:2;max-width:75%;font-size:clamp(12px,1.7vw,18px)}@media(orientation:landscape){#left,#right,#jump{bottom:max(10px,env(safe-area-inset-bottom))}} 
 #gate{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 30% 20%,#ffd6e6,#f6aed3 45%,#b48ac8);height:var(--available-height,100%)}
@@ -98,12 +98,16 @@ function buildLevel(n){
    ...coins(0,[[175,216],[335,177],[710,194],[1155,185],[1710,190],[1950,170]])]};
 }
 // Underground bonus room behind the glowing pipe (level 3)
-function buildUnder(){return {key:'2u',under:true,end:900,
- map:[gr(0,900),bl(300,60,250),bl(520,60,230)],
- boxes:[qb(0,160,190,'coin'),qb(1,182,190,'bag'),qb(2,204,190,'coin')],
- plats:[],cps:[70],trees:[],enemies:[],
- objects:[{type:'seed',x:700,y:G-22},{type:'sign',x:785,text:'出口 →'},
-  ...coins(0,[...arc(226,246,4,18,24),...row(310,215,3,20),...arc(440,240,4,18,30),...row(530,195,3,20),...row(620,250,3,18)])]}}
+function buildUnder(){return {key:'2u',under:true,end:1570,
+ map:[gr(0,845),gr(1085,485),bl(150,76,247),bl(650,80,242),bl(1190,88,237)],
+ boxes:[],plats:[],cps:[70],trees:[],enemies:[],
+ objects:[{type:'seed',x:1370,y:G-35},{type:'sign',x:1460,text:'出口 →'},
+ ...coins(0,[[170,213],[218,201],[730,205],[1240,190]])]}}
+// The blue-ice cave has its own puzzle state, independent of the forest bridge.
+let icePuzzle={cubeX:345,cubeStart:345,plateX:480,gateX:590,gateOpen:false,light:'idle',lightT:0};
+function resetIcePuzzle(){icePuzzle={cubeX:345,cubeStart:345,plateX:480,gateX:590,gateOpen:false,light:'idle',lightT:0}}
+function iceBridgePieces(){return [
+ {x:864,y:G-19,w:51},{x:921,y:G-29,w:51},{x:979,y:G-25,w:51},{x:1037,y:G-18,w:52}];}
 function buildSecretRoom(){return {key:'0b',secret:true,end:690,
  map:[gr(0,690),bl(185,95,240),bl(380,100,218)],
  boxes:[qb(0,290,172,'bag'),qb(1,340,177,'snowboard')],plats:[],cps:[50],trees:[],enemies:[],
@@ -139,6 +143,7 @@ function surfaces(){
  for(const a of L.map)arr.push(a.kind==='block'?{x:a.x,y:a.y,w:a.w,h:H+200,kind:'block',box:true}:a);
  for(const b of L.boxes)arr.push({x:b.x,y:b.y,w:b.w,h:b.h,kind:'q',box:true,ref:b});
  clouds.forEach(c=>{if(!c.building)arr.push({x:c.x,y:G-5,w:c.w,kind:'cloud'});});
+ if(L.under){if(!icePuzzle.gateOpen)arr.push({x:icePuzzle.gateX,y:G-214,w:24,h:214,kind:'block',box:true});if(icePuzzle.light==='ready')for(const s of iceBridgePieces())arr.push({...s,kind:'icebridge'});}
  if(starBridgeReady()&&starBridgeProgress()>=.98){
   // Optional vertical star steps: do not cover the main ground or substitute for rafts.
   for(const a of [{x:2740,y:G-49,w:43},{x:2792,y:G-79,w:45},{x:2847,y:G-105,w:46},{x:2903,y:G-105,w:100}])arr.push({...a,kind:'starbridge'});
@@ -190,7 +195,7 @@ function restoreUnclaimedRewards(){
  if(changed)save();
 }
 function resetPlanks(){for(const pl of L.plats)if(pl.kind==='fall'){pl.y=pl.y0;pl.t=0;pl.vy=0}}
-function respawnAt(x){if(level===2&&!L.under&&!data.story.bridge&&coop.state==='approaching'){coop.state='waiting';coop.lionReady=true}pendingFlag=-1;flagCrossingArmed=false;x=safeX(x);p.x=x;p.y=G-p.h;p.vx=p.vy=0;p.on=true;p.ride=null;p.sit=false;p.hidden=false;p.coyote=p.buffer=p.jumpMs=0;lion.x=x-34*p.face;lion.y=p.y;lion.sit=false;trail=[];resetPlanks();cam=Math.max(0,Math.min(L.end-W,x-W*.35));respawnGuard=900;clearInput()}
+function respawnAt(x){if(L&&L.under&&!icePuzzle.gateOpen)icePuzzle.cubeX=icePuzzle.cubeStart;if(level===2&&!L.under&&!data.story.bridge&&coop.state==='approaching'){coop.state='waiting';coop.lionReady=true}pendingFlag=-1;flagCrossingArmed=false;x=safeX(x);p.x=x;p.y=G-p.h;p.vx=p.vy=0;p.on=true;p.ride=null;p.sit=false;p.hidden=false;p.coyote=p.buffer=p.jumpMs=0;lion.x=x-34*p.face;lion.y=p.y;lion.sit=false;trail=[];resetPlanks();cam=Math.max(0,Math.min(L.end-W,x-W*.35));respawnGuard=900;clearInput()}
 function startLevel(n,fromSave){layout(n);let cp=(fromSave&&data.cpLevel===n)?Math.max(0,Math.min(L.cps.length-1,data.cp)):0;data.level=Math.max(data.level,n);data.cp=cp;data.cpLevel=n;save();p.face=1;respawnAt(L.cps[cp]);play();if(n===2&&!data.story.gardenIntro){data.story.gardenIntro=true;save();cut('🌲 红杉森林的秘密','沿着红杉森林找到秘密小屋，打开地下入口，和小狮子一起探索蓝冰洞。<br>找到「未来的种子」后，带它回到约定之树旁的花坛，一起种下。',play,'一起出发 ♡')}if(n===0&&!data.story.introGuide){data.story.introGuide=true;save();cut('🦁 冒险的小目标','听说这片世界里藏着三颗特别的爱心，我们一起把它们找出来吧！<br><br>沿途的金币也值得收集，遇到特别的东西时，小狮子会提醒你。<br>想知道收集进度，可以在暂停菜单打开「📖 冒险手册」。',play,'出发吧 ♡')}}
 function showUI(on){$('#controls').classList.toggle('hide',!on);$('#pause').classList.toggle('hide',!on);$('#hud').classList.toggle('hide',mode==='gate')}
 function menu(title,body,buttons){mode='menu';clearInput();showUI(false);$('#interact').classList.add('hide');$('#shade').classList.remove('hide');$('#heading').textContent=title;$('#message').innerHTML=body;const el=$('#actions');el.textContent='';buttons.forEach((b,i)=>{let btn=document.createElement('button');btn.type='button';btn.textContent=b[0];if(i)btn.className='alt';btn.addEventListener('click',b[1]);el.appendChild(btn)});$('#card').scrollTop=0}
@@ -525,7 +530,7 @@ function buildCabin(){return {key:'2c',cabin:true,end:W,map:[gr(0,W)],boxes:[],p
 let forestReturnX=852, cabinL=null;
 function enterCabin(){if(level!==2||L.under||L.cabin)return;forestReturnX=p.x;forestClouds=clouds;mainL=L;L=buildCabin();L.pops=[];clouds=[];respawnAt(60);play();flash('🏡 森林小屋 · 地板下似乎有暗门')}
 function exitCabin(){if(!L.cabin)return;L=mainL;mainL=null;cabinL=null;clouds=forestClouds;respawnAt(forestReturnX);play()}
-function enterUnder(){if(L.cabin){cabinL=L;}else if(!mainL){mainL=L;}L=buildUnder();L.pops=[];clouds=[];p.face=1;respawnAt(70);cam=0;play();flash('💎 地下蓝冰洞')}
+function enterUnder(){resetIcePuzzle();if(L.cabin){cabinL=L;}else if(!mainL){mainL=L;}L=buildUnder();L.pops=[];clouds=[];p.face=1;respawnAt(70);cam=0;play();flash('💎 地下蓝冰洞')}
 function exitUnder(){L=cabinL||mainL;cabinL=null;respawnAt(350);play();flash('🏡 回到了小屋 · 随时可以再次探洞')}
 
 // ================= Update =================
@@ -621,6 +626,7 @@ function updateLion(k){
  // Always resolve the companion against raised terrain, never embed it in a block.
  let floor=G-27;
  for(const a of L.map){if(a.kind==='block'&&lion.x+22>a.x+3&&lion.x<a.x+a.w-3)floor=Math.min(floor,a.y-27)}
+ if(L.under&&icePuzzle.light==='ready')for(const s of iceBridgePieces())if(lion.x+22>s.x+3&&lion.x<s.x+s.w-3)floor=Math.min(floor,s.y-27);
  if(!p.on&&Math.abs(p.x-lion.x)<64&&p.y<floor-22)floor=Math.min(floor,p.y+12);
  if(lion.y>floor+6)lion.y=floor;
  else lion.y+=(floor-lion.y)*Math.min(1,.23*k);
@@ -642,12 +648,28 @@ function update(dt){
   if(coastCoop.phase===3){lion.x+=(p.x-35-lion.x)*Math.min(1,.14*k)}
   if(starBridgeReady()&&!starBridgeAnnounced){starBridgeAnnounced=true;starBridgeBorn=timer;flash('✨ 海岸上方出现了通往秘密观景台的星光台阶……')}
  }
+ if(L.under){
+  if(icePuzzle.light==='idle'&&p.x>775&&p.x<875&&lion.x>630&&lion.x<970&&icePuzzle.gateOpen){icePuzzle.light='revealing';icePuzzle.lightT=0;flash('🦁 小狮子的头灯照出了隐藏冰桥！');}
+  if(icePuzzle.light==='revealing'){icePuzzle.lightT+=dt;if(icePuzzle.lightT>1700){icePuzzle.light='ready';flash('✨ 冰桥已经固定，可以一起过去啦！');}}
+ }
  updateRewards(dt);secretDoor();
  if(p.ride&&p.on){const r=p.ride;if(r.kind==='mover'){p.x+=r.dx;p.y+=r.dy}else if(r.kind==='fall'&&r.t>=450){p.y=r.y-p.h}}
  const prevY=p.y,prevX=p.x,sol=surfaces();
  if(dir)p.face=dir;
  p.vx+=(dir*2.45-p.vx)*Math.min(1,.27*k);if(!dir)p.vx*=Math.pow(.7,k);
  p.x=Math.max(0,Math.min(L.end-24,p.x+p.vx*k));
+ if(L.under&&!icePuzzle.gateOpen){
+  const cube=icePuzzle,old=cube.cubeX,cw=39;
+  if(dir>0&&prevX+p.w<=old+5&&p.x+p.w>old&&p.y+p.h>G-39){
+   const desired=Math.min(icePuzzle.plateX+32,old+Math.max(0,p.x+p.w-old));
+   cube.cubeX=desired;p.x=cube.cubeX-p.w;
+  }
+  if(dir<0&&prevX>=old+cw-5&&p.x<old+cw&&p.y+p.h>G-39){
+   cube.cubeX=Math.max(285,old-Math.max(0,old+cw-p.x));p.x=cube.cubeX+cw;
+  }
+  if(cube.cubeX>=cube.plateX-12){cube.gateOpen=true;flash('🧊 冰块压住机关，冰门打开啦！');}
+ }
+
  for(const a of sol){
   // Solid raised blocks, question bricks and pipes cannot be walked through.
   if(!a.box)continue;
@@ -709,7 +731,7 @@ function update(dt){
    else if(!sleeping&&respawnGuard===0){die('enemy');return}}}
  L.enemies=L.enemies.filter(e=>!e.dead||e.dead<500);
  let showInteract=false;
- if(L.under){if(p.x>765)showInteract='✦ 返回小屋'}else if(L.cabin){if(p.x<110)showInteract='✦ 返回森林';if(p.x>335&&p.x<475)showInteract='✦ 打开地下暗门'}
+ if(L.under){if(p.x>1415)showInteract='✦ 返回小屋'}else if(L.cabin){if(p.x<110)showInteract='✦ 返回森林';if(p.x>335&&p.x<475)showInteract='✦ 打开地下暗门'}
  else{
  if(level===0&&!L.secret){if(!data.met&&p.x>340){data.met=true;checkpoint(1);cut('🦁 遇见你，真好','小兔子：「你也要去冒险吗？」<br>小狮子：「那我们一起走吧！」<br><br>记得寻找特别的爱心，还有路上闪闪发光的收藏品哦。',play);return}
   /* heart collected on contact below */}
@@ -1015,8 +1037,28 @@ function draw(){
 
  if(L.under){rect(0,0,W,G,'#0b2946');for(let i=0;i<22;i++){let x=(i*67-cam*.2)%W;ctx.fillStyle=i%2?'#1c567d':'#2b7da5';ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+22,0);ctx.lineTo(x+10,35+i%4*13);ctx.fill()}for(let i=0;i<13;i++){let x=i*75-cam*.3;circle(x,110+i%4*28,14,i%2?'#357ba9':'#55b6d6');circle(x,110+i%4*28,5,'#d7f9ff')}const lx=lion.x-cam+12,ly=lion.y+3;const facing=p.face>=0?1:-1;
   let glow=ctx.createRadialGradient(lx,ly,2,lx+facing*55,ly-5,145);glow.addColorStop(0,'#ffe9ad88');glow.addColorStop(1,'#ffe6a300');ctx.fillStyle=glow;ctx.fillRect(0,0,W,G);
-  rect(lx-7,ly-22,15,5,'#555e70');circle(lx+facing*7,ly-19,5,'#ffe7a8');for(let i=0;i<9;i++){const xx=i*106+25-cam*.12;ctx.fillStyle=i%2?'#7de1f0':'#a9efff';ctx.globalAlpha=.42;ctx.beginPath();ctx.moveTo(xx,15);ctx.lineTo(xx+18,15);ctx.lineTo(xx+8,65+(i%3)*18);ctx.fill();ctx.globalAlpha=1;}text('蓝冰洞',W/2,52,'#d8f7ff',16,'center');text('出口 →',785-cam,G-53,'#fff3cf',13,'center');}
+  rect(lx-7,ly-22,15,5,'#555e70');circle(lx+facing*7,ly-19,5,'#ffe7a8');for(let i=0;i<9;i++){const xx=i*106+25-cam*.12;ctx.fillStyle=i%2?'#7de1f0':'#a9efff';ctx.globalAlpha=.42;ctx.beginPath();ctx.moveTo(xx,15);ctx.lineTo(xx+18,15);ctx.lineTo(xx+8,65+(i%3)*18);ctx.fill();ctx.globalAlpha=1;}text('蓝冰洞',W/2,52,'#d8f7ff',16,'center');text('出口 →',1460-cam,G-53,'#fff3cf',13,'center');}
  L.map.forEach(terrain);drawShallowCove();drawFinalBeach();clouds.forEach(cloudDraw);
+ if(L.under){
+  const c=icePuzzle;
+  // Ice cube and pressure plate, both in world coordinates.
+  rect(c.plateX-cam,G-8,58,8,c.gateOpen?'#9df3ce':'#87aabe');
+  rect(c.cubeX-cam,G-39,39,39,'#77b9e3');rect(c.cubeX+4-cam,G-35,31,7,'#d4f8ff');
+  rect(c.cubeX+4-cam,G-23,7,17,'#a3def9');
+  if(!c.gateOpen){rect(c.gateX-cam,G-214,24,214,'#82c7e9');rect(c.gateX+5-cam,G-207,8,192,'#d4f6ff');}
+  else {circle(c.gateX+12-cam,G-210,10,'#b8ffe9');text('冰门已开启',c.gateX-cam,G-231,'#d5fff9',12,'center')}
+  text('推动冰块 →',c.cubeX+20-cam,G-61,'#e5fbff',12,'center');
+  const bridgeAlpha=c.light==='ready'?1:c.light==='revealing'?Math.min(1,c.lightT/1700):0;
+  if(bridgeAlpha){ctx.save();ctx.globalAlpha=bridgeAlpha;
+   for(const s of iceBridgePieces()){rect(s.x-cam,s.y,s.w,12,'#a2efff');rect(s.x+5-cam,s.y+3,s.w-10,4,'#e1ffff');circle(s.x+8-cam,s.y-8,3,'#d8ffff');}
+   ctx.restore();}
+  if(c.light==='idle'&&p.x>720)text('让小狮子的头灯照亮前方',820-cam,G-83,'#d6f9ff',12,'center');
+  if(c.light==='revealing')text('✨ 隐藏的冰桥正在显现',930-cam,G-95,'#e5fdff',12,'center');
+  // Seed altar at the end of the puzzle.
+  rect(1334-cam,G-13,71,13,'#72c7d7');rect(1345-cam,G-22,51,10,'#a6e6eb');
+  for(let i=0;i<4;i++)circle(1340+i*18-cam,G-27-(i%2)*5,4,'#c7f9ff');
+ }
+
  // Stars uncover an optional elevated lookout, not a shortcut across the tidal section.
  if(level===2&&!L.under&&(data.story.bridge||(scene&&scene.type==='switch'))){const r=data.story.bridge?1:Math.min(1,coop.bridgeTime/2000);bridge({x:1555,y:G-7-(1-r)*75,w:225},'#c99a6b','#8d6248')}
  if(!L.under&&!L.secret&&!L.cabin)for(let i=1;i<L.cps.length;i++){if(level===2&&i===1)continue;let x=L.cps[i]-cam;if(x<-30||x>W+30)continue;rect(x,G-62,4,62,'#8b6a85');rect(x+4,G-62,18,12,data.cpLevel===level&&data.cp>=i?'#f28eaf':'#ffe5a1')}
@@ -1128,7 +1170,7 @@ function loop(t){try{let dt=Math.min(40,t-last||16);last=t;
 // ================= Interact =================
 function interact(){if(mode==='scene'&&scene&&scene.type==='plant')return;if(mode!=='play')return;
  if(L.secret){if(p.x>555){exitSecretRoom();return}if(data.snowboard&&p.x>305&&p.x<355){startSnow();return}return}
- if(L.under){if(p.x>790)exitUnder();return}if(L.cabin){if(p.x<100){exitCabin();return}if(p.x>335&&p.x<475){enterUnder();return}return}
+ if(L.under){if(p.x>1415)exitUnder();return}if(L.cabin){if(p.x<100){exitCabin();return}if(p.x>335&&p.x<475){enterUnder();return}return}
  if(level===0&&p.x>1374&&p.x<1425&&doorRevealed()){enterSecretRoom();return}
  // Sitting is automatic only at the final beach; no early interaction.
 
