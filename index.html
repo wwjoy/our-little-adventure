@@ -45,6 +45,8 @@ let W=640, cam=0, mode='gate', last=0, level=0, timer=0;
  let pendingFlag=-1, flagCrossingArmed=false;
 let held={left:false,right:false,jump:false}, jumpQueue=false, assist=true;
 let clouds=[], forestClouds=[], sleeping=false, failCount=0, failCp=-1, respawnGuard=0, toast=null;
+// V3.0.11: track consecutive falls independently for each forest chasm.
+let chasmFailures={}, chasmHelpDeclined={}, chasmCleared={};
 let scene=null, dying=null, fade={a:0,dir:0,cb:null,text:''}, rockets=[], trail=[], mainL=null, bubbleMsg=null;
 const freshData=()=>({version:1,gifts:[],keepsakes:[],keys:[],secretDoors:[],snowboard:false,winterCard:false,snowBest:0,rewardMigration:0,level:0,hearts:[false,false,false],seed:false,stars:[],shells:[],coins:[],qb:[],met:false,cp:0,cpLevel:0,done:false,story:{},assist:true});
 let data=freshData();
@@ -89,7 +91,7 @@ function buildLevel(n){
  return {end:2450,
   map:[gr(0,510),gr(700,370),gr(1115,440),gr(1780,670),bl(295,90,245),bl(715,92,237),bl(1170,105,235)],
   boxes:[qb(0,300,181,'coin'),qb(1,615,173,'bag'),qb(2,1215,170,'coin')],
-  plats:[], // The old moving cloud is replaced by the lion-built stationary cloud bridge.
+  plats:[mover(560,G-20,82,49,0,3600),mover(1612,G-20,90,74,0,4000)], // Optional independent moving-platform route across BOTH forest chasms.
   cps:[45,560,990,1510,2180],trees:[],
   enemies:[{type:'walker',x:1320,start:1280,end:1390,v:.30}],
   objects:[{type:'switch',x:1392},{type:'heart',x:2310,y:264},
@@ -143,7 +145,10 @@ function surfaces(){
  }
  for(const o of L.objects)if(o.type==='pipe')arr.push({x:o.x-5,y:o.top,w:o.w+10,h:G-o.top,kind:'pipe',box:true,ref:o});
  if(level===2&&!L.under&&!L.cabin){arr.push({x:1430,y:G-38,w:65,h:38,kind:'block',box:true});if(data.story.bridge)arr.push({x:1555,y:G-7,w:225,kind:'bridge'});}
- for(const pl of L.plats){if(pl.kind==='fall'&&pl.y>H+40)continue;arr.push({x:pl.x,y:pl.y,w:pl.w,h:pl.kind==='spring'?14:10,kind:pl.kind,box:pl.kind==='spring',ref:pl})}
+ for(const pl of L.plats){if(pl.kind==='fall'&&pl.y>H+40)continue;
+  // Once the lion has made a permanent bridge, its moving raft is retired.
+  if(level===2&&!L.under&&!L.cabin&&pl.kind==='mover'&&clouds.some(c=>!c.building&&pl.x0>=c.x-80&&pl.x0<=c.x+c.w))continue;
+  arr.push({x:pl.x,y:pl.y,w:pl.w,h:pl.kind==='spring'?14:10,kind:pl.kind,box:pl.kind==='spring',ref:pl})}
  return arr}
 function onFloor(x){return L.map.some(a=>a.kind==='ground'&&x+p.w>a.x+4&&x<a.x+a.w-4)}
 function insideBox(x){return surfaces().some(a=>a.box&&a.y<G-8&&a.y+a.h>G-p.h&&x+p.w>a.x&&x<a.x+a.w)}
@@ -162,7 +167,7 @@ function gateOk(){try{return localStorage.getItem(GATE)==='1'}catch(e){return fa
 
 // ================= Flow =================
 function clearInput(){Object.keys(held).forEach(k=>{held[k]=false;$('#'+k).classList.remove('pressed')});jumpQueue=false}
-function layout(n){starBridgeBorn=-1;starBridgeAnnounced=false;starLionReunion=false;coastCoop={phase:0,t:0,lionTarget:2206};pickups=[];coop={state:'idle',lionX:1392,lionReady:false,started:false,bridgeTime:0};pendingFlag=-1;flagCrossingArmed=false;finalReviewOpen=false;if(finalSceneTimeout){clearTimeout(finalSceneTimeout);finalSceneTimeout=null}fade={a:0,dir:0,cb:null,text:''};level=n;L=buildLevel(n);mainL=null;L.pops=[];restoreUnclaimedRewards();clouds=[];forestClouds=[];sleeping=false;failCount=0;failCp=-1;scene=null;dying=null;gardenWater=null;L.enemies.forEach(e=>{e.v=Math.abs(e.v);e.dead=0;e.vy=0;e.hop=0;e.jt=Math.random()*900})}
+function layout(n){starBridgeBorn=-1;starBridgeAnnounced=false;starLionReunion=false;coastCoop={phase:0,t:0,lionTarget:2206};pickups=[];coop={state:'idle',lionX:1392,lionReady:false,started:false,bridgeTime:0};pendingFlag=-1;flagCrossingArmed=false;finalReviewOpen=false;if(finalSceneTimeout){clearTimeout(finalSceneTimeout);finalSceneTimeout=null}fade={a:0,dir:0,cb:null,text:''};level=n;L=buildLevel(n);mainL=null;L.pops=[];restoreUnclaimedRewards();clouds=[];forestClouds=[];sleeping=false;failCount=0;failCp=-1;chasmFailures={};chasmHelpDeclined={};chasmCleared={};scene=null;dying=null;gardenWater=null;L.enemies.forEach(e=>{e.v=Math.abs(e.v);e.dead=0;e.vy=0;e.hop=0;e.jt=Math.random()*900})}
 
 function restoreUnclaimedRewards(){
  // Uncollected physical prizes return INSIDE their question bricks on retry/reload.
@@ -347,19 +352,19 @@ function updateDying(dt){const k=Math.min(2,dt/16.667);dying.t+=dt;
  if(dying.t>wait&&fade.dir===0)fadeTo(()=>{const c=dying.cause,x=dying.x;dying=null;failure(c,x)},'哎呀～回到小旗子那里再试一次');}
 function failure(cause,x){
  const cp=L.secret?0:data.cpLevel===level?Math.min(data.cp,L.cps.length-1):0;
- if(failCp!==cp){failCp=cp;failCount=0}
- failCount++;
- // Always respawn at the latest ACTIVATED flag, never at a temporary bank.
+ const gap=(cause==='fall'&&level===2&&!L.under&&!L.cabin)?findGap(x):null;
+ const tracked=gap&&gap.w>=150&&!chasmCleared[gap.id]&&!clouds.some(c=>c.id===gap.id);
+ // Only falls into THIS chasm count; enemies and other pitfalls cannot trigger an offer.
+ if(tracked)chasmFailures[gap.id]=(chasmFailures[gap.id]||0)+1;
  respawnAt(L.cps[cp]);play();
  if(!assist)return;
- if(failCount===3){
-  if(cause==='fall'){const gap=findGap(x);if(gap&&!clouds.some(c=>c.id===gap.id))
-   menu('🦁 要小狮子帮忙吗？','小狮子可以在<strong>刚才掉下去的地方</strong>搭一朵云桥，只帮这一处。',[['好呀 ♡',()=>{summonLionBridge(gap);play()}],['再试试',play]])}
-  else if(!sleeping) menu('🦁 要小狮子帮忙吗？','小狮子可以唱一首摇篮曲，让小怪们先睡一会儿。',[['好呀 ♡',()=>{sleeping=true;play()}],['再试试',play]]);
- } else if(failCount===5){
-  const gap=cause==='fall'?findGap(x):null;
-  menu('🦁 我们一起过去吧','可以让小狮子帮你搭好刚才的云桥，但仍需要自己走过这段路。',[["帮我搭桥",()=>{if(gap&&!clouds.some(c=>c.id===gap.id)){summonLionBridge(gap)}else sleeping=true;respawnAt(L.cps[cp]);failCount=0;play()}],['继续挑战',play]]);
- }}
+ if(tracked&&chasmFailures[gap.id]===3&&!chasmHelpDeclined[gap.id]){
+  menu('🦁 要小狮子帮忙吗？','刚才这处悬崖已经尝试了三次。要不要让小狮子搭一座稳稳的云桥？也可以继续乘移动平台自己挑战。',[
+   ['好呀 ♡',()=>{summonLionBridge(gap);chasmFailures[gap.id]=0;play()}],
+   ['我再试试',()=>{chasmHelpDeclined[gap.id]=true;play()}]
+  ]);
+ }
+}
 
 // ================= Winter snowboard secret (optional) =================
 const SNOW_LENGTH=15.0, SNOW_SPEED=145;
@@ -673,6 +678,15 @@ function update(dt){
    if(a.kind==='q'){boxReward(a.ref)}}}
  p.ride=p.on?ride:null;
  if(p.y>H+30){die('fall');return}
+ // A successful landing on the far bank clears the streak for that exact gap.
+ if(level===2&&!L.under&&!L.cabin&&p.on){
+  for(const gapX of [510,1555]){
+   const gap=findGap(gapX+20);
+   if(gap&&gap.x===gapX&&p.x>=gap.x+gap.w+22){
+    chasmFailures[gap.id]=0;chasmCleared[gap.id]=true;
+   }
+  }
+ }
  updateFlags(prevX);
  for(const o of L.objects){
   if(o.type==='heart'&&!data.hearts[level]&&overlap(o,16)){collectHeart(level);flash('❤️ 珍贵爱心 '+data.hearts.filter(Boolean).length+'/3，集齐会发生什么呢？')}
@@ -1016,7 +1030,7 @@ function draw(){
  }
  if(level===2&&!L.under&&!L.secret&&!L.cabin)drawGardenItems();
 
- L.plats.forEach(platDraw);drawStarBridge();L.boxes.forEach(qbrick);pickups.forEach(pickupDraw);if(L.secret&&data.snowboard){const bx=330-cam;rect(bx-20,G-17,40,5,'#f3a3c9');rect(bx-16,G-19,32,2,'#fff');rect(bx-9,G-22,5,5,'#80bdd5');rect(bx+5,G-22,5,5,'#80bdd5');}
+ L.plats.forEach(pl=>{if(level===2&&!L.under&&!L.cabin&&pl.kind==='mover'&&clouds.some(c=>!c.building&&pl.x0>=c.x-80&&pl.x0<=c.x+c.w))return;platDraw(pl)});drawStarBridge();L.boxes.forEach(qbrick);pickups.forEach(pickupDraw);if(L.secret&&data.snowboard){const bx=330-cam;rect(bx-20,G-17,40,5,'#f3a3c9');rect(bx-16,G-19,32,2,'#fff');rect(bx-9,G-22,5,5,'#80bdd5');rect(bx+5,G-22,5,5,'#80bdd5');}
  for(const o of L.objects){let x=o.x-cam;if(x<-60||x>W+60)continue;
   if(o.type==='coin'&&!data.coins.includes(cKey(o)))coinDraw(x,o.y);
   if(o.type==='heart'&&!data.hearts[level])heart(x,o.y+Math.sin(timer/300)*2);
