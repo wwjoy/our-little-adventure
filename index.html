@@ -90,7 +90,7 @@ function buildLevel(n){
   map:[gr(0,510),gr(700,370),gr(1115,440),gr(1780,670),bl(295,90,245),bl(715,92,237),bl(1170,105,235)],
   boxes:[qb(0,300,181,'coin'),qb(1,615,173,'bag'),qb(2,1215,170,'coin')],
   plats:[mover(551,G-17,118,0,26,3600)],
-  cps:[45,560,990,1510,2180],trees:[100,245,435,640,820,1030,1290,1680,1850,2240],
+  cps:[45,560,990,1510,2180],trees:[],
   enemies:[{type:'walker',x:1320,start:1280,end:1390,v:.30}],
   objects:[{type:'switch',x:1392},{type:'heart',x:2310,y:264},
    ...coins(0,[[175,216],[335,177],[710,194],[1155,185],[1710,190],[1950,170]])]};
@@ -136,7 +136,7 @@ function surfaces(){
  const arr=[];
  for(const a of L.map)arr.push(a.kind==='block'?{x:a.x,y:a.y,w:a.w,h:H+200,kind:'block',box:true}:a);
  for(const b of L.boxes)arr.push({x:b.x,y:b.y,w:b.w,h:b.h,kind:'q',box:true,ref:b});
- if(level!==2)clouds.forEach(c=>arr.push({x:c.x,y:G,w:c.w,kind:'cloud'}));
+ clouds.forEach(c=>arr.push({x:c.x,y:G-5,w:c.w,kind:'cloud'}));
  if(starBridgeReady()&&starBridgeProgress()>=.98){
   // Optional vertical star steps: do not cover the main ground or substitute for rafts.
   for(const a of [{x:2740,y:G-49,w:43},{x:2792,y:G-79,w:45},{x:2847,y:G-105,w:46},{x:2903,y:G-105,w:100}])arr.push({...a,kind:'starbridge'});
@@ -353,11 +353,11 @@ function failure(cause,x){
  if(!assist)return;
  if(failCount===3){
   if(cause==='fall'){const gap=findGap(x);if(gap&&!clouds.some(c=>c.id===gap.id))
-   menu('🦁 要小狮子帮忙吗？','小狮子可以在<strong>刚才掉下去的地方</strong>搭一朵云桥，只帮这一处。',[['好呀 ♡',()=>{clouds.push(gap);play()}],['再试试',play]])}
+   menu('🦁 要小狮子帮忙吗？','小狮子可以在<strong>刚才掉下去的地方</strong>搭一朵云桥，只帮这一处。',[['好呀 ♡',()=>{clouds.push(gap);flash('🦁 小狮子召唤了云桥！现在可以踩着云朵过河啦');play()}],['再试试',play]])}
   else if(!sleeping) menu('🦁 要小狮子帮忙吗？','小狮子可以唱一首摇篮曲，让小怪们先睡一会儿。',[['好呀 ♡',()=>{sleeping=true;play()}],['再试试',play]]);
  } else if(failCount===5){
   const gap=cause==='fall'?findGap(x):null;
-  menu('🦁 我们一起过去吧','可以让小狮子帮你搭好刚才的云桥，但仍需要自己走过这段路。',[["帮我搭桥",()=>{if(gap&&!clouds.some(c=>c.id===gap.id))clouds.push(gap);else sleeping=true;respawnAt(L.cps[cp]);failCount=0;play()}],['继续挑战',play]]);
+  menu('🦁 我们一起过去吧','可以让小狮子帮你搭好刚才的云桥，但仍需要自己走过这段路。',[["帮我搭桥",()=>{if(gap&&!clouds.some(c=>c.id===gap.id)){clouds.push(gap);flash('🦁 云桥已经搭好！')}else sleeping=true;respawnAt(L.cps[cp]);failCount=0;play()}],['继续挑战',play]]);
  }}
 
 // ================= Winter snowboard secret (optional) =================
@@ -888,7 +888,17 @@ function lionDraw(x,y,face,sit){x=Math.round(x);y=Math.round(y);const s=sit?3:0,
 function bubble(x,y,t){ctx.font='bold 11px sans-serif';const w=ctx.measureText(t).width+14;rect(x-w/2,y-22,w,20,'#fff');rect(x-3,y-3,6,4,'#fff');text(t,x,y-8,'#7b4d6e',11,'center')}
 function heart(x,y){circle(x-5,y-2,6,'#f26d9e');circle(x+5,y-2,6,'#f26d9e');ctx.fillStyle='#f26d9e';ctx.beginPath();ctx.moveTo(x-11,y);ctx.lineTo(x,y+12);ctx.lineTo(x+11,y);ctx.fill()}
 function seedDraw(x,y){const b=Math.sin(timer/300)*2;circle(x,y+b,11,'#fff6b0');circle(x,y+b,7,'#a5d66f');rect(x-1,y-10+b,2,6,'#5fae6a');circle(x+4,y-10+b,3,'#8bd06b')}
-function cloudDraw(c){let x=c.x-cam,y=G-4;circle(x+9,y+4,10,'#eaf8ff');circle(x+c.w/2,y-2,13,'#fff');circle(x+c.w-9,y+4,10,'#eaf8ff');rect(x,y+2,c.w,9,'#eaf8ff');rect(x+4,y+10,c.w-8,3,'#a6d4eb')}
+function cloudDraw(c){
+ const x=c.x-cam,y=G-6;
+ ctx.save();ctx.globalAlpha=.97;
+ rect(x,y,c.w,10,'#f6faff');rect(x+4,y+10,c.w-8,4,'#a7dce6');
+ for(let i=0;i<Math.max(2,Math.ceil(c.w/34));i++){
+  const xx=x+10+(c.w-20)*i/Math.max(1,Math.ceil(c.w/34)-1);
+  circle(xx,y-3-(i%2)*4,14,'#fff');circle(xx+11,y+1,10,'#e3faff');
+ }
+ for(let i=0;i<7;i++){const xx=x+(i+.5)*c.w/7;circle(xx,y-21+Math.sin(timer/310+i)*3,2,'#fff2bb')}
+ ctx.restore();
+}
 
 // V3.0.2 — spring diving, summer cave, redwood autumn, winter cabin, seed pickups and cooperative watering.
 function drawFourSeasons(){
@@ -901,7 +911,7 @@ function drawFourSeasons(){
  }
  // Redwood trunks with vertical bark, layered canopies and warm sunbeams.
  for(let i=0;i<15;i++){
-  const wx=90+i*137,x=wx-cam;if(Math.abs(wx-980)<160||x<-115||x>W+115)continue;
+  const wx=90+i*137,x=wx-cam;if(Math.abs(wx-980)<205||x<-115||x>W+115)continue;
   const h=205+(i%3)*20;
   rect(x-21,G-h,42,h,'#965e43');rect(x-13,G-h,4,h,'#bd8058');rect(x+9,G-h,3,h,'#6d443c');
   for(let j=0;j<4;j++){circle(x+(j%2?19:-17),G-h-18+j*10,27+(j%2)*6,j%2?'#638f69':'#7da978')}
@@ -964,11 +974,16 @@ function draw(){
   rect(665,G-63,108,11,'#d5aa87');rect(675,G-52,9,52,'#a77d66');rect(749,G-52,9,52,'#a77d66');
   circle(714,G-81,15,'#f6d7a8');rect(708,G-111,12,24,'#ad866f');circle(714,G-113,7,'#ffe4a5');
   rect(792,G-80,40,60,'#967566');rect(799,G-99,26,20,'#e6b2c6');circle(811,G-105,9,'#f7c3d8');
-  rect(470,G-10,W-470,7,'#b78c82');rect(525,G-11,180,7,'#d99da9');rect(842,125,48,72,'#987467');rect(847,131,38,9,'#e5c79b');rect(850,146,32,38,'#c8a286');circle(868,152,6,'#f5d3a1');rect(865,G-62,32,45,'#a87e68');circle(881,G-70,12,'#9dbb90');circle(893,G-82,10,'#80a780');}
+  rect(470,G-10,W-470,7,'#b78c82');rect(525,G-11,180,7,'#d99da9');rect(842,125,48,72,'#987467');rect(847,131,38,9,'#e5c79b');rect(850,146,32,38,'#c8a286');circle(868,152,6,'#f5d3a1');rect(865,G-62,32,45,'#a87e68');circle(881,G-70,12,'#9dbb90');circle(893,G-82,10,'#80a780');
+  // Full-width wooden skirting, floor and a warm, furnished reading corner at the right edge.
+  rect(0,G-20,W,8,'#a77d67');rect(0,G-13,W,5,'#d3a18b');
+  rect(895,100,65,120,'#8d685a');for(let i=0;i<3;i++){rect(901,123+i*29,50,5,'#e6b78b');for(let j=0;j<4;j++)rect(905+j*12,105+i*29,7,18,['#e6c49f','#a9bdab','#e0aabb'][j%3]);}
+  circle(940,G-71,10,'#ffd69b');rect(935,G-66,10,45,'#be8f74');rect(915,G-12,42,7,'#e3a8b4');
+ }
  if(L.under){rect(0,0,W,G,'#0b2946');for(let i=0;i<22;i++){let x=(i*67-cam*.2)%W;ctx.fillStyle=i%2?'#1c567d':'#2b7da5';ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+22,0);ctx.lineTo(x+10,35+i%4*13);ctx.fill()}for(let i=0;i<13;i++){let x=i*75-cam*.3;circle(x,110+i%4*28,14,i%2?'#357ba9':'#55b6d6');circle(x,110+i%4*28,5,'#d7f9ff')}const lx=lion.x-cam+12,ly=lion.y+3;const facing=p.face>=0?1:-1;
   let glow=ctx.createRadialGradient(lx,ly,2,lx+facing*55,ly-5,145);glow.addColorStop(0,'#ffe9ad88');glow.addColorStop(1,'#ffe6a300');ctx.fillStyle=glow;ctx.fillRect(0,0,W,G);
   rect(lx-7,ly-22,15,5,'#555e70');circle(lx+facing*7,ly-19,5,'#ffe7a8');for(let i=0;i<9;i++){const xx=i*106+25-cam*.12;ctx.fillStyle=i%2?'#7de1f0':'#a9efff';ctx.globalAlpha=.42;ctx.beginPath();ctx.moveTo(xx,15);ctx.lineTo(xx+18,15);ctx.lineTo(xx+8,65+(i%3)*18);ctx.fill();ctx.globalAlpha=1;}text('蓝冰洞',W/2,52,'#d8f7ff',16,'center');text('出口 →',785-cam,G-53,'#fff3cf',13,'center');}
- L.map.forEach(terrain);drawShallowCove();drawFinalBeach();if(level!==2)clouds.forEach(cloudDraw);
+ L.map.forEach(terrain);drawShallowCove();drawFinalBeach();clouds.forEach(cloudDraw);
  // Stars uncover an optional elevated lookout, not a shortcut across the tidal section.
  if(level===2&&!L.under&&(data.story.bridge||(scene&&scene.type==='switch'))){const r=data.story.bridge?1:Math.min(1,coop.bridgeTime/2000);bridge({x:1555,y:G-7-(1-r)*75,w:225},'#c99a6b','#8d6248')}
  if(!L.under&&!L.secret)for(let i=1;i<L.cps.length;i++){let x=L.cps[i]-cam;if(x<-30||x>W+30)continue;rect(x,G-62,4,62,'#8b6a85');rect(x+4,G-62,18,12,data.cpLevel===level&&data.cp>=i?'#f28eaf':'#ffe5a1')}
