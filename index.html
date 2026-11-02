@@ -91,7 +91,7 @@ function buildLevel(n){
  return {end:2450,
   map:[gr(0,510),gr(700,370),gr(1115,440),gr(1780,670),bl(295,90,245),bl(715,92,237),bl(1170,105,235)],
   boxes:[qb(0,300,181,'coin'),qb(1,615,173,'bag'),qb(2,1215,170,'coin')],
-  plats:[mover(560,G-20,82,49,0,3600),mover(1612,G-20,90,74,0,4000)], // Optional independent moving-platform route across BOTH forest chasms.
+  plats:[mover(560,G-20,82,49,0,3600)], // Independent moving platform at first chasm only; second chasm uses the lion-operated wooden bridge.
   cps:[45,560,990,1510,2180],trees:[],
   enemies:[{type:'walker',x:1320,start:1280,end:1390,v:.30}],
   objects:[{type:'switch',x:1392},{type:'heart',x:2310,y:264},
@@ -365,13 +365,20 @@ function finishLevel(){
   if(!data.story.bridge){cut('🦁 双人机关还没完成','先和小狮子一起启动花园机关，再前往终点。',()=>{respawnAt(L.cps[Math.min(data.cp,L.cps.length-1)]);play()});return}
   finalReviewOpen=true;beginFinalPlanting();}}
 function cardC(){return data.coins.length>=Math.ceil(TOTAL_COINS*.7)}
-function ending(){if(!data.hearts.every(Boolean)||!data.seed||!data.story.bridge){menu('✨ 旅程还没完成','还需要找到未来的种子、完成双人机关，并在终点一起种树。',[['继续冒险',()=>startLevel(Math.min(2,data.level),true)],['返回首页',home]]);return}data.done=true;save();
- menu('🌸 我们的第一个365天',ANNIV.label+'<br>🐰 ❤️ 🦁<br>我们一起种下未来的种子，<br>看它慢慢长成属于我们的约定之树。<br><strong>一周年快乐 ♡</strong>',[['下一页 ♡',ending2]])}
-function ending2(){const n=data.shells.length;
- const lines=[];if(n>=5)lines.push('🐚 还记得海边的贝壳吗？我们把那一天收藏起来。');else if(n>=3)lines.push('🐚 海边的夕阳，是我们珍贵的回忆。');
- if(cardC())lines.push('🪙 爱心币收集达人！隐藏回忆卡 C 已解锁');
- lines.push('🌷 未来的种子已经发芽，秘密礼盒正在等待打开。');
- menu('🎁 还有一份礼物',lines.join('<br>'),[['🎁 打开纪念礼物',()=>menu('🎁 给你的礼物','🐰♡🦁<br>谢谢你陪我走过第一个365天。<br>从初夏小镇，到海边夕阳，再到四季花园——<br>未来还想和你一起走过很多很多季节。<br><strong>我们的故事，未完待续。</strong>',[['继续我们的冒险 ♡',home],['回忆相册',album]])],['回忆相册',album],['返回首页',home]])}
+function ending(){
+ if(!data.hearts.every(Boolean)||!data.seed||!data.story.bridge){
+  menu('✨ 旅程还没完成','还需要找到未来的种子、完成双人机关，并在终点一起种树。', [['继续冒险',()=>startLevel(Math.min(2,data.level),true)],['返回首页',home]]);return;
+ }
+ data.done=true;save();
+ menu('💌 小狮子有封信想交给你',
+  '🦁「还有一件事，想亲手交给你。」<br><br>约定之树已经盛开，一封小小的信从花瓣间轻轻落下。',
+  [['💝 打开我们的礼物',openAnniversaryLetter]]);
+}
+function openAnniversaryLetter(){
+ menu('💌 给小兔子的信',
+  '🐰♡🦁<br>谢谢你陪我走过第一个365天。<br>从初夏小镇，到海边夕阳，再到红杉森林与蓝冰洞——<br>未来还想和你一起走过很多很多季节。<br><strong>我们的故事，未完待续。</strong>',
+  [['回忆相册 📷',album],['继续我们的冒险 ♡',home]]);
+}
 function album(){const n=data.shells.length,c=data.coins.length;menu('📷 我们的回忆相册','🌸 初夏相遇　🎆 夕阳花火　🌱 星愿花园<br>'+(data.winterCard?'❄️《未来的冬天》已收藏<br>':'')+'🐚 贝壳 '+n+'/5'+(n>=3?'　回忆卡 A ✓':'')+(n>=5?'　回忆卡 B ✓':'')+'<br>🪙 爱心币 '+c+'/'+TOTAL_COINS+(cardC()?'　隐藏回忆卡 C ✓':'<br>（收集 '+Math.ceil(TOTAL_COINS*.7)+' 枚解锁隐藏卡 C）'),[['📖 冒险手册',()=>journal(home)],['返回',home]])}
 
 // ================= Fade =================
@@ -539,7 +546,7 @@ function updateScene(dt){const s=scene,k=Math.min(2,dt/16.667);s.t+=dt;timer+=dt
  if(s.type==='beachArrival'){p.x=3250;p.y=G-p.h;lion.x=3223;lion.y=G-27;p.sit=false;lion.sit=false;camTo(p.x-W*.45,k);if(s.t>2400){startScene('sunset');return}}
  if(s.type==='sunset'){p.x=3250;p.y=G-p.h;p.sit=true;lion.x=3223;lion.y=G-27;lion.sit=true;lion.face=1;p.face=1;camTo(p.x-W*.45,k);
   if(s.t>5000){data.story.sunset=true;save();startScene('fireworks');return}}
- if(s.type==='plant'){s.t=Math.max(s.t,performance.now()-s.startedAt);if(s.t>=19500&&s.visibleFrames>=8){s.readyToFinish=true;completeFinalPlanting()}return}
+ if(s.type==='plant'){s.t=Math.max(s.t,performance.now()-s.startedAt);if(s.t>=23200&&s.visibleFrames>=8){s.readyToFinish=true;completeFinalPlanting()}return}
  if(s.type==='fireworks'){p.x=3250;p.y=G-p.h;p.sit=true;lion.x=3223;lion.y=G-27;lion.sit=true;lion.face=1;camTo(p.x-W*.45,k);
   if(s.t<8600&&(s.next||0)<s.t){s.next=s.t+260+Math.random()*300;if(Math.random()<.35)rockets.push({x:W*(.15+Math.random()*.75),y:H-110,vy:-4.8-Math.random()*1.4,c:'#ffd6f0',parts:null});rockets.push({x:W*(.15+Math.random()*.75),y:H-110,vy:-4.6-Math.random()*1.6,c:['#ffcb8e','#ff91c1','#9ad7ff','#c8f7a6','#fff1a8'][Math.floor(Math.random()*5)],parts:null})}
   for(const r of rockets){if(!r.parts){r.y+=r.vy*k;r.vy+=.07*k;if(r.vy>-.6){r.parts=[];const n=34;for(let i=0;i<n;i++){const a=i/n*Math.PI*2,sp=1.8+Math.random()*1.6;r.parts.push({x:r.x,y:r.y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:1})}}}
@@ -1064,14 +1071,26 @@ function draw(){
     for(let i=0;i<5;i++){const x=cx-17+i*8;
       circle(x,ground-9-8*Math.abs(Math.sin((t-720)/240+i)),2.2,'#b58a74');}}
   if(t>1400&&t<3000){const drop=fadeIn(1400,2500);seedDraw(cx,ground-27+drop*22)}
-  // Blue watering can held by lion, tilted while watering; falling droplets.
-  if(watering){const xx=lx-10,yy=ground-30+(t>3400?2:0);
-    ctx.save();ctx.translate(xx,yy);ctx.rotate(t>2750?.36:0);
-    rect(-8,-7,16,13,'#8ccadb');rect(-8,-9,14,3,'#d9f4f9');
-    rect(8,-5,7,3,'#90d6e8');rect(-12,-4,4,7,'#b8edf5');ctx.restore();
-    if(t>2850){for(let i=0;i<5;i++){
-      const phase=((t-2850)/260+i*.25)%1;
-      circle(xx+8-(phase*18),yy+phase*22,2.5,'#a4ddf7');}}
+  // The can is held by the lion's FRONT (left) paw, not hovering above its head.
+  // Its spout points toward the seed at cx; droplets land inside the dug soil.
+  if(watering){
+    const tip=t<2750?0:Math.min(1,(t-2750)/480), tilt=-.38*tip;
+    const handX=lx+5, handY=ground-12;
+    const canX=handX-12,canY=handY-5;
+    rect(handX-8,handY-3,9,5,'#f4c28d'); // paw actually grips the handle
+    ctx.save();ctx.translate(canX,canY);ctx.rotate(tilt);
+    rect(-9,-10,15,12,'#8ccadb');rect(-9,-12,15,3,'#e1f8ff');
+    rect(-16,-9,8,3,'#b0e9f6'); // spout on the LEFT, toward the planting bed
+    ctx.strokeStyle='#b0e9f6';ctx.lineWidth=3;
+    ctx.strokeRect(5,-7,5,7);ctx.restore();
+    if(t>2990&&t<4800){
+      for(let i=0;i<4;i++){
+        const phase=((t-2990)/470+i*.25)%1;
+        const sx=canX-17, tx=cx+((i%2)*5-2), sy=canY-9, ty=ground-8;
+        const dx=tx-sx,dy=ty-sy;
+        circle(sx+dx*phase,sy+dy*phase-6*Math.sin(phase*Math.PI),2.3,'#a4ddf7');
+      }
+    }
   }
   // Growth: sprout -> trunk -> branching leaves -> clustered blossoms, not an instant tree.
   const grow=fadeIn(4600,9700),bloom=fadeIn(8650,13300),glow=fadeIn(12100,15300);
@@ -1121,6 +1140,18 @@ function draw(){
   if(t>=16900){ctx.save();ctx.globalAlpha=fadeIn(16900,18000);
     text('我们的第一年结束了，冒险才刚刚开始。',cx,133,'#936578',14,'center');
     ctx.restore();}
+  // A single invitation appears only AFTER the tree has blossomed and the anniversary text.
+  if(t>=20000){
+    const a=fadeIn(20000,21700);
+    ctx.save();ctx.globalAlpha=a;
+    const ex=cx+77,ey=ground-33-17*(1-a);
+    rect(ex-13,ey-9,26,19,'#fff8ee');rect(ex-13,ey-9,26,3,'#f3b8ce');
+    ctx.strokeStyle='#e6a1bd';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(ex-12,ey-8);ctx.lineTo(ex,ey+2);ctx.lineTo(ex+12,ey-8);ctx.stroke();
+    heart(ex,ey-16);
+    text('🦁 还有一件事，想亲手交给你。',cx,166,'#875e7b',15,'center');
+    ctx.restore();
+  }
   return;
  }
  if(!L){ctx.fillStyle='#2a203f';ctx.fillRect(0,0,W,H);return}
