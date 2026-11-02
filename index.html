@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · Beta V3.0.17 · 深蓝色的秘密</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · Beta V3.0.18 · 深蓝色的秘密</title><style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#2a203f;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;touch-action:none}#stage{position:absolute;inset:0;height:var(--available-height,100%);display:flex;align-items:center;justify-content:center}canvas{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;touch-action:none;-webkit-user-select:none}#hud{position:absolute;top:max(8px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));color:#fff;font-size:clamp(13px,2.2vw,19px);font-weight:800;text-shadow:1px 2px #704b73;pointer-events:none}#pause{position:absolute;right:max(12px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));z-index:2}button{font-family:inherit;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent}#controls{position:absolute;inset:0;pointer-events:none;z-index:3}#left,#right,#jump{opacity:.58;position:absolute;bottom:max(10px,env(safe-area-inset-bottom));width:52px;height:52px;background:#55476655;border:2px solid #ffffff77;color:#fff;border-radius:12px;font-size:22px;font-weight:800;pointer-events:auto}#left{left:max(12px,env(safe-area-inset-left))}#right{left:calc(max(12px,env(safe-area-inset-left)) + 61px)}#jump{right:max(12px,env(safe-area-inset-right));border-radius:50%;font-size:28px}.pressed{background:#ec8eaecc!important;opacity:1!important}#pause{border:2px solid #ffffffaa;background:#55476677;color:#fff;border-radius:11px;width:45px;height:42px;font-size:20px}#shade{position:absolute;inset:0;height:var(--available-height,100%);background:#211b39c9;display:flex;justify-content:center;align-items:center;z-index:4;padding:12px}#card{background:#fff3f6;border:3px solid #ffc2d7;border-radius:17px;color:#68455e;text-align:center;width:min(440px,92%);padding:16px;max-height:90%;overflow:auto;box-shadow:0 6px #a36e9d}#card h1{font-size:clamp(19px,3.2vw,27px);color:#db6394;margin:0 0 8px}#card p{font-size:clamp(12px,1.8vw,15px);line-height:1.65;margin:8px 0}#actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}#actions button{font-size:14px;font-weight:700;border:0;background:#e979a5;color:#fff;border-radius:10px;padding:10px 15px;min-height:43px}#actions button.alt{background:#a88bad}#rotate{position:absolute;inset:0;height:var(--available-height,100%);background:#241b38;color:white;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:8;gap:12px;font-size:20px;padding:24px}#rotate small{font-size:13px;opacity:.8}#error{display:none;position:absolute;z-index:12;inset:10%;background:#fff5f5;color:#a12750;border-radius:12px;padding:16px;overflow:auto;font-size:14px}.hide{display:none!important}@media(orientation:portrait){#rotate{display:flex}}@media(max-height:310px){#card{padding:8px}#card p{margin:3px}#left,#right,#jump{opacity:.58;width:48px;height:48px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 56px)}}
 #interact{position:absolute;left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);background:#fff9f0e8;color:#79516c;border:2px solid #e9a7c5;border-radius:7px;padding:4px 8px;min-width:66px;min-height:32px;z-index:3;font-weight:800;font-size:11px;box-shadow:0 3px #a88ba4;white-space:nowrap}#card{max-width:520px!important}#hud{z-index:2;max-width:75%;font-size:clamp(12px,1.7vw,18px)}@media(orientation:landscape){#left,#right,#jump{bottom:max(10px,env(safe-area-inset-bottom))}} 
 #gate{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 30% 20%,#ffd6e6,#f6aed3 45%,#b48ac8);height:var(--available-height,100%)}
@@ -40,7 +40,9 @@ function gardenCollected(){return data.story.gardenSeeds||[]}
 function gardenPlanted(){return data.story.gardenFlowers||[]}
 const ANNIV={label:'2025.11.13 — 2026.11.13'};
 // The final physical hiding place is intentionally not specified yet.
-const HOME_CLUE='最后的宝藏不在海底，而在我们熟悉的家里。真正的信，也会在见面的时候亲手交给你。具体藏在哪里，等啾啾公布最后一条线索 ♡';
+const HOME_CLUE='最后的宝藏不在海底，而在我们熟悉的家里。真正的信，也会在见面的时候亲手交给你。';
+// Fill this only when the real hiding place is decided. Keep it private until then.
+const FINAL_HOME_RIDDLE='';
 let W=640, cam=0, mode='gate', last=0, level=0, timer=0;
  let coop={state:'idle',lionX:1392,lionReady:false,started:false,bridgeTime:0};
  let finalReviewOpen=false, finalSceneTimeout=null;
@@ -1338,77 +1340,103 @@ function interact(){if(mode==='dive'){diveInteract();return}if(mode==='scene'&&s
 // ================= Bonus: 深蓝色的秘密 =================
 // A self-contained, optional post-story three-stop underwater treasure hunt.
 // It never overwrites the first three levels' map/checkpoints/physics.
-const DIVE_WORLD=1920, DIVE_STOPS=[365,1000,1680];
+const DIVE_WORLD=2160, DIVE_STOPS=[355,1040,1810];
+const DIVE_STOPS_LABELS=['🐚 珊瑚浅海','🫧 泡泡升流峡谷','🚢 月光沉船'];
 function diveBack(){mode='dive';$('#shade').classList.add('hide');showUI(true);$('#interact').classList.remove('hide');last=performance.now()}
 function startDive(){
  if(!data.done){menu('🌊 还没解锁','完成第三关的双人种树后，就能找到海底藏宝图。',[['返回首页',home]]);return}
- dive={x:60,y:160,vx:0,vy:0,lionX:36,lionY:160,view:0,t:0,pearlX:855,pearlMoved:false,gateOpen:data.dive.pieces.includes(1),hintAt:0};
- clearInput();diveBack();flash('🌊 小兔子与小狮子一起下潜啦！按 ✦ 向上游，左右移动探索。');
+ dive={x:60,y:210,vx:0,vy:0,lionX:36,lionY:210,view:0,t:0,updraft:false,updraftFlash:0,shipOpened:false};
+ clearInput();diveBack();flash('🫧 上浮到高处找宝藏！泡泡水流会把我们轻轻托起来。');
 }
 function pauseDive(){menu('🌊 海底冒险暂停','已经找到藏宝图碎片 '+data.dive.pieces.length+'/3，进度自动保存。',[['继续潜水',diveBack],['🗺️ 已完成的藏宝图',()=>data.dive.finished?showTreasureMap(diveBack):diveBack()],['返回首页',home]])}
-function diveTarget(){if(!dive)return null;let next=data.dive.pieces.length;if(next>=3)return null;return DIVE_STOPS[next]}
+function diveTarget(){if(!dive)return null;let n=data.dive.pieces.length;return n>=3?null:DIVE_STOPS[n]}
 function diveInteract(){
- if(!dive)return;
- const n=data.dive.pieces.length;if(n>=3){showTreasureMap(diveBack);return}
- if(n===0&&Math.abs(dive.x-DIVE_STOPS[0])<65){
-  data.dive.pieces.push(0);save();menu('🐚 珊瑚贝壳里的秘密','打开珍珠贝壳，找到了 <strong>藏宝图碎片 1/3</strong>！<br>🦁「第一片找到啦，继续向海里看看吧。」',[['继续潜水 ♡',diveBack]]);return;
+ if(!dive)return;const d=dive,n=data.dive.pieces.length;
+ if(n>=3){showTreasureMap(diveBack);return}
+ if(n===0&&Math.abs(d.x-355)<72&&d.y>155){
+  data.dive.pieces.push(0);save();menu('🐚 珊瑚浅海 · 第一块碎片','你们打开了发光贝壳，找到 <strong>藏宝图碎片 1/3</strong>！<br>🦁「上面的海沟好像还有亮晶晶的东西！」',[['继续向前游 ♡',diveBack]]);return;
  }
- if(n===1&&Math.abs(dive.x-DIVE_STOPS[1])<95){
-  if(!dive.gateOpen){menu('🐢 海龟遗迹的机关','石门还没打开。请推动左侧的发光珍珠到圆形机关上，小狮子会帮忙启动它。',[['继续寻找',diveBack]]);return}
-  data.dive.pieces.push(1);save();menu('🐢 海龟遗迹','小兔子推好珍珠，小狮子点亮机关，遗迹石门打开了！<br>获得 <strong>藏宝图碎片 2/3</strong>。',[['寻找最后一块',diveBack]]);return;
+ if(n===1&&Math.abs(d.x-1040)<82){
+  if(d.y>115){flash('🫧 第二块碎片在峡谷高处！游进上升气泡，按 ✦ 一直往上！');return}
+  data.dive.pieces.push(1);save();menu('🫧 泡泡升流峡谷 · 第二块碎片','你们借助上升气流游到高台，打开了发光贝壳！<br>获得 <strong>藏宝图碎片 2/3</strong>。<br>🦁「好棒！还剩最后一块啦。」',[['寻找沉船 ♡',diveBack]]);return;
  }
- if(n===2&&Math.abs(dive.x-DIVE_STOPS[2])<80){
-  data.dive.pieces.push(2);data.dive.finished=true;save();menu('🚢 沉船里的宝箱','小兔子打开宝箱，小狮子帮忙托住箱盖。<br>终于找到 <strong>藏宝图碎片 3/3</strong>！<br>三块碎片拼成了一张完整的藏宝图。',[['🗺️ 展开藏宝图',()=>showTreasureMap(diveBack)],['继续潜水',diveBack]]);return;
+ if(n===2&&Math.abs(d.x-1810)<80&&d.y>155){
+  data.dive.pieces.push(2);data.dive.finished=true;save();menu('🚢 月光沉船 · 最后一块碎片','小兔子打开船舱宝箱，小狮子在旁边帮忙扶住箱盖。<br>获得 <strong>藏宝图碎片 3/3</strong>！<br>三块碎片合成了一张完整的藏宝图。',[['🗺️ 拼合藏宝图',()=>showTreasureMap(diveBack)],['继续潜水',diveBack]]);return;
  }
- flash('🫧 再往前游一游，寻找发光的秘密吧！');
+ flash('🫧 观察闪光的贝壳、上升气泡和沉船宝箱，靠近后再互动！');
 }
 function updateDive(dt){
  if(!dive)return;const d=dive,k=Math.min(2,dt/16.667);d.t+=dt;
  const direction=(held.right?1:0)-(held.left?1:0);
- d.vx=direction*2.7;d.x=Math.max(22,Math.min(DIVE_WORLD-35,d.x+d.vx*k));
- // Gentle buoyancy and a large play area; no oxygen timer or death traps.
- if(held.jump||jumpQueue){d.vy=Math.max(-2.7,d.vy-.32*k)}else d.vy=Math.min(1.15,d.vy+.095*k);
- d.y=Math.max(64,Math.min(248,d.y+d.vy*k));if(d.y===64||d.y===248)d.vy=0;
- d.lionX+=(d.x-38-d.lionX)*.09*k;d.lionY+=(d.y+10-d.lionY)*.07*k;
- d.view+=(Math.max(0,Math.min(DIVE_WORLD-W,d.x-W*.34))-d.view)*.09*k;
- // The only moving cooperative puzzle: bump the glowing pearl to its switch.
- if(data.dive.pieces.length===1&&!d.gateOpen&&d.x>815&&d.x<965&&held.right){
-  d.pearlX=Math.min(949,d.pearlX+1.8*k);
-  if(d.pearlX>=940){d.gateOpen=true;data.dive.puzzleOpened=true;save();flash('🦁 小狮子点亮机关！石门打开啦 ♡')}
- }
- let n=data.dive.pieces.length;
- let nearby=n===0?Math.abs(d.x-365)<65:n===1?Math.abs(d.x-1000)<95:Math.abs(d.x-1680)<80;
+ d.vx=direction*2.65;d.x=Math.max(22,Math.min(DIVE_WORLD-35,d.x+d.vx*k));
+ const inStream=d.x>846&&d.x<967;
+ // A timed current gives an optional lift. Normal swim is still possible but slower.
+ d.updraft=inStream&&Math.sin(d.t/950)>-.32;
+ if(d.updraft){d.vy=Math.max(-3.8,d.vy-.55*k);if(d.t-d.updraftFlash>2400){d.updraftFlash=d.t;flash('🫧 泡泡升流把你托起来啦！')}}
+ else if(held.jump||jumpQueue){d.vy=Math.max(-2.65,d.vy-.30*k)}
+ else d.vy=Math.min(1.25,d.vy+.105*k);
+ d.y=Math.max(62,Math.min(253,d.y+d.vy*k));if(d.y===62||d.y===253)d.vy=0;
+ d.lionX+=(d.x-36-d.lionX)*.095*k;d.lionY+=(d.y+6-d.lionY)*.075*k;
+ d.view+=(Math.max(0,Math.min(DIVE_WORLD-W,d.x-W*.35))-d.view)*.09*k;
+ const n=data.dive.pieces.length;
+ const nearby=n===0?Math.abs(d.x-355)<72&&d.y>155:n===1?Math.abs(d.x-1040)<82:n===2?Math.abs(d.x-1810)<80&&d.y>155:true;
  $('#interact').classList.toggle('hide',!nearby&&n<3);
- $('#interact').textContent=n===0?'🐚 打开贝壳':n===1?'🐢 探索遗迹':n===2?'🎁 打开宝箱':'🗺️ 藏宝图';
- $('#hud').textContent='🌊 深蓝色的秘密　🗺️ '+n+'/3　🫧 潜水寻宝';
+ $('#interact').textContent=n===0?'🐚 打开贝壳':n===1?'🫧 取高处碎片':n===2?'🎁 打开宝箱':'🗺️ 藏宝图';
+ $('#hud').textContent='🌊 深蓝色的秘密　🗺️ '+n+'/3　'+(n<3?DIVE_STOPS_LABELS[n]:'🎁 藏宝图已拼好');
  jumpQueue=false;
 }
+function diveCoral(x,y,scale=1){
+ // Pixel-art-like branching coral, anchored on a natural rock shelf.
+ ctx.save();ctx.translate(x,y);ctx.scale(scale,scale);ctx.strokeStyle='#f5a1c9';ctx.lineWidth=7;ctx.lineCap='square';
+ const stalks=[[0,0,0,-31],[-2,-18,-17,-35],[0,-24,15,-44],[14,-40,24,-54]];
+ for(const p of stalks){ctx.beginPath();ctx.moveTo(p[0],p[1]);ctx.lineTo(p[2],p[3]);ctx.stroke()}
+ circle(-17,-35,5,'#ffd1dc');circle(24,-54,5,'#ffc0cb');ctx.restore();
+}
+function diveRock(x,y,w,h){ctx.fillStyle='#376e8e';ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+w*.16,y-h*.69);ctx.lineTo(x+w*.55,y-h);ctx.lineTo(x+w*.90,y-h*.55);ctx.lineTo(x+w,y);ctx.closePath();ctx.fill();rect(x,y-6,w,6,'#63b9b5')}
 function drawDive(){
  if(!dive)return;const d=dive,v=d.view;
- const bg=ctx.createLinearGradient(0,0,0,H);bg.addColorStop(0,'#8be4ee');bg.addColorStop(.38,'#328fc1');bg.addColorStop(1,'#173e83');ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
- // Sunshafts, slow bubbles and seabed. Painted in world-space for continuous horizontal travel.
- for(let i=0;i<12;i++){const x=i*215-v*.17;ctx.globalAlpha=.13;ctx.fillStyle='#f7ffff';ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+36,0);ctx.lineTo(x+140,305);ctx.lineTo(x+53,305);ctx.fill();ctx.globalAlpha=1}
- for(let i=0;i<68;i++){const wx=(i*83+27)%DIVE_WORLD,sy=28+((i*59+d.t*.018)%(285));circle(wx-v,sy,2+i%3,'#b5eff3aa')}
- rect(0,284,W,76,'#e4d1a0');rect(0,284,W,7,'#f3e5b8');
- for(let x=0;x<DIVE_WORLD;x+=78){const sx=x-v; if(sx<-110||sx>W+110)continue;const height=24+(x/78%3)*10;rect(sx,284-height,7,height,'#3caa98');rect(sx+9,284-height+8,5,height-8,'#65c6a3');if((x/78)%4===0){circle(sx+15,282-height,11,'#f6a2b7');circle(sx+5,277-height,9,'#ffbdc6')}}
- // Colorful fish silhouettes to add gentle movement.
- for(let i=0;i<18;i++){let fx=i*119+Math.sin(d.t/1800+i)*25-v*.75,fy=90+(i*49)%155;if(fx<-35||fx>W+35)continue;circle(fx,fy,5,i%2?'#ffe4a0':'#ffa8cb');ctx.fillStyle=i%2?'#ffe4a0':'#ffa8cb';ctx.beginPath();ctx.moveTo(fx-5,fy);ctx.lineTo(fx-12,fy-5);ctx.lineTo(fx-12,fy+5);ctx.closePath();ctx.fill()}
- // One cohesive undersea route: coral cove, turtle ruins, sunken ship.
- let sx=365-v; if(sx>-90&&sx<W+90){circle(sx,240,33,'#f5bdd0');circle(sx,244,26,'#e892b2');circle(sx,251,19,'#fff3e9');text('✦',sx,253,'#d993b6',21,'center');text('珊瑚花园',sx,194,'#fff9e8',14,'center');if(!data.dive.pieces.includes(0))text('🐚',sx,228,'#fff',27,'center')}
- sx=1000-v;if(sx>-155&&sx<W+155){rect(sx-92,200,184,85,'#688ca2');rect(sx-76,182,152,22,'#abc5cf');for(let j=0;j<4;j++)rect(sx-70+j*43,208,26,70,'#a8b8ba');rect(sx-26,204,52,75,d.gateOpen||data.dive.pieces.includes(1)?'#83d4dc':'#3e647a');text('海龟遗迹',sx,165,'#fff9e8',14,'center');text('🐢',sx-84,179,'#fff',19,'center');if(!data.dive.pieces.includes(1))text('🗺️',sx,188,'#fff',18,'center');if(data.dive.pieces.length===1&&!d.gateOpen){circle(d.pearlX-v,252,13,'#d0ffff');circle(949-v,277,10,'#f4d49a');text('把珍珠推到圆圈 →',sx-32,145,'#f8ffe6',12,'center')}}
- sx=1680-v;if(sx>-180&&sx<W+180){ctx.fillStyle='#916d58';ctx.beginPath();ctx.moveTo(sx-130,243);ctx.lineTo(sx+145,243);ctx.lineTo(sx+100,283);ctx.lineTo(sx-100,283);ctx.fill();rect(sx-65,202,140,39,'#ab8266');rect(sx-1,158,5,85,'#6d5957');rect(sx+4,159,67,44,'#ebd9b3');text('沉船宝箱',sx,143,'#fff9e8',14,'center');rect(sx-25,228,52,32,'#f8d09c');rect(sx-25,227,52,7,'#bd83a9');text('🎀',sx,227,'#fce8f7',19,'center')}
- // Gentle goal markers, only on unfinished stops.
- const goal=diveTarget();if(goal!==null){const gx=goal-v;if(gx>-40&&gx<W+40){circle(gx,111+Math.sin(d.t/260)*4,5,'#fff4d0');text('✧',gx,102,'#fffded',19,'center')}}
- // The lion follows in a visible wetsuit/goggles, rather than a disembodied light.
- lionDraw(d.lionX-v,d.lionY,1,false);rect(d.lionX-v+2,d.lionY+7,23,5,'#91e9fcaa');
- bunny(d.x-v,d.y,d.vx<0?-1:1,false,false);rect(d.x-v+1,d.y+5,23,6,'#a9f5ffaa');
- text('按 ✦ 上浮 · 左右游动 · 靠近标记可互动',W/2,37,'#f6ffff',14,'center');
+ let bg=ctx.createLinearGradient(0,0,0,H);bg.addColorStop(0,'#77dfe9');bg.addColorStop(.3,'#278cb3');bg.addColorStop(1,'#092a56');ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+ // Three regions share one continuous gradient and camera, but have distinct silhouettes.
+ for(let i=0;i<15;i++){const x=i*175-v*.17;ctx.globalAlpha=.11;ctx.fillStyle='#f5ffff';ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+28,0);ctx.lineTo(x+126,300);ctx.lineTo(x+46,300);ctx.fill();ctx.globalAlpha=1}
+ for(let i=0;i<80;i++){const wx=(i*79+20)%DIVE_WORLD,sy=28+((i*41+d.t*.020)%260);circle(wx-v,sy,1+i%3,'#b8f6f8bb')}
+ // Sloping ocean floor and a dark canyon, no more featureless full-width strip.
+ ctx.fillStyle='#d4c59c';ctx.beginPath();ctx.moveTo(0,300);for(let x=0;x<=W+12;x+=12){const world=x+v;let y=288+5*Math.sin(world/75);if(world>760&&world<1230)y=H+80;ctx.lineTo(x,y)}ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.closePath();ctx.fill();
+ // Canyon left and right faces, far underwater mountains.
+ for(let i=0;i<18;i++){const wx=i*145-v*.42,base=290;ctx.fillStyle=i%2?'#20547755':'#2a6f8155';ctx.beginPath();ctx.moveTo(wx-110,base);ctx.lineTo(wx,165+(i%3)*19);ctx.lineTo(wx+130,base);ctx.fill()}
+ for(let i=0;i<26;i++){let wx=i*88+12;let sx=wx-v;if(sx<-80||sx>W+80||wx>770&&wx<1220)continue;rect(sx,266,6,24,'#369a88');rect(sx+9,257,5,32,'#58b9a5');if(i%2===0)diveCoral(sx+12,281,.63)}
+ for(let i=0;i<19;i++){let fx=i*123+Math.sin(d.t/1550+i)*22-v*.82,fy=93+(i*53)%158;if(fx<-28||fx>W+28)continue;circle(fx,fy,4,i%2?'#ffe2a8':'#ffb2d4');ctx.fillStyle=i%2?'#ffe2a8':'#ffb2d4';ctx.beginPath();ctx.moveTo(fx-4,fy);ctx.lineTo(fx-11,fy-5);ctx.lineTo(fx-11,fy+5);ctx.fill()}
+ // First stop: three tiers of natural reef and a luminous shell.
+ for(const [x,y,w,h] of [[180,283,190,61],[337,283,225,94],[465,283,115,47]]){if(x-v<W+140&&x-v>-210)diveRock(x-v,y,w,h)}
+ for(const x of [210,266,333,438,490])if(x-v>-45&&x-v<W+45)diveCoral(x-v,225+(x%3)*13,.77);
+ let sx=355-v;if(sx>-120&&sx<W+120){circle(sx,218,29,'#e892bb');circle(sx,223,23,'#ffd2e4');circle(sx,226,17,'#fff3e0');text('珊瑚浅海',sx,168,'#fff6de',15,'center');if(!data.dive.pieces.includes(0))text('🗺️',sx,213,'#fff',20,'center')}
+ // Second stop: vertical gorge and timed bubble updraft, reward at the TOP.
+ for(const [x,y,w,h] of [[735,320,110,190],[1105,320,125,180],[780,188,82,33],[970,115,180,32]]){let vx=x-v;if(vx>-210&&vx<W+210)diveRock(vx,y,w,h)}
+ sx=908-v;if(sx>-160&&sx<W+160){
+  const strong=d.updraft;ctx.fillStyle=strong?'#80f8f82a':'#68d5e81c';ctx.fillRect(sx-62,50,125,235);
+  for(let i=0;i<24;i++){let bx=sx+Math.sin(i*8.7)*39,by=284-((i*49+d.t*(strong?.14:.055))%252);circle(bx,by,4+i%4,strong?'#c7fdffbb':'#79dcea88')}
+  text('🫧 升流峡谷',sx,36,'#fff6de',15,'center');text('▲ 跟着泡泡向上游',sx,57,'#f7f8dd',11,'center');
+ }
+ sx=1040-v;if(sx>-100&&sx<W+100){circle(sx,81,28,'#a7e8f0aa');circle(sx,81,19,'#ffe5f1');text('🐚',sx,88,'#fff',28,'center');if(!data.dive.pieces.includes(1))text('🗺️',sx,67,'#fff',15,'center');text('高处藏宝贝壳',sx,29,'#fff7dd',14,'center')}
+ // Third stop: more recognizable tilted ship with portholes, cabin and a physical chest.
+ sx=1810-v;if(sx>-250&&sx<W+250){
+  ctx.save();ctx.translate(sx,222);ctx.rotate(-.08);ctx.fillStyle='#745b59';ctx.beginPath();ctx.moveTo(-192,17);ctx.lineTo(184,17);ctx.lineTo(135,78);ctx.lineTo(-136,78);ctx.fill();rect(-110,-25,193,42,'#956f64');rect(-42,-84,6,60,'#785c60');rect(-37,-79,100,31,'#d5bc9a');rect(-120,-38,248,8,'#b99380');for(const xx of [-89,-24,42,103]){circle(xx,22,13,'#37475c');circle(xx,22,7,'#93d9d3')}ctx.restore();
+  text('月光沉船',sx,97,'#fff8df',16,'center');rect(sx-22,230,46,28,'#e6b579');rect(sx-22,229,46,7,'#c784a0');text('🎀',sx,229,'#fff',18,'center');if(!data.dive.pieces.includes(2))text('🗺️',sx,219,'#fff',19,'center');
+  for(const xx of [sx-180,sx+170])diveCoral(xx,273,.92);
+ }
+ // Only the next objective is marked. y indicates vertical gameplay for the second stop.
+ let n=data.dive.pieces.length;if(n<3){const gx=DIVE_STOPS[n]-v,gy=n===1?75:178;if(gx>-40&&gx<W+40){circle(gx,gy+Math.sin(d.t/290)*4,5,'#fff2b1');text('✧',gx,gy-12,'#fff9e5',19,'center')}}
+ lionDraw(d.lionX-v,d.lionY,1,false);rect(d.lionX-v+2,d.lionY+7,23,5,'#91e9fcaa');bunny(d.x-v,d.y,d.vx<0?-1:1,false,false);rect(d.x-v+1,d.y+5,23,6,'#a9f5ffaa');
+ text('按 ✦ 上浮 · 左右游动 · 泡泡升流会把你托上高处',W/2,37,'#f6ffff',13,'center');
+}
+function showFinalHomeClue(back){
+ if(!FINAL_HOME_RIDDLE.trim()){
+  menu('🏡 最后的家中线索 · 尚未揭晓','三块藏宝图已经拼好了！<br><br>🦁「礼物就在家里，不过最后的藏匿地点，要等我准备好才告诉你哦。」<br><br><small>这张线索卡还未配置具体位置；不会让你在不知道位置的情况下误点“已找到”。</small>',[['💌 收好藏宝图',()=>showTreasureMap(back)],['返回',back||home]]);return;
+ }
+ menu('🏡 家里的最后一条线索','<div style="padding:14px;border:2px dashed #d6a7b5;border-radius:12px;background:#fff9e8"><strong>'+FINAL_HOME_RIDDLE+'</strong></div>',[['🎁 我真的找到啦！',()=>menu('💕 我们的故事未完待续','Happy 1st Anniversary ♡<br>2025.11.13 — 2026.11.13<br><br>真正的信，等见面时再亲手交给兔兔宝宝。<br>—— 永远陪着你的啾啾 🦁',[['返回首页',home]])],['返回藏宝图',()=>showTreasureMap(back)]]);
 }
 function showTreasureMap(back){
  if(!data.dive.finished){menu('🗺️ 还没拼好','还需要收集三块海底藏宝图碎片。',[['继续寻宝',startDive],['返回',back||home]]);return}
- menu('🗺️ 我们的藏宝图 · 3/3',
- '<div style="background:#fff9e8;border:3px dashed #d5aa82;border-radius:14px;padding:13px;color:#8b6474;line-height:1.8">🐚 珊瑚花园　→　🐢 海龟遗迹　→　🚢 沉船宝箱<br>✨ 三块地图碎片合成啦！<hr style="border:0;border-top:1px solid #e8c8ac"><strong>'+HOME_CLUE+'</strong></div><small>具体的家中藏匿点尚未确定，之后可以只替换最终谜语，不需要重玩潜水。</small>',
- [['💝 我找到啦！',()=>menu('💕 我们的故事未完待续','Happy 1st Anniversary ♡<br>2025.11.13 — 2026.11.13<br><br>游戏里的冒险暂时结束啦。<br>真正的信，等我们见面再亲手交给兔兔宝宝。<br>—— 永远陪着你的啾啾 🦁',[['回到首页',home],['重新看藏宝图',()=>showTreasureMap(back)]] )],['返回',back||home]]);
+ menu('🗺️ 我们的藏宝图 · 3/3','<div style="background:#fff9e8;border:3px dashed #d5aa82;border-radius:14px;padding:13px;color:#8b6474;line-height:1.8">🐚 珊瑚浅海　→　🫧 泡泡升流峡谷　→　🚢 月光沉船<br>✨ 三块碎片已经拼成完整的藏宝图！<hr style="border:0;border-top:1px solid #e8c8ac"><strong>'+HOME_CLUE+'</strong></div><small>地图指向家里。具体位置请打开独立的最后线索卡，尚未配置时不会提前剧透。</small>',[['🏡 查看最后的家中线索',()=>showFinalHomeClue(back)],['继续潜水',diveBack],['返回',back||home]]);
 }
 
 // ================= Gate (welcome + anniversary date) =================
