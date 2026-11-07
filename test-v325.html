@@ -72,6 +72,7 @@ const sitButton=document.getElementById('sit-review');
 sitButton.addEventListener('click',()=>{sitReviewEnabled=!sitReviewEnabled;sitButton.textContent='安全站姿：'+(sitReviewEnabled?'开':'关');sitButton.classList.toggle('active',sitReviewEnabled)});
 
 let lastLionReviewX=null,lastLionReviewAt=0;
+let lionOnMovingRaftIdle=false; // Only animation override; raft physics remain unchanged.
 
 function drawReviewSprite(kind,x,y,sit,face){
  if(backReviewEnabled&&!sitReviewEnabled){const im=backReviewImages[kind];if(im&&im.complete&&im.naturalWidth){const w=kind==='BUNNY_URL'?32:40;ctx.save();ctx.imageSmoothingEnabled=false;ctx.drawImage(im,Math.round(x+(kind==='BUNNY_URL'?-5:-8)),Math.round(y+27-40+(sit?3:0)),w,40);ctx.restore();return true;}}
@@ -84,7 +85,7 @@ function drawReviewSprite(kind,x,y,sit,face){
  const dy=Math.round(y+27-h+(sit?3:0));
  let moving=false;
  if(kind==='BUNNY_URL')moving=Math.abs(p.vx)>0.35 && p.on && !sit;
- else {const now=performance.now();if(lastLionReviewX!==null&&Math.abs(x-lastLionReviewX)>0.06)lastLionMotionUntil=now+180;moving=now<lastLionMotionUntil;lastLionReviewX=x;lastLionReviewAt=now;}
+ else {const now=performance.now();if(lastLionReviewX!==null&&Math.abs(x-lastLionReviewX)>0.06)lastLionMotionUntil=now+180;moving=!lionOnMovingRaftIdle && now<lastLionMotionUntil;lastLionReviewX=x;lastLionReviewAt=now;}
  const prefix=(kind==='BUNNY_URL'?'bunny_':'lion_')+movingDir.toLowerCase()+'_'+(moving?'run':'idle')+'_';
  const index=moving?Math.floor(timer/115)%4:Math.floor(timer/460)%3;
  const airborne=kind==='BUNNY_URL'?(!p.on&&Math.abs(p.vy)>0.15):(!p.on&&Math.abs(p.x-lion.x)<85&&Math.abs(p.y-lion.y)<95);
@@ -719,6 +720,7 @@ function updatePlats(dt,k){
   if(pl.kind==='spring'&&pl.anim>0)pl.anim=Math.max(0,pl.anim-dt)}}
 function onPipeTop(o){return p.on&&p.x+p.w>o.x-5&&p.x<o.x+o.w+5&&Math.abs(p.y+p.h-o.top)<2}
 function updateLion(k){
+ lionOnMovingRaftIdle=false;
  // The secret lookout is a shared discovery: climb its actual stepped silhouette
  // rather than leaving the companion on the ground or teleporting her to the top.
  if(level===1&&starBridgeReady()&&starBridgeProgress()>=.98&&p.x>=2705&&p.x<3070&&p.y<G-35){
@@ -763,6 +765,7 @@ function updateLion(k){
    lion.x=Math.max(minX,Math.min(maxX,lion.x));
    lion.y=raft.y-27;
    lion.face=p.face;
+   lionOnMovingRaftIdle=true;
    return;
   }
  }
@@ -1629,7 +1632,7 @@ function passGate(){try{localStorage.setItem(GATE,'1')}catch(e){}$('#gate-input'
 $('#gate-enter').addEventListener('click',()=>gateOk()?passGate():showGate('date'));
 $('#gate-date').addEventListener('submit',e=>{e.preventDefault();const v=$('#gate-input').value;
  if(parseDate(v)){$('#gate-msg').textContent='答对啦 ♡';setTimeout(passGate,350)}
- else{wrong++;$('#gate-msg').textContent=wrong>=3?'提示：是 7 月的某一天，输入 4 位数字，比如 0101':'再想想～是我们开始熟悉的那天吧 💗';const c=$('#gate-card');c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake')}});
+ else{wrong++;$('#gate-msg').textContent=wrong>=3?'提示：是 7 月的某一天，输入 4 位数字，比如 0101':'再想想～是我们开始熟悉的那天哦';const c=$('#gate-card');c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake')}});
 $('#gate-input').addEventListener('input',e=>{const t=e.target;t.value=t.value.replace(/[^0-9]/g,'').slice(0,8)});
 
 // ================= Input =================
