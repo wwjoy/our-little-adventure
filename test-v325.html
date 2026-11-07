@@ -26,7 +26,10 @@
 #jump{width:76px!important;height:76px!important;right:calc(max(12px,env(safe-area-inset-right)) + 18px)!important;bottom:calc(max(2px,env(safe-area-inset-bottom)) + 14px)!important;opacity:.7}
 #card p{overflow-wrap:anywhere}#card strong{color:#cf5a91}
 #review-label{position:absolute;top:max(48px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);padding:4px 9px;border-radius:8px;background:#fff7f0d9;color:#754c65;font-size:11px;font-weight:700;pointer-events:none;z-index:2;white-space:nowrap}@media(max-width:700px){#review-label{font-size:9px;top:45px}}
-#back-review{position:absolute;right:max(12px,env(safe-area-inset-right));bottom:80px;z-index:3;background:#805575df;color:white;border:2px solid white;border-radius:11px;padding:9px 12px;font-weight:700;font-size:13px;touch-action:manipulation}#back-review.active{background:#d65d96}</style></head><body><div id="stage"><canvas id="game" width="640" height="360" aria-label="我们的奇妙冒险"></canvas></div><div id="hud" class="hide"></div><div id="review-label">V3.2.5 场景服装规则：日常默认 / 蓝冰洞探险 / 滑雪服 / 潜水服</div><button id="pause" class="hide" aria-label="暂停">Ⅱ</button><div id="controls" class="hide"><button id="left" aria-label="向左">◀</button><button id="right" aria-label="向右">▶</button><button id="jump" aria-label="跳跃">✦</button></div><button id="interact" class="hide" type="button">✦ 互动</button><button id="back-review" type="button">背面预览：关</button><button id="sit-review" type="button" style="position:absolute;right:12px;bottom:102px;z-index:6;border-radius:9px;border:2px solid #e6a0bf;background:#fff1f6;color:#865477;padding:8px;font-weight:bold">安全站姿：关</button><div id="shade" class="hide"><div id="card"><h1 id="heading"></h1><p id="message"></p><div id="actions"></div></div></div>
+#back-review{position:absolute;right:max(12px,env(safe-area-inset-right));bottom:80px;z-index:3;background:#805575df;color:white;border:2px solid white;border-radius:11px;padding:9px 12px;font-weight:700;font-size:13px;touch-action:manipulation}#back-review.active{background:#d65d96}</style><style>
+/* V3.2.5: hide temporary developer review controls and banner in playable build. */
+#review-label,#back-review,#sit-review,#sunset-review-btn,#sunset-review-panel{display:none!important;}
+</style></head><body><div id="stage"><canvas id="game" width="640" height="360" aria-label="我们的奇妙冒险"></canvas></div><div id="hud" class="hide"></div><div id="review-label">V3.2.5 场景服装规则：日常默认 / 蓝冰洞探险 / 滑雪服 / 潜水服</div><button id="pause" class="hide" aria-label="暂停">Ⅱ</button><div id="controls" class="hide"><button id="left" aria-label="向左">◀</button><button id="right" aria-label="向右">▶</button><button id="jump" aria-label="跳跃">✦</button></div><button id="interact" class="hide" type="button">✦ 互动</button><button id="back-review" type="button">背面预览：关</button><button id="sit-review" type="button" style="position:absolute;right:12px;bottom:102px;z-index:6;border-radius:9px;border:2px solid #e6a0bf;background:#fff1f6;color:#865477;padding:8px;font-weight:bold">安全站姿：关</button><div id="shade" class="hide"><div id="card"><h1 id="heading"></h1><p id="message"></p><div id="actions"></div></div></div>
 <div id="gate"><div id="gate-card"><div id="gate-welcome"><h1>🌸《我们的奇妙冒险》</h1><div class="duo">🐰 小兔子 + 🦁 小狮子</div><button id="gate-enter" type="button">进入 ♡</button></div>
 <form id="gate-date" class="hide" autocomplete="off"><h1>🌸</h1><p>我们的故事，从哪一天开始？</p><input id="gate-input" type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="8" placeholder="MMDD" aria-label="纪念日期"><br><button type="submit">确定 ♡</button><p id="gate-msg"></p></form></div></div>
 <div id="rotate"><div style="font-size:42px">🐰 🦁</div><strong>请将手机横过来 ♡</strong><small>关闭方向锁定后横屏；若仍无法旋转，可在 Safari 中打开。</small></div><div id="error"></div><script>
@@ -745,6 +748,24 @@ function updateLion(k){
   lion.y=G-27;return;
  }
  if(coop.state==='done'&&!data.story.bridge)coop.state='idle';
+ // V3.2.5 raft companion fix: when bunny is standing on a wooden moving raft,
+ // put the lion's FEET on the same raft top rather than leaving him in the water.
+ // Keep the lion behind the bunny and within the raft's usable horizontal span.
+ if(level===1&&!L.secret&&!L.under&&p.on&&p.ride&&p.ride.kind==='mover'){
+  const raft=p.ride;
+  const playerCenter=p.x+p.w/2;
+  const lionWidth=22;
+  if(playerCenter>=raft.x-12&&playerCenter<=raft.x+raft.w+12){
+   const preferred=p.x-(p.face||1)*32;
+   const minX=raft.x+3,maxX=raft.x+raft.w-lionWidth-3;
+   const targetX=Math.max(minX,Math.min(maxX,preferred));
+   lion.x+=Math.max(-5*k,Math.min(5*k,(targetX-lion.x)*.30*k));
+   lion.x=Math.max(minX,Math.min(maxX,lion.x));
+   lion.y=raft.y-27;
+   lion.face=p.face;
+   return;
+  }
+ }
  const desiredX=p.x-(p.face||1)*38;
  const dx=desiredX-lion.x;
  if(Math.abs(dx)>220){lion.x=desiredX;lion.y=p.y;lion.face=p.face;return}
