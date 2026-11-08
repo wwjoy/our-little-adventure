@@ -111,7 +111,7 @@ for(const [key,uri] of Object.entries(OUTFIT_DATA)){const img=new Image();img.sr
 let outfitRenderMode='daily';
 function drawSceneOutfit(kind,x,y,face,sit){
  let mode=outfitRenderMode;
- if(mode==='daily' && level===2 && L && L.secret)mode='cave';
+ if(mode==='daily' && level===2 && L && L.under)mode='cave';
  if(mode==='daily')return false;
  const animal=kind==='bunny'?'bunny':'lion';
  const dir=face<0?'left':'right';
@@ -302,7 +302,14 @@ function restoreUnclaimedRewards(){
 }
 function resetPlanks(){for(const pl of L.plats)if(pl.kind==='fall'){pl.y=pl.y0;pl.t=0;pl.vy=0}}
 function respawnAt(x){if(L&&L.under&&!icePuzzle.gateOpen)icePuzzle.cubeX=icePuzzle.cubeStart;if(level===2&&!L.under&&!data.story.bridge&&coop.state==='approaching'){coop.state='waiting';coop.lionReady=true}pendingFlag=-1;flagCrossingArmed=false;x=safeX(x);p.x=x;p.y=G-p.h;p.vx=p.vy=0;p.on=true;p.ride=null;p.sit=false;p.hidden=false;p.coyote=p.buffer=p.jumpMs=0;lion.x=x-34*p.face;lion.y=p.y;lion.sit=false;trail=[];resetPlanks();cam=Math.max(0,Math.min(L.end-W,x-W*.35));respawnGuard=900;clearInput()}
-function startLevel(n,fromSave){sitReviewEnabled=false;sitButton.textContent='安全站姿：关';p.sit=false;lion.sit=false;layout(n);let cp=(fromSave&&data.cpLevel===n)?Math.max(0,Math.min(L.cps.length-1,data.cp)):0;data.level=Math.max(data.level,n);data.cp=cp;data.cpLevel=n;save();p.face=1;respawnAt(L.cps[cp]);play();if(n===2&&!data.story.gardenIntro){data.story.gardenIntro=true;save();cut('🌲 红杉森林的秘密','沿着红杉森林找到秘密小屋，打开地下入口，和小狮子一起探索蓝冰洞。<br>找到「未来的种子」后，带它回到约定之树旁的花坛，一起种下。',play,'一起出发 ♡')}if(n===0&&!data.story.introGuide){data.story.introGuide=true;save();cut('🦁 冒险的小目标','听说这片世界里藏着三颗特别的爱心，我们一起把它们找出来吧！<br><br>沿途的金币也值得收集，遇到特别的东西时，小狮子会提醒你。<br>想知道收集进度，可以在暂停菜单打开「📖 冒险手册」。',play,'出发吧 ♡')}}
+function startLevel(n,fromSave){
+ // Replaying beach must replay the sunset/fireworks, independently of previous unlocks.
+ if(n===1&&!fromSave){data.story.fireworks=false;data.story.sunset=false;}
+ // On refresh during a cinematic, return to a safe replayable state, not a dead end.
+ if(n===1&&fromSave&&data.story.fireworks&&!data.hearts[1]){
+   data.story.fireworks=false;data.story.sunset=false;
+ }
+ sitReviewEnabled=false;sitButton.textContent='安全站姿：关';p.sit=false;lion.sit=false;layout(n);let cp=(fromSave&&data.cpLevel===n)?Math.max(0,Math.min(L.cps.length-1,data.cp)):0;data.level=Math.max(data.level,n);data.cp=cp;data.cpLevel=n;save();p.face=1;respawnAt(L.cps[cp]);play();if(n===2&&!data.story.gardenIntro){data.story.gardenIntro=true;save();cut('🌲 红杉森林的秘密','沿着红杉森林找到秘密小屋，打开地下入口，和小狮子一起探索蓝冰洞。<br>找到「未来的种子」后，带它回到约定之树旁的花坛，一起种下。',play,'一起出发 ♡')}if(n===0&&!data.story.introGuide){data.story.introGuide=true;save();cut('🦁 冒险的小目标','听说这片世界里藏着三颗特别的爱心，我们一起把它们找出来吧！<br><br>沿途的金币也值得收集，遇到特别的东西时，小狮子会提醒你。<br>想知道收集进度，可以在暂停菜单打开「📖 冒险手册」。',play,'出发吧 ♡')}}
 function showUI(on){$('#controls').classList.toggle('hide',!on);$('#pause').classList.toggle('hide',!on);$('#hud').classList.toggle('hide',mode==='gate')}
 function menu(title,body,buttons){mode='menu';clearInput();showUI(false);$('#interact').classList.add('hide');$('#shade').classList.remove('hide');$('#heading').textContent=title;$('#message').innerHTML=body;const el=$('#actions');el.textContent='';buttons.forEach((b,i)=>{let btn=document.createElement('button');btn.type='button';btn.textContent=b[0];if(i)btn.className='alt';btn.addEventListener('click',b[1]);el.appendChild(btn)});$('#card').scrollTop=0}
 function play(){p.sit=false;lion.sit=false;sitReviewEnabled=false;sitButton.textContent='安全站姿：关';mode='play';$('#shade').classList.add('hide');showUI(true);last=performance.now()}
@@ -645,7 +652,7 @@ function updateScene(dt){const s=scene,k=Math.min(2,dt/16.667);s.t+=dt;timer+=dt
   for(const r of rockets){if(!r.parts){r.y+=r.vy*k;r.vy+=.07*k;if(r.vy>-.6){r.parts=[];const n=34;for(let i=0;i<n;i++){const a=i/n*Math.PI*2,sp=1.8+Math.random()*1.6;r.parts.push({x:r.x,y:r.y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:1})}}}
    else for(const q of r.parts){q.x+=q.vx*k;q.y+=q.vy*k;q.vy+=.035*k;q.vx*=.985;q.life-=dt/1300}}
   rockets=rockets.filter(r=>!r.parts||r.parts.some(q=>q.life>0));
-  if(s.t>10000){scene=null;p.sit=lion.sit=false;collectHeart(1);p.x=3250;p.y=G-p.h;lion.x=3223;lion.y=G-27;cut('🎆 夕阳花火','那天的夕阳和烟花，我都想一直记得。<br>❤️ 这一刻的特别爱心已经收藏。',()=>{play();finishLevel()})}}
+  if(s.t>10000){data.story.fireworks=true;data.story.sunset=true;save();scene=null;p.sit=lion.sit=false;collectHeart(1);p.x=3250;p.y=G-p.h;lion.x=3223;lion.y=G-27;cut('🎆 夕阳花火','那天的夕阳和烟花，我都想一直记得。<br>❤️ 这一刻的特别爱心已经收藏。',()=>{play();finishLevel()})}}
  if(s.type==='switch'){
   coop.bridgeTime+=dt;
   // Show the cooperation for long enough to see the two beams and bridge.
@@ -776,6 +783,17 @@ function updateLion(k){
  if(Math.abs(dx)>4)lion.face=Math.sign(dx);
  // Always resolve the companion against raised terrain, never embed it in a block.
  let floor=G-27;
+ // Forest cloud bridge is at G-5. Companion's feet must share that surface.
+ if(level===2&&L&&!L.under&&!L.secret&&!L.cabin&&p.on&&clouds.length){
+   const cloud=clouds.find(c=>!c.building&&p.x+p.w>c.x&&p.x<c.x+c.w&&Math.abs(p.y+p.h-(G-5))<7);
+   if(cloud){
+     lion.x=Math.max(cloud.x+2,Math.min(cloud.x+cloud.w-24,lion.x));
+     lion.y=G-5-27;
+     lion.face=p.face;
+     return;
+   }
+ }
+
  for(const a of L.map){if(a.kind==='block'&&lion.x+22>a.x+3&&lion.x<a.x+a.w-3)floor=Math.min(floor,a.y-27)}
  if(L.under&&icePuzzle.light==='ready')for(const s of [ICE_BRIDGE_WALKWAY,ICE_MEMORY_LEDGE])if(lion.x+22>s.x+3&&lion.x<s.x+s.w-3)floor=Math.min(floor,s.y-27);
  if(!p.on&&Math.abs(p.x-lion.x)<64&&p.y<floor-22)floor=Math.min(floor,p.y+12);
@@ -892,10 +910,10 @@ function update(dt){
  if(level===1){
   // No early sitting prompt: sunset and fireworks play together at the final beach.
   if(p.x>2080&&!data.story.starHint){data.story.starHint=true;save();flash('✨ 前方是潮汐木筏，留意海浪的节奏！')}
-  if(p.x>3230&&!data.story.fireworks){data.story.fireworks=true;save();startScene('beachArrival');return}
+  if(p.x>3230&&!data.story.fireworks){startScene('beachArrival');return}
   // Old saves could have finished the fireworks but returned to a checkpoint
   // before the heart; let the pair finish at the beach without replaying the level.
-  if(p.x>3180&&data.story.fireworks&&data.story.sunset){
+  if(p.x>3180&&data.story.fireworks&&data.story.sunset&&data.hearts[1]){
    collectHeart(1);
    finishLevel();return;
   }}
