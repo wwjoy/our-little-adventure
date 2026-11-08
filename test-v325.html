@@ -728,22 +728,23 @@ function updatePlats(dt,k){
 function onPipeTop(o){return p.on&&p.x+p.w>o.x-5&&p.x<o.x+o.w+5&&Math.abs(p.y+p.h-o.top)<2}
 function updateLion(k){
  lionOnMovingRaftIdle=false;
- // Forest cloud bridge: resolve companion BEFORE cooperative-event early returns
- // and before ordinary ground following. Anchor both characters by their feet.
- // This only applies to the third level's completed cloud bridge.
+ // Forest cloud bridge: share the bunny's rendered foot plane, including
+ // the temporary moving platform that can coexist with the visible cloud.
+ // This check deliberately does not depend on p.ride or a narrow G-relative
+ // vertical interval; either condition previously made the branch miss.
  if(level===2 && L && !L.under && !L.secret && !L.cabin && clouds.length){
-  const bunnyFeet=p.y+p.h;
+  const feet=p.y+p.h;
   const cloud=clouds.find(c=>!c.building &&
-    p.x+p.w>c.x+2 && p.x<c.x+c.w-2 &&
-    bunnyFeet>=G-49 && bunnyFeet<=G-8);
+    p.x+p.w>c.x-18 && p.x<c.x+c.w+18 &&
+    feet<G-9 && feet>G-100);
   if(cloud){
    const lionWidth=22;
-   const preferred=p.x-(p.face||1)*30;
    const left=cloud.x+2, right=Math.max(left,cloud.x+cloud.w-lionWidth-2);
+   const preferred=p.x-(p.face||1)*29;
    lion.x=Math.max(left,Math.min(right,preferred));
-   // Companion sprite uses a 27px-high drawing box; match bunny foot plane.
-   lion.y=bunnyFeet-27;
+   lion.y=feet-27;
    lion.face=p.face;
+   lionOnMovingRaftIdle=true;
    return;
   }
  }
@@ -1472,7 +1473,17 @@ function draw(){
  const pipeOver=scene&&(scene.type==='pipeIn'||scene.type==='pipeOut'||scene.type==='rise');
  if(!pipeOver)for(const o of L.objects)if(o.type==='pipe')pipeDraw(o);
  L.enemies.forEach(enemyDraw);
- if(!L.secret){if(level===0&&!data.met){lionDraw(350-cam,G-28,-1,false);circle(363-cam,G-56,10,'#fff6e8');text('!',359-cam,G-51,'#9d6492',14)}else lionDraw(lion.x-cam,lion.y,lion.face,lion.sit)}
+ if(!L.secret){if(level===0&&!data.met){lionDraw(350-cam,G-28,-1,false);circle(363-cam,G-56,10,'#fff6e8');text('!',359-cam,G-51,'#9d6492',14)}else {
+  // Render-only safety net: never show the lion beneath an active cloud
+  // when the bunny is visibly standing on it. No other scene is affected.
+  let lx=lion.x,ly=lion.y;
+  if(level===2&&!L.under&&!L.cabin&&clouds.length&&p.on){
+   const feet=p.y+p.h;
+   const c=clouds.find(c=>!c.building&&p.x+p.w>c.x-18&&p.x<c.x+c.w+18&&feet<G-9&&feet>G-100);
+   if(c){lx=Math.max(c.x+2,Math.min(c.x+c.w-24,p.x-(p.face||1)*29));ly=feet-27;lionOnMovingRaftIdle=true;}
+  }
+  lionDraw(lx-cam,ly,lion.face,lion.sit);
+ }}
  if(!p.hidden)bunny(p.x-cam,p.y,p.face,p.sit,!!dying);
  if(pipeOver){for(const o of L.objects)if(o.type==='pipe'||o.type==='exitpipe')pipeDraw(o)}
  if(bubbleMsg&&scene)bubble(lion.x-cam+12,lion.y-6,bubbleMsg.t);
