@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · V3.2.5 第一关美术与小怪兽整合审核</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · V3.2.5 第一关设计稿重构与小怪兽整合审核</title><style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#2a203f;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;touch-action:none}#stage{position:absolute;inset:0;height:var(--available-height,100%);display:flex;align-items:center;justify-content:center}canvas{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;touch-action:none;-webkit-user-select:none}#hud{position:absolute;top:max(8px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));color:#fff;font-size:clamp(13px,2.2vw,19px);font-weight:800;text-shadow:1px 2px #704b73;pointer-events:none}#pause{position:absolute;right:max(12px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));z-index:2}button{font-family:inherit;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent}#controls{position:absolute;inset:0;pointer-events:none;z-index:3}#left,#right,#jump{opacity:.58;position:absolute;bottom:max(10px,env(safe-area-inset-bottom));width:52px;height:52px;background:#55476655;border:2px solid #ffffff77;color:#fff;border-radius:12px;font-size:22px;font-weight:800;pointer-events:auto}#left{left:max(12px,env(safe-area-inset-left))}#right{left:calc(max(12px,env(safe-area-inset-left)) + 61px)}#jump{right:max(12px,env(safe-area-inset-right));border-radius:50%;font-size:28px}.pressed{background:#ec8eaecc!important;opacity:1!important}#pause{border:2px solid #ffffffaa;background:#55476677;color:#fff;border-radius:11px;width:45px;height:42px;font-size:20px}#shade{position:absolute;inset:0;height:var(--available-height,100%);background:#211b39c9;display:flex;justify-content:center;align-items:center;z-index:4;padding:12px}#card{background:#fff3f6;border:3px solid #ffc2d7;border-radius:17px;color:#68455e;text-align:center;width:min(440px,92%);padding:16px;max-height:90%;overflow:auto;box-shadow:0 6px #a36e9d}#card h1{font-size:clamp(19px,3.2vw,27px);color:#db6394;margin:0 0 8px}#card p{font-size:clamp(12px,1.8vw,15px);line-height:1.65;margin:8px 0}#actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}#actions button{font-size:14px;font-weight:700;border:0;background:#e979a5;color:#fff;border-radius:10px;padding:10px 15px;min-height:43px}#actions button.alt{background:#a88bad}#rotate{position:absolute;inset:0;height:var(--available-height,100%);background:#241b38;color:white;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:8;gap:12px;font-size:20px;padding:24px}#rotate small{font-size:13px;opacity:.8}#error{display:none;position:absolute;z-index:12;inset:10%;background:#fff5f5;color:#a12750;border-radius:12px;padding:16px;overflow:auto;font-size:14px}.hide{display:none!important}@media(orientation:portrait){#rotate{display:flex}}@media(max-height:310px){#card{padding:8px}#card p{margin:3px}#left,#right,#jump{opacity:.58;width:48px;height:48px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 56px)}}
 #interact{position:absolute;left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);background:#fff9f0e8;color:#79516c;border:2px solid #e9a7c5;border-radius:7px;padding:4px 8px;min-width:66px;min-height:32px;z-index:3;font-weight:800;font-size:11px;box-shadow:0 3px #a88ba4;white-space:nowrap}#card{max-width:520px!important}#hud{z-index:2;max-width:75%;font-size:clamp(12px,1.7vw,18px)}@media(orientation:landscape){#left,#right,#jump{bottom:max(10px,env(safe-area-inset-bottom))}} 
 #gate{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 30% 20%,#ffd6e6,#f6aed3 45%,#b48ac8);height:var(--available-height,100%)}
@@ -29,7 +29,7 @@
 #back-review{position:absolute;right:max(12px,env(safe-area-inset-right));bottom:80px;z-index:3;background:#805575df;color:white;border:2px solid white;border-radius:11px;padding:9px 12px;font-weight:700;font-size:13px;touch-action:manipulation}#back-review.active{background:#d65d96}</style><style>
 /* V3.2.5: hide temporary developer review controls and banner in playable build. */
 #review-label,#back-review,#sit-review,#sunset-review-btn,#sunset-review-panel{display:none!important;}
-</style></head><body><div id="stage"><canvas id="game" width="640" height="360" aria-label="我们的奇妙冒险"></canvas></div><div id="hud" class="hide"></div><div id="review-label">V3.2.5 第一关美术与小怪兽整合审核</div><button id="pause" class="hide" aria-label="暂停">Ⅱ</button><div id="controls" class="hide"><button id="left" aria-label="向左">◀</button><button id="right" aria-label="向右">▶</button><button id="jump" aria-label="跳跃">✦</button></div><button id="interact" class="hide" type="button">✦ 互动</button><button id="back-review" type="button">背面预览：关</button><button id="sit-review" type="button" style="position:absolute;right:12px;bottom:102px;z-index:6;border-radius:9px;border:2px solid #e6a0bf;background:#fff1f6;color:#865477;padding:8px;font-weight:bold">安全站姿：关</button><div id="shade" class="hide"><div id="card"><h1 id="heading"></h1><p id="message"></p><div id="actions"></div></div></div>
+</style></head><body><div id="stage"><canvas id="game" width="640" height="360" aria-label="我们的奇妙冒险"></canvas></div><div id="hud" class="hide"></div><div id="review-label">V3.2.5 第一关设计稿重构与小怪兽整合审核</div><button id="pause" class="hide" aria-label="暂停">Ⅱ</button><div id="controls" class="hide"><button id="left" aria-label="向左">◀</button><button id="right" aria-label="向右">▶</button><button id="jump" aria-label="跳跃">✦</button></div><button id="interact" class="hide" type="button">✦ 互动</button><button id="back-review" type="button">背面预览：关</button><button id="sit-review" type="button" style="position:absolute;right:12px;bottom:102px;z-index:6;border-radius:9px;border:2px solid #e6a0bf;background:#fff1f6;color:#865477;padding:8px;font-weight:bold">安全站姿：关</button><div id="shade" class="hide"><div id="card"><h1 id="heading"></h1><p id="message"></p><div id="actions"></div></div></div>
 <div id="gate"><div id="gate-card"><div id="gate-welcome"><h1>🌸《我们的奇妙冒险》</h1><div class="duo">🐰 小兔子 + 🦁 小狮子</div><button id="gate-enter" type="button">进入 ♡</button></div>
 <form id="gate-date" class="hide" autocomplete="off"><h1>🌸</h1><p>我们的故事，从哪一天开始？</p><input id="gate-input" type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="8" placeholder="MMDD" aria-label="纪念日期"><br><button type="submit">确定 ♡</button><p id="gate-msg"></p></form></div></div>
 <div id="rotate"><div style="font-size:42px">🐰 🦁</div><strong>请将手机横过来 ♡</strong><small>关闭方向锁定后横屏；若仍无法旋转，可在 Safari 中打开。</small></div><div id="error"></div><script>
@@ -1061,9 +1061,35 @@ function text(t,x,y,c,size,align){ctx.fillStyle=c;ctx.font='bold '+(size||11)+'p
 function mix(a,b,t){const pa=parseInt(a.slice(1),16),pb=parseInt(b.slice(1),16);const r=Math.round(((pa>>16)&255)*(1-t)+((pb>>16)&255)*t),g=Math.round(((pa>>8)&255)*(1-t)+((pb>>8)&255)*t),bl=Math.round((pa&255)*(1-t)+(pb&255)*t);return 'rgb('+r+','+g+','+bl+')'}
 function mix3(a,b,c,t){return t<.5?mix(a,b,t*2):mix(b,c,(t-.5)*2)}
 
-// ================= V3.2.5 第一关美术升级：初夏小镇（全关小怪兽整合基线） =================
+// ================= V3.2.5 第一关设计稿重构升级：初夏小镇（全关小怪兽整合基线） =================
 // 仅替换绘制层；地图碰撞、收集物、敌人、隐藏入口和关卡流程保持稳定基线坐标。
 function poly(points,color){ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(points[0][0],points[0][1]);for(let i=1;i<points.length;i++)ctx.lineTo(points[i][0],points[i][1]);ctx.closePath();ctx.fill()}
+
+// V3.2.5 design-board faithful reconstruction: decorative-only, no geometry or physics changes.
+function townP(x,y,w,h,color){rect(x,y,w,h,color)}
+function townBlossom(x,y,scale,seed){
+ const cols=['#ffcee7','#ffc1df','#ffacd1','#fa96c4','#fff0f6','#fbe0f0','#eb7fb4'];
+ // Dense irregular clusters instead of oversized flat circles; fixed deterministic pixel pattern.
+ for(let i=0;i<95;i++){
+  const a=i*2.39996+seed*1.17,rr=Math.sqrt((i+2)/97),px=x+Math.cos(a)*rr*30*scale,py=y+Math.sin(a)*rr*22*scale;
+  const block=2+((i+seed)%3===0?2:0);rect(px,py,block*scale,block*scale,cols[(i*7+Math.floor(i/7)+seed)%cols.length]);
+ }
+ for(let i=0;i<15;i++){
+  const a=i*2.399+seed,rr=(.24+(i%5)*.14),px=x+Math.cos(a)*rr*30*scale,py=y+Math.sin(a)*rr*22*scale;
+  rect(px,py,2*scale,2*scale,'#fff8ed');
+ }
+}
+function townShrub(x,y,s){
+ for(let i=0;i<14;i++){const xx=x+(i%7)*4*s,yy=y-Math.floor(i/7)*6*s;circle(xx,yy,(4+i%3)*s,i%3?'#6aa46f':'#85ba7a')}
+ for(let i=0;i<11;i++){const xx=x+(i*13)%27*s,yy=y-(i*7)%13*s;rect(xx,yy,3*s,3*s,['#fbb5dd','#e8bcf1','#fff0ae','#eaa0c5'][i%4])}
+}
+function townMountains(t,shift,base,color,bright){
+ for(let i=-2;i<9;i++){
+  const x=i*177-((cam*shift)%177),peak=base+(i%3)*8;
+  poly([[x-110,G],[x+20,peak],[x+146,G]],color);
+  poly([[x+20,peak],[x-7,peak+24],[x+2,peak+22],[x+12,peak+32],[x+29,peak+20],[x+39,peak+28]],bright);
+ }
+}
 function firstLevelPixelCloud(x,y,s,alpha){
  ctx.save();ctx.globalAlpha=alpha==null?1:alpha;
  const c='#fff7fb',sh='#dbeaf8';
@@ -1071,52 +1097,78 @@ function firstLevelPixelCloud(x,y,s,alpha){
  ctx.restore();
 }
 function firstLevelSky(){
- const sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#83c9f4');sky.addColorStop(.52,'#bcdcf5');sky.addColorStop(1,'#f9dbe8');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
- circle(W*.79-cam*.018,70,28,'#fff2ae');circle(W*.79-cam*.018-8,62,7,'#fff8d3');
- for(let i=-1;i<7;i++){const x=i*210-((cam*.08)%210);firstLevelPixelCloud(x+45,48+(i%3)*23,.8+(i%2)*.15,.82)}
- // Far lavender mountain range.
- for(let i=-2;i<8;i++){const x=i*205-((cam*.12)%205);poly([[x-120,G],[x+25,126+(i%3)*13],[x+190,G]],i%2?'#b9aedc':'#a99bd2')}
- // Misty near hills and a distant fairytale castle.
- for(let i=-2;i<9;i++){const x=i*165-((cam*.22)%165);poly([[x-110,G],[x+25,174+(i%4)*9],[x+165,G]],i%2?'#8fc6c0':'#a8d1c8')}
- const cx=1015-cam*.20;if(cx>-130&&cx<W+130){
-  ctx.save();ctx.globalAlpha=.82;
-  rect(cx-42,126,84,66,'#f4e4f3');rect(cx-54,146,108,46,'#ead6ee');
-  rect(cx-28,96,17,96,'#f7ebf8');rect(cx+10,82,19,110,'#f7ebf8');rect(cx-4,113,14,79,'#f3e4f5');
-  poly([[cx-34,96],[cx-19,77],[cx-5,96]],'#8d7bb7');poly([[cx+4,82],[cx+20,60],[cx+30,82]],'#7d6aad');poly([[cx-9,113],[cx+3,98],[cx+16,113]],'#9b84bf');
-  for(const wx of [cx-21,cx+18,cx+3]){rect(wx,125,5,11,'#8fc1d7');rect(wx,156,5,10,'#8fc1d7')}
-  ctx.restore();
+ const sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#77bcfa');sky.addColorStop(.38,'#a5d5fd');sky.addColorStop(.76,'#f7c7da');sky.addColorStop(1,'#ffe4cc');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+ const sun=W*.82-cam*.018;circle(sun,51,26,'#fff0b0');circle(sun-8,43,7,'#fff9d7');
+ for(let i=-1;i<8;i++){let x=i*167-((cam*.07)%167);firstLevelPixelCloud(x+60,33+(i%4)*22,.9+i%2*.15,.94)}
+ townMountains(.12,0,150,'#aaa3dc','#cec7ee');townMountains(.17,0,176,'#92abe4','#b7c8f4');
+ for(let i=-1;i<9;i++){
+  let x=i*142-((cam*.25)%142);poly([[x-92,G],[x+17,193+i%3*7],[x+141,G]],i%2?'#6caaa5':'#82bdb1');
+  for(let j=0;j<7;j++){let xx=x-24+j*13,yy=232+(j%3)*8;circle(xx,yy,11,j%2?'#78ad8e':'#9ac39c')}
  }
- // Slow drifting petals, subtle enough not to compete with gameplay.
- ctx.save();ctx.globalAlpha=.45;for(let i=0;i<18;i++){const x=((i*83+timer*.013-cam*.06)%(W+70)+W+70)%(W+70)-35;const y=44+(i*47)%168;rect(x,y,3,2,i%3?'#ffd5e7':'#fff4f8')}ctx.restore();
+ const cx=1030-cam*.17;if(cx>-90&&cx<W+90){
+   ctx.save();ctx.globalAlpha=.85;
+   rect(cx-33,144,66,52,'#f9e8f2');rect(cx-44,155,88,41,'#e9d2ed');
+   for(const [ox,h] of [[-32,56],[-14,79],[7,65],[24,94]]){rect(cx+ox,196-h,15,h,'#f4e7f4');poly([[cx+ox-4,196-h],[cx+ox+7,180-h],[cx+ox+19,196-h]],'#8e83ba');rect(cx+ox+5,204-h,4,9,'#97c3db')}
+   ctx.restore();
+ }
+ for(let i=0;i<32;i++){
+  const xx=((i*103+timer*.008-cam*.06)%(W+30)+W+30)%(W+30)-15, yy=58+(i*43)%148;
+  rect(xx,yy,i%4===0?3:2,2,i%3?'#ffe0ef':'#fffaf5');
+ }
 }
 function firstLevelHouse(wx,w,h,body,roof,awning){
- const x=Math.round(wx-cam),base=G+3;if(x+w<-30||x>W+30)return;
- rect(x,base-h,w,h,body);rect(x+5,base-h+8,w-10,5,'#fff2dd');
- poly([[x-7,base-h+2],[x+w/2,base-h-31],[x+w+8,base-h+2]],roof);
- rect(x+9,base-38,22,38,'#9b6a77');rect(x+12,base-34,16,31,'#c28c8b');circle(x+25,base-19,2,'#ffe79c');
- rect(x+w-31,base-h+19,19,17,'#fff0b1');rect(x+w-28,base-h+22,13,11,'#a8d7e4');
- if(awning){for(let i=0;i<5;i++)rect(x+3+i*(w-6)/5,base-h+43,(w-6)/5,9,i%2?awning:'#fff5ed');rect(x+3,base-h+52,w-6,4,'#a86983')}
- rect(x+w/2-14,base-h-15,28,12,'#f6df9b');text('♡',x+w/2,base-h-5,'#d97ba2',12,'center');
+ const x=Math.round(wx-cam),base=G+1;if(x+w<-35||x>W+35)return;
+ // Homes are intentionally behind the walkable surface: roofs, window glow and brick details.
+ rect(x+5,base-h+7,w-10,h-6,'#bd9ba8');rect(x+8,base-h+10,w-16,h-10,body);
+ poly([[x-9,base-h+13],[x+w*.5,base-h-27],[x+w+9,base-h+13]],'#735e96');
+ poly([[x-5,base-h+11],[x+w*.5,base-h-24],[x+w+5,base-h+11]],roof);
+ for(let r=0;r<3;r++)for(let c=0;c<7;c++){
+  let tx=x-1+c*(w+1)/7+(r%2?5:0),ty=base-h-10+r*8;
+  if(ty<base-h+9&&tx<x+w-4)rect(tx,ty,12,1,'#ffe4e4');
+ }
+ rect(x+w*.64,base-h-29,12,18,'#d4abb6');rect(x+w*.64-2,base-h-31,16,4,'#a77c98');
+ rect(x+13,base-h+24,21,24,'#8b6384');rect(x+16,base-h+27,15,18,'#fff0ac');rect(x+22,base-h+27,2,18,'#d9a58e');rect(x+16,base-h+35,15,2,'#d9a58e');
+ rect(x+w-37,base-h+24,23,24,'#8b6384');rect(x+w-34,base-h+27,17,18,'#ffeab0');rect(x+w-27,base-h+27,2,18,'#d9a58e');
+ rect(x+w-34,base-h+35,17,2,'#d9a58e');
+ rect(x+w*.43,base-30,25,33,'#8c6882');rect(x+w*.43+3,base-27,19,27,'#eec4ab');circle(x+w*.43+19,base-13,2,'#fff3b8');
+ if(awning){const ay=base-h+59;rect(x+4,ay,w-8,4,'#93638a');for(let i=0;i<8;i++)rect(x+4+i*(w-8)/8,ay+4,(w-8)/8,8,i%2?'#fff4f6':awning);rect(x+4,ay+12,w-8,3,'#ae7794')}
+ for(let i=0;i<12;i++){const px=x+((i*31)%Math.max(12,w-18))+9,py=base-h+16+(i*13)%Math.max(15,h-34);if(i%3===0)rect(px,py,5,2,'#fff0eb')}
+ townShrub(x+3,base-4,.7);townShrub(x+w-24,base-3,.75);
 }
-function firstLevelFence(wx,len,y){const x=wx-cam;if(x>W||x+len<0)return;rect(x,y,len,4,'#d79b69');for(let i=0;i<=len;i+=22){rect(x+i,y-14,5,21,'#a96f54');poly([[x+i-2,y-14],[x+i+2.5,y-20],[x+i+7,y-14]],'#c88761')}}
-function firstLevelLamp(wx,y){const x=wx-cam;if(x<-20||x>W+20)return;rect(x,y,4,G-y,'#684c69');rect(x-5,y-3,14,4,'#8d6481');rect(x-2,y-20,9,17,'#6f536f');rect(x,y-17,5,10,'#ffe4a0');ctx.save();ctx.globalAlpha=.22;circle(x+2,y-12,20,'#ffeeb0');ctx.restore()}
-function firstLevelBench(wx,y){const x=wx-cam;if(x<-70||x>W+70)return;rect(x,y,58,6,'#a96f54');rect(x+4,y-15,50,7,'#c98a62');rect(x+9,y+5,5,14,'#7f5b55');rect(x+44,y+5,5,14,'#7f5b55')}
-function firstLevelWaterfall(wx,w){const x=wx-cam;if(x>W||x+w<0)return;rect(x,G-4,w,H-G+4,'#74c8eb');rect(x+5,G-4,5,H-G+4,'#c6f4ff');rect(x+w-8,G-4,4,H-G+4,'#4da9d5');for(let i=0;i<6;i++)circle(x+5+i*(w-10)/5,H-8-(i%2)*4,4,'#e9fdff')}
-function firstLevelBush(wx,y,type){const x=wx-cam;if(x<-45||x>W+45)return;const base=type==='hydrangea'?'#74b574':'#5da55e';circle(x,y,10,base);circle(x+11,y-3,12,base);circle(x+23,y,10,base);if(type==='hydrangea'){for(let i=0;i<8;i++)circle(x+3+(i*7)%24,y-7+(i%3)*5,3,['#d9b7f2','#9fcdf2','#f7cae5'][i%3])}else{for(let i=0;i<5;i++)circle(x+4+i*5,y-7+(i%2)*4,2,i%2?'#ffd36c':'#fff4d3')}}
-function firstLevelFlower(wx,y,c){const x=wx-cam;if(x<-10||x>W+10)return;rect(x,y,2,8,'#579557');circle(x-2,y,2,c);circle(x+2,y,2,c);circle(x,y-2,2,'#fff7c3')}
+function firstLevelFence(wx,len,y){
+ const x=wx-cam;if(x>W||x+len<0)return;
+ rect(x,y-11,len,4,'#a77668');rect(x,y,len,4,'#c58b66');
+ for(let i=0;i<=len;i+=19){rect(x+i,y-21,6,28,'#9c675a');rect(x+i+1,y-21,3,24,'#e5b182');poly([[x+i,y-21],[x+i+3,y-27],[x+i+6,y-21]],'#e9b88b')}
+}
+function firstLevelLamp(wx,y){
+ const x=Math.round(wx-cam);if(x<-30||x>W+30)return;
+ ctx.save();ctx.globalAlpha=.13;circle(x+2,y-17,29,'#fff0af');ctx.restore();
+ rect(x-2,y,7,G-y,'#66536d');rect(x,y,3,G-y,'#a1838d');rect(x-8,y-21,20,5,'#574d6b');
+ rect(x-6,y-39,16,21,'#655071');rect(x-3,y-36,10,15,'#ffe2a0');rect(x-1,y-34,6,11,'#fff4c7');
+ poly([[x-10,y-39],[x+2,y-48],[x+14,y-39]],'#5c526d');rect(x,y-51,4,4,'#ffdd98');
+}
+function firstLevelBench(wx,y){
+ const x=wx-cam;if(x<-70||x>W+70)return;
+ rect(x+3,y-15,51,4,'#925d5a');rect(x+6,y-12,46,6,'#c58c68');rect(x+2,y,56,6,'#bb785c');
+ rect(x+9,y+6,5,13,'#725c5e');rect(x+44,y+6,5,13,'#725c5e');
+}
+function firstLevelWaterfall(wx,w){
+ const x=Math.round(wx-cam);if(x>W||x+w<0)return;
+ // Decorative waterfall follows existing gaps; only paint, never collision.
+ rect(x,G-9,w,H-G+10,'#5ab8ef');rect(x+3,G-9,5,H-G+10,'#b8eaff');rect(x+11,G-9,3,H-G+10,'#85daf9');
+ for(let i=0;i<7;i++){let px=x+2+i*(w-3)/7;rect(px,G+12+(i%2)*9,2,H-G-15,'#a3e6fa')}
+ for(let i=0;i<8;i++)circle(x+4+i*(w-8)/7,G+3+(i%2)*2,3,'#f0fcff');
+ for(let i=0;i<10;i++)circle(x+4+i*(w-8)/9,H-10-(i%2)*2,3,'#f2fdff');
+}
+function firstLevelBush(wx,y,type){const x=wx-cam;if(x<-45||x>W+45)return;townShrub(x,y,1)}
+function firstLevelFlower(wx,y,c){const x=wx-cam;if(x<-15||x>W+15)return;rect(x,y,2,12,'#588c58');rect(x-4,y+5,5,2,'#75ac6b');for(let i=0;i<5;i++){let a=i*Math.PI*2/5;circle(x+Math.cos(a)*4,y+Math.sin(a)*4,3,c)}circle(x,y,2,'#fff3ac')}
 function firstLevelRabbitSign(wx){const x=wx-cam,y=G-58;if(x<-40||x>W+40)return;rect(x,y,4,58,'#8b625d');rect(x-17,y-4,38,28,'#f6dfb3');rect(x-14,y-1,32,22,'#b97872');circle(x+2,y+10,8,'#fff7f2');rect(x-4,y-4,4,10,'#fff7f2');rect(x+4,y-4,4,10,'#fff7f2');circle(x-1,y+9,1.4,'#4b384b');circle(x+5,y+9,1.4,'#4b384b')}
 function firstLevelVineArch(wx){const x=wx-cam,y=G-4;if(x<-80||x>W+80)return;ctx.save();ctx.globalAlpha=doorRevealed()?1:.86;rect(x-24,y-65,7,65,'#486f52');rect(x+24,y-65,7,65,'#486f52');poly([[x-24,y-63],[x-12,y-78],[x+12,y-78],[x+31,y-63],[x+25,y-55],[x+13,y-68],[x-11,y-68],[x-18,y-55]],'#5f8f5f');for(let i=0;i<12;i++){const px=x-25+(i*9)%54,py=y-70+(i%4)*9;circle(px,py,4,i%3?'#79b868':'#5b995a')}ctx.restore()}
 function firstLevelTownMidground(){
  firstLevelWaterfall(405,46);firstLevelWaterfall(941,48);firstLevelWaterfall(1449,48);
- firstLevelHouse(195,105,82,'#f6c8bd','#c987a7','#e986a6');
- firstLevelHouse(485,110,76,'#f7d4bf','#8b7eb3','#8bb8dd');
- firstLevelHouse(755,116,90,'#f6c4c7','#bd7e9f','#ee9db8');
- firstLevelHouse(1115,105,78,'#f2d6c9','#8e7ab0','#d79ab8');
- firstLevelHouse(1660,116,86,'#f7cfbf','#bd7b8f','#f0a2b9');
- firstLevelHouse(1970,112,80,'#f2d7ca','#8d78a8','#8fc6df');
+ for(const item of [[185,108,88,'#f8d8c8','#db7ba6','#eb89af'],[490,108,83,'#f6d8c6','#9386cb','#a3c8e6'],[753,106,92,'#f9d6c7','#d884ad','#ef8eaf'],[1115,105,83,'#f7d4c4','#9889c4','#e4a5ca'],[1665,113,91,'#f8d8c4','#d48a9c','#eeabc4'],[1962,111,87,'#f4d4cb','#9b89be','#a2c5e8']])firstLevelHouse(...item);
  firstLevelFence(24,145,G-22);firstLevelFence(455,205,G-22);firstLevelFence(990,190,G-22);firstLevelFence(1515,225,G-22);firstLevelFence(1890,175,G-22);
- // Warm string lights in the town street section.
- const sx=530-cam;if(sx>-250&&sx<W+250){ctx.strokeStyle='#8e697e';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(sx,183);ctx.quadraticCurveTo(sx+100,200,sx+205,182);ctx.stroke();for(let i=0;i<7;i++){const lx=sx+i*34,ly=184+Math.sin(i/6*Math.PI)*11;rect(lx,ly,2,8,'#72516d');circle(lx+1,ly+9,3,'#ffd66f')}}
+ for(const wx of [305,598,1119,1747]){let x=wx-cam;if(x>-160&&x<W+120){ctx.strokeStyle='#ae8793';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,189);ctx.quadraticCurveTo(x+65,209,x+134,190);ctx.stroke();for(let k=0;k<7;k++){let lx=x+k*20,ly=189+Math.sin(k/6*Math.PI)*10;rect(lx,ly,2,5,'#bc8c96');rect(lx-2,ly+5,6,5,k%2?'#fff1b7':'#ffe2cb')}}}
 }
 function firstLevelDecor(){
  firstLevelRabbitSign(88);firstLevelBench(555,G-27);firstLevelBench(1210,G-27);firstLevelLamp(340,G-126);firstLevelLamp(685,G-128);firstLevelLamp(1540,G-127);firstLevelLamp(2025,G-128);
@@ -1126,11 +1178,14 @@ function firstLevelDecor(){
  // Hanging vines at the hidden-area cliff and final segment.
  for(const wx of [1390,1460,1760]){const x=wx-cam;if(x>-20&&x<W+20){rect(x,G-76,3,58,'#4f8b54');for(let i=0;i<5;i++)circle(x+(i%2?4:-3),G-69+i*11,3,'#6ab363')}}
 }
-function firstLevelCherryTree(wx){const x=wx-cam;if(x<-85||x>W+85)return;const y=G;
- rect(x-7,y-91,14,93,'#82585e');rect(x-3,y-91,5,93,'#aa7067');
- rect(x-4,y-72,36,7,'#8d5f61');rect(x-29,y-62,29,6,'#8d5f61');
- const blobs=[[-30,-95,24,'#f59fc7'],[-11,-118,27,'#ffb8d7'],[17,-108,30,'#f7a6cc'],[35,-88,24,'#ffd0e2'],[-4,-83,28,'#ffbfd9'],[-43,-77,20,'#f7b0d0']];for(const b of blobs)circle(x+b[0],y+b[1],b[2],b[3]);
- for(let i=0;i<15;i++){const px=x-43+(i*17)%83,py=y-128+(i*19)%58;rect(px,py,3,3,i%3?'#fff1f7':'#df72ac')}
+function firstLevelCherryTree(wx){
+ const x=Math.round(wx-cam);if(x<-115||x>W+115)return;
+ const y=G+2;
+ rect(x-8,y-93,18,95,'#805b64');rect(x-3,y-91,5,90,'#b27a70');rect(x-29,y-74,31,7,'#875a60');rect(x+3,y-81,32,7,'#875a60');
+ rect(x-23,y-79,6,15,'#94636a');rect(x+29,y-89,5,16,'#94636a');
+ const cl=[[-35,-106,1.0],[-12,-123,1.12],[19,-114,1.2],[40,-97,.91],[-17,-88,1.0],[13,-86,1.08],[-49,-89,.77]];
+ for(let i=0;i<cl.length;i++)townBlossom(x+cl[i][0],y+cl[i][1],cl[i][2],i+Math.floor(wx/10));
+ for(let i=0;i<9;i++){const xx=x-51+(i*29)%104,yy=y-115+(i*17)%40;rect(xx,yy,3,2,'#fff8f7')}
 }
 function bg(){
  if(level===0&&!L.secret&&!L.under&&!L.cabin){firstLevelSky();return}
@@ -1155,11 +1210,22 @@ function tree(x){if(level===0&&!L.secret&&!L.under&&!L.cabin){firstLevelCherryTr
 function terrain(a){let x=a.x-cam;if(x>W||x+a.w<0)return;
  if(level===0&&!L.secret&&!L.under&&!L.cabin){
   const top=a.kind==='block'?a.y:G;
-  rect(x,top,a.w,H-top,'#6d5b73');
-  rect(x,top,a.w,8,'#80d24e');rect(x,top+7,a.w,5,'#4f9f43');
-  for(let i=0;i<a.w;i+=16){const xx=x+i;rect(xx+2,top+17+(i%3)*3,12,8,i%32?'#846f82':'#92778c');rect(xx+5,top+20+(i%2)*5,5,3,'#b5969e');if(i%48===0){rect(xx+8,top+9,3,18,'#477c45');circle(xx+10,top+18,3,'#65a65a')}}
-  // Cliff edge highlights make each original collision segment readable.
-  rect(x,top+12,3,H-top-12,'#9e8193');rect(x+a.w-4,top+12,4,H-top-12,'#54485f');
+  rect(x,top,a.w,H-top,'#6e5a78');
+  // Mossy grass caps and richly textured 16-pixel stone masonry.
+  rect(x,top,a.w,4,'#c5e98b');rect(x,top+4,a.w,6,'#72c75a');rect(x,top+10,a.w,4,'#3d8d50');
+  for(let yy=top+16,row=0;yy<H+18;yy+=16,row++){
+    for(let xx=x-8+(row%2)*8,col=0;xx<x+a.w;xx+=16,col++){
+      let hash=(row*17+col*23+Math.floor(a.x/31))%7;
+      rect(xx+1,yy+1,14,13,['#816d86','#89768e','#786780','#90778a','#76617e','#927c91','#846b85'][hash]);
+      rect(xx+2,yy+2,10,2,'#a18aa0');rect(xx+4,yy+9,6,2,'#6a5775');
+      if((hash+row)%5===0){rect(xx+11,yy+4,3,3,'#d2a9b4');rect(xx+12,yy+2,2,2,'#b992ae')}
+    }
+  }
+  if(a.w>20){rect(x,top+13,3,H-top-13,'#a18ba1');rect(x+a.w-4,top+13,4,H-top-13,'#534967')}
+  for(let k=0;k<Math.floor(a.w/46);k++){
+    let vx=x+19+k*46;rect(vx,top+11,2,9+(k%3)*7,'#4b9e56');
+    for(let j=0;j<3;j++){rect(vx+(j%2?3:-3),top+17+j*6,5,3,'#7fba60')}
+  }
   return;
  }
  if(level===1&&!L.under&&!L.secret&&a.kind==='block'){
