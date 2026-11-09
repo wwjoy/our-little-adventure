@@ -1135,10 +1135,27 @@ function firstLevelHouse(wx,w,h,body,roof,awning){
  for(let i=0;i<12;i++){const px=x+((i*31)%Math.max(12,w-18))+9,py=base-h+16+(i*13)%Math.max(15,h-34);if(i%3===0)rect(px,py,5,2,'#fff0eb')}
  townShrub(x+3,base-4,.7);townShrub(x+w-24,base-3,.75);
 }
+
+// V3.2.5 first-level fence only: authored modular pixel tile, no collision changes.
+const firstLevelFenceTile=new Image();
+firstLevelFenceTile.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAhCAYAAACfiCi5AAABmElEQVR4nO2WMU/CQBTH/62HJi4ubEZJOjSSiIPxOzjooMbd0c04sDD5Ddh14gvA5mACiyROxkE0GIwEcSHRAbc64WB6cJQLl+t7iSX8p+vl9ff67rV9f2Cuf6jT3b1BUviuDs5VBDVfKSCEnh9nlGsqcfAjHQjhRzvLcdkTRc2XBehOg6oLXHx3FBKeztqGB2B4SnGTcPJlB0I4AHy8tOWaqtVc/Mg3kDQpBWSyHmsyDv5sdWBcD81v1uQUfNErFwYXV49TA3vlgvWfgpMvbmsNo0DTOFvZ8kXOT6P29jk1MOenrRIAYOWLRutL2Vj3PeSLdRxsLir743G2ouaLu64DYPj65Yv1iYF/cbbi44t+kMLSwo/cONtfBQB0O2rb+0HKKgEAVr4oVSuOiRcpVSvWLeDkz+4gu38NWBNT8bUFnBxukSTg5msLeH5qkSTg5if+G5h7ISqReSHdqKfyQtT8iBfSjXoqL0TNV7zQe7OtHfUUXoiDH/FCo9rOrsg1lRei5juAmVe5vLlm9UK2fNfk5jgPz83/BWZx58Vx1izvAAAAAElFTkSuQmCC';
 function firstLevelFence(wx,len,y){
- const x=wx-cam;if(x>W||x+len<0)return;
- rect(x,y-11,len,4,'#a77668');rect(x,y,len,4,'#c58b66');
- for(let i=0;i<=len;i+=19){rect(x+i,y-21,6,28,'#9c675a');rect(x+i+1,y-21,3,24,'#e5b182');poly([[x+i,y-21],[x+i+3,y-27],[x+i+6,y-21]],'#e9b88b')}
+ // Retain all original fence locations. Repeating original-resolution 48x33 tiles
+ // avoids stretched posts and aligns the feet of the pickets to the former ground level.
+ const x=Math.round(wx-cam);if(x>W||x+len<0)return;
+ const yy=Math.round(y-26);
+ if(firstLevelFenceTile.complete&&firstLevelFenceTile.naturalWidth===48){
+   for(let i=0;i<len;i+=48){
+     const segment=Math.min(48,len-i);
+     ctx.drawImage(firstLevelFenceTile,0,0,segment,33,x+i,yy,segment,33);
+   }
+   // Finish right end with a matching full post, without an exposed raw rail.
+   ctx.drawImage(firstLevelFenceTile,1,0,10,33,x+len-8,yy,10,33);
+ }else{
+   // Fallback while PNG is decoding: unobtrusive warm wood tones.
+   rect(x,yy+13,len,5,'#ae7558');rect(x,yy+25,len,5,'#a46c51');
+   for(let i=0;i<len;i+=24){rect(x+i,yy+7,7,26,'#c79069')}
+ }
 }
 function firstLevelLamp(wx,y){
  const x=Math.round(wx-cam);if(x<-30||x>W+30)return;
@@ -1163,18 +1180,7 @@ function firstLevelWaterfall(wx,w){
 function firstLevelBush(wx,y,type){const x=wx-cam;if(x<-45||x>W+45)return;townShrub(x,y,1)}
 function firstLevelFlower(wx,y,c){const x=wx-cam;if(x<-15||x>W+15)return;rect(x,y,2,12,'#588c58');rect(x-4,y+5,5,2,'#75ac6b');for(let i=0;i<5;i++){let a=i*Math.PI*2/5;circle(x+Math.cos(a)*4,y+Math.sin(a)*4,3,c)}circle(x,y,2,'#fff3ac')}
 function firstLevelRabbitSign(wx){const x=wx-cam,y=G-58;if(x<-40||x>W+40)return;rect(x,y,4,58,'#8b625d');rect(x-17,y-4,38,28,'#f6dfb3');rect(x-14,y-1,32,22,'#b97872');circle(x+2,y+10,8,'#fff7f2');rect(x-4,y-4,4,10,'#fff7f2');rect(x+4,y-4,4,10,'#fff7f2');circle(x-1,y+9,1.4,'#4b384b');circle(x+5,y+9,1.4,'#4b384b')}
-// Hidden cave: self-contained 48x48 native-pixel artwork (96px display), visual-only.
-// Original DOOR_X, doorUnlocked, doorRevealed and interaction bounds are untouched.
-const hiddenFlowerCaveImg=new Image();
-hiddenFlowerCaveImg.src='data:image/png;base64,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';
-function firstLevelVineArch(wx){
- const x=Math.round(wx-cam),y=G-4;
- if(x<-95||x>W+95)return;
- if(hiddenFlowerCaveImg.complete&&hiddenFlowerCaveImg.naturalWidth){
-  ctx.drawImage(hiddenFlowerCaveImg,Math.round(x-48),Math.round(y-92),96,96);
- }
-}
-
+function firstLevelVineArch(wx){const x=wx-cam,y=G-4;if(x<-80||x>W+80)return;ctx.save();ctx.globalAlpha=doorRevealed()?1:.86;rect(x-24,y-65,7,65,'#486f52');rect(x+24,y-65,7,65,'#486f52');poly([[x-24,y-63],[x-12,y-78],[x+12,y-78],[x+31,y-63],[x+25,y-55],[x+13,y-68],[x-11,y-68],[x-18,y-55]],'#5f8f5f');for(let i=0;i<12;i++){const px=x-25+(i*9)%54,py=y-70+(i%4)*9;circle(px,py,4,i%3?'#79b868':'#5b995a')}ctx.restore()}
 function firstLevelTownMidground(){
  firstLevelWaterfall(405,46);firstLevelWaterfall(941,48);firstLevelWaterfall(1449,48);
  for(const item of [[185,108,88,'#f8d8c8','#db7ba6','#eb89af'],[490,108,83,'#f6d8c6','#9386cb','#a3c8e6'],[753,106,92,'#f9d6c7','#d884ad','#ef8eaf'],[1115,105,83,'#f7d4c4','#9889c4','#e4a5ca'],[1665,113,91,'#f8d8c4','#d48a9c','#eeabc4'],[1962,111,87,'#f4d4cb','#9b89be','#a2c5e8']])firstLevelHouse(...item);
@@ -1737,20 +1743,21 @@ function draw(){
  if(bubbleMsg&&scene)bubble(lion.x-cam+12,lion.y-6,bubbleMsg.t);
  for(const q of L.pops){const a=1-q.t/600;ctx.globalAlpha=Math.max(0,a);if(q.txt)text(q.txt,q.x-cam,q.y-q.t*.03,'#fff',11,'center');else coinDraw(q.x-cam,q.y-q.t*.05);ctx.globalAlpha=1}
  if(level===0&&!L.under&&!L.secret){
-  const dx=DOOR_X+12-cam;
-  // Never overlay a mint rectangular door. Flower-covered cave is always scenery.
-  // Unlocking only adds a subtle warm discovery glow; trigger remains unchanged.
-  if(doorRevealed()&&dx>-60&&dx<W+60){
-   ctx.save();const near=Math.abs(p.x+11-(DOOR_X+12));
-   ctx.globalAlpha=Math.max(.15,Math.min(.75,(100-near)/100));
-   for(let i=0;i<4;i++){
-    const sx=dx+Math.cos(i*2.3+timer*.001)*15;
-    const sy=G-46+Math.sin(i*2.3+timer*.001)*11;
-    circle(sx,sy,1.5,i%2?'#ffdf91':'#ffeef8');
+   const dx=DOOR_X-cam;
+   if(dx>-40&&dx<W+40){
+    // Before finding the key, the secret entrance is part of the scenery, not a visible locked door.
+    if(!doorUnlocked()){
+      ctx.globalAlpha=.40;circle(dx+12,G-45,3,'#eaf9ff');circle(dx+17,G-41,2,'#f7ffff');ctx.globalAlpha=1;
+    }else if(doorRevealed()){
+      const proximity=Math.abs(p.x+11-(DOOR_X+12));
+      const alpha=data.secretDoors.includes('0-secret-door')?1:Math.max(.18,Math.min(1,(105-proximity)/65));
+      ctx.save();ctx.globalAlpha=alpha;
+      rect(dx-3,G-52,30,52,'#f6e8fa');rect(dx,G-49,24,49,'#9ccfbf');
+      rect(dx+4,G-43,16,39,'#d8f5e9');rect(dx+18,G-26,3,4,'#f4cf80');
+      circle(dx+12,G-56,3,'#fff7cb');ctx.restore();
+    }
    }
-   ctx.restore();
   }
- }
  if(!L.under&&!L.secret&&!L.cabin&&level===0){rect(L.end-70-cam,G-90,5,90,'#fff4e4');rect(L.end-65-cam,G-90,48,24,'#f18eb2');text('终点',L.end-59-cam,G-73,'#fff',13)}
  for(const r of rockets){if(!r.parts){rect(r.x-1,r.y,2,7,r.c);ctx.globalAlpha=.4;rect(r.x-1,r.y+7,2,10,r.c);ctx.globalAlpha=1}else for(const q of r.parts)if(q.life>0){ctx.globalAlpha=Math.max(0,q.life);circle(q.x,q.y,2.4,r.c);ctx.globalAlpha=Math.max(0,q.life*.4);circle(q.x-q.vx*2,q.y-q.vy*2,1.6,r.c);ctx.globalAlpha=1}}
  if(scene&&scene.type==='sunsetPhoto')drawSunsetPhoto();
