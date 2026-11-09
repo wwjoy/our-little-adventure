@@ -182,7 +182,7 @@ function boarFrameName(e){
 }
 function drawFirstLevelBoar(e,x,floorY){
  const key=boarFrameName(e),im=boarImages[key];if(!im||!im.complete||!im.naturalWidth)return false;
- const w=42,h=31,by=floorY-(e.hop||0);
+ const w=38,h=28,by=floorY-(e.hop||0); // V3.2.5: visual size reduced ~9%; gameplay collision unchanged
  ctx.save();ctx.imageSmoothingEnabled=false;
  if(e.dead&&e.dead>340)ctx.globalAlpha=Math.max(0,1-(e.dead-340)/240);
  ctx.drawImage(im,Math.round(x-w/2),Math.round(by-h),w,h);
