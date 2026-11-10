@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="v325-build" content="V3.2.5-backdrop-parallax-castle-2026-11-10"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · V3.2.5 第一关路灯旗帜审核</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="v325-build" content="V3.2.5-depth-order-2026-11-10"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="mobile-web-app-capable" content="yes"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f6c4d8"><title>我们的奇妙冒险 · V3.2.5 第一关路灯旗帜审核</title><style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#2a203f;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;touch-action:none}#stage{position:absolute;inset:0;height:var(--available-height,100%);display:flex;align-items:center;justify-content:center}canvas{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;touch-action:none;-webkit-user-select:none}#hud{position:absolute;top:max(8px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));color:#fff;font-size:clamp(13px,2.2vw,19px);font-weight:800;text-shadow:1px 2px #704b73;pointer-events:none}#pause{position:absolute;right:max(12px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));z-index:2}button{font-family:inherit;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent}#controls{position:absolute;inset:0;pointer-events:none;z-index:3}#left,#right,#jump{opacity:.58;position:absolute;bottom:max(10px,env(safe-area-inset-bottom));width:52px;height:52px;background:#55476655;border:2px solid #ffffff77;color:#fff;border-radius:12px;font-size:22px;font-weight:800;pointer-events:auto}#left{left:max(12px,env(safe-area-inset-left))}#right{left:calc(max(12px,env(safe-area-inset-left)) + 61px)}#jump{right:max(12px,env(safe-area-inset-right));border-radius:50%;font-size:28px}.pressed{background:#ec8eaecc!important;opacity:1!important}#pause{border:2px solid #ffffffaa;background:#55476677;color:#fff;border-radius:11px;width:45px;height:42px;font-size:20px}#shade{position:absolute;inset:0;height:var(--available-height,100%);background:#211b39c9;display:flex;justify-content:center;align-items:center;z-index:4;padding:12px}#card{background:#fff3f6;border:3px solid #ffc2d7;border-radius:17px;color:#68455e;text-align:center;width:min(440px,92%);padding:16px;max-height:90%;overflow:auto;box-shadow:0 6px #a36e9d}#card h1{font-size:clamp(19px,3.2vw,27px);color:#db6394;margin:0 0 8px}#card p{font-size:clamp(12px,1.8vw,15px);line-height:1.65;margin:8px 0}#actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}#actions button{font-size:14px;font-weight:700;border:0;background:#e979a5;color:#fff;border-radius:10px;padding:10px 15px;min-height:43px}#actions button.alt{background:#a88bad}#rotate{position:absolute;inset:0;height:var(--available-height,100%);background:#241b38;color:white;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:8;gap:12px;font-size:20px;padding:24px}#rotate small{font-size:13px;opacity:.8}#error{display:none;position:absolute;z-index:12;inset:10%;background:#fff5f5;color:#a12750;border-radius:12px;padding:16px;overflow:auto;font-size:14px}.hide{display:none!important}@media(orientation:portrait){#rotate{display:flex}}@media(max-height:310px){#card{padding:8px}#card p{margin:3px}#left,#right,#jump{opacity:.58;width:48px;height:48px}#right{left:calc(max(12px,env(safe-area-inset-left)) + 56px)}}
 #interact{position:absolute;left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);background:#fff9f0e8;color:#79516c;border:2px solid #e9a7c5;border-radius:7px;padding:4px 8px;min-width:66px;min-height:32px;z-index:3;font-weight:800;font-size:11px;box-shadow:0 3px #a88ba4;white-space:nowrap}#card{max-width:520px!important}#hud{z-index:2;max-width:75%;font-size:clamp(12px,1.7vw,18px)}@media(orientation:landscape){#left,#right,#jump{bottom:max(10px,env(safe-area-inset-bottom))}} 
 #gate{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 30% 20%,#ffd6e6,#f6aed3 45%,#b48ac8);height:var(--available-height,100%)}
@@ -35,7 +35,7 @@
 <div id="rotate"><div style="font-size:42px">🐰 🦁</div><strong>请将手机横过来 ♡</strong><small>关闭方向锁定后横屏；若仍无法旋转，可在 Safari 中打开。</small></div><div id="error"></div><script>
 /* V3.2.5 stable character baseline. Scene art work should branch from this file. */
 /* First-level cherry trees only; prior natural rock terrain, benches, fence, pre-cave entry and gameplay retained. */
-window.__V325_SCENE_BUILD__='V3.2.5-first-level-distant-mountains-castle-sky-2026-11-10';
+window.__V325_SCENE_BUILD__='V3.2.5-first-level-03-04-06-scenery-removal-2026-11-10';
 (function(){'use strict';
 const $=q=>document.querySelector(q), canvas=$('#game'), ctx=canvas.getContext('2d');
 if(!ctx){$('#error').style.display='block';$('#error').textContent='Canvas 无法启动，请使用 Safari 打开链接';return}
@@ -234,13 +234,16 @@ const row=(x,y,n,dx=18)=>Array.from({length:n},(_,i)=>[x+i*dx,y]);
 const arc=(x,y,n,dx=18,h=18)=>Array.from({length:n},(_,i)=>[x+i*dx,y-Math.round(Math.sin(i/(n-1)*Math.PI)*h)]);
 function buildLevel(n){
  if(n===0) return {end:2140,
-  map:[gr(0,405),gr(451,490),gr(989,460),gr(1497,670),bl(235,92,244),bl(595,98,241),bl(1110,105,238),bl(1690,100,235)],
+  // Low grass is continuous under the first pink house and left-bank blue house.
+  // Climbable high blocks are separate from houses; all three waterfall gaps
+  // remain real chasms, with the first two now 40px and 38px wide.
+  map:[gr(0,438),gr(478,505),gr(1021,428),gr(1497,670),bl(393,38,244),bl(887,72,241),bl(1110,105,238),bl(1690,100,235)],
   boxes:[qb(0,150,190,'coin'),qb(1,520,190,'bag'),qb(2,770,190,'keepsake'),qb(3,792,190,'coin'),qb(4,1320,190,'key'),qb(5,615,157,'coin'),qb(6,1138,164,'bag')],
   plats:[spring(1860)],
-  cps:[45,360,1000,1515], trees:[105,390,730,1040,1450,1610,2040],
+  cps:[45,360,1000,1515], trees:[105,390,730,1040,1610,2040],
   enemies:[{type:'walker',x:1620,start:1580,end:1670,v:.35}],
   objects:[{type:'heart',x:1995,y:264},{type:'sign',x:118,text:'从下面顶一下 ？ 砖块'},{type:'sign',x:1810,text:'踩蘑菇弹簧跳得更高'},
-   ...coins(0,[...arc(410,250,3,18,12),...row(612,214,4,20),...arc(944,245,3,20,14),...row(1130,212,3,24),...row(1855,120,3,22),...row(1925,150,2,22)])]};
+   ...coins(0,[...arc(440,250,3,18,12),...row(612,214,4,20),...arc(983,245,3,20,14),...row(1130,212,3,24),...row(1855,120,3,22),...row(1925,150,2,22)])]};
  if(n===1) return {end:3370,
   // V2.8.3.5: spaced shore -> stepping rocks -> safe flag -> cooperative tidal crossing -> quiet final beach.
   map:[gr(0,900),gr(1065,520),gr(1730,515),gr(2470,260),gr(3010,540),
@@ -1159,10 +1162,13 @@ v325TownHouseArt[0].src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIgAAACAC
 v325TownHouseArt[1].src='data:image/png;base64,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';
 v325TownHouseArt[2].src='data:image/png;base64,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';
 function firstLevelHouse(wx,w,h,body,roof,awning){
- const x=Math.round(wx-cam),base=G+1;
+ // All town cottages use the same ordinary low-ground baseline.
+ // Raised blocks are physically separated from both the first pink and blue homes.
+ const visualLift=0;
+ const x=Math.round(wx-cam),base=G+1-visualLift;
  const drawW=w+20,drawH=h+30,drawX=x-10,drawY=base-drawH;
  if(drawX>W+25||drawX+drawW<-25)return;
- const choice=wx===185||wx===1665?0:wx===490||wx===1115?1:2;
+ const choice=wx===185?0:wx===525||wx===1265?1:2;
  const house=v325TownHouseArt[choice];
  if(house.complete&&house.naturalWidth===136){
   ctx.save();ctx.imageSmoothingEnabled=false;
@@ -1179,10 +1185,23 @@ function firstLevelHouse(wx,w,h,body,roof,awning){
 const firstLevelFenceTile=new Image();
 firstLevelFenceTile.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAhCAYAAACfiCi5AAABmElEQVR4nO2WMU/CQBTH/62HJi4ubEZJOjSSiIPxOzjooMbd0c04sDD5Ddh14gvA5mACiyROxkE0GIwEcSHRAbc64WB6cJQLl+t7iSX8p+vl9ff67rV9f2Cuf6jT3b1BUviuDs5VBDVfKSCEnh9nlGsqcfAjHQjhRzvLcdkTRc2XBehOg6oLXHx3FBKeztqGB2B4SnGTcPJlB0I4AHy8tOWaqtVc/Mg3kDQpBWSyHmsyDv5sdWBcD81v1uQUfNErFwYXV49TA3vlgvWfgpMvbmsNo0DTOFvZ8kXOT6P29jk1MOenrRIAYOWLRutL2Vj3PeSLdRxsLir743G2ouaLu64DYPj65Yv1iYF/cbbi44t+kMLSwo/cONtfBQB0O2rb+0HKKgEAVr4oVSuOiRcpVSvWLeDkz+4gu38NWBNT8bUFnBxukSTg5msLeH5qkSTg5if+G5h7ISqReSHdqKfyQtT8iBfSjXoqL0TNV7zQe7OtHfUUXoiDH/FCo9rOrsg1lRei5juAmVe5vLlm9UK2fNfk5jgPz83/BWZx58Vx1izvAAAAAElFTkSuQmCC';
 function firstLevelFence(wx,len,y){
- // Retain all original fence locations. Repeating original-resolution 48x33 tiles
+ // Draw the retained fence spans. Repeating original-resolution 48x33 tiles
  // avoids stretched posts and aligns the feet of the pickets to the former ground level.
  const x=Math.round(wx-cam);if(x>W||x+len<0)return;
  const yy=Math.round(y-26);
+ // Local fence visibility windows: leave the approved wooden benches visible.
+ // These do NOT change the five original fence coordinates or its texture.
+ const gaps=[[545,635],[1198,1288]];
+ ctx.save();ctx.beginPath();
+ let cursor=wx;
+ for(const [g0,g1] of gaps){
+   if(g1<=cursor||g0>=wx+len)continue;
+   const stop=Math.min(wx+len,Math.max(cursor,g0));
+   if(stop>cursor)ctx.rect(Math.round(cursor-cam),yy,stop-cursor,33);
+   cursor=Math.max(cursor,Math.min(wx+len,g1));
+ }
+ if(wx+len>cursor)ctx.rect(Math.round(cursor-cam),yy,wx+len-cursor,33);
+ ctx.clip();
  if(firstLevelFenceTile.complete&&firstLevelFenceTile.naturalWidth===48){
    for(let i=0;i<len;i+=48){
      const segment=Math.min(48,len-i);
@@ -1195,6 +1214,7 @@ function firstLevelFence(wx,len,y){
    rect(x,yy+13,len,5,'#ae7558');rect(x,yy+25,len,5,'#a46c51');
    for(let i=0;i<len;i+=24){rect(x+i,yy+7,7,26,'#c79069')}
  }
+ ctx.restore();
 }
 // V3.2.5 first-level lamp/banner pixel-art-only revision.
 // Exactly four original streetlamp anchors remain (340, 685, 1540, 2025).
@@ -1215,8 +1235,9 @@ function firstLevelLamp(wx,y){
   halo.addColorStop(1,'rgba(255,224,162,0)');
   ctx.fillStyle=halo;ctx.fillRect(lanternX-41,lanternY-41,82,82);
   if(art.complete&&art.naturalWidth===70){
-    ctx.imageSmoothingEnabled=false;
-    ctx.drawImage(art,x-25,G-180,70,180);
+   ctx.imageSmoothingEnabled=false;
+   ctx.shadowColor='rgba(44,39,66,0.30)';ctx.shadowBlur=2;
+   ctx.drawImage(art,x-25,G-180,70,180);
   }else{
     // Pixel-art fallback until the inline PNG is decoded. Decorative only.
     rect(x-3,G-123,7,123,'#554961');
@@ -1244,7 +1265,7 @@ function firstLevelWaterfall(wx,w){
  if(x>W||x+w<0)return;
  // Frame rate is deliberately modest (~7.1 fps) for light mobile rendering.
  // Each waterfall starts on a different frame without changing its position.
- const phase=(Math.floor(timer/140)+(wx===405?0:wx===941?1:2))%4;
+ const phase=(Math.floor(timer/140)+(wx===438?0:wx===983?1:2))%4;
  if(v325WaterfallAtlas.complete && v325WaterfallAtlas.naturalWidth===192){
    ctx.save(); ctx.imageSmoothingEnabled=false;
    ctx.drawImage(v325WaterfallAtlas,phase*48,0,48,85,x,G-9,w,H-G+9);
@@ -1317,29 +1338,45 @@ const v325StringLightArt=[new Image(),new Image()];
 v325StringLightArt[0].src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAAAqCAYAAABcF9KrAAAEv0lEQVR4nO2bT2hcRRzHv5t6EUoDxeCheInbkzlYcgkRD0EiPfknW5qKh5R48SCF1ZCQdym9zNKlMVA85JKlOUjakj+2eGibQ5FgCYhWIQqlfxQkB6lUolt6atfDdl5nZ2fem5k387pNfh8I5O2bP28z39/395vZDUAQBPG8KIgX5SPjDQA4Mf4uztauAQBml2oFRT9il6HTRpeqMW8AAN98+VUjjwckOhdRA6I2AOCltM6X12+2ieiDzz8jV9rByOt9ef0muveo26YKiA/A6eneR4LaYagEY0qqgGqr84XxDz9JnIAE9WJhK5ja6nyB10AyRg5UW52PBTF1vNw2EAmqs1EJpqd7H+5v/6tsL653GsYNR4ePtgnnwtrFAgDIDiXz3tuHWq5JUGExcRhRQDaCkbES0ImP34+vz359KRaQDAkqX1xS0tTxcuP0udnMf/cgApLRCYpHAQnKDhfB8N+TMokLRh2nP/pU6yiVxTnrybmgdHlYFhSwe0WlOoezEYxMFiNQYSwgVjkWX9/6YRMAsLCy6SQgDrfRtJQH7A5RpYlFF3BpNUzjzwuvmz5D4bXRu6ZtAYNdWJL78Pu2IuI2+sfWFkaHjzYe1v9riQKVoFRRpzsl73Rh6Z7b9PzFqejds787+mL5R91tNlPqx+MH27bDGm3jdYyN9GFhZdOpr2yjIqo/UJqoxOg0+fgllMhM5rY5qJOPULLsmACAnZt6dvHPHQBAVF52Hs9IQGMjfXHackWy0aJ4b/CdEs6jFN9X2aipqACzBQr1GZ88d9J5i4xOHLJjA/aFb5L78PusOlRMaqMikwMBlkW0ZxvVRadJTZUkMptFd8HFRZIcOytstuTsQkYCWljZxNhIX8trB7oegS1Z1VsxLTZ66zsAQFTZcBpLFZ0mC2QiMhfkuV3TTlbHVsFmS3Ha8kWqgCqLcwVVIb315GXryULZqEt0Ji2qj1rDR9oJVfgmjGXdz8iBmmmqXURZtvAybHrA2IVCRCfgadEFfKWdFsf+fR0AEJ26YT1OVF5uupBA/fufwZbugs2UNL2SMa6BZCdyFQ+bHojTViYCRWfIWsMWn47NZkr9qvH2vvUm4FiKAJZFtE/HUeFioy3R+fdPAIBoYs24fwg344H27dX1+LXeV/Y7nZnpYCcH7Vzo8YNtVh0qRuXltiKIVYeKLukL8LALsyWqbDRdSKB++761jXqtpwK4me7k3hZ2cjBOWz5g1aFiNHn9jnidZbxcBaS10YM9ANxttG2eM8NWLhT3E93st18AAFH1itUYIU7udZg6tsI54/kri3OZniFfB+I2KkQAx8VG2ZnhOG1lIdTuUMbl5D46daPpQgL1X//KVPj6RPlfGaGRF8PH4rTNMVPq9zLO5GHrPvzknv84z615D3vfeNV5TN/k5kAhbDSaWGu6kEB9455TdLLJw3HaColV+vLs2CF4Lg7kA210DvTmNpcOVZo60PXI+YPnPBzbldx3Yd7g0Tmx5iU6o+qVtnRVv3fb2s18ndyHLHx98uIK6Ck+tqXa3WHvQbjsDvM4ue8UdtwbskU8SNTWGk+x/baej5P7TmdHvikb5K97JrmZrYAIgiAIgiAIgiAIgiAIgiAIgsjK/zyM8nNhRzhBAAAAAElFTkSuQmCC';
 v325StringLightArt[1].src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAAAqCAYAAABcF9KrAAAEyklEQVR4nO2bQWhURxzGv9VeBDEgBg+lF11PKlhyCSk9hLoeY3TFKB4M6cE9FGHb0JB3ES+zNBgD4mE9ZNGDRCUxcfHSbqGUUAmU1oIRCdW2UHIoFkvaFe3Bbg/rPGdn5703M2/eczX/HwT27Xs783bnm+/7z+wGIAiCeF1kxIPikZEGAJweOYALla8AAFOzlYzidcQ6I0gbG1QX8wsAYOH8xUYaN0h0LqIGRG0AwDtRL64u3m0T0eCnn5ArvcXI411dvIuujeprIwXEG+B0d20hQb1lqASjS6SAKvPTmZFDH4d2QIJ6szAVTGV+OsNrIBktB6rMT/uCGBsutjVEgupsVILp7tqCx2t/K68XxzsK7QuHckfbhHO9diMDALJDyQx8+H7LMQkqWXQcRhSQiWBkjAR0+sRB//jC1Vu+gGRIUOliE0ljw8XGF5enYn/uoQ00fr++U7uh94YeBZ0LEhSfBSQoM2wEwx+HJYkN0TXQxq1d3mdzPwSdZpP5Hrx4shbWhGyRpkU5sH5FpfosTASjQk6SOGgV0QDALo+9Onj+AADgFapWnfI3ODZcbOis8oD1IaoosQQVvlGCkZIkK57r+yiPa8j758OSREWkgMLch59nE/3ZsGtkuI3+trqKodzRxtP6Py02qoo8XVEBnS+soPvW3X+xKnodJIkKbQdSdloesHahMBtVfUBRohJnp87XL0mJTKdvk406eQslzooJkJLkr4cAAK84Z92eloBYecCPLVvi2qiuqAC9AUrqOz6577D9FpkgcciODZgXvkkkCRDTgQDf+vQudmyjQbMzahsBCBeZyaDbYOMiLgtfGTaVt3YhLQF5hWrThQTqX98Hm30ENpk37rTFRle+bfZRWjJuB1DPTp0B0hGZDXLftrGTROHLpvJ+bLkiUkBsMt+jco3N+3cDs0YFe2I2ajM7wwbVRa3hInaSKnxD2jJ+XbQDvXiyxib6s16h2iZdNtGftelUBRvv1XahpJalTgZdwFXstDj2r4sAAO/sHeN2vOJc04UE6t/9ZJ0kgMk+0ER/1vv8m4fisU2HbLzXj61YJDQ74wy6a2G7dOzAJPlgn3GSiIQKSPEm/dlYmilbdxqEjY22zM4/fwQAeKM1l7dlRkqxw870mbkQT5LinNMkib0KM8UrLTVdSKD+82NjG3VdT40fLzQA4PaXi/5zO7ZtxfjxQqM0UzaOsRZh/7vSvKdTC6bNgJ3p82PLBa6ShJOqgAJtdFc3AHsbbevnXM7KhVjpmP945ftlAMCVm8tGbSS1UFCh69hJJkm6DsRtVJgBHBsbZedyfmzFgbtP2HkbF5JhlwaNXcg7e6fpQgL1+3/EKnxdovyvjKSRZ6CrGdnS5mS+x0U7Jw/vMe/70mAztvifJUHvYfPu7dZtuiY1B0rCRr3RWtOFBOpLv1jNzpOH9/ixlSRGCwXHjp0Er8WBXBA4O3t3OO/LNL5UMVWv3bMqooF0HNuW1FdhzuCzc7TmZHZeubncFlfvbngGZrhHErhQyO012m9JewvFljdXQC9xsSwtzZQzqkJ69b9N5jfEhX1qoWNjxyUd/cOrtFGJyCS+5N+Qhwnb9Jd/nQoJSEIUkYulO0EQBEEQBEEQBEEQBEEQBEEQcfgfaXD/5vApAUEAAAAASUVORK5CYII=';
 function firstLevelStringLights(wx){
- const x=Math.round(wx-cam);if(x<-148||x>W+18)return;
- const phase=(Math.floor(timer/560)+(wx===598||wx===1747?1:0))%2;
+ // Keep the approved two-frame bulb art, but do not draw orphaned cables.
+ // Of the four old locations only x=598 has TWO stable and visible supports:
+ // the blue cottage roof eave and the next cottage roof eave.
+ // The other three old locations are deliberately suppressed until there
+ // is approved architectural support; in particular no detached bulbs.
+ if(wx!==598)return;
+ const left=632, right=741, top=189;
+ if(right-cam<-8||left-cam>W+8)return;
+ const phase=(Math.floor(timer/560)+1)%2;
  const im=v325StringLightArt[phase];
+ const x=Math.round(left-cam), width=right-left;
+ ctx.save();ctx.imageSmoothingEnabled=false;
+ // Visible continuous supporting cable, fastened at both roof eaves.
+ ctx.lineWidth=1.5;ctx.strokeStyle='#725365';
+ ctx.beginPath();ctx.moveTo(x,top);ctx.quadraticCurveTo(x+width/2,top+14,x+width,top);ctx.stroke();
  if(im.complete&&im.naturalWidth===144){
-  ctx.save();ctx.imageSmoothingEnabled=false;
-  ctx.drawImage(im,x-5,185,144,42);
-  ctx.restore();
- }else{
-  // Original cable silhouette while the art decodes, never changes geometry.
-  ctx.strokeStyle='#ae8793';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,189);
-  ctx.quadraticCurveTo(x+65,209,x+134,190);ctx.stroke();
+  ctx.drawImage(im,0,0,144,42,x,top-4,width,36);
  }
+ // Dark iron brackets are directly joined to the string at both ends.
+ for(const endX of [x,x+width]){
+  rect(endX-3,top-3,6,6,'#6f5467');rect(endX-1,top-5,3,7,'#e8cda4');
+ }
+ ctx.restore();
 }
 
 function firstLevelTownMidground(){
- firstLevelWaterfall(405,46);firstLevelWaterfall(941,48);firstLevelWaterfall(1449,48);
- for(const item of [[185,108,88,'#f8d8c8','#db7ba6','#eb89af'],[490,108,83,'#f6d8c6','#9386cb','#a3c8e6'],[753,106,92,'#f9d6c7','#d884ad','#ef8eaf'],[1115,105,83,'#f7d4c4','#9889c4','#e4a5ca'],[1665,113,91,'#f8d8c4','#d48a9c','#eeabc4'],[1962,111,87,'#f4d4cb','#9b89be','#a2c5e8']])firstLevelHouse(...item);
- firstLevelFence(24,145,G-22);firstLevelFence(455,205,G-22);firstLevelFence(990,190,G-22);firstLevelFence(1515,225,G-22);firstLevelFence(1890,175,G-22);
- // Same four original string-light world anchors: decorative sprites only.
- for(const wx of [305,598,1119,1747])firstLevelStringLights(wx);
+ firstLevelWaterfall(438,40);firstLevelWaterfall(983,38);firstLevelWaterfall(1449,48);
+ // Yard fences remain a BACKGROUND layer. The last run is shifted left so
+ // the last span stays left of the former terminal lamp location x=2025.
+ firstLevelFence(24,145,G-22);firstLevelFence(1515,225,G-22);firstLevelFence(1810,175,G-22);
+ // The raised-platform red cottage at x=1665 is intentionally removed.
+ // The mid-level blue cottage at x=1265 remains on ordinary ground; x=525 is removed.
+ // Final cottage x=1962 moves left to x=1865, off the x=2025 streetlamp.
+ for(const item of [[185,108,88,'#f8d8c8','#db7ba6','#eb89af'],[753,106,92,'#f9d6c7','#d884ad','#ef8eaf'],[1265,105,83,'#f7d4c4','#9889c4','#e4a5ca'],[1865,111,87,'#f4d4cb','#9b89be','#a2c5e8']])if(item[0]!==753&&item[0]!==1865)firstLevelHouse(...item);
+ // Original string-light sprites and two-frame animation are kept as data for later reinstatement.
+ // Decorative bulb art is retained, but there are now no two-ended supports: leave all four strings hidden.
 }
 function firstLevelDecor(){
- firstLevelRabbitSign(88);firstLevelBench(555,G-27);firstLevelBench(1210,G-27);firstLevelLamp(340,G-126);firstLevelLamp(685,G-128);firstLevelLamp(1540,G-127);firstLevelLamp(2025,G-128);
+ firstLevelRabbitSign(88);firstLevelBench(555,G-27);firstLevelBench(1210,G-27);firstLevelLamp(340,G-126);firstLevelLamp(685,G-128);firstLevelLamp(1540,G-127);
  firstLevelVineArch(DOOR_X+12);
  const bushes=[[128,'flower'],[330,'hydrangea'],[470,'flower'],[845,'hydrangea'],[1015,'flower'],[1380,'hydrangea'],[1515,'flower'],[1755,'hydrangea'],[1990,'flower']];for(const b of bushes)firstLevelBush(b[0],G-15,b[1]);
  const flowerXs=[62,150,285,372,476,540,632,702,812,910,1010,1090,1200,1295,1370,1518,1585,1715,1840,1930,2040,2110];for(let i=0;i<flowerXs.length;i++)firstLevelFlower(flowerXs[i],G-18,['#ff9cc2','#fff1d2','#9fd9f2'][i%3]);
@@ -1827,6 +1864,12 @@ function draw(){
  }
  if(!L){ctx.fillStyle='#2a203f';ctx.fillRect(0,0,W,H);return}
  bg();if(level===0&&!L.under&&!L.secret&&!L.cabin)firstLevelTownMidground();if(level===2&&!L.under&&!L.secret&&!L.cabin)drawFourSeasons();L.trees.forEach(tree);
+ // House 753 retains its approved foreground ordering. The terminal
+ // cottage is repositioned left on normal ground, leaving the final lamp clear.
+ if(level===0&&!L.secret&&!L.under&&!L.cabin){
+  firstLevelHouse(753,106,92,'#f9d6c7','#d884ad','#ef8eaf');
+  firstLevelHouse(1865,111,87,'#f4d4cb','#9b89be','#a2c5e8');
+ }
  if(level===1&&!L.under){
   for(let i=0;i<19;i++){const sx=((i*91-cam*.24)%(W+110)+(W+110))%(W+110)-45;rect(sx,253+i%4*7,26+i%3*7,2,'#f6d3bd')}
   // Beach sand is drawn only in its own world-space zone, not across the entire level.
