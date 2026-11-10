@@ -35,7 +35,7 @@
 <div id="rotate"><div style="font-size:42px">🐰 🦁</div><strong>请将手机横过来 ♡</strong><small>关闭方向锁定后横屏；若仍无法旋转，可在 Safari 中打开。</small></div><div id="error"></div><script>
 /* V3.2.5 stable character baseline. Scene art work should branch from this file. */
 /* First-level cherry trees only; prior natural rock terrain, benches, fence, pre-cave entry and gameplay retained. */
-window.__V325_SCENE_BUILD__='V3.2.5-first-level-03-04-06-scenery-removal-2026-11-10';
+window.__V325_SCENE_BUILD__='V3.2.5-first-level-lowland-and-supported-lights-2026-11-10';
 (function(){'use strict';
 const $=q=>document.querySelector(q), canvas=$('#game'), ctx=canvas.getContext('2d');
 if(!ctx){$('#error').style.display='block';$('#error').textContent='Canvas 无法启动，请使用 Safari 打开链接';return}
@@ -240,7 +240,7 @@ function buildLevel(n){
   map:[gr(0,438),gr(478,505),gr(1021,428),gr(1497,670),bl(393,38,244),bl(887,72,241),bl(1110,105,238),bl(1690,100,235)],
   boxes:[qb(0,150,190,'coin'),qb(1,520,190,'bag'),qb(2,770,190,'keepsake'),qb(3,792,190,'coin'),qb(4,1320,190,'key'),qb(5,615,157,'coin'),qb(6,1138,164,'bag')],
   plats:[spring(1860)],
-  cps:[45,360,1000,1515], trees:[105,390,730,1040,1610,2040],
+  cps:[45,360,1000,1515], trees:[105,390,730,1040,1450,1610,2040],
   enemies:[{type:'walker',x:1620,start:1580,end:1670,v:.35}],
   objects:[{type:'heart',x:1995,y:264},{type:'sign',x:118,text:'从下面顶一下 ？ 砖块'},{type:'sign',x:1810,text:'踩蘑菇弹簧跳得更高'},
    ...coins(0,[...arc(440,250,3,18,12),...row(612,214,4,20),...arc(983,245,3,20,14),...row(1130,212,3,24),...row(1855,120,3,22),...row(1925,150,2,22)])]};
@@ -1185,7 +1185,7 @@ function firstLevelHouse(wx,w,h,body,roof,awning){
 const firstLevelFenceTile=new Image();
 firstLevelFenceTile.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAhCAYAAACfiCi5AAABmElEQVR4nO2WMU/CQBTH/62HJi4ubEZJOjSSiIPxOzjooMbd0c04sDD5Ddh14gvA5mACiyROxkE0GIwEcSHRAbc64WB6cJQLl+t7iSX8p+vl9ff67rV9f2Cuf6jT3b1BUviuDs5VBDVfKSCEnh9nlGsqcfAjHQjhRzvLcdkTRc2XBehOg6oLXHx3FBKeztqGB2B4SnGTcPJlB0I4AHy8tOWaqtVc/Mg3kDQpBWSyHmsyDv5sdWBcD81v1uQUfNErFwYXV49TA3vlgvWfgpMvbmsNo0DTOFvZ8kXOT6P29jk1MOenrRIAYOWLRutL2Vj3PeSLdRxsLir743G2ouaLu64DYPj65Yv1iYF/cbbi44t+kMLSwo/cONtfBQB0O2rb+0HKKgEAVr4oVSuOiRcpVSvWLeDkz+4gu38NWBNT8bUFnBxukSTg5msLeH5qkSTg5if+G5h7ISqReSHdqKfyQtT8iBfSjXoqL0TNV7zQe7OtHfUUXoiDH/FCo9rOrsg1lRei5juAmVe5vLlm9UK2fNfk5jgPz83/BWZx58Vx1izvAAAAAElFTkSuQmCC';
 function firstLevelFence(wx,len,y){
- // Draw the retained fence spans. Repeating original-resolution 48x33 tiles
+ // Retain all original fence locations. Repeating original-resolution 48x33 tiles
  // avoids stretched posts and aligns the feet of the pickets to the former ground level.
  const x=Math.round(wx-cam);if(x>W||x+len<0)return;
  const yy=Math.round(y-26);
@@ -1366,17 +1366,17 @@ function firstLevelStringLights(wx){
 function firstLevelTownMidground(){
  firstLevelWaterfall(438,40);firstLevelWaterfall(983,38);firstLevelWaterfall(1449,48);
  // Yard fences remain a BACKGROUND layer. The last run is shifted left so
- // the last span stays left of the former terminal lamp location x=2025.
- firstLevelFence(24,145,G-22);firstLevelFence(1515,225,G-22);firstLevelFence(1810,175,G-22);
+ // its end no longer intersects the approved lamp at world x=2025.
+ firstLevelFence(24,145,G-22);firstLevelFence(455,205,G-22);firstLevelFence(990,190,G-22);firstLevelFence(1515,225,G-22);firstLevelFence(1810,175,G-22);
  // The raised-platform red cottage at x=1665 is intentionally removed.
- // The mid-level blue cottage at x=1265 remains on ordinary ground; x=525 is removed.
+ // The x=1115 blue cottage moves onto flat ground beside the bench (x=1210).
  // Final cottage x=1962 moves left to x=1865, off the x=2025 streetlamp.
- for(const item of [[185,108,88,'#f8d8c8','#db7ba6','#eb89af'],[753,106,92,'#f9d6c7','#d884ad','#ef8eaf'],[1265,105,83,'#f7d4c4','#9889c4','#e4a5ca'],[1865,111,87,'#f4d4cb','#9b89be','#a2c5e8']])if(item[0]!==753&&item[0]!==1865)firstLevelHouse(...item);
- // Original string-light sprites and two-frame animation are kept as data for later reinstatement.
- // Decorative bulb art is retained, but there are now no two-ended supports: leave all four strings hidden.
+ for(const item of [[185,108,88,'#f8d8c8','#db7ba6','#eb89af'],[525,108,83,'#f6d8c6','#9386cb','#a3c8e6'],[753,106,92,'#f9d6c7','#d884ad','#ef8eaf'],[1265,105,83,'#f7d4c4','#9889c4','#e4a5ca'],[1865,111,87,'#f4d4cb','#9b89be','#a2c5e8']])if(item[0]!==753&&item[0]!==1865)firstLevelHouse(...item);
+ // Historical anchors preserved for traceability; only supported span renders.
+ for(const wx of [305,598,1119,1747])firstLevelStringLights(wx);
 }
 function firstLevelDecor(){
- firstLevelRabbitSign(88);firstLevelBench(555,G-27);firstLevelBench(1210,G-27);firstLevelLamp(340,G-126);firstLevelLamp(685,G-128);firstLevelLamp(1540,G-127);
+ firstLevelRabbitSign(88);firstLevelBench(555,G-27);firstLevelBench(1210,G-27);firstLevelLamp(340,G-126);firstLevelLamp(685,G-128);firstLevelLamp(1540,G-127);firstLevelLamp(2025,G-128);
  firstLevelVineArch(DOOR_X+12);
  const bushes=[[128,'flower'],[330,'hydrangea'],[470,'flower'],[845,'hydrangea'],[1015,'flower'],[1380,'hydrangea'],[1515,'flower'],[1755,'hydrangea'],[1990,'flower']];for(const b of bushes)firstLevelBush(b[0],G-15,b[1]);
  const flowerXs=[62,150,285,372,476,540,632,702,812,910,1010,1090,1200,1295,1370,1518,1585,1715,1840,1930,2040,2110];for(let i=0;i<flowerXs.length;i++)firstLevelFlower(flowerXs[i],G-18,['#ff9cc2','#fff1d2','#9fd9f2'][i%3]);
