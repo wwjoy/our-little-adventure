@@ -327,13 +327,10 @@ function surfaces(){
  clouds.forEach(c=>{if(!c.building)arr.push({x:c.x,y:G-5,w:c.w,kind:'cloud'});});
  if(L.under){if(!icePuzzle.gateOpen)arr.push({x:icePuzzle.gateX,y:G-214,w:24,h:214,kind:'block',box:true});if(icePuzzle.light==='ready')arr.push({...ICE_BRIDGE_WALKWAY,kind:'icebridge'});arr.push({...ICE_MEMORY_LEDGE,kind:'icebridge'});}
  if(starBridgeReady()&&starBridgeProgress()>=.98){
-  // Newly unlocked continuous lookout bridge; replaces only the final ordinary raft.
-  arr.push({x:2728,y:G-8,w:282,h:10,kind:'starbridge'});
+  // Walkable arch, segmented to follow its gentle crown; both unlock conditions required.
+  for(let i=0;i<28;i++){const x=2730+i*10,mid=(i+.5)/28;arr.push({x,y:G-8-Math.round(10*Math.sin(Math.PI*mid)),w:10,h:12,kind:'starbridge'});}
  }
- if(starBridgeReady()&&starBridgeProgress()>=.98){
-  // Keep the elevated collectible lookout route and its original heart marker.
-  for(const a of [{x:2740,y:G-49,w:43},{x:2792,y:G-79,w:45},{x:2847,y:G-105,w:46},{x:2903,y:G-105,w:100}])arr.push({...a,kind:'starbridge'});
- }
+
  for(const o of L.objects)if(o.type==='pipe')arr.push({x:o.x-5,y:o.top,w:o.w+10,h:G-o.top,kind:'pipe',box:true,ref:o});
  if(level===2&&!L.under&&!L.cabin){arr.push({x:1430,y:G-38,w:65,h:38,kind:'block',box:true});if(data.story.bridge)arr.push({x:1555,y:G-7,w:225,kind:'bridge'});}
  for(const pl of L.plats){if(pl.kind==='fall'&&pl.y>H+40)continue;
@@ -358,7 +355,7 @@ function gateOk(){try{return localStorage.getItem(GATE)==='1'}catch(e){return fa
 
 // ================= Flow =================
 function clearInput(){Object.keys(held).forEach(k=>{held[k]=false;$('#'+k).classList.remove('pressed')});jumpQueue=false}
-function layout(n){memoryTrailSeen=[false,false,false];memoryTrailGreeting=false;starBridgeBorn=-1;starBridgeAnnounced=false;starLionReunion=false;coastCoop={phase:0,t:0,lionTarget:2206};pickups=[];coop={state:'idle',lionX:1392,lionReady:false,started:false,bridgeTime:0};pendingFlag=-1;flagCrossingArmed=false;finalReviewOpen=false;if(finalSceneTimeout){clearTimeout(finalSceneTimeout);finalSceneTimeout=null}fade={a:0,dir:0,cb:null,text:''};level=n;L=buildLevel(n);mainL=null;L.pops=[];restoreUnclaimedRewards();clouds=[];forestClouds=[];sleeping=false;failCount=0;failCp=-1;chasmFailures={};chasmHelpDeclined={};chasmCleared={};townWaterfallFailures={};townWaterfallHelpDeclined={};scene=null;dying=null;gardenWater=null;L.enemies.forEach(e=>{e.v=Math.abs(e.v);e.dead=0;e.vy=0;e.hop=0;e.jt=Math.random()*900;e.dir=e.v>=0?1:-1;e.animT=Math.random()*360;e.turnT=0;e.pendingV=0})}
+function layout(n){memoryTrailSeen=[false,false,false];memoryTrailGreeting=false;starBridgeBorn=-1;starBridgeAnnounced=false;starLionReunion=false;coastCoop={phase:(n===1&&sessionStorage.getItem('v325_coop_raft_parked')==='1'?3:0),t:0,lionTarget:2206};pickups=[];coop={state:'idle',lionX:1392,lionReady:false,started:false,bridgeTime:0};pendingFlag=-1;flagCrossingArmed=false;finalReviewOpen=false;if(finalSceneTimeout){clearTimeout(finalSceneTimeout);finalSceneTimeout=null}fade={a:0,dir:0,cb:null,text:''};level=n;L=buildLevel(n);mainL=null;L.pops=[];restoreUnclaimedRewards();clouds=[];forestClouds=[];sleeping=false;failCount=0;failCp=-1;chasmFailures={};chasmHelpDeclined={};chasmCleared={};townWaterfallFailures={};townWaterfallHelpDeclined={};scene=null;dying=null;gardenWater=null;L.enemies.forEach(e=>{e.v=Math.abs(e.v);e.dead=0;e.vy=0;e.hop=0;e.jt=Math.random()*900;e.dir=e.v>=0?1:-1;e.animT=Math.random()*360;e.turnT=0;e.pendingV=0})}
 
 function restoreUnclaimedRewards(){
  // Uncollected physical prizes return INSIDE their question bricks on retry/reload.
@@ -861,28 +858,11 @@ function updateLion(k){
   }
  }
 
- // The secret lookout is a shared discovery: climb its actual stepped silhouette
- // rather than leaving the companion on the ground or teleporting her to the top.
- if(level===1&&starBridgeReady()&&starBridgeProgress()>=.98&&p.x>=2705&&p.x<3070&&p.y<G-35){
-  const steps=[{x:2740,y:G-49,w:43},{x:2792,y:G-79,w:45},{x:2847,y:G-105,w:46},{x:2903,y:G-105,w:100}];
-  const followingX=Math.max(2700,Math.min(2970,p.x-31));
-  const d=followingX-lion.x;
-  lion.x+=Math.max(-4.0*k,Math.min(4.0*k,d*.22*k));
-  lion.face=d>=0?1:-1;
-  let floor=G-27;
-  // Approach each stair from the left, then rise smoothly onto it.
-  for(const a of steps){if(lion.x+22>a.x&&lion.x<a.x+a.w){
-   const blend=Math.max(0,Math.min(1,(lion.x+22-a.x)/22));
-   floor=Math.min(floor,G-27+(a.y-G)*blend);
-  }}
-  // Sync to bunny height during a jump while retaining visible following motion.
-  if(p.y<floor-8&&Math.abs(p.x-lion.x)<78)floor=Math.min(floor,p.y+8);
-  lion.y+=(floor-lion.y)*Math.min(1,.16*k);
-  if(p.x>2912&&p.y<G-94&&lion.x>2872&&lion.y<G-94&&!starLionReunion){
+ // The former aerial photo platform is now the center of the stone arch bridge.
+ if(level===1&&starBridgeReady()&&starBridgeProgress()>=.98&&
+    p.x>2844&&p.x<2910&&p.on&&!starLionReunion){
    starLionReunion=true;
    if(!data.story.sunsetPhoto){startScene('sunsetPhoto');return;}
-  }
-  return;
  }
  if(level===1&&(coastCoop.phase===1||coastCoop.phase===2))return;
  // Once the coastal co-op is complete, mirror the bunny's intentional turn
@@ -937,11 +917,11 @@ function update(dt){
   if(coastCoop.phase===0&&onPlate){coastCoop.phase=1;coastCoop.t=0;flash('🦁 我来拉住绳索，把木筏拉到岸边！')}
   if(coastCoop.phase===1){coastCoop.t+=dt;const d=coastCoop.lionTarget-lion.x;
    lion.x+=Math.sign(d)*Math.min(Math.abs(d),3.4*k);lion.y=G-27;lion.face=d>=0?1:-1;
-   if(Math.abs(d)<3){coastCoop.phase=2;coastCoop.t=0;flash('🦁 木筏靠岸了！现在可以跳上去啦！')}}
+   if(Math.abs(d)<3){coastCoop.phase=2;sessionStorage.setItem('v325_coop_raft_parked','1');coastCoop.t=0;flash('🦁 木筏靠岸了！现在可以跳上去啦！')}}
   if(coastCoop.phase===2){coastCoop.t+=dt;for(const raft of L.plats.filter(a=>a.kind==='mover'&&a.x0>=2280)){raft.dx=0;raft.dy=0}
    if(p.x>2475){coastCoop.phase=3;flash('🦁 我们成功啦！')}}
   if(coastCoop.phase===3){/* Following and facing are handled by updateLion below. */}
-  if(starBridgeReady()&&!starBridgeAnnounced){starBridgeAnnounced=true;starBridgeBorn=timer;flash('✨ 海岸上方出现了通往秘密观景台的星光台阶……')}
+  if(starBridgeReady()&&!starBridgeAnnounced){starBridgeAnnounced=true;starBridgeBorn=timer;flash('✨ 三颗回忆星星与双人合作唤醒了夕阳拱桥！')}
  }
  if(L.under){
   if(icePuzzle.light==='idle'&&p.x>775&&p.x<875&&lion.x>630&&lion.x<970&&icePuzzle.gateOpen){icePuzzle.light='revealing';icePuzzle.lightT=0;flash('🦁 小狮子的头灯照出了隐藏冰桥！');}
@@ -1715,51 +1695,35 @@ function terrain(a){let x=a.x-cam;if(x>W||x+a.w<0)return;
 const v325MemoryStarSprite=new Image();v325MemoryStarSprite.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAABI0lEQVR4nM2WPQ7CMAyFXxFnQLB06coROEhRL8ENEAszIwMSEyrnYOUMLF2oEDtjWEhxWsf5aZF4UpfIzufn2FKBf1ZZZCo0Z/SLQgZRWWRKXRcq1FWco2kaleatssiUel2aL8RVkKP8cAyvLhRkVP/cN2BfV96gPm68QZybUFfjzkWMfNy47khoYL6a2SPn268bqroSCzjv7liebklCDw2Y765MNsBjzcI1BCCOWFgbyF3aFgNhQRoGAFagAwDAgACWqdNBOskpB8QKioFJEOAz3k7RttEp0+fTFIBckHNhm3eqq+4okzNxNSA4MhaQAGgrjSJIHtc+tp86gVYpvVU7jgM536gNoJdo1zpGap/oyAaIiRUX1gXonRfzOzVkfi+9AY+crpOnnme2AAAAAElFTkSuQmCC';
 function drawStarBridge(){
  if(!starBridgeReady())return;
- const t=starBridgeProgress();
- const left=2728-cam, span=282*Math.max(0,Math.min(1,t));
+ const progress=starBridgeProgress();
  ctx.save();ctx.imageSmoothingEnabled=false;
- if(span>0){
-  // A continuous pastel stone-and-wood promenade, with open sea below.
-  rect(left,G-8,span,8,'#f9e4c1');
-  rect(left,G-5,span,3,'#fff7df');
-  rect(left,G,span,8,'#c69ba6');
-  rect(left,G+8,span,5,'#8c6988');
-  for(let i=0;i<span;i+=18){
-   rect(left+i,G+1,2,6,'#e8c3b5');
-   rect(left+i+5,G-6,8,2,'#fff3da');
-  }
-  // Light balustrade kept below the characters' walking line.
-  for(let i=16;i<span-6;i+=40){
-   rect(left+i,G+13,5,22,'#86667b');rect(left+i+1,G+12,3,5,'#f8e4bf');
-   if(i+40<span)rect(left+i+5,G+18,35,3,'#d8ad9f');
-  }
-  // Bridge piers: intentionally non-colliding decoration.
-  for(const i of [42,137,231])if(i<span-8){
-   rect(left+i,G+14,10,48,'#9b7894');rect(left+i+2,G+14,5,46,'#d7a8a5');
-   rect(left+i-4,G+12,18,5,'#f2d4bb');
-  }
-  for(const i of [12,span-14])if(i>0&&i<span){
-   rect(left+i,G-24,4,16,'#8e6b81');rect(left+i-2,G-26,8,4,'#f9d8a5');
-   circle(left+i+2,G-29,4,'#fff3bb');
-  }
+ const n=Math.floor(28*Math.max(0,Math.min(1,progress)));
+ for(let i=0;i<n;i++){
+  const wx=2730+i*10, xx=wx-cam, u=(i+.5)/28;
+  const y=G-8-Math.round(10*Math.sin(Math.PI*u));
+  // Rounded bridge deck and warm pixel masonry; no decorative fake walkway.
+  rect(xx,y,10,5,'#fff2d5');rect(xx,y+5,10,6,'#e6b9b2');
+  rect(xx,y+11,10,9,'#ba91a8');
+  if(i%2===0)rect(xx+1,y+7,7,2,'#fff1df');
+  if(i%3===0)rect(xx+2,y+14,5,2,'#f0c9bb');
+  // Arch barrel drops away toward the center, leaving the water visible beneath.
+  const archDepth=13+Math.round(18*Math.abs(Math.cos(Math.PI*u)));
+  rect(xx,y+20,10,archDepth,'#b38ba4');
+  rect(xx+1,y+20,2,archDepth,'#e8bcb6');
  }
- // The existing elevated lookout and pink heart are preserved above the bridge.
- const pieces=[{x:2740,y:G-49,w:43},{x:2792,y:G-79,w:45},{x:2847,y:G-105,w:46},{x:2903,y:G-105,w:100}];
- for(let j=0;j<pieces.length;j++){
-  const local=Math.max(0,Math.min(1,(t-j*.17)/.43));
-  if(local<=0)continue;
-  const a=pieces[j],xx=a.x-cam,w=a.w*local;
-  ctx.globalAlpha=.24+.76*local;
-  rect(xx,a.y,w,8,'#fff0bb');rect(xx,a.y+8,w,4,'#dca5d3');
-  for(let k=0;k<Math.floor(w/13);k++){
-   const x=xx+8+k*13;circle(x,a.y-8-2*Math.sin(timer/240+k),2.5,'#fffce3');
-   if(k%3===0){rect(x-1,a.y-17,2,11,'#fff9d0');rect(x-5,a.y-13,10,2,'#fff9d0')}
-  }
+ // Small low railings, not a second collision surface.
+ for(let i=0;i<n;i+=4){const wx=2730+i*10,xx=wx-cam,u=(i+.5)/28;
+  const y=G-8-Math.round(10*Math.sin(Math.PI*u));
+  rect(xx+2,y-12,4,12,'#967185');rect(xx+1,y-14,6,4,'#ffe3b6');
+  if(i+4<n)rect(xx+6,y-9,34,3,'#f2c7ae');
  }
- if(t>.85){ctx.globalAlpha=Math.min(1,(t-.85)*7);const x=2952-cam;
-  circle(x,G-139,21,'#fff2cc');circle(x,G-139,16,'#ffdbef');
-  text('♡',x,G-132,'#ce78a4',24,'center');
-  text('星光观景台',x,G-160,'#fff8d8',13,'center');}
+ if(n>=28){
+  for(const wx of [2740,2998]){const xx=wx-cam;rect(xx,G-36,5,24,'#92738e');circle(xx+2,G-39,5,'#fff1bc');}
+  const xx=2870-cam;
+  text('♡',xx,G-40,'#ffe5ed',18,'center');
+  // Photo trigger and collectible reward are retained by their original game state.
+  for(let i=0;i<3;i++)circle(xx-15+i*15,G-47+Math.sin(timer/340+i)*2,2,'#ffe9ac');
+ }
  ctx.restore();
 }
 // V3.2.5 review candidate: purely visual pixel-stepped transition into the final beach.
