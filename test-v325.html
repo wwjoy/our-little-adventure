@@ -402,6 +402,17 @@ function replayCoop(){
 function chooseLevel(){let b=[];for(let i=0;i<=Math.min(2,data.done?2:data.level);i++)b.push([LEVELS[i],()=>startLevel(i,false)]);b.push(['返回',home]);menu('选择旅程','已解锁的关卡可以重新游玩，收集过的东西不会丢。',b)}
 function pause(){if(mode!=='play')return;menu('暂停一下 ♡','小狮子会在这里等你。',[['继续冒险',play],['重新开始本关',()=>startLevel(level,false)],...(level===2?[['🩷 重玩双人机关',replayCoop]]:[]),['📖 冒险手册',()=>journal(()=>{play()})],['辅助模式：'+(assist?'开':'关'),()=>{assist=!assist;data.assist=assist;save();mode='play';pause()}],['返回首页',home]])}
 function cut(title,body,done,label){menu(title,body,[[label||'继续 ♡',done]])}
+
+// V3.2.5 checkpoint pennant visual-only candidate: 32x68 transparent pixel sprites.
+const checkpointFlagArt=[new Image(),new Image()];
+checkpointFlagArt[0].src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAABECAYAAADgHze4AAACUElEQVR4nO2ZMUgCURjH/4Xg3uKQc2NDa4NBkTQ4FDW1aFgQOIQ4XAQNRdTQIOFQJthQLdXUEElBDdHWoFtjGHiLuAbBa7Cn7+6ep3d951W8/6Lvce97v/f/3vfuTgGfNeB0AHtZY5YgY1nHcbgCrkaNTLW/v965nRsAMOjk4sP4nGX1dv3kAF7IXQp+aLuov+fA0cEbKYDvDjjW6myKsUaFsUaFXW1n2dV21nUFAL/AARKA3UjctQvuylCi2mKaFav1Vnv98aSn45kMIDQ9Cg2AXio3OySuyKDIAPjEoelRADDCAChW661UiSBkAGYQEQYAEqUyeIpEEHIAruvPW8RK7baYInGveFaGyf0JQ1svlQ3u8DR4AnD9eWv4FCWuHiDcA+JkydNzoJZHcn8ChUy7PxaIAvBoE8YCUYT2PpqNWr4N850KXQtaVg8Qp0DXgihkHgx9hcwDdC3YcUzf7gV89ebDiByAW86dMFeDWaQAfCPqWhCxQLRlvawaPAHgk8vaifAQAOudkxSAl1mv/eQA3SRzgQygWK1L67ybyB3oBmJ2geQkFGubB+YQifCQLRD57ZjDmEFksJ4AyCbajcRZp2fEvlSB3QPq/3gvUAAKQAEoAAWgABSAAlAAfQHQltJMW0pLf5Lt1E8K4JV8B7B9ManeX7SszZ092wYSrw1PLvT8P6LthWJQrp3co6G9kYpYxjkBcPxqJpvwJ5KSHm81/4aZGR92FfTm6R0AsLy51tUJWwd4IC/lexX4DmCbo5X5lKsTLn+Z67kKfHdA6QvYA95Aa2qtTgAAAABJRU5ErkJggg==';
+checkpointFlagArt[1].src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAABECAYAAADgHze4AAACeUlEQVR4nO2ZMWgTURjH/yeBQMcuEczs2MHV4QqVBocgik4OJiUWhAwlZDgRHCxShw5BMmgaiIK6tJ06SEKFZihuDunmKBFyS+gkCIXnEL/Lu7uXy931uxyF918u7929937v/73v3V0OSFlG1Abix5bwdXKrEbkfUiZWq5t3pr9/HscdGwBwLcrF70oPfLMPqmcHSELxQnBJ22VdPQfev/3FCpC6A5H17H5ViPMzIc7PxOF2QxxuN0JngPjTF/IRWLADxpJpiNFHYSyZzsbFArBjlkK7YFx/4to146WhQqPHNdEZjp3y8/6HUNszG0BufQUWALs3mFQoXFFBsQHQwLn1FQBwwwDoDMdOqGQQNgAviAwDAOXeABQiGYQdgHR00UWxNy3LIZLXSmJpWNlddZXt3sDlDoUhEYCji67rmNu755yTZw8wrgEaDAAqn74AoxYqu6to17tAeXKumCkASGgRFjMF5N78nRRGrSnM/1DYVtY3e4A5BLaVRbt+4qpr109gW9mZbRZ2L6DZezcjdgCynJzwZoNXrAC0EG0ri2Km4FgvL9BEAWhwVbmcXwbgv3OyAlCaha1nB5gnlQtsAJ3hWJnn88TuwDwQrwssO6Gc29QxQZTzy4FA7LdjgvGCqGATAVANtGOWxKxnxIVkQdADaupvRhpAA2gADaABNIAG0AAa4OoAWBs1YW3UlH/JzqpnBUhKqQMEvpgMv+071jY/fw/sSL42v/Yo9HfEwAvlTkmvm31X+UXV9LWLAhD51Uw14GWkJN17NfkMc/f2jVidfj39DQB4+nJrrhOBDlBHSSr1LEgdIDBGmw+rsXa41kEzdBak7oDWP29s7Fs4wg08AAAAAElFTkSuQmCC';
+function drawCheckpointPennant(x,lit){
+ const img=checkpointFlagArt[lit?1:0];
+ if(img.complete&&img.naturalWidth){ctx.drawImage(img,Math.round(x-8),Math.round(G-68),32,68);}
+ else {rect(x,G-62,4,62,'#8b6a85');rect(x+4,G-62,18,12,lit?'#f28eaf':'#ffe5a1')}
+}
+
 function checkpoint(i){
  if(i<=0||L.under||i>=L.cps.length)return;
  // Only the movement system can confirm a flag: crossing it, then landing safely.
@@ -1543,6 +1554,7 @@ function terrain(a){let x=a.x-cam;if(x>W||x+a.w<0)return;
  const u=L.under;rect(x,a.y,a.w,H-a.y,L.secret?'#c4e0ed':u?'#6b5a7e':level===1?'#c7a38f':level===2?'#a98276':'#b8867c');rect(x,a.y,a.w,9,L.secret?'#f3faff':L.secret?'#f6fdff':u?'#a891c4':level===1?'#f1c59c':level===2?'#85c79b':'#82d1a0');rect(x,a.y+8,a.w,6,L.secret?'#9bcfe1':u?'#584a6b':level===2?'#4b9b77':'#6ca582');for(let i=0;i<a.w/22;i++)for(let j=0;j<4;j++)if((i+j*3)%4===0)rect(x+i*22+5,a.y+21+j*19,4,3,u?'#8c7aa3':'#e0b0a2')}
 // V2.8.4.2: distinct water crossing: stars unlock high route; moving raft stays as fallback.
 // Star path is an optional elevated shortcut across the actual water gap. A moving raft remains available below.
+const v325MemoryStarSprite=new Image();v325MemoryStarSprite.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAABI0lEQVR4nM2WPQ7CMAyFXxFnQLB06coROEhRL8ENEAszIwMSEyrnYOUMLF2oEDtjWEhxWsf5aZF4UpfIzufn2FKBf1ZZZCo0Z/SLQgZRWWRKXRcq1FWco2kaleatssiUel2aL8RVkKP8cAyvLhRkVP/cN2BfV96gPm68QZybUFfjzkWMfNy47khoYL6a2SPn268bqroSCzjv7liebklCDw2Y765MNsBjzcI1BCCOWFgbyF3aFgNhQRoGAFagAwDAgACWqdNBOskpB8QKioFJEOAz3k7RttEp0+fTFIBckHNhm3eqq+4okzNxNSA4MhaQAGgrjSJIHtc+tp86gVYpvVU7jgM536gNoJdo1zpGap/oyAaIiRUX1gXonRfzOzVkfi+9AY+crpOnnme2AAAAAElFTkSuQmCC';
 function drawStarBridge(){
  if(!starBridgeReady())return;
  const t=starBridgeProgress();
@@ -1618,19 +1630,23 @@ function qbrick(b){const used=data.qb.includes(qKey(b));const x=b.x-cam,y=b.y-(b
  else{rect(x,y,b.w,b.h,used?'#b9a294':'#f6b64a');if(!used)text('?',x+b.w/2,y+16,'#fff',15,'center');else rect(x+5,y+9,12,3,'#8b7568')}
  if(!used&&b.reward==='snowboard')text('❄',x+b.w/2,y+16,'#fff',15,'center');
  if(!used&&b.reward==='gift')rect(x+b.w-5,y+3,3,3,'#e879ac');if(!used&&b.reward==='keepsake')rect(x+3,y+3,3,3,'#ff8caa');}
-function coinDraw(x,y){const s=Math.abs(Math.sin(timer/220+x*.05));circle(x,y,7,'#b97826');circle(x,y,6,'#ffd25c');circle(x-1.5,y-2,2,'#fff2ac');ctx.fillStyle='#e65c86';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText('♥',x,y+3);ctx.textAlign='left'}
+const v325HeartCoinSprite=new Image();v325HeartCoinSprite.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABCUlEQVR4nGNkwAHmeEn8R+anbHvBiE0dhuAcL4n/ya3aWA2dW30VwyAmrJqVEyAYDSS3amO4DG4AimY8wDOQC8UQRqya7y7AacCzM/cZGBgYGLav/8aQsu0FIxOGirsLGF7OCWJ4OSeIgYGBgeFmnTXDzTprnAYyotgO1Sye6QvRXDkHRbF601G4C2CuYEG2GQZeTt+M00Z0gOEF8ZR1WBWqNx2Fsz88/I7bAGyGoGsWkOdEGJCy7QXj3OqrWA05/+EFimZkgDsWkEDEpLso/Gtrr6HYDvcCLlega9YK1kKxnYEBLS/M8ZL47xnIhdcgZM1wF8BAyrYXjNvXfyNaM4YL0F2Dbjg2dQDBtXxbpES7rAAAAABJRU5ErkJggg==';
+function coinDraw(x,y){if(v325HeartCoinSprite.complete&&v325HeartCoinSprite.naturalWidth){ctx.drawImage(v325HeartCoinSprite,Math.round(x)-8,Math.round(y)-8,16,16);return;}circle(x,y,7,'#b97826');circle(x,y,6,'#ffd25c');circle(x-1.5,y-2,2,'#fff2ac');ctx.fillStyle='#e65c86';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText('♥',x,y+3);ctx.textAlign='left'}
 function pickupDraw(a){const x=a.x-cam,y=a.y;if(x<-25||x>W+25)return;
  if(a.kind==='snowboard'){rect(x-15,y-3,30,6,'#f8c5dd');rect(x-12,y-5,24,2,'#fff');rect(x-8,y-7,5,3,'#7baed5');rect(x+4,y-7,5,3,'#7baed5')}
   else if(a.kind==='keepsake'){ctx.save();ctx.translate(x,y);ctx.scale(1.3,1.3);heart(0,0);ctx.restore()}
  else if(a.kind==='key'){circle(x-4,y,6,'#ffe47c');rect(x,y-2,14,4,'#e9b74e');rect(x+9,y+2,3,5,'#e9b74e');text('✦',x-4,y+3,'#fff',8,'center')}
  else{rect(x-10,y-9,20,18,'#f3a5c5');rect(x-10,y-3,20,5,'#fff0a9');rect(x-2,y-9,4,18,'#fff0a9');text('♡',x,y+5,'#fff',11,'center')}
 }
+// V3.2.5 mushroom spring visual-only sprites; collision and physics unchanged.
+const v325MushroomSpring0=new Image();v325MushroomSpring0.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAPCAYAAAD6Ud/mAAABJ0lEQVR4nGNkIAF8L2/7j8zn7KxiJFYvQYX3gwrhhkuoiqLIvbj9Gs5WXNeP1yysksiGIwMJVVEGjppABgYGBoYfLesxLMNnKYZAm13o/0gRGQwLsBkIAwoL0xgexM+C85e/ecJQdWg1itlMOHVDDVBYmIbXEgYGBoYH8bMYFBam4VUDtxXZJ4R8QCxA9hlWH1HDEnTAgu4CBgYGhsqtTRQZ2u5dhyFGdD442m3/n4GBgcEqPJqBUS6NEca3Lj1IlBl4EwM2wCiXxvj/0SysyR+vPkIKYC6HAavwaIZjK5diqCPkMxTJr9d64YZyyXoxMDAwMBybkUHILRAHZMxgYGBgYPj2eBtcjFurGG4+TouoAZAtIjmOyAVYw3VjdwJFPvMvXYBhLgClUmE46J3MnQAAAABJRU5ErkJggg==';
+const v325MushroomSpring1=new Image();v325MushroomSpring1.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAPCAYAAAD6Ud/mAAAAzklEQVR4nGNgGAWDHTCSovh7edt/ZD5nZxXR+gkqvB9UCDdcQlUURe7F7ddwtuK6frxmYZVENhwZSKiKMnDUBDIwMDAw/GhZj2EZPksxBNrsQv9HishgWIDNQBhQWJjG8CB+Fpy//M0ThqpDq1HMZsKpG2qAwsI0vJYwMDAwPIifxaCwMA2vGrityD4h5ANiAbLPsPqIGpagAxZ0FzAwMDBUbm2iyNB27zoMMZQI+3qtF2tqIxdwaxXDzcebGKgJsOajjd0JFPnMv3QBhrkADKJEMxf770cAAAAASUVORK5CYII=';
 function platDraw(pl){const x=pl.x-cam;if(x<-80||x>W+80)return;
  if(pl.kind==='mover'){const y=pl.y;
   if(level===1&&!L.secret&&!L.under){rect(x,y,pl.w,8,'#e7bd86');rect(x,y+8,pl.w,5,'#9d765a');for(let i=7;i<pl.w;i+=13)rect(x+i,y+2,2,5,'#b58b68');circle(x+6,y+13,3,'#f4e2b9');circle(x+pl.w-6,y+13,3,'#f4e2b9')}
   else{circle(x+10,y+4,10,'#f2fbff');circle(x+pl.w/2,y-1,13,'#fff');circle(x+pl.w-10,y+4,10,'#f2fbff');rect(x,y+2,pl.w,9,'#eef8ff');rect(x+4,y+10,pl.w-8,3,'#a6d4eb')}}
  if(pl.kind==='fall'){const sh=pl.t>0&&pl.t<450?Math.sin(timer/25)*1.5:0;rect(x+sh,pl.y,pl.w,9,'#c69468');rect(x+sh,pl.y+9,pl.w,3,'#8d6248');for(let i=6;i<pl.w;i+=14)rect(x+sh+i,pl.y+2,2,5,'#8d6248')}
- if(pl.kind==='spring'){const sq=pl.anim?4:0;rect(x+2,pl.y+8,pl.w-4,7,'#9d5b73');rect(x+9,pl.y+6,8,9-sq,'#f5e6d3');rect(x+1,pl.y+sq,pl.w-2,8,'#e8577f');rect(x+1,pl.y+sq,pl.w-2,2,'#ffc3d8');circle(x+7,pl.y+3+sq,2.2,'#fff');circle(x+18,pl.y+4+sq,2,'#fff')}}
+ if(pl.kind==='spring'){const sprite=pl.anim?v325MushroomSpring1:v325MushroomSpring0;if(sprite.complete&&sprite.naturalWidth)ctx.drawImage(sprite,Math.round(x),Math.round(pl.y),26,15);else{const sq=pl.anim?4:0;rect(x+2,pl.y+8,pl.w-4,7,'#9d5b73');rect(x+9,pl.y+6,8,9-sq,'#f5e6d3');rect(x+1,pl.y+sq,pl.w-2,8,'#e8577f');rect(x+1,pl.y+sq,pl.w-2,2,'#ffc3d8');circle(x+7,pl.y+3+sq,2.2,'#fff');circle(x+18,pl.y+4+sq,2,'#fff')}}}
 function pipeDraw(o){const x=o.x-cam;if(x<-60||x>W+60)return;rect(x,o.top+5,o.w,G-o.top-5,'#4bba83');rect(x+4,o.top+5,5,G-o.top-5,'#7cdda0');rect(x-5,o.top,o.w+10,10,'#7cdda0');rect(x-5,o.top+8,o.w+10,2,'#3f9a6c');
  if(o.type==='pipe'&&!o.exit&&!data.seed){circle(x+o.w/2,o.top-14+Math.sin(timer/250)*2,6,'#fff1a8');text('跳上管道',x+o.w/2,o.top-26,'#fff',11,'center')}
  if(o.exit&&data.seed){text('⬇ 出口',x+o.w/2,o.top-12,'#fff',11,'center')}}
@@ -1667,6 +1683,7 @@ function bunny(x,y,face,sit,dead){if(drawSunsetRear('bunny',x,y))return;if(drawS
  rect(x+11+ex,y+17+s,4,2,'#e58baa');rect(x+3,y+21,19,4,'#ed85ab');if(!sit){rect(x+3,y+25,6,3,'#fffaf6');rect(x+16,y+25,6,3,'#fffaf6')}else{rect(x,y+24,8,3,'#fffaf6');rect(x+16,y+24,8,3,'#fffaf6')}}
 function lionDraw(x,y,face,sit){if(drawSunsetRear('lion',x,y))return;if(drawSceneOutfit('lion',x,y,face,sit))return;if(drawReviewSprite('LION_URL',x,y,sit,face))return;x=Math.round(x);y=Math.round(y);const s=sit?3:0,ex=face<0?-2:1;circle(x+12,y+11+s,13,'#92603d');rect(x+3,y+17+s,19,10-s,'#c89158');circle(x+12,y+11+s,9,'#f4c28d');circle(x+4,y+3+s,5,'#92603d');circle(x+21,y+3+s,5,'#92603d');rect(x+7+ex,y+10+s,3,3,'#493b50');rect(x+15+ex,y+10+s,3,3,'#493b50');rect(x+11+ex,y+16+s,4,3,'#7b4d53');rect(x+7,y+21+s,11,4,'#e7839b');rect(x+3,y+25,7,3,'#f4c28d');rect(x+17,y+25,7,3,'#f4c28d')}
 function bubble(x,y,t){ctx.font='bold 11px sans-serif';const w=ctx.measureText(t).width+14;rect(x-w/2,y-22,w,20,'#fff');rect(x-3,y-3,6,4,'#fff');text(t,x,y-8,'#7b4d6e',11,'center')}
+const v325SpecialHeartSprite=new Image();v325SpecialHeartSprite.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAA/klEQVR4nGNgGOqAEZvgPMe8/+hiSfsnMZKqBsOCeY55/yP0jLC6ZMWlc3ADiFWHYgE+TdgAp585Cv/7ppNYLWFBN5wzwwNV44wdRFsKAxCz8v4n7Z/EyEKybiwuxgcwLRDigBjQtoFcu1EAE1VMIWRB0v5JjCsunaOaoRiRjAyoFTQwgJEPHPgk4HwJOwOCBrw4dAGFf+DTC5R8gBIHSfsnMR749IIsl2IznIEBT1GB7BNyDWdgwJGKSPUJLsMZGHD4AAaQfcItKYoi9/X5a4KGMzAQyAeEfELIcAYGAj6AAWxxQozhDAxE5mR0nxBrOMlgnmPef2wVzSgY3AAAnyKB58HxEmsAAAAASUVORK5CYII=';
 function heart(x,y){circle(x-5,y-2,6,'#f26d9e');circle(x+5,y-2,6,'#f26d9e');ctx.fillStyle='#f26d9e';ctx.beginPath();ctx.moveTo(x-11,y);ctx.lineTo(x,y+12);ctx.lineTo(x+11,y);ctx.fill()}
 function seedDraw(x,y){const b=Math.sin(timer/300)*2;circle(x,y+b,11,'#fff6b0');circle(x,y+b,7,'#a5d66f');rect(x-1,y-10+b,2,6,'#5fae6a');circle(x+4,y-10+b,3,'#8bd06b')}
 function cloudDraw(c){
@@ -1979,7 +1996,7 @@ function draw(){
 
  // Stars uncover an optional elevated lookout, not a shortcut across the tidal section.
  if(level===2&&!L.under&&(data.story.bridge||(scene&&scene.type==='switch'))){const r=data.story.bridge?1:Math.min(1,coop.bridgeTime/2000);bridge({x:1555,y:G-7-(1-r)*75,w:225},'#c99a6b','#8d6248')}
- if(!L.under&&!L.secret&&!L.cabin)for(let i=1;i<L.cps.length;i++){if(level===2&&i===1)continue;if(level===0&&(i===1||i===2))continue;let x=L.cps[i]-cam;if(x<-30||x>W+30)continue;rect(x,G-62,4,62,'#8b6a85');rect(x+4,G-62,18,12,data.cpLevel===level&&data.cp>=i?'#f28eaf':'#ffe5a1')}
+ if(!L.under&&!L.secret&&!L.cabin)for(let i=1;i<L.cps.length;i++){if(level===2&&i===1)continue;if(level===0&&(i===1||i===2))continue;let x=L.cps[i]-cam;if(x<-30||x>W+30)continue;drawCheckpointPennant(x,data.cpLevel===level&&data.cp>=i)}
  for(const o of L.objects)if(o.type==='sign')sign(o);
  if(level===1&&!L.under&&!L.secret){
   const px=2140-cam;rect(px,G-7,48,7,coastCoop.phase?'#ffcf87':'#e9a2b2');
@@ -1993,9 +2010,9 @@ function draw(){
  L.plats.forEach(pl=>{if(level===2&&!L.under&&!L.cabin&&pl.kind==='mover'&&clouds.some(c=>!c.building&&pl.x0>=c.x-80&&pl.x0<=c.x+c.w))return;platDraw(pl)});drawStarBridge();L.boxes.forEach(qbrick);pickups.forEach(pickupDraw);if(L.secret&&data.snowboard){const bx=330-cam;rect(bx-20,G-17,40,5,'#f3a3c9');rect(bx-16,G-19,32,2,'#fff');rect(bx-9,G-22,5,5,'#80bdd5');rect(bx+5,G-22,5,5,'#80bdd5');}
  for(const o of L.objects){let x=o.x-cam;if(x<-60||x>W+60)continue;
   if(o.type==='coin'&&!data.coins.includes(cKey(o)))coinDraw(x,o.y);
-  if(o.type==='heart'&&!data.hearts[level])heart(x,o.y+Math.sin(timer/300)*2);
+  if(o.type==='heart'&&!data.hearts[level]){const hy=o.y+Math.sin(timer/300)*2;if(v325SpecialHeartSprite.complete&&v325SpecialHeartSprite.naturalWidth)ctx.drawImage(v325SpecialHeartSprite,Math.round(x-12),Math.round(hy-12),24,24);else heart(x,hy);}
   if(o.type==='seed'&&!data.seed)seedDraw(x,o.y);
-  if(o.type==='star'&&!data.stars.includes(o.id)){circle(x,o.y,9,'#ffe3a2');rect(x-2,o.y-13,4,26,'#fff6c4');rect(x-13,o.y-2,26,4,'#fff6c4')}
+  if(o.type==='star'&&!data.stars.includes(o.id)){if(v325MemoryStarSprite.complete&&v325MemoryStarSprite.naturalWidth)ctx.drawImage(v325MemoryStarSprite,Math.round(x-13),Math.round(o.y-13),26,26);else{circle(x,o.y,9,'#ffe3a2');rect(x-2,o.y-13,4,26,'#fff6c4');rect(x-13,o.y-2,26,4,'#fff6c4')}}
   if(o.type==='shell'&&!data.shells.includes(o.id)){circle(x,o.y-2,6,'#ffd7a4');rect(x-5,o.y,10,3,'#e9a88f')}
   if(o.type==='switch'){
     const pinkX=coop.lionX-cam, yellowX=1450-cam;
