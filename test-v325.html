@@ -240,11 +240,11 @@ function buildLevel(n){
   // The next raised platform shifts 35px left; the waterfall at x=1449 remains.
   map:[gr(0,438),gr(490,959),gr(1497,670),bl(1030,105,238),bl(1690,100,235)],
   boxes:[qb(0,150,190,'coin'),qb(1,520,190,'bag'),qb(2,901,190,'keepsake'),qb(3,923,190,'coin'),qb(4,1343,190,'key'),qb(5,615,157,'coin'),qb(6,1138,164,'bag')],
-  plats:[spring(1860)],
+  plats:[spring(1835)],
   cps:[45,360,1000,1515], trees:[105,390,730,995,1420,1610,2040],
   enemies:[{type:'walker',x:1620,start:1580,end:1670,v:.35}],
   objects:[{type:'heart',x:1995,y:264},{type:'sign',x:1810,text:'踩蘑菇弹簧跳得更高'},
-   ...coins(0,[...arc(440,250,3,18,12),...row(612,214,4,20),...arc(983,245,3,20,14),...row(1130,212,3,24),...row(1855,120,3,22),...row(1925,150,2,22)])]};
+   ...coins(0,[...arc(440,250,3,18,12),...row(612,214,4,20),...arc(983,245,3,20,14),...row(1130,212,3,24),...row(1830,120,3,22),...row(1925,150,2,22)])]};
  if(n===1) return {end:3370,
   // V2.8.3.5: spaced shore -> stepping rocks -> safe flag -> cooperative tidal crossing -> quiet final beach.
   map:[gr(0,900),gr(1065,520),gr(1730,515),gr(2470,260),gr(3010,540),
@@ -1393,7 +1393,7 @@ function firstLevelTownMidground(){
  // Two short foreground-yard fence sections flank the first pink cottage:
  // one between the left cherry tree and cottage, another between cottage and right tree.
  // All other fence placements and approved fence pixel art remain untouched.
- firstLevelFence(120,45,G-22);firstLevelFence(925,190,G-22);firstLevelFence(1515,225,G-22);firstLevelFence(1810,175,G-22);
+ firstLevelFence(120,45,G-22);firstLevelFence(925,190,G-7);firstLevelFence(1515,225,G-22);firstLevelFence(1810,175,G-22);
  // The raised-platform red cottage at x=1665 is intentionally removed.
  // The x=1115 blue cottage moves onto flat ground beside the bench (x=1210).
  // Final cottage x=1962 moves left to x=1865, off the x=2025 streetlamp.
@@ -1405,8 +1405,8 @@ function firstLevelTownMidground(){
 function firstLevelDecor(){
  firstLevelRabbitSign(88);firstLevelBench(555,G-27);firstLevelBench(1180,G-27);firstLevelLamp(340,G-126);firstLevelLamp(685,G-128);firstLevelLamp(1540,G-127);firstLevelLamp(2025,G-128);
  firstLevelVineArch(DOOR_X+12);
- const bushes=[[128,'flower'],[330,'hydrangea'],[470,'flower'],[845,'hydrangea'],[1015,'flower'],[1380,'hydrangea'],[1515,'flower'],[1755,'hydrangea'],[1990,'flower']];for(const b of bushes)firstLevelBush(b[0],G-15,b[1]);
- const flowerXs=[62,150,285,372,496,540,632,702,828,926,1532,1585,1805,1840,1930,2040,2110];for(let i=0;i<flowerXs.length;i++)firstLevelFlower(flowerXs[i],G-18,['#ff9cc2','#fff1d2','#9fd9f2'][i%3]);
+ const bushes=[[128,'flower'],[330,'hydrangea'],[470,'flower'],[845,'hydrangea'],[1380,'hydrangea'],[1515,'flower'],[1990,'flower']];for(const b of bushes)firstLevelBush(b[0],G-15,b[1]);
+ const flowerXs=[62,150,285,372,496,540,632,702,866,1532,1585,2040,2110];for(let i=0;i<flowerXs.length;i++)firstLevelFlower(flowerXs[i],G-18,['#ff9cc2','#fff1d2','#9fd9f2'][i%3]);
  // Hanging vines at the hidden-area cliff and final segment.
  for(const wx of [1390,1760]){const x=wx-cam;if(x>-20&&x<W+20){rect(x,G-76,3,58,'#4f8b54');for(let i=0;i<5;i++)circle(x+(i%2?4:-3),G-69+i*11,3,'#6ab363')}}
 }
