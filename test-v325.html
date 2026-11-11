@@ -320,15 +320,22 @@ const TOTAL_COINS=totalCoins();
 
 function starBridgeReady(){return level===1&&L&&!L.under&&!L.secret&&data.stars.length>=3&&coastCoop.phase>=2}
 function starBridgeProgress(){return starBridgeBorn<0?1:Math.min(1,(timer-starBridgeBorn)/2300)}
+// One shared, continuous walking profile for the bunny, lion and photo scene.
+const ARCH_START=2730,ARCH_END=3010;
+function archDeckY(x){const u=Math.max(0,Math.min(1,(x-ARCH_START)/(ARCH_END-ARCH_START)));return G-8-Math.round(10*Math.sin(Math.PI*u))}
+function archWalkable(){return starBridgeReady()&&starBridgeProgress()>=.98}
+function archUnderfoot(x,w){return x+w>ARCH_START&&x<ARCH_END}
+
 function surfaces(){
  const arr=[];
  for(const a of L.map)arr.push(a.kind==='block'?{x:a.x,y:a.y,w:a.w,h:H+200,kind:'block',box:true}:a);
  for(const b of L.boxes)arr.push({x:b.x,y:b.y,w:b.w,h:b.h,kind:'q',box:true,ref:b});
  clouds.forEach(c=>{if(!c.building)arr.push({x:c.x,y:G-5,w:c.w,kind:'cloud'});});
  if(L.under){if(!icePuzzle.gateOpen)arr.push({x:icePuzzle.gateX,y:G-214,w:24,h:214,kind:'block',box:true});if(icePuzzle.light==='ready')arr.push({...ICE_BRIDGE_WALKWAY,kind:'icebridge'});arr.push({...ICE_MEMORY_LEDGE,kind:'icebridge'});}
- if(starBridgeReady()&&starBridgeProgress()>=.98){
-  // Walkable arch, segmented to follow its gentle crown; both unlock conditions required.
-  for(let i=0;i<28;i++){const x=2730+i*10,mid=(i+.5)/28;arr.push({x,y:G-8-Math.round(10*Math.sin(Math.PI*mid)),w:10,h:12,kind:'starbridge'});}
+ if(archWalkable()){
+  // Fine-grained collision strips with a shared surface function.  Each strip
+  // overlaps its neighbor, preventing missed landings at the two bridge heads.
+  for(let x=ARCH_START;x<ARCH_END;x+=4)arr.push({x,y:archDeckY(x+2),w:6,h:12,kind:'starbridge'});
  }
 
  for(const o of L.objects)if(o.type==='pipe')arr.push({x:o.x-5,y:o.top,w:o.w+10,h:G-o.top,kind:'pipe',box:true,ref:o});
@@ -744,8 +751,8 @@ function sceneDusk(){if(scene&&scene.type==='sunset')return Math.min(1,scene.t/4
 function updateScene(dt){const s=scene,k=Math.min(2,dt/16.667);s.t+=dt;timer+=dt;
  if(s.type==='sunsetPhoto'){
   // Both companions remain visible on the lookout; camera stays at the same position.
-  p.x=2928;p.y=G-105-p.h;p.vx=p.vy=0;p.on=true;
-  lion.x=2901;lion.y=G-105-27;lion.face=1;p.face=1;
+  p.x=2894;p.y=archDeckY(p.x+p.w/2)-p.h;p.vx=p.vy=0;p.on=true;
+  lion.x=2864;lion.y=archDeckY(lion.x+11)-27;lion.face=1;p.face=1;
   camTo(p.x-W*.58,k);
   if(s.t>1900&&!s.shot&&(held.jump||jumpQueue||s.t>4300)){s.shot=true;s.shotAt=s.t;clearInput();}
   if(s.shot&&s.t-s.shotAt>3000){data.story.sunsetPhoto=true;save();scene=null;play();flash('📸 夕阳下的你 · 已收进冒险手册 ♡');}
@@ -902,6 +909,10 @@ function updateLion(k){
 
  for(const a of L.map){if(a.kind==='block'&&lion.x+22>a.x+3&&lion.x<a.x+a.w-3)floor=Math.min(floor,a.y-27)}
  if(L.under&&icePuzzle.light==='ready')for(const s of [ICE_BRIDGE_WALKWAY,ICE_MEMORY_LEDGE])if(lion.x+22>s.x+3&&lion.x<s.x+s.w-3)floor=Math.min(floor,s.y-27);
+ if(archWalkable()&&archUnderfoot(lion.x,22)){
+  // Same world-space arch profile as the bunny, at the lion's own feet.
+  floor=Math.min(floor,archDeckY(lion.x+11)-27);
+ }
  if(!p.on&&Math.abs(p.x-lion.x)<64&&p.y<floor-22)floor=Math.min(floor,p.y+12);
  if(lion.y>floor+6)lion.y=floor;
  else lion.y+=(floor-lion.y)*Math.min(1,.23*k);
@@ -933,6 +944,12 @@ function update(dt){
  if(dir)p.face=dir;
  p.vx+=(dir*2.45-p.vx)*Math.min(1,.27*k);if(!dir)p.vx*=Math.pow(.7,k);
  p.x=Math.max(0,Math.min(L.end-24,p.x+p.vx*k));
+ // On the unlocked arch, follow the sloping deck only while grounded and
+ // walking.  Never magnetize a jumping or falling bunny onto the bridge.
+ const archWasGrounded=archWalkable()&&p.on&&p.vy>=0&&archUnderfoot(p.x,p.w)&&
+   prevY+p.h>=archDeckY(p.x+p.w/2)-15&&prevY+p.h<=archDeckY(p.x+p.w/2)+12;
+ if(archWasGrounded){p.y=archDeckY(p.x+p.w/2)-p.h;p.vy=0;}
+
  if(L.under&&!icePuzzle.gateOpen){
   const cube=icePuzzle,old=cube.cubeX,cw=39;
   if(dir>0&&prevX+p.w<=old+5&&p.x+p.w>old&&p.y+p.h>G-39){
@@ -973,6 +990,9 @@ function update(dt){
    p.y=a.y-p.h;p.vy=0;p.on=true;ride=a.ref||null}
   else if(a.box&&p.vy<0&&prevY>=a.y+a.h-6&&p.y<a.y+a.h){p.y=a.y+a.h;p.vy=.5;p.jumpMs=999;
    if(a.kind==='q'){boxReward(a.ref)}}}
+ if(archWasGrounded&&p.vy>=0&&archUnderfoot(p.x,p.w)){
+  p.y=archDeckY(p.x+p.w/2)-p.h;p.vy=0;p.on=true;ride=null;
+ }
  p.ride=p.on?ride:null;
  if(p.y>H+30){die('fall');return}
  // A successful landing on the far bank clears the streak for that exact gap.
@@ -2311,8 +2331,8 @@ function drawSunsetPhoto(){
  const lx=lion.x-cam;
  rect(lx+14,lion.y+9,13,10,'#a78ca8');rect(lx+16,lion.y+6,5,3,'#f1cad8');circle(lx+21,lion.y+14,3,'#fce9ed');
  if(!s.shot){
-  text('🦁 这里好漂亮，我给你拍张照吧！',center,34,'#fffaf1',17,'center');
-  if(t>1200)text('✦ 按跳跃键摆姿势并拍照',center,57,'#ffebed',12,'center');
+  text('🦁 在桥上拍张照吧！',center,77,'#fffaf1',16,'center');
+  if(t>1200)text('✦ 按跳跃键拍照',center,98,'#ffebed',12,'center');
  }else{
   const elapsed=t-s.shotAt;
   if(elapsed<180){ctx.globalAlpha=1-elapsed/180;rect(0,0,W,H,'#fff9ed');ctx.globalAlpha=1;}
@@ -2330,7 +2350,7 @@ function drawSunsetPhoto(){
   bunny(x+89,y+125,1,false,false);
   text('夕阳下的你 ♡',center,y+204,'#b36c94',15,'center');
   ctx.restore();
-  text('📸 咔嚓！',center,31,'#fff9ed',17,'center');
+  text('📸 咔嚓！',center,78,'#fff9ed',17,'center');
  }
 }
 function loop(t){try{let dt=Math.min(40,t-last||16);last=t;
