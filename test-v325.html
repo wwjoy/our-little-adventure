@@ -1332,7 +1332,31 @@ function firstLevelRabbitSign(wx){
  }
 }
 
-function firstLevelVineArch(wx){const x=wx-cam,y=G-4;if(x<-80||x>W+80)return;ctx.save();ctx.globalAlpha=doorRevealed()?1:.86;rect(x-24,y-65,7,65,'#486f52');rect(x+24,y-65,7,65,'#486f52');poly([[x-24,y-63],[x-12,y-78],[x+12,y-78],[x+31,y-63],[x+25,y-55],[x+13,y-68],[x-11,y-68],[x-18,y-55]],'#5f8f5f');for(let i=0;i<12;i++){const px=x-25+(i*9)%54,py=y-70+(i%4)*9;circle(px,py,4,i%3?'#79b868':'#5b995a')}ctx.restore()}
+// V3.2.5 secret-garden art candidate: pastel cherry blossoms, living vine arch and ivory sage timber door.
+// The sprites are self-contained, transparent, and do not change collisions, unlocks or interaction positions.
+const v325GardenVineSprite=new Image();
+v325GardenVineSprite.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEYAAABcCAYAAADTY8N5AAAHg0lEQVR42u1cXUwUVxg9sxL/MCoSiV0Ci3YTraHR2PIgIZoKxhQwJWIaaGkIwRR9sCSlSTWIaQQjTfRh2wexYWNJN11itFG7mhClpg2FByzRFKsmVFgIW4NVxKKoqU4f8E5nZ+9dZnbv/OyyJ9lkMjvM3Hv2fH/3fgOQQAIJJJBAAgkkEJsQrDgo8dE9URrg4uWmjNFmxEMOndkvxppikox6ECHnYOkRpgImbwyKLPUYrRzBDLU8ebQQzVUNQjhibHN+BAAssJcjrojZd7JRBICFi58wr1GqZ9YQQ1TBUg0ADF0bDfnb1o8/l453ffOldNzuajGMHN2cL81U5PAHRuEPjGq6Z1ntbrGsdrdohEM3VJ5ltbtFIY0SnsfU32PtphTp+I9fxnVTkWAUIdID08LkLxSCCkqcAIDLZweCSNGbHJuRpMgn//1HTUxSCkqc0gcAAg/uY2NhnupnWF4xrAF765owNnwCaZk1+OC7AwCAD9/Nwd2J8WmH+85ngvweBSVOrLWvRO/QFABgYvKGpBY5eCpHMJoUOTnuP7/FiiXT5rEseSnu+W5Rrx3KdoScm5i8gbqlZag+f1wXcgQzSCEmQkiRo3hDdciYXB2ekPvtSnoTk/N8WPSsOIgcXsQYUisRlGdmoKDEiRVLUqiksFC7rSJksq3//h5CCk9/w5UYV4dHZA2soMSJexvmMVUR7jzTHG2Xgpw0T3IE3sSQ456LXSGmI3esvj63GA0x544dFgFIZJOQrkSkpiXoQYqSHELM8r5neK+untszleTQiKmozNGsRN2XHf7PPe4CAFdSyP3OHTssLu97FqQcQoglfIzcdORInns3JDfhTY7SZJWk0MzWEFMizo4o5JM1BdJ37jse3UgJilJXjorhIp1Wc+IalXoudqHyn9eDzlWvqjAkFaheVYGi1CIUpRaFfOdp6zXelGihcaJ3EFNTpzA1dUo6p+cywcPTPUH3ppFjio+ZKSQasRiu/DE8bb3wtPWi63oAWevTNec2Np4+BgBOp/4KAHjen4Pn/TlovOoylKCQOuvVCmHW+nTsO9kokiVXU8L1V8J5Qye/53Ybjq+uxPP+6Wh0ye9mkmOIYpTyJOHSviyVen24rRMe5Oy53SYplgay3KpGNboUkUaEZ6kwPRz843R2D4Qke5GAmynJ03691TETOrsHIKTRl0qbqxoE4mvCLdjbEOPw1tMjYtn8DE33UWbHNl4SBoCBV0uPVofc1/j63KKvzy0uS17Kx5T27tyKr09fAgA47OkSKbwLxUhUQ6rumZC3zi4dP3j8EL4+t0hKB83E7DvZKPoDoxIpwPTmWX6uU/IvVoeaopKbj+nsHkD705GYIEbNCmJExDjs9ERJq8MzC2oy8Ih8zNC10bA7ilYnpCD7beSuLhVIotdc1SAogwlTMbSlSnnGKI5Nf/JzncjPdaJsfoYpjlct5Nu7l/uvSiT5A6PUCBvWlFwdHpFGUCxh7aYU6p43IYWVgtjUqIVFjjLbtSKU27gAcPPWOG7eGucTlVwdHvE1+0pqo080YdEMvLEmZcZ8iEoMbecPAP4KDDIfJvcvJJs0a+JkLOWZGZJqyOdg6RFBTR3HvVZSEmJV1XjrWwSHPR0Oezq89S2CMntmhmuWauTNye7f2ixPgJqaKWrFKPtwq9+qBDC9E8hrPzpS8I6emhO8xyOTIa2mVgEhh6V2XYmJpAYxWi2uDo+Ifn9U99RkSqTn9uWL7Xj5YjvKGxos6z+Gsh3UTizdFCNvSLYKardVCDQfk9XvR48RiplNSIqXiSgdrtpVPC4lwWxSjCZT2liYF9KITArI1itHY4I4tYloUiRq2ViYx2wUsiq0dlhF7GMk5USZL+heE336hXR84f4FSTUz5VyqTImVSVpVNWRPfbNjS9B5LX0zcROVWJjoHcTc7OmOqgUL3ledoasmhqhGjzc9dDGh4RFsjjzxjW/F/Oz/CZsdW6S+mYU7VwiWIObQmf2imV0PhBzv8Ig1FCPfvzk4GxI8LaQAwfs3eoK2L2SZWinw4L5p/6pg786tACAC7H4Z0xRjRt8dUYu884KXeuIyKvHYV4+KGLJvY5Q6qPlKfYtAU4k4BiDTQs43XsDNlIxsYaWphlYrGeZ8aZLl0VPLG6x3G7QQptmUhDTEZNNQuHwrKlNSqiUWyPEOj6A8MwPlmRlSWaA219KkGGXvXfvTEXR2D8SMSpQNROFIUk0MK6PMz3VanpDrWZPMrqpZHa7XDS3SnJVrImbo2igc9nSpMdGq7atqX9aK2vnS3tRQZr1WB+nFU/vmftyaUrS5jCZivHVNMzYn8pBxtCDvJJGQTUI191f/mqsaBHH4b3Fs+AS8dU2G2LgeOLCqWPVYVStmf+dxpGXWoPzYgZh0tK07avB4zkW07qjRoVaSkUIkevnsgFRAzvQ6ndHmFFTk/nACyS8K0XTHp6700fIwluNi2a4RJGn9MeTXh/tbTcsO7a4WwUr+gzUxXfMYVrtE1/VAXIV1+TzlW7dJ0dqu2QqK5vnNVQ2CnBhyXLyhWmASY1ZraqT5itofkjVPpYX8B7dFgJfEAJskAAAAAElFTkSuQmCC';
+const v325GardenDoorSprite=new Image();
+v325GardenDoorSprite.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEYAAABcCAYAAADTY8N5AAACWklEQVR42u2aPU/CUBSGTwmbgSgmFJGgYnBxUGc/NhPiSGLi5E8wLg7+AgcX409wYnI0JG5q3BlcNFQk1VgJaEow0UUXP0pzCy1pubft+2y9LaV98p57D6VEAAAAAAAAAAAAAAAAAAAAAADgNpJIF3N4fPDFGt/b2ZdCKcZKCE9BksgydreLdHRyykWQJIKU3e1i38+YBXktJ8K7jOxIYR1nt/x8kxjjDdmV0is9XiUn4jcp5s96lRyJhxgrKTeayhyflzNDT05UlFXoRlMpP5qw3GclJzCTLystvaQYjzEnysuSkniX0OfHe9f23Vur7/nM6fktKTfLKUocMUqxIyTQpcTCqRSrSdrNcorwTotoSRmamH5LtBOqD0/M1LhxbiESI3pauE++Rm4Vtef+uVwm+GKskrK8uEQNveFYWmBXpVBOvhAzAMlYnJKxOMRY8ay1IIZFSk5AjFNmxtIQw5Jy//oEMWZ4ScFyDTEQgz4GfQxKCX0M+hi3+5hU/QJiMMfYoCDXurZznSvPvzPqBzFlbZo2F5pEG+tE1KQKraCP6VyWaPLxJyHx7N9Y57IU/MSk5ATpyjtz38jq1v/DcL3+N4Y+ZixNBblGlfY4XZ+dU6U9PpQ5xhd9TFmb7hpXRlbCLQbPY+xO0tk1iEGDBzEQ42qDF2oxeFA1YC8TejHmd2N4PqgS6te1+QWhW1K5XYswYob9KhmWa7+LEW3JFqaPEW3JRh+DPiZAYvCHmwVmKbNTaYjhDdcG76WtQ0y9WqNcPkdERAsTWVfPrdwp/k6MFzeAOQYAofkGtGXvlgE+OQ8AAAAASUVORK5CYII=';
+function firstLevelVineArch(wx){
+ const x=Math.round(wx-cam), y=G;
+ if(x<-90||x>W+90)return;
+ const unlockedAndVisible=doorRevealed();
+ ctx.save();ctx.imageSmoothingEnabled=false;
+ // Put the revealed door UNDER its flowering trellis; both share the same world anchor.
+ if(unlockedAndVisible&&v325GardenDoorSprite.complete&&v325GardenDoorSprite.naturalWidth===70){
+   // Keep the original proximity-fade reveal exactly; only the door appearance is new.
+   const proximity=Math.abs(p.x+11-(DOOR_X+12));
+   ctx.globalAlpha=data.secretDoors.includes('0-secret-door')?1:Math.max(.18,Math.min(1,(105-proximity)/65));
+   ctx.drawImage(v325GardenDoorSprite,x-35,y-92,70,92);
+   ctx.globalAlpha=1;
+ }
+ if(v325GardenVineSprite.complete&&v325GardenVineSprite.naturalWidth===70){
+   ctx.globalAlpha=unlockedAndVisible?1:.94;
+   ctx.drawImage(v325GardenVineSprite,x-35,y-92,70,92);
+ }
+ ctx.restore();
+}
 // V3.2.5: first-level string lights — two authored, lightweight pixel frames.
 // Same four original world X anchors and y=189 cable reference; no scene logic change.
 const v325StringLightArt=[new Image(),new Image()];
@@ -1939,7 +1963,7 @@ function draw(){
 
  // Stars uncover an optional elevated lookout, not a shortcut across the tidal section.
  if(level===2&&!L.under&&(data.story.bridge||(scene&&scene.type==='switch'))){const r=data.story.bridge?1:Math.min(1,coop.bridgeTime/2000);bridge({x:1555,y:G-7-(1-r)*75,w:225},'#c99a6b','#8d6248')}
- if(!L.under&&!L.secret&&!L.cabin)for(let i=1;i<L.cps.length;i++){if(level===2&&i===1)continue;let x=L.cps[i]-cam;if(x<-30||x>W+30)continue;rect(x,G-62,4,62,'#8b6a85');rect(x+4,G-62,18,12,data.cpLevel===level&&data.cp>=i?'#f28eaf':'#ffe5a1')}
+ if(!L.under&&!L.secret&&!L.cabin)for(let i=1;i<L.cps.length;i++){if(level===2&&i===1)continue;if(level===0&&(i===1||i===2))continue;let x=L.cps[i]-cam;if(x<-30||x>W+30)continue;rect(x,G-62,4,62,'#8b6a85');rect(x+4,G-62,18,12,data.cpLevel===level&&data.cp>=i?'#f28eaf':'#ffe5a1')}
  for(const o of L.objects)if(o.type==='sign')sign(o);
  if(level===1&&!L.under&&!L.secret){
   const px=2140-cam;rect(px,G-7,48,7,coastCoop.phase?'#ffcf87':'#e9a2b2');
@@ -1994,18 +2018,9 @@ function draw(){
  for(const q of L.pops){const a=1-q.t/600;ctx.globalAlpha=Math.max(0,a);if(q.txt)text(q.txt,q.x-cam,q.y-q.t*.03,'#fff',11,'center');else coinDraw(q.x-cam,q.y-q.t*.05);ctx.globalAlpha=1}
  if(level===0&&!L.under&&!L.secret){
    const dx=DOOR_X-cam;
-   if(dx>-40&&dx<W+40){
-    // Before finding the key, the secret entrance is part of the scenery, not a visible locked door.
-    if(!doorUnlocked()){
-      ctx.globalAlpha=.40;circle(dx+12,G-45,3,'#eaf9ff');circle(dx+17,G-41,2,'#f7ffff');ctx.globalAlpha=1;
-    }else if(doorRevealed()){
-      const proximity=Math.abs(p.x+11-(DOOR_X+12));
-      const alpha=data.secretDoors.includes('0-secret-door')?1:Math.max(.18,Math.min(1,(105-proximity)/65));
-      ctx.save();ctx.globalAlpha=alpha;
-      rect(dx-3,G-52,30,52,'#f6e8fa');rect(dx,G-49,24,49,'#9ccfbf');
-      rect(dx+4,G-43,16,39,'#d8f5e9');rect(dx+18,G-26,3,4,'#f4cf80');
-      circle(dx+12,G-56,3,'#fff7cb');ctx.restore();
-    }
+   if(dx>-40&&dx<W+40&&!doorUnlocked()){
+     // Unchanged faint pre-unlock clue; the matching timber door is now drawn behind the vine arch.
+     ctx.globalAlpha=.40;circle(dx+12,G-45,3,'#eaf9ff');circle(dx+17,G-41,2,'#f7ffff');ctx.globalAlpha=1;
    }
   }
  if(!L.under&&!L.secret&&!L.cabin&&level===0){rect(L.end-70-cam,G-90,5,90,'#fff4e4');rect(L.end-65-cam,G-90,48,24,'#f18eb2');text('终点',L.end-59-cam,G-73,'#fff',13)}
