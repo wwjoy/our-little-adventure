@@ -1719,6 +1719,38 @@ function drawStarBridge(){
    text('星光观景台',x,G-160,'#fff8d8',13,'center');}
  ctx.restore();
 }
+// V3.2.5 review candidate: purely visual pixel-stepped transition into the final beach.
+// The world-space collision map, checkpoint and sunset story remain untouched.
+function v325BeachLeftTransition(){
+ if(level!==1||L.under||L.secret)return;
+ const begin=2962,end=3030;
+ if(end-cam<0||begin-cam>W)return;
+ ctx.save();
+ // Warm sand gradually overlays the old stone wall, with an irregular pixel edge.
+ for(let wx=begin;wx<end;wx+=4){
+  const t=(wx-begin)/(end-begin);
+  const top=G+Math.round(10-15*t+2*Math.sin(wx*.19));
+  const coverage=Math.max(0,Math.min(1,(t-.04)/.83));
+  const x=wx-cam;
+  if(coverage<=0)continue;
+  ctx.globalAlpha=.18+.82*coverage;
+  rect(x,top,4,H-top,'#f5dbb7');
+  if(wx%12<4){rect(x,top+7,4,3,'#f9e8c9');rect(x,top+23,3,2,'#e9c39f');}
+ }
+ ctx.globalAlpha=1;
+ // Tiny sand grains and a few low coastal plants soften the remaining seam.
+ for(let i=0;i<21;i++){
+  const wx=2965+i*3,x=wx-cam,y=G+4+(i*11)%24;
+  if(x<-5||x>W+5)continue;
+  rect(x,y,2+(i%2),1,i%3===0?'#fff0d7':'#eac3a4');
+ }
+ for(const wx of [2972,2988,3003]){
+  const x=wx-cam;if(x<-8||x>W+8)continue;
+  rect(x,G-3,2,5,'#8ea980');rect(x-3,G-4,3,2,'#a9be86');
+  rect(x+2,G-5,3,2,'#b6c78f');
+ }
+ ctx.restore();
+}
 // V2.8.4: full-width sand scene above the physics floor instead of recoloring the dirt underneath.
 function drawFinalBeach(){
  if(level!==1||L.under||L.secret)return;
@@ -2108,7 +2140,7 @@ function draw(){
   let glow=ctx.createRadialGradient(lx,ly,2,lx+facing*55,ly-5,145);glow.addColorStop(0,'#ffe9ad88');glow.addColorStop(1,'#ffe6a300');ctx.fillStyle=glow;ctx.fillRect(0,0,W,G);
   // Keep the existing cave light gradient; remove only the floating extra torch.
   for(let i=0;i<9;i++){const xx=i*106+25-cam*.12;ctx.fillStyle=i%2?'#7de1f0':'#a9efff';ctx.globalAlpha=.42;ctx.beginPath();ctx.moveTo(xx,15);ctx.lineTo(xx+18,15);ctx.lineTo(xx+8,65+(i%3)*18);ctx.fill();ctx.globalAlpha=1;}text('蓝冰洞',W/2,52,'#d8f7ff',16,'center');text('出口 →',1460-cam,G-53,'#fff3cf',13,'center');}
- L.map.forEach(terrain);v325SeasideDecorFront();if(level===0&&!L.under&&!L.secret&&!L.cabin)firstLevelDecor();drawShallowCove();drawFinalBeach();clouds.forEach(cloudDraw);
+ L.map.forEach(terrain);v325SeasideDecorFront();if(level===0&&!L.under&&!L.secret&&!L.cabin)firstLevelDecor();drawShallowCove();drawFinalBeach();v325BeachLeftTransition();clouds.forEach(cloudDraw);
  if(L.under){
   const c=icePuzzle;
   // Ice cube and pressure plate, both in world coordinates.
@@ -2137,7 +2169,7 @@ function draw(){
 
  // Stars uncover an optional elevated lookout, not a shortcut across the tidal section.
  if(level===2&&!L.under&&(data.story.bridge||(scene&&scene.type==='switch'))){const r=data.story.bridge?1:Math.min(1,coop.bridgeTime/2000);bridge({x:1555,y:G-7-(1-r)*75,w:225},'#c99a6b','#8d6248')}
- if(!L.under&&!L.secret&&!L.cabin)for(let i=1;i<L.cps.length;i++){if(level===2&&i===1)continue;if(level===0&&(i===1||i===2))continue;let x=L.cps[i]-cam;if(x<-30||x>W+30)continue;drawCheckpointPennant(x,data.cpLevel===level&&data.cp>=i)}
+ if(!L.under&&!L.secret&&!L.cabin)for(let i=1;i<L.cps.length;i++){if(level===2&&i===1)continue;if(level===0&&(i===1||i===2))continue;let x=L.cps[i]-cam+(level===1&&i===5?36:0);if(x<-30||x>W+30)continue;drawCheckpointPennant(x,data.cpLevel===level&&data.cp>=i)}
  for(const o of L.objects)if(o.type==='sign')sign(o);
  if(level===1&&!L.under&&!L.secret){
   const px=2140-cam;rect(px,G-7,48,7,coastCoop.phase?'#ffcf87':'#e9a2b2');
