@@ -1463,15 +1463,69 @@ function bg(){
  if(L.secret){const sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#a5d6ed');sky.addColorStop(1,'#f5e8f4');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);for(let i=0;i<8;i++){let x=i*135-cam*.18;ctx.fillStyle=i%2?'#eaf7ff':'#cde8f5';ctx.beginPath();ctx.moveTo(x-110,G);ctx.lineTo(x+35,105+(i%3)*22);ctx.lineTo(x+170,G);ctx.fill()}for(let i=0;i<38;i++){let x=(i*89+timer*.012)%Math.max(W,560),y=(i*43+timer*.024)%G;circle(x,y,1.6,'#fff')}return}
  if(L.under){rect(0,0,W,H,'#2c2440');for(let y=0;y<G;y+=18)for(let x=((y/18)%2)*14-((cam*.6)%28);x<W;x+=28)rect(x,y,26,16,'#3a3054');for(let i=0;i<20;i++)circle((i*137+20)%W,30+(i*53)%200,1.4,'#f6d8ff');return}
  let g=ctx.createLinearGradient(0,0,0,H);
- if(level===1){const d=sceneDusk();
-  g.addColorStop(0,mix3('#f39b9e','#e8705f','#20254f',d));g.addColorStop(1,mix3('#ffe2b0','#ffb37a','#6d568c',d));ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-  if(d>.6)for(let i=0;i<40;i++){ctx.globalAlpha=Math.min(1,(d-.6)*2.5);circle((i*97)%W,20+(i*37)%170,1.1,'#fff4ce')}ctx.globalAlpha=1;
-  const sunX=W*.62,sunY=80+d*190;circle(sunX,sunY,30,mix3('#fff0bd','#ffb257','#ff6b5a',Math.min(1,d*1.2)));
-  if(d>.85){ctx.globalAlpha=(d-.85)/.15;circle(W*.2,70,20,'#e6ecff');circle(W*.2+8,64,17,mix3('#f39b9e','#e8705f','#20254f',d));ctx.globalAlpha=1}
-  rect(0,244,W,116,mix3('#da97b0','#e98a6f','#283c6b',d));
-  for(let i=0;i<40;i++){let x=((i*79-cam*.18)%W+W)%W;rect(x,265+i%6*11,35,2,i%3?'#ffccab':'#a9b2db')}
-  if(d<.98){ctx.globalAlpha=.55*(1-d);for(let i=0;i<7;i++)rect(sunX-24+i%3*6-(i*5)%18,250+i*12,48-i*5,3,'#fff0bd');ctx.globalAlpha=1}
+ if(level===1){
+  // V3.2.5 Level 2 sunset sky art candidate: visual-only, all existing scene timing retained.
+  const d=sceneDusk(),night=Math.max(0,Math.min(1,(d-.42)/.58));
+  g.addColorStop(0,mix3('#9b79c6','#704b9c','#171b4b',d));
+  g.addColorStop(.34,mix3('#e68fbe','#c26ba6','#42356e',d));
+  g.addColorStop(.72,mix3('#ffa38f','#f17b8a','#71517f',d));
+  g.addColorStop(1,mix3('#ffcf9a','#ffac7b','#3d426f',d));
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  // Pixel clouds: fixed shapes, parallax offset; sunset edges retain their warmth at dusk.
+  const cloud=(cx,cy,scale,seed)=>{
+   const x=Math.round(cx),y=Math.round(cy),s=scale;
+   ctx.globalAlpha=.83-night*.29;
+   const shadow=mix3('#a879bd','#a369a5','#3c356e',d);
+   const body=mix3('#f4a2bf','#d983aa','#655182',d);
+   const rim=mix3('#ffcbaf','#ffb49b','#aa7197',d);
+   rect(x+8*s,y+8*s,63*s,10*s,shadow);rect(x+19*s,y,35*s,16*s,body);
+   rect(x,y+13*s,85*s,13*s,body);rect(x+11*s,y+5*s,59*s,13*s,body);
+   rect(x+22*s,y-5*s,19*s,8*s,rim);rect(x+44*s,y+1*s,20*s,6*s,rim);
+   rect(x+4*s,y+23*s,65*s,4*s,shadow);ctx.globalAlpha=1;
+  };
+  for(let i=0;i<11;i++){
+   const x=((i*167+37-Math.round(cam*.055))%(W+270)+(W+270))%(W+270)-135;
+   cloud(x,23+(i*53)%127,i%3===0?.7:i%3===1?.45:.58,i);
+  }
+  // Distant violet Osaka-bay silhouette; decorative only, behind the ocean.
+  ctx.globalAlpha=.48+night*.25;
+  const hill=mix3('#9373a5','#805f98','#25264f',d);
+  ctx.fillStyle=hill;ctx.beginPath();ctx.moveTo(0,244);
+  for(let x=0;x<=W+16;x+=16){const wx=x+cam*.035;ctx.lineTo(x,220+10*Math.sin(wx/95)+6*Math.sin(wx/41));}
+  ctx.lineTo(W,244);ctx.closePath();ctx.fill();
+  for(let i=0;i<45;i++){
+   const x=((i*37-Math.round(cam*.07))%(W+55)+(W+55))%(W+55)-18;
+   const h=9+(i*17)%29;
+   rect(x,244-h,12+(i%3)*5,h,mix3('#8b719d','#795c8e','#292a56',d));
+   if(i%4===0){ctx.globalAlpha=.5+night*.3;rect(x+4,244-h+6,2,2,'#ffe6aa');ctx.globalAlpha=.48+night*.25;}
+  }
+  ctx.globalAlpha=1;
+  // The original sunset-to-fireworks timing and sun descent are unchanged.
+  const sunX=W*.62,sunY=80+d*190;
+  ctx.globalAlpha=Math.max(0,1-Math.max(0,d-.78)*3.5);
+  circle(sunX,sunY,34,mix3('#ffeaa3','#ffd16e','#ff997b',Math.min(1,d*1.2)));
+  circle(sunX-8,sunY-9,17,mix3('#fff1b9','#ffe19b','#ffc4a0',d));ctx.globalAlpha=1;
+  if(d>.85){ctx.globalAlpha=(d-.85)/.15;circle(W*.2,70,20,'#e6ecff');circle(W*.2+8,64,17,mix3('#9b79c6','#704b9c','#171b4b',d));ctx.globalAlpha=1}
+  if(d>.45)for(let i=0;i<40;i++){
+   ctx.globalAlpha=Math.min(.9,(d-.45)*2)*(i%5===0?1:.6);
+   rect((i*97+13)%W,18+(i*37)%174,i%7===0?3:2,i%7===0?3:2,'#fff0cf');
+  }ctx.globalAlpha=1;
+  // Pixel-banded sea, moving highlights and narrowing warm reflection beneath the sun.
+  rect(0,244,W,H-244,mix3('#b67fae','#936da2','#27365f',d));
+  for(let i=0;i<35;i++){
+   const y=249+i*4,off=(i*43+Math.floor(timer/115)*(i%3+1))%W;
+   const c=i%4===0?mix3('#f7a9bb','#e59bad','#6874a6',d):mix3('#d995b6','#bb7da8','#405583',d);
+   for(let j=-1;j<3;j++)rect(off+j*W,y,16+(i%5)*13,2,c);
+  }
+  const glow=Math.max(0,1-d*.94);
+  ctx.globalAlpha=.9*glow;
+  for(let i=0;i<26;i++){
+   const y=247+i*4.1,width=16+i*3.1,dx=Math.sin(i*2.4+timer/430)*11;
+   rect(Math.round(sunX-width/2+dx),Math.round(y),Math.round(width),i%3===0?3:2,i%4===0?'#fff4c5':'#ffd77e');
+   if(i%3===0)rect(Math.round(sunX+width*.6+dx),Math.round(y),10+i%5*4,2,'#ffb88f');
+  }ctx.globalAlpha=1;
   return}
+
  if(level===0){g.addColorStop(0,'#f6aed3');g.addColorStop(1,'#ffe7c9')}else{g.addColorStop(0,'#b4e3d4');g.addColorStop(1,'#eaf7c9')}
  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);circle(W*.78-cam*.015,80,31,'#fff0bd');
  for(let i=0;i<14;i++){let x=i*190-cam*.12;ctx.fillStyle=level===2?'#a0cfc2':'#cbb9df';ctx.beginPath();ctx.moveTo(x-140,G);ctx.lineTo(x+70,155+(i%3)*11);ctx.lineTo(x+280,G);ctx.fill()}
