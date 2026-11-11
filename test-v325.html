@@ -1639,33 +1639,32 @@ function v325SeasideDecorBack(){
   rect(X(wx),267+(i%3)*2,26+(i%3)*7,2,i%2?'#ffe7d4':'#fff2e4');
  }
 }
+const v325OctopusShopImg=new Image();v325OctopusShopImg.src='data:image/png;base64,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';
+const v325PierRailImg=new Image();v325PierRailImg.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHAAAAAkCAYAAABR/76qAAAB8klEQVR4nO2YMUzCQBSGf8BZJGGRxcHVganRhcTdxeBqYuKGo4Q41BASEg1hcnA2OhPDyETCgnFicFQTF1hMEBNHrAMpseXa3tH26DXv22jvva/l9V3vChAEQRAEQShIgnXQ+HgwLIO2jpnj/CLLExcfK1/ST0Ji9VieiK/uteE0EAA29i8CeWJleeLic8tHHag4VEDFoQIqzsJcXDksGYWd6fx37yUFAGg83gb6npDliYvPKd8aT7Be1aBXNQMA1vMngd9wobiHQnHuCs0TFd8yLr2qodfqLxwX7sDvwd18ReTnpv/n6bX6oXmi6DPP8XjMsfXaM1h1sSQYd5uuy187qUzW8dx0/Ol5PggPjyuqPnsOVl6nPFc37wA4p1An3C4ylckK/WnLeoJ2yfTZcyyT19KBtaMzZgdW6nkAQEMfCCUXRZZHFZ/b+J/prFS0jVAcrg4koofZgbQPVMTnlI+mUMVJvN6XadpUGM8ObHcmaHcmQkkpRl6M8D5wczu3cGz0NqSYFcUIF9BLSjFyYxLnB6eu78BcOonSpQYA0MtPXOJcejYzDye/XONle8yYenOXy+fXY+Lls8fwXB+tQhWHqwMB/08fxYQT41lAItrQlxhFfPQlJqZQARWHuQ802zNsZHni4mPlow5UHCogQaySP/hDxGVKkxEMAAAAAElFTkSuQmCC';
+function v325DrawPierRail(wx,wy,w){if(!v325PierRailImg.complete||!v325PierRailImg.naturalWidth)return;const x=Math.round(wx-cam);ctx.save();ctx.imageSmoothingEnabled=false;ctx.drawImage(v325PierRailImg,x,wy-29,w,29);ctx.restore();}
+const v325SeasideLampImg=new Image();v325SeasideLampImg.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAABOCAYAAAAzS3ZoAAAB40lEQVR4nO1YMU/CQBh9JQ4uxjAZCH9AWNwcnJCBQROCMTiZEAcF2aWG2QguLioJgyFhIBKVkOjggEwM/gCQXYJxYnAxYaiLZ6htr722Sj36xvb6Xr/3fXf33QG8Q2D9QBrUJBmBP8HE4WEVtIo/FzSFXjUn9ao5SX+kEvxbyr8g0xz66JRVC2U2lDTM47wI0+tppvIv3hWpnFNcNJ1y1tRKQhBKFlS5+bfUGTncje5Yyh9B6eFSwc+/pTO0l1vhBQBArT00RJZY8QIArlpvmmOoy1AzfygBwOp20JDgY6ULAIiIx5q8sghfm/nvYvFFROVH3pA6y7CjeKTFNWVF44uIwkE8Y8scPD17AQCc1M9lqeHf0slP/J+em4UWjwcApH5DkvoNW4pFD5OxVAjEbLFRC8Q9IRATJl80v4FxBx0eocquwApnRphKtQ2RkR2fBs3pkI3vW1oICvWLKe28DeUwuaGfGwAo3+p3d4aWtOeKsTuZxe0jXT5nnC1oyKztyaIdff1z6Z5+1Cbgv0r5F2TeD0fwYDPsBwBctwbMgvxb6gq6gq6gK+gKuoI2C97kRM3+lPZuHKZOwGZ2egLn9zTRpXlLgoa6ZXLDuByco4576r4DoN9mMUVICK3A2dPiXwp+Ag0ecbHEOrJjAAAAAElFTkSuQmCC';
+// V3.2.5 seaside flowers: four transparent pixel-art variations, visual only.
+const v325SeasideFlowersImg=new Image();v325SeasideFlowersImg.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAAAcCAYAAACpmrfzAAADyElEQVR4nO2YPWgUQRiGvwMjxB+MFgEPBTGFIpqggtgomCiYxiLYpLFIFUhpc8chGiQkTcpAqitsrpErbE7QRNBGBCOJICpEgkoCKfTEn4Ap1iL5Zndn5pubv10SM29zezszO/PlfWfu2QAEBQUFBQUFBQUFBQUF7SAV8pgkevg6Eia+eT6XubeCouYLsf6OS1ui/l2mA6zMvHg8vn75yXRKZ808+Casue/WISsDrMxs74qv1xZtpnXS79qssOa9g70FAIsAmJgpCwvfZnoS2Jh59vJBdv3m+XeT6UQZmCkLC99mehKozKS0+1wPu/47N59q0w6Ak5ked72JmbKw8G26J4GTmR53vcpMXrKw8G3mJ4CLmVeXNj6fHjMe6mKm865PysnM1c3PTuOROmZSJ4EqKOYBQBFmqk4K1K+3y9bTupjZe+MZAADMPrpi/YxYcjNVJwXq57tX1rO22vUq7enf+Nv9acSnqBAAU8gTzFQxAguLfQBQlJmqkwK1+OEL2WYKeYKZSkbAsCy1WmJLycwEUJ8UqK/La+xaPAF0IY8zc9+Zotbux75UqEwhjzdTxQhxWOgA6ENe2sz9py5o7X7sS4XKFPKSZgKoGSEOiyQAupDH90Mz2X1H4NOFPN7MrhNHtXY/9uVDpQt5fD80k913BD5dyOPNPFJs19r92Jd+DfRF7JuMUG7MpW5/fL8C9dGqkGhdyOP7oZl43xn4vBH7BiPo1q8LeXw/NBPvmzICDYESyCvVKlF5vc6+U8W4yBexIyPoGiBKhLxSrRKVG48tnqUvF8hLChmhVf0t3wJSkHfSYAUsOHOqXqRkkFeqVaInMMm+Z2EAL3tiN3/VS0oGeaVaJboPM+y7j/rpABgSO0IdzwjjbQOsbeDuUNTdcxi66xXW597AmLKAFOSd1loKACSC02YXQFNiR6jjGWG8/zprs6k/BXlFraUAgPh2QIkFgDKQInabYkykRewJIdTxjHBt/TZrU62ZMpAi9qzrlxG7Sgh1PCPcgT7WJluz/T+CJHJhBMpAGbEDZG+AjVwYgTIwSexJ+ao/FYA8IG9hPrvfbVdGyAPysq7flBGcTgC+mFKtovUeSikPyPNpQBb1+4Y8Xvyavf4ETAzGR5DsiFqYX/E5nXcDXLUd62cBGJoeiVZ/NAEAoDo8VeAL+LzaZIOqw1PSVA5Nj7AFNFdoeEn2w2cl5+880KE1hheOx/kpA1rNv5Pq93oC+NLE4JjSgP9dedZPBqA+Wi0k0yNrVz24Plot1Im2ZAKznJ8fj2Pymn871P8PBi4zNj8dV1AAAAAASUVORK5CYII=';
 function v325SeasideDecorFront(){
  if(level!==1||L.under||L.secret)return;
  const X=wx=>Math.round(wx-cam),visible=(wx,w=100)=>X(wx)<W+20&&X(wx)+w>-20;
  const flower=(wx,wy,pink=true)=>{let x=X(wx),c=pink?'#ff9bca':'#c5a3f3';rect(x,wy+4,2,8,'#548f72');rect(x-4,wy+1,10,5,c);rect(x-2,wy-2,6,10,c);rect(x,wy+2,3,3,'#fff3ac')};
- const lamp=(wx,wy)=>{let x=X(wx);rect(x-2,wy-63,5,63,'#684d68');rect(x-6,wy-66,13,4,'#8e6170');rect(x-6,wy-61,13,19,'#7c5369');rect(x-4,wy-59,9,15,'#ffe2a0');rect(x-2,wy-56,5,10,'#fff2b9');rect(x-8,wy-44,17,3,'#6b4a66');rect(x-6,wy-69,13,3,'#f4c98d');};
+ const lamp=(wx,wy)=>{if(!v325SeasideLampImg.complete||!v325SeasideLampImg.naturalWidth)return;ctx.save();ctx.imageSmoothingEnabled=false;ctx.drawImage(v325SeasideLampImg,Math.round(X(wx)-14),wy-78,28,78);ctx.restore();};
  const fence=(wx,wy,w)=>{let x=X(wx);rect(x,wy-15,w,4,'#ad755f');rect(x,wy-4,w,4,'#c78a69');for(let j=0;j<=w;j+=20){rect(x+j,wy-20,5,24,'#94614f');rect(x+j-1,wy-22,7,4,'#efc58d')}};
- // A seaside octopus snack stall, deliberately positioned away from jump blocks.
- if(visible(22,158)){
-  let x=X(22),y=G;
-  rect(x+10,y-72,132,68,'#9d6476');rect(x+14,y-69,124,57,'#ffdbb4');
-  rect(x+18,y-47,116,34,'#855a75');rect(x+25,y-42,102,24,'#f5c28e');
-  for(let j=0;j<5;j++){rect(x+26+j*20,y-41,14,19,j%2?'#f9a0b1':'#fff1d3');}
-  rect(x+4,y-79,145,12,'#ba6c81');rect(x+11,y-84,131,7,'#f6b7a6');
-  for(let j=0;j<7;j++)rect(x+10+j*19,y-78,10,10,j%2?'#fce8c7':'#e8899c');
-  rect(x+29,y-10,96,9,'#b67d62');rect(x+35,y-18,84,8,'#f8d5a0');
-  // Octopus sign silhouette: purely decorative and not an enemy.
-  rect(x+63,y-104,25,15,'#f28f89');rect(x+58,y-98,36,10,'#f28f89');
-  rect(x+60,y-90,6,7,'#e87d81');rect(x+70,y-89,6,7,'#e87d81');rect(x+84,y-90,6,7,'#e87d81');
-  rect(x+68,y-99,3,3,'#5d4564');rect(x+80,y-99,3,3,'#5d4564');
-  rect(x+19,y-52,12,10,'#ffe6a4');rect(x+119,y-52,12,10,'#ffe6a4');
+ // Detailed transparent pixel-art shop sprite; decorative only, original footprint and mechanics preserved.
+ if(visible(22,158)&&v325OctopusShopImg.complete&&v325OctopusShopImg.naturalWidth){
+  ctx.drawImage(v325OctopusShopImg,X(22),G-116,160,116);
  }
  if(visible(170,28))lamp(183,G);
- if(visible(310,100))fence(316,G,96);
- if(visible(702,110))fence(707,G,85);
+ if(visible(310,100))v325DrawPierRail(316,G,96);
+ if(visible(702,110))v325DrawPierRail(707,G,85);
  if(visible(748,24))lamp(759,G);
  for(const wx of [16,194,209,308,325,337,407,513,528,675,692,790,811,875]){
-  if(!visible(wx,12))continue;flower(wx,G-12-(wx%3)*2,wx%2===0);
+  if(!visible(wx,32))continue;
+  if(v325SeasideFlowersImg.complete&&v325SeasideFlowersImg.naturalWidth){
+   const variant=([0,1,3,2][(Math.floor(wx/17)+wx)%4]);
+   ctx.save();ctx.imageSmoothingEnabled=false;ctx.drawImage(v325SeasideFlowersImg,variant*32,0,32,28,Math.round(X(wx)-12),G-27,32,28);ctx.restore();
+  }else flower(wx,G-12-(wx%3)*2,wx%2===0);
  }
  // Tiny seashells and starfish sit below the walkable ground surface.
  for(const wx of [281,548,685,880]){
@@ -1770,6 +1769,22 @@ function drawFinalBeach(){
    ctx.globalAlpha=.92;rect(mx-46,G-2,88,4,'#ebafc1');
    rect(mx-43,G+2,82,3,'#f8e8d8');
    circle(mx-26,G-4,3,'#fff7e8');circle(mx+24,G-4,3,'#fff7e8');
+ }
+ ctx.restore();
+}
+// V3.2.5 second-level beach decoration: visual-only, four 72x72 pixel sprites.
+// No terrain, collisions, checkpoint, sunset or story state is changed.
+const v325BeachDecorAtlas=new Image();
+v325BeachDecorAtlas.src='data:image/png;base64,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';
+function v325BeachDecor(){
+ if(level!==1||L.under||L.secret||L.cabin)return;
+ if(!v325BeachDecorAtlas.complete||!v325BeachDecorAtlas.naturalWidth)return;
+ // Preserve the central sitting/heart scene around x=3234 unobstructed.
+ const items=[{wx:3068,sy:0,w:57,h:57},{wx:3130,sy:72,w:53,h:53},{wx:3312,sy:144,w:49,h:49},{wx:3360,sy:216,w:37,h:37}];
+ ctx.save();ctx.imageSmoothingEnabled=false;
+ for(const a of items){const x=Math.round(a.wx-cam-a.w/2),y=Math.round(G+14-a.h);
+  if(x+a.w<0||x>W)continue;
+  ctx.drawImage(v325BeachDecorAtlas,a.sy,0,72,72,x,y,a.w,a.h);
  }
  ctx.restore();
 }
@@ -2121,7 +2136,7 @@ function draw(){
   let glow=ctx.createRadialGradient(lx,ly,2,lx+facing*55,ly-5,145);glow.addColorStop(0,'#ffe9ad88');glow.addColorStop(1,'#ffe6a300');ctx.fillStyle=glow;ctx.fillRect(0,0,W,G);
   // Keep the existing cave light gradient; remove only the floating extra torch.
   for(let i=0;i<9;i++){const xx=i*106+25-cam*.12;ctx.fillStyle=i%2?'#7de1f0':'#a9efff';ctx.globalAlpha=.42;ctx.beginPath();ctx.moveTo(xx,15);ctx.lineTo(xx+18,15);ctx.lineTo(xx+8,65+(i%3)*18);ctx.fill();ctx.globalAlpha=1;}text('蓝冰洞',W/2,52,'#d8f7ff',16,'center');text('出口 →',1460-cam,G-53,'#fff3cf',13,'center');}
- L.map.forEach(terrain);v325SeasideDecorFront();if(level===0&&!L.under&&!L.secret&&!L.cabin)firstLevelDecor();drawShallowCove();drawFinalBeach();v325BeachLeftTransition();clouds.forEach(cloudDraw);
+ L.map.forEach(terrain);v325SeasideDecorFront();if(level===0&&!L.under&&!L.secret&&!L.cabin)firstLevelDecor();drawShallowCove();drawFinalBeach();v325BeachLeftTransition();v325BeachDecor();clouds.forEach(cloudDraw);
  if(L.under){
   const c=icePuzzle;
   // Ice cube and pressure plate, both in world coordinates.
