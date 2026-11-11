@@ -934,7 +934,7 @@ function update(dt){
   if(coastCoop.phase===1){coastCoop.t+=dt;const d=coastCoop.lionTarget-lion.x;
    lion.x+=Math.sign(d)*Math.min(Math.abs(d),3.4*k);lion.y=G-27;lion.face=d>=0?1:-1;
    if(Math.abs(d)<3){coastCoop.phase=2;coastCoop.t=0;flash('🦁 木筏靠岸了！现在可以跳上去啦！')}}
-  if(coastCoop.phase===2){for(const raft of L.plats.filter(a=>a.kind==='mover'&&a.x0>=2280)){raft.dx=0;raft.dy=0}
+  if(coastCoop.phase===2){coastCoop.t+=dt;for(const raft of L.plats.filter(a=>a.kind==='mover'&&a.x0>=2280)){raft.dx=0;raft.dy=0}
    if(p.x>2475){coastCoop.phase=3;flash('🦁 我们成功啦！')}}
   if(coastCoop.phase===3){/* Following and facing are handled by updateLion below. */}
   if(starBridgeReady()&&!starBridgeAnnounced){starBridgeAnnounced=true;starBridgeBorn=timer;flash('✨ 海岸上方出现了通往秘密观景台的星光台阶……')}
@@ -2212,9 +2212,40 @@ function draw(){
    ctx.save();ctx.lineWidth=3;ctx.strokeStyle='#7e5970';ctx.beginPath();ctx.moveTo(rx,G-64);ctx.lineTo(ex,ey);ctx.stroke();
    ctx.lineWidth=1;ctx.strokeStyle='#ffe5a6';ctx.beginPath();ctx.moveTo(rx,G-65);ctx.lineTo(ex,ey-1);ctx.stroke();ctx.restore();
   }
+  // V3.2.5: decorative feedback only. No collision, platform or trigger changes.
+  // Phase 1: warm star-light travels along the rope while the lion pulls.
+  // Phase 2: a short 900ms heart-and-star arrival celebration near the winch.
+  if(coastCoop.phase===1){
+   const raft=L.plats.find(a=>a.kind==='mover'&&a.x0===2398);
+   if(raft){
+    const ex=raft.x+raft.w/2-cam, ey=raft.y, sx=rx, sy=G-65;
+    for(let j=0;j<4;j++){
+     const u=((coastCoop.t/125+j*.25)%1), xx=sx+(ex-sx)*u, yy=sy+(ey-sy)*u;
+     ctx.save();ctx.globalAlpha=.55+.35*Math.sin(u*Math.PI);
+     rect(Math.round(xx)-2,Math.round(yy)-1,5,3,'#ffe8a2');
+     rect(Math.round(xx),Math.round(yy)-3,1,7,'#fff8d8');ctx.restore();
+    }
+   }
+   const pulse=.55+.35*Math.sin(coastCoop.t/130);
+   ctx.save();ctx.globalAlpha=pulse;circle(rx+1,G-66,9,'#ffe2a1');ctx.restore();
+  }
+  if(coastCoop.phase===2&&coastCoop.t<900){
+   const progress=coastCoop.t/900, fade=1-progress;
+   const raft=L.plats.find(a=>a.kind==='mover'&&a.x0===2398);
+   const center=(raft?raft.x+raft.w/2:2330)-cam;
+   const top=(raft?raft.y:G-23)-8;
+   ctx.save();ctx.globalAlpha=Math.max(0,fade);
+   for(let j=0;j<9;j++){
+    const angle=j*Math.PI*2/9, radius=8+progress*30;
+    const xx=Math.round(center+Math.cos(angle)*radius),yy=Math.round(top+Math.sin(angle)*radius-progress*14);
+    if(j%3===0){text('♡',xx,yy,'#ffb6d4',12,'center');}
+    else{rect(xx-1,yy-4,3,9,'#fff0b7');rect(xx-4,yy-1,9,3,'#fff0b7');}
+   }
+   ctx.restore();
+  }
   if(coastCoop.phase===0&&p.x>1900&&p.x<2230){
    // Compact storybook prompt, shown only where the original hint appeared.
-   const tx=px-93,ty=G-98;
+   const tx=px-93,ty=G-118; // Raise the entire sign 20 world pixels; text stays centered inside.
    rect(tx+2,ty+3,204,27,'#80566b');rect(tx,ty,204,27,'#fff0d9');
    rect(tx+2,ty+2,200,2,'#e9adba');rect(tx+2,ty+23,200,2,'#d8a6a4');
    rect(tx+8,ty+8,17,13,'#f5b7c7');rect(tx+11,ty+10,4,4,'#fff5ee');rect(tx+18,ty+10,4,4,'#ffe4a0');
