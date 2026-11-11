@@ -243,7 +243,7 @@ function buildLevel(n){
   plats:[spring(1835)],
   cps:[45,360,1000,1515], trees:[105,390,730,995,1420,1610,2040],
   enemies:[{type:'walker',x:1620,start:1580,end:1670,v:.35}],
-  objects:[{type:'heart',x:1995,y:264},{type:'sign',x:1810,text:'踩蘑菇弹簧跳得更高'},
+  objects:[{type:'heart',x:1995,y:264},
    ...coins(0,[...arc(440,250,3,18,12),...row(612,214,4,20),...arc(983,245,3,20,14),...row(1130,212,3,24),...row(1830,120,3,22),...row(1925,150,2,22)])]};
  if(n===1) return {end:3370,
   // V2.8.3.5: spaced shore -> stepping rocks -> safe flag -> cooperative tidal crossing -> quiet final beach.
@@ -295,7 +295,7 @@ function buildSecretRoom(){return {key:'0b',secret:true,end:690,
 let secretReturnX=1370;
 let snow=null;
 let interactionTarget=null;
- const DOOR_X=1400;
+ const DOOR_X=1382;
  function doorUnlocked(){return data.keys.includes('0-q4')}
  function doorRevealed(){return doorUnlocked()&&(data.secretDoors.includes('0-secret-door')||Math.abs(p.x+11-(DOOR_X+12))<100)}
 function enterSecretRoom(){
@@ -1044,12 +1044,12 @@ function update(dt){
   /* heart collected on contact below */}}
   if(L.secret&&p.x>555)showInteract='✦ 离开小屋';
   if(L.secret&&data.snowboard&&p.x>305&&p.x<355)showInteract='✦ 滑雪';
-  if(level===0&&!L.secret&&!L.under&&p.x>1374&&p.x<1425&&doorRevealed())showInteract='✦ 进入';
+  if(level===0&&!L.secret&&!L.under&&p.x>1356&&p.x<1407&&doorRevealed())showInteract='✦ 进入';
  const ib=$('#interact');
  if(showInteract){
   let worldX=p.x+11, worldY=p.y-20;
   if(L.secret){if(p.x>555){worldX=595;worldY=G-55;showInteract='✦ 离开'}else{worldX=330;worldY=G-48;showInteract='✦ 滑雪'}}
-  else if(level===0&&p.x>1374&&p.x<1425){worldX=DOOR_X+12;worldY=G-70;showInteract='✦ 进入'}
+  else if(level===0&&p.x>1356&&p.x<1407){worldX=DOOR_X+12;worldY=G-70;showInteract='✦ 进入'}
   const bounds=canvas.getBoundingClientRect();
   ib.style.left=(bounds.left+(worldX-cam)/W*bounds.width)+'px';
   ib.style.top=(bounds.top+Math.max(40,worldY)/H*bounds.height)+'px';
@@ -1393,7 +1393,7 @@ function firstLevelTownMidground(){
  // Two short foreground-yard fence sections flank the first pink cottage:
  // one between the left cherry tree and cottage, another between cottage and right tree.
  // All other fence placements and approved fence pixel art remain untouched.
- firstLevelFence(120,45,G-22);firstLevelFence(925,190,G-7);firstLevelFence(1515,225,G-22);firstLevelFence(1810,175,G-22);
+ firstLevelFence(120,45,G-22);firstLevelFence(860,190,G-2);firstLevelFence(1515,225,G-22);firstLevelFence(1810,175,G-22);
  // The raised-platform red cottage at x=1665 is intentionally removed.
  // The x=1115 blue cottage moves onto flat ground beside the bench (x=1210).
  // Final cottage x=1962 moves left to x=1865, off the x=2025 streetlamp.
@@ -1405,7 +1405,7 @@ function firstLevelTownMidground(){
 function firstLevelDecor(){
  firstLevelRabbitSign(88);firstLevelBench(555,G-27);firstLevelBench(1180,G-27);firstLevelLamp(340,G-126);firstLevelLamp(685,G-128);firstLevelLamp(1540,G-127);firstLevelLamp(2025,G-128);
  firstLevelVineArch(DOOR_X+12);
- const bushes=[[128,'flower'],[330,'hydrangea'],[470,'flower'],[845,'hydrangea'],[1380,'hydrangea'],[1515,'flower'],[1990,'flower']];for(const b of bushes)firstLevelBush(b[0],G-15,b[1]);
+ const bushes=[[128,'flower'],[330,'hydrangea'],[470,'flower'],[880,'hydrangea'],[1362,'hydrangea'],[1515,'flower'],[1990,'flower']];for(const b of bushes)firstLevelBush(b[0],G-15,b[1]);
  const flowerXs=[62,150,285,372,496,540,632,702,866,1532,1585,2040,2110];for(let i=0;i<flowerXs.length;i++)firstLevelFlower(flowerXs[i],G-18,['#ff9cc2','#fff1d2','#9fd9f2'][i%3]);
  // Hanging vines at the hidden-area cliff and final segment.
  for(const wx of [1390,1760]){const x=wx-cam;if(x>-20&&x<W+20){rect(x,G-76,3,58,'#4f8b54');for(let i=0;i<5;i++)circle(x+(i%2?4:-3),G-69+i*11,3,'#6ab363')}}
@@ -2074,7 +2074,7 @@ function loop(t){try{let dt=Math.min(40,t-last||16);last=t;
 function interact(){if(mode==='dive'){diveInteract();return}if(mode==='scene'&&scene&&scene.type==='plant')return;if(mode!=='play')return;
  if(L.secret){if(p.x>555){exitSecretRoom();return}if(data.snowboard&&p.x>305&&p.x<355){startSnow();return}return}
  if(L.under){if(p.x>1415)exitUnder();return}if(L.cabin){if(p.x<100){exitCabin();return}if(p.x>335&&p.x<475){enterUnder();return}return}
- if(level===0&&p.x>1374&&p.x<1425&&doorRevealed()){enterSecretRoom();return}
+ if(level===0&&p.x>1356&&p.x<1407&&doorRevealed()){enterSecretRoom();return}
  // Sitting is automatic only at the final beach; no early interaction.
 
  if(level===2&&!L.cabin&&Math.abs(p.x+11-980)<58){enterCabin();return}}
