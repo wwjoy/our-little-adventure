@@ -1588,11 +1588,90 @@ function v325DrawNaturalTerrain(a){
   ctx.restore();
 }
 
+// V3.2.5 / LEVEL 2-1 ONLY: decorative pixel art; no physics, map or collectible edits.
+function v325SeasideTerrain(a){
+ const x=Math.round(a.x-cam),y=a.y,w=a.w;
+ const top=a.kind==='block'?y:G;
+ rect(x,top,w,H-top,'#b88a94');
+ rect(x+3,top+12,w-6,H-top-12,'#c89a98');
+ // Golden sand cap with grass fringe, matching the approved concept palette.
+ rect(x,top,w,5,'#fff0a8');rect(x,top+5,w,5,'#8bbf76');
+ for(let i=0;i<w;i+=13){
+  const wx=a.x+i;
+  rect(x+i,top+7,8,3,(wx/13|0)%2?'#548f74':'#6ca66d');
+  if(i+9<w)rect(x+i+3,top+12+(wx%3)*4,6,3,'#e5b0a4');
+  for(let j=23;j<H-top;j+=21){
+   if((i/13+j/21)%3===0)rect(x+i+2,top+j,8,3,'#9e778e');
+   if((i/13+j/21)%4===1)rect(x+i+7,top+j+9,3,3,'#f3c7ac');
+  }
+ }
+ rect(x,top+10,w,2,'#e6c7a4');
+ if(a.kind==='block'){
+  for(let i=7;i<w-7;i+=31){rect(x+i,top+2,5,2,'#f9d3ad');}
+ }
+}
+function v325SeasideDecorBack(){
+ if(level!==1||L.under||L.secret)return;
+ const X=wx=>Math.round(wx-cam),visible=(wx,w=100)=>X(wx)<W+30&&X(wx)+w>-30;
+ // Faraway Ferris wheel, port tower and warm-lit coastal skyline.
+ ctx.save();ctx.globalAlpha=.62;
+ if(visible(45,650)){
+  for(let i=0;i<26;i++){
+   const wx=38+i*23,x=X(wx)*.34+cam*.0+30;
+   const h=8+(i*17)%28;rect(x,241-h,12+(i%3)*4,h,'#775b93');
+   if(i%2===0)rect(x+4,240-h+6,2,2,'#ffd9a0');
+  }
+  const fx=X(260)*.34+90,fy=219;
+  ctx.strokeStyle='#ffdbb0';ctx.lineWidth=2;ctx.beginPath();ctx.arc(fx,fy,22,0,Math.PI*2);ctx.stroke();
+  for(let k=0;k<8;k++){const t=k*Math.PI/4;ctx.beginPath();ctx.moveTo(fx,fy);ctx.lineTo(fx+22*Math.cos(t),fy+22*Math.sin(t));ctx.stroke();}
+  rect(fx-2,fy+20,4,15,'#c69ab5');
+ }
+ ctx.restore();
+ // Low shoreline foam follows the background; no collision surface is created.
+ for(let i=0;i<19;i++){
+  const wx=i*54+8;if(!visible(wx,44))continue;
+  rect(X(wx),267+(i%3)*2,26+(i%3)*7,2,i%2?'#ffe7d4':'#fff2e4');
+ }
+}
+function v325SeasideDecorFront(){
+ if(level!==1||L.under||L.secret)return;
+ const X=wx=>Math.round(wx-cam),visible=(wx,w=100)=>X(wx)<W+20&&X(wx)+w>-20;
+ const flower=(wx,wy,pink=true)=>{let x=X(wx),c=pink?'#ff9bca':'#c5a3f3';rect(x,wy+4,2,8,'#548f72');rect(x-4,wy+1,10,5,c);rect(x-2,wy-2,6,10,c);rect(x,wy+2,3,3,'#fff3ac')};
+ const lamp=(wx,wy)=>{let x=X(wx);rect(x-2,wy-63,5,63,'#684d68');rect(x-6,wy-66,13,4,'#8e6170');rect(x-6,wy-61,13,19,'#7c5369');rect(x-4,wy-59,9,15,'#ffe2a0');rect(x-2,wy-56,5,10,'#fff2b9');rect(x-8,wy-44,17,3,'#6b4a66');rect(x-6,wy-69,13,3,'#f4c98d');};
+ const fence=(wx,wy,w)=>{let x=X(wx);rect(x,wy-15,w,4,'#ad755f');rect(x,wy-4,w,4,'#c78a69');for(let j=0;j<=w;j+=20){rect(x+j,wy-20,5,24,'#94614f');rect(x+j-1,wy-22,7,4,'#efc58d')}};
+ // A seaside octopus snack stall, deliberately positioned away from jump blocks.
+ if(visible(22,158)){
+  let x=X(22),y=G;
+  rect(x+10,y-72,132,68,'#9d6476');rect(x+14,y-69,124,57,'#ffdbb4');
+  rect(x+18,y-47,116,34,'#855a75');rect(x+25,y-42,102,24,'#f5c28e');
+  for(let j=0;j<5;j++){rect(x+26+j*20,y-41,14,19,j%2?'#f9a0b1':'#fff1d3');}
+  rect(x+4,y-79,145,12,'#ba6c81');rect(x+11,y-84,131,7,'#f6b7a6');
+  for(let j=0;j<7;j++)rect(x+10+j*19,y-78,10,10,j%2?'#fce8c7':'#e8899c');
+  rect(x+29,y-10,96,9,'#b67d62');rect(x+35,y-18,84,8,'#f8d5a0');
+  // Octopus sign silhouette: purely decorative and not an enemy.
+  rect(x+63,y-104,25,15,'#f28f89');rect(x+58,y-98,36,10,'#f28f89');
+  rect(x+60,y-90,6,7,'#e87d81');rect(x+70,y-89,6,7,'#e87d81');rect(x+84,y-90,6,7,'#e87d81');
+  rect(x+68,y-99,3,3,'#5d4564');rect(x+80,y-99,3,3,'#5d4564');
+  rect(x+19,y-52,12,10,'#ffe6a4');rect(x+119,y-52,12,10,'#ffe6a4');
+ }
+ if(visible(170,28))lamp(183,G);
+ if(visible(310,100))fence(316,G,96);
+ if(visible(702,110))fence(707,G,85);
+ if(visible(748,24))lamp(759,G);
+ for(const wx of [16,194,209,308,325,337,407,513,528,675,692,790,811,875]){
+  if(!visible(wx,12))continue;flower(wx,G-12-(wx%3)*2,wx%2===0);
+ }
+ // Tiny seashells and starfish sit below the walkable ground surface.
+ for(const wx of [281,548,685,880]){
+  if(!visible(wx,16))continue;let x=X(wx);rect(x,G+7,10,3,'#f9d2a6');rect(x+2,G+4,6,4,'#e9a5ac');rect(x+4,G+3,2,2,'#fff0d6');
+ }
+}
 function terrain(a){let x=a.x-cam;if(x>W||x+a.w<0)return;
  if(level===0&&!L.secret&&!L.under&&!L.cabin){
   v325DrawNaturalTerrain(a);
   return;
  }
+ if(level===1&&!L.under&&!L.secret&&a.x<900){v325SeasideTerrain(a);return;}
  if(level===1&&!L.under&&!L.secret&&a.kind==='block'){
   if(true){
    // Low, climbable rock steps: collision stays solid, art follows the same geometry.
@@ -1979,7 +2058,7 @@ function draw(){
   return;
  }
  if(!L){ctx.fillStyle='#2a203f';ctx.fillRect(0,0,W,H);return}
- bg();if(level===0&&!L.under&&!L.secret&&!L.cabin)firstLevelTownMidground();if(level===2&&!L.under&&!L.secret&&!L.cabin)drawFourSeasons();L.trees.forEach(tree);
+ bg();v325SeasideDecorBack();if(level===0&&!L.under&&!L.secret&&!L.cabin)firstLevelTownMidground();if(level===2&&!L.under&&!L.secret&&!L.cabin)drawFourSeasons();L.trees.forEach(tree);
  // House 753 retains its approved foreground ordering. The terminal
  // cottage is repositioned left on normal ground, leaving the final lamp clear.
  if(level===0&&!L.secret&&!L.under&&!L.cabin){
@@ -2023,7 +2102,7 @@ function draw(){
   let glow=ctx.createRadialGradient(lx,ly,2,lx+facing*55,ly-5,145);glow.addColorStop(0,'#ffe9ad88');glow.addColorStop(1,'#ffe6a300');ctx.fillStyle=glow;ctx.fillRect(0,0,W,G);
   // Keep the existing cave light gradient; remove only the floating extra torch.
   for(let i=0;i<9;i++){const xx=i*106+25-cam*.12;ctx.fillStyle=i%2?'#7de1f0':'#a9efff';ctx.globalAlpha=.42;ctx.beginPath();ctx.moveTo(xx,15);ctx.lineTo(xx+18,15);ctx.lineTo(xx+8,65+(i%3)*18);ctx.fill();ctx.globalAlpha=1;}text('蓝冰洞',W/2,52,'#d8f7ff',16,'center');text('出口 →',1460-cam,G-53,'#fff3cf',13,'center');}
- L.map.forEach(terrain);if(level===0&&!L.under&&!L.secret&&!L.cabin)firstLevelDecor();drawShallowCove();drawFinalBeach();clouds.forEach(cloudDraw);
+ L.map.forEach(terrain);v325SeasideDecorFront();if(level===0&&!L.under&&!L.secret&&!L.cabin)firstLevelDecor();drawShallowCove();drawFinalBeach();clouds.forEach(cloudDraw);
  if(L.under){
   const c=icePuzzle;
   // Ice cube and pressure plate, both in world coordinates.
