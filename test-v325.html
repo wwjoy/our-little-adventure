@@ -235,12 +235,13 @@ const arc=(x,y,n,dx=18,h=18)=>Array.from({length:n},(_,i)=>[x+i*dx,y-Math.round(
 function buildLevel(n){
  if(n===0) return {end:2140,
   // Low grass stays continuous under the first pink house; nearby blue house is removed.
-  // FIRST raised block remains removed. The first waterfall gap is 52px
-  // (previously 40px); later waterfall gaps remain 38px and 48px.
-  map:[gr(0,438),gr(490,493),gr(1021,428),gr(1497,670),bl(887,72,241),bl(1110,105,238),bl(1690,100,235)],
-  boxes:[qb(0,150,190,'coin'),qb(1,520,190,'bag'),qb(2,770,190,'keepsake'),qb(3,792,190,'coin'),qb(4,1320,190,'key'),qb(5,615,157,'coin'),qb(6,1138,164,'bag')],
+  // Retain the x=438 waterfall (52px). The screenshot's first raised platform
+  // at x=887 and adjacent waterfall at x=983 are removed; fill their ground area.
+  // The next raised platform shifts 35px left; the waterfall at x=1449 remains.
+  map:[gr(0,438),gr(490,959),gr(1497,670),bl(1030,105,238),bl(1690,100,235)],
+  boxes:[qb(0,150,190,'coin'),qb(1,520,190,'bag'),qb(2,901,190,'keepsake'),qb(3,923,190,'coin'),qb(4,1343,190,'key'),qb(5,615,157,'coin'),qb(6,1138,164,'bag')],
   plats:[spring(1860)],
-  cps:[45,360,1000,1515], trees:[105,390,730,1040,1450,1610,2040],
+  cps:[45,360,1000,1515], trees:[105,390,730,995,1420,1610,2040],
   enemies:[{type:'walker',x:1620,start:1580,end:1670,v:.35}],
   objects:[{type:'heart',x:1995,y:264},{type:'sign',x:118,text:'从下面顶一下 ？ 砖块'},{type:'sign',x:1810,text:'踩蘑菇弹簧跳得更高'},
    ...coins(0,[...arc(440,250,3,18,12),...row(612,214,4,20),...arc(983,245,3,20,14),...row(1130,212,3,24),...row(1855,120,3,22),...row(1925,150,2,22)])]};
@@ -1168,7 +1169,7 @@ function firstLevelHouse(wx,w,h,body,roof,awning){
  const x=Math.round(wx-cam),base=G+1-visualLift;
  const drawW=w+20,drawH=h+30,drawX=x-10,drawY=base-drawH;
  if(drawX>W+25||drawX+drawW<-25)return;
- const choice=wx===185?0:wx===525||wx===1265?1:2;
+ const choice=wx===185?0:wx===525||wx===1235?1:2;
  const house=v325TownHouseArt[choice];
  if(house.complete&&house.naturalWidth===136){
   ctx.save();ctx.imageSmoothingEnabled=false;
@@ -1364,21 +1365,21 @@ function firstLevelStringLights(wx){
 }
 
 function firstLevelTownMidground(){
- firstLevelWaterfall(438,52);firstLevelWaterfall(983,38);firstLevelWaterfall(1449,48);
+ firstLevelWaterfall(438,52);firstLevelWaterfall(1449,48);
  // Two short foreground-yard fence sections flank the first pink cottage:
  // one between the left cherry tree and cottage, another between cottage and right tree.
  // All other fence placements and approved fence pixel art remain untouched.
- firstLevelFence(120,45,G-22);firstLevelFence(310,60,G-22);firstLevelFence(990,190,G-22);firstLevelFence(1515,225,G-22);firstLevelFence(1810,175,G-22);
+ firstLevelFence(120,45,G-22);firstLevelFence(310,60,G-22);firstLevelFence(945,190,G-22);firstLevelFence(1515,225,G-22);firstLevelFence(1810,175,G-22);
  // The raised-platform red cottage at x=1665 is intentionally removed.
  // The x=1115 blue cottage moves onto flat ground beside the bench (x=1210).
  // Final cottage x=1962 moves left to x=1865, off the x=2025 streetlamp.
- for(const item of [[185,108,88,'#f8d8c8','#db7ba6','#eb89af'],[753,106,92,'#f9d6c7','#d884ad','#ef8eaf'],[1265,105,83,'#f7d4c4','#9889c4','#e4a5ca'],[1865,111,87,'#f4d4cb','#9b89be','#a2c5e8']])if(item[0]!==753&&item[0]!==1865)firstLevelHouse(...item);
+ for(const item of [[185,108,88,'#f8d8c8','#db7ba6','#eb89af'],[753,106,92,'#f9d6c7','#d884ad','#ef8eaf'],[1235,105,83,'#f7d4c4','#9889c4','#e4a5ca'],[1865,111,87,'#f4d4cb','#9b89be','#a2c5e8']])if(item[0]!==753&&item[0]!==1865)firstLevelHouse(...item);
  // Historical anchors preserved for traceability; only supported span renders.
  // The removed blue cottage was an endpoint of the x598 string lights.
  // Keep the approved art frames, but draw no unsupported floating bulbs.
 }
 function firstLevelDecor(){
- firstLevelRabbitSign(88);firstLevelBench(555,G-27);firstLevelBench(1210,G-27);firstLevelLamp(340,G-126);firstLevelLamp(685,G-128);firstLevelLamp(1540,G-127);firstLevelLamp(2025,G-128);
+ firstLevelRabbitSign(88);firstLevelBench(555,G-27);firstLevelBench(1180,G-27);firstLevelLamp(340,G-126);firstLevelLamp(685,G-128);firstLevelLamp(1540,G-127);firstLevelLamp(2025,G-128);
  firstLevelVineArch(DOOR_X+12);
  const bushes=[[128,'flower'],[330,'hydrangea'],[470,'flower'],[845,'hydrangea'],[1015,'flower'],[1380,'hydrangea'],[1515,'flower'],[1755,'hydrangea'],[1990,'flower']];for(const b of bushes)firstLevelBush(b[0],G-15,b[1]);
  const flowerXs=[62,150,285,372,476,540,632,702,812,910,1010,1090,1200,1295,1370,1518,1585,1715,1840,1930,2040,2110];for(let i=0;i<flowerXs.length;i++)firstLevelFlower(flowerXs[i],G-18,['#ff9cc2','#fff1d2','#9fd9f2'][i%3]);
