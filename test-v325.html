@@ -765,9 +765,9 @@ function updateScene(dt){const s=scene,k=Math.min(2,dt/16.667);s.t+=dt;timer+=dt
   if(s.t>5000){data.story.sunset=true;save();startScene('fireworks');return}}
  if(s.type==='plant'){s.t=Math.max(s.t,performance.now()-s.startedAt);if(s.t>=23200&&s.visibleFrames>=8){s.readyToFinish=true;completeFinalPlanting()}return}
  if(s.type==='fireworks'){p.x=3250;p.y=G-p.h;p.sit=true;lion.x=3223;lion.y=G-27;lion.sit=true;lion.face=1;camTo(p.x-W*.45,k);
-  if(s.t<8600&&(s.next||0)<s.t){s.next=s.t+260+Math.random()*300;if(Math.random()<.35)rockets.push({x:W*(.15+Math.random()*.75),y:H-110,vy:-4.8-Math.random()*1.4,c:'#ffd6f0',parts:null});rockets.push({x:W*(.15+Math.random()*.75),y:H-110,vy:-4.6-Math.random()*1.6,c:['#ffcb8e','#ff91c1','#9ad7ff','#c8f7a6','#fff1a8'][Math.floor(Math.random()*5)],parts:null})}
-  for(const r of rockets){if(!r.parts){r.y+=r.vy*k;r.vy+=.07*k;if(r.vy>-.6){r.parts=[];const n=34;for(let i=0;i<n;i++){const a=i/n*Math.PI*2,sp=1.8+Math.random()*1.6;r.parts.push({x:r.x,y:r.y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:1})}}}
-   else for(const q of r.parts){q.x+=q.vx*k;q.y+=q.vy*k;q.vy+=.035*k;q.vx*=.985;q.life-=dt/1300}}
+  if(s.t<8600&&(s.next||0)<s.t){const finale=s.t>6500;s.next=s.t+(finale?350:620)+Math.random()*(finale?200:280);const palette=['#ffd69b','#ff9ecb','#c9a9f4','#9acded','#fff0bd'];const idx=Math.floor(Math.random()*palette.length);rockets.push({x:W*(.18+Math.random()*.65),y:H-110,vy:-4.6-Math.random()*1.5,c:palette[idx],parts:null,heart:finale&&!s.heartShown});if(finale&&!s.heartShown)s.heartShown=true}
+  for(const r of rockets){if(!r.parts){r.y+=r.vy*k;r.vy+=.07*k;if(r.vy>-.6){r.parts=[];const n=r.heart?40:30;for(let i=0;i<n;i++){const a=i/n*Math.PI*2,sp=1.9+Math.random()*.9;let vx=Math.cos(a)*sp,vy=Math.sin(a)*sp;if(r.heart){const hx=16*Math.pow(Math.sin(a),3)/17,hy=-(13*Math.cos(a)-5*Math.cos(2*a)-2*Math.cos(3*a)-Math.cos(4*a))/17;vx=hx*2.4;vy=hy*2.4}r.parts.push({x:r.x,y:r.y,vx,vy,life:1})}}}
+   else for(const q of r.parts){q.x+=q.vx*k;q.y+=q.vy*k;q.vy+=.035*k;q.vx*=.985;q.life-=dt/1050}}
   rockets=rockets.filter(r=>!r.parts||r.parts.some(q=>q.life>0));
   if(s.t>10000){data.story.fireworks=true;data.story.sunset=true;save();rockets=[];scene=null;p.sit=lion.sit=false;collectHeart(1);p.x=3250;p.y=G-p.h;lion.x=3223;lion.y=G-27;cut('🎆 夕阳花火','那天的夕阳和烟花，我都想一直记得。<br>❤️ 这一刻的特别爱心已经收藏。',()=>{play();finishLevel()})}}
  if(s.type==='switch'){
@@ -2311,7 +2311,7 @@ function draw(){
    }
   }
  if(!L.under&&!L.secret&&!L.cabin&&level===0){const flag=firstLevelFinishFlagArt;if(flag.complete&&flag.naturalWidth){ctx.drawImage(flag,Math.round(L.end-78-cam),G-94,52,94)}else{rect(L.end-70-cam,G-90,5,90,'#fff4e4');rect(L.end-65-cam,G-90,48,24,'#f18eb2');text('终点',L.end-59-cam,G-73,'#fff',13)}}
- if(level===1&&scene&&scene.type==='fireworks')for(const r of rockets){if(!r.parts){rect(r.x-1,r.y,2,7,r.c);ctx.globalAlpha=.4;rect(r.x-1,r.y+7,2,10,r.c);ctx.globalAlpha=1}else for(const q of r.parts)if(q.life>0){ctx.globalAlpha=Math.max(0,q.life);circle(q.x,q.y,2.4,r.c);ctx.globalAlpha=Math.max(0,q.life*.4);circle(q.x-q.vx*2,q.y-q.vy*2,1.6,r.c);ctx.globalAlpha=1}}
+ if(level===1&&scene&&scene.type==='fireworks')for(const r of rockets){if(!r.parts){rect(r.x-1,r.y,2,7,r.c);ctx.globalAlpha=.4;rect(r.x-1,r.y+7,2,10,r.c);ctx.globalAlpha=1}else for(const q of r.parts)if(q.life>0){ctx.globalAlpha=Math.max(0,q.life);rect(q.x-1.5,q.y-1.5,3,3,r.c);ctx.globalAlpha=Math.max(0,q.life*.3);rect(q.x-q.vx*2-1,q.y-q.vy*2-1,2,2,r.c);ctx.globalAlpha=1}}
  if(scene&&scene.type==='sunsetPhoto')drawSunsetPhoto();
  if(scene&&scene.type==='beachArrival'){text('🦁 我们就在这里等烟花吧。',W/2,64,'#fff5e8',17,'center')}
  if(scene&&scene.type==='sunset'&&scene.t>1500&&scene.t<6000){ctx.globalAlpha=Math.min(1,(scene.t-1500)/600,(6000-scene.t)/600);text('太阳慢慢落进海里……',W/2,58,'#fff',15,'center');ctx.globalAlpha=1}
