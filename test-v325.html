@@ -1612,9 +1612,12 @@ function drawShallowCove(){
  ctx.restore();
 }
 function bridge(a,c1,c2){let x=a.x-cam;rect(x,a.y,a.w,8,c1);rect(x,a.y+8,a.w,3,c2);for(let i=4;i<a.w;i+=12)rect(x+i,a.y+2,2,4,c2)}
+const qbrickArt={};for(const [key,url] of Object.entries({fresh:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAABTUlEQVR4nLWVPUvDUBSGn6sRBAcHEVyE6lDsL1BxSib7B6w6uQoZi+AkToJ2FMTNxU90dmtACNqhq5VCacHZr02HWofkNo35Tug7nZxz7pPDm8ONYEC9r7MeGSQmt4SMFYCrzalMQCnJWb94E4pMlsp5aJ1mApfKea4rTQCUz/NZZ9p8GUw9HXXlGJoVXt/HOFqd6SmuoqnD8n46sKnDdK7/qAR32hpf8+a+byKPecGPe06sNgCo7iz0U9rhi/UyoxAKHgms/INqRYFWFA7QricHGwUX1E/V++AtDfXYF+hjj5+CJ/aTjz3ZwQmgycADioJCnD2WMgqhHys9WG2gqUTur1RiK+JOPXwrOnctcrsndA62A5vnJ+zeB2/NOWuZIOS1+fH8E3uaMN3WbTBYN//i3CgAl0+pNhCAjaVfau2u+w9Sa3ftKD3YYQxRf2cqZp2bV9cvAAAAAElFTkSuQmCC',used:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAj0lEQVR4nGNgoBFgZGBgYKgtyP5PTUObJ0xlZIFx3FxtqGLort1HGBgYGBhYkAUVFOQpMvTBg4dwNhNFJuEBKC6+dPkqg66OLsPlK5fJMoyPlwfOxnAxuYaiA5oFxdAzmAWf5IFDJwka4GBnjlV8mAUFLm8SA4ZeUNAnjJHzOtUMPnn4GNUMZWAYimFMMwAAnAkYf2m8fNQAAAAASUVORK5CYII='})){const im=new Image();im.src=url;qbrickArt[key]=im;}
 function qbrick(b){const used=data.qb.includes(qKey(b));const x=b.x-cam,y=b.y-(b.bump?Math.sin(b.bump/150*Math.PI)*5:0);if(x<-30||x>W+30)return;
- rect(x,y,b.w,b.h,used?'#b9a294':'#f6b64a');rect(x,y,b.w,2,used?'#d2c0b4':'#ffd98a');rect(x,y+b.h-3,b.w,3,used?'#8b7568':'#c97f22');
- if(!used){if(b.reward==='snowboard'){rect(x,y,b.w,b.h,'#9fdcf2');text('❄',x+b.w/2,y+16,'#fff',15,'center')}else text('?',x+b.w/2,y+16,'#fff',15,'center');if(b.reward==='gift')rect(x+b.w-5,y+3,3,3,'#e879ac');if(b.reward==='keepsake')rect(x+3,y+3,3,3,'#ff8caa')}else{rect(x+5,y+9,12,3,'#8b7568')}}
+ const sprite=qbrickArt[used?'used':'fresh'];if(sprite&&sprite.complete&&sprite.naturalWidth)ctx.drawImage(sprite,Math.round(x),Math.round(y),b.w,b.h);
+ else{rect(x,y,b.w,b.h,used?'#b9a294':'#f6b64a');if(!used)text('?',x+b.w/2,y+16,'#fff',15,'center');else rect(x+5,y+9,12,3,'#8b7568')}
+ if(!used&&b.reward==='snowboard')text('❄',x+b.w/2,y+16,'#fff',15,'center');
+ if(!used&&b.reward==='gift')rect(x+b.w-5,y+3,3,3,'#e879ac');if(!used&&b.reward==='keepsake')rect(x+3,y+3,3,3,'#ff8caa');}
 function coinDraw(x,y){const s=Math.abs(Math.sin(timer/220+x*.05));circle(x,y,7,'#b97826');circle(x,y,6,'#ffd25c');circle(x-1.5,y-2,2,'#fff2ac');ctx.fillStyle='#e65c86';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText('♥',x,y+3);ctx.textAlign='left'}
 function pickupDraw(a){const x=a.x-cam,y=a.y;if(x<-25||x>W+25)return;
  if(a.kind==='snowboard'){rect(x-15,y-3,30,6,'#f8c5dd');rect(x-12,y-5,24,2,'#fff');rect(x-8,y-7,5,3,'#7baed5');rect(x+4,y-7,5,3,'#7baed5')}
