@@ -1723,31 +1723,22 @@ function drawStarBridge(){
 // The world-space collision map, checkpoint and sunset story remain untouched.
 function v325BeachLeftTransition(){
  if(level!==1||L.under||L.secret)return;
- const begin=2962,end=3030;
- if(end-cam<0||begin-cam>W)return;
+ // Visual-only sandy bank, with a soft stepped edge. Do not change physics.
+ const begin=2960,end=3010;
+ if(end<cam||begin>cam+W)return;
  ctx.save();
- // Warm sand gradually overlays the old stone wall, with an irregular pixel edge.
- for(let wx=begin;wx<end;wx+=4){
-  const t=(wx-begin)/(end-begin);
-  const top=G+Math.round(10-15*t+2*Math.sin(wx*.19));
-  const coverage=Math.max(0,Math.min(1,(t-.04)/.83));
-  const x=wx-cam;
-  if(coverage<=0)continue;
-  ctx.globalAlpha=.18+.82*coverage;
-  rect(x,top,4,H-top,'#f5dbb7');
-  if(wx%12<4){rect(x,top+7,4,3,'#f9e8c9');rect(x,top+23,3,2,'#e9c39f');}
+ for(let wx=begin;wx<end;wx+=3){
+  const t=(wx-begin)/(end-begin),x=wx-cam;
+  const top=G+Math.round(10-16*t+2*Math.sin(wx*.17));
+  const alpha=Math.min(1,Math.max(0,(t+.12)*1.35));
+  ctx.globalAlpha=alpha;
+  rect(x,top,3,H-top,'#f5dbb7');
+  if(wx%9<3)rect(x,top+9,2,2,'#fce8c9');
  }
  ctx.globalAlpha=1;
- // Tiny sand grains and a few low coastal plants soften the remaining seam.
- for(let i=0;i<21;i++){
-  const wx=2965+i*3,x=wx-cam,y=G+4+(i*11)%24;
-  if(x<-5||x>W+5)continue;
-  rect(x,y,2+(i%2),1,i%3===0?'#fff0d7':'#eac3a4');
- }
- for(const wx of [2972,2988,3003]){
-  const x=wx-cam;if(x<-8||x>W+8)continue;
-  rect(x,G-3,2,5,'#8ea980');rect(x-3,G-4,3,2,'#a9be86');
-  rect(x+2,G-5,3,2,'#b6c78f');
+ for(let i=0;i<22;i++){
+  const wx=2963+i*3,x=wx-cam,y=G+7+(i*13)%34;
+  rect(x,y,2,1,i%3?'#eac6a5':'#fff0d8');
  }
  ctx.restore();
 }
@@ -1765,12 +1756,7 @@ function drawFinalBeach(){
   ctx.lineTo(x,G+dune)}
  ctx.lineTo(right,H+12);ctx.lineTo(left,H+12);ctx.closePath();ctx.fill();
  rect(left,G+17,w,H-G-17,'#f5dbb7');
- // Foreground ripples are soft, curved; no horizontal turf edge remains.
- ctx.fillStyle='#c9e5e3';ctx.globalAlpha=.72;ctx.beginPath();ctx.moveTo(left,G+48);
- for(let x=left;x<=right;x+=5){ctx.lineTo(x,G+44+3*Math.sin((x+cam)/31+timer/510))}
- ctx.lineTo(right,H+2);ctx.lineTo(left,H+2);ctx.closePath();ctx.fill();
- ctx.globalAlpha=.9;ctx.strokeStyle='#fff7e6';ctx.lineWidth=2;ctx.beginPath();
- for(let x=left;x<=right;x+=5){const y=G+43+3*Math.sin((x+cam)/31+timer/510);if(x===left)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+ // Dry continuous beach foreground; no near-shore water overlay or foam line.
  ctx.globalAlpha=.9;
  for(let i=0;i<48;i++){const wx=start+13+i*8,x=wx-cam;
   if(x<left||x>right)continue;
@@ -1788,13 +1774,8 @@ function drawFinalBeach(){
  ctx.restore();
 }
 function drawShallowCove(){
- if(level!==1||L.under||L.secret)return;
- const left=Math.max(0,2710-cam),right=Math.min(W,3010-cam);
- if(right<=left)return;
- ctx.save();ctx.globalAlpha=.62;rect(left,G-5,right-left,16,'#a7d9db');
- for(let i=0;i<12;i++){const x=2720+i*25-cam;if(x<left||x>right)continue;
-  rect(x,G+2+Math.sin(timer/360+i)*2,14,2,'#fff4d7')}
- ctx.restore();
+ // Intentionally empty: the former pale-blue strip looked like a water trench.
+ // The distant ocean remains rendered by the background layer.
 }
 function bridge(a,c1,c2){let x=a.x-cam;rect(x,a.y,a.w,8,c1);rect(x,a.y+8,a.w,3,c2);for(let i=4;i<a.w;i+=12)rect(x+i,a.y+2,2,4,c2)}
 const qbrickArt={};for(const [key,url] of Object.entries({fresh:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAABTUlEQVR4nLWVPUvDUBSGn6sRBAcHEVyE6lDsL1BxSib7B6w6uQoZi+AkToJ2FMTNxU90dmtACNqhq5VCacHZr02HWofkNo35Tug7nZxz7pPDm8ONYEC9r7MeGSQmt4SMFYCrzalMQCnJWb94E4pMlsp5aJ1mApfKea4rTQCUz/NZZ9p8GUw9HXXlGJoVXt/HOFqd6SmuoqnD8n46sKnDdK7/qAR32hpf8+a+byKPecGPe06sNgCo7iz0U9rhi/UyoxAKHgms/INqRYFWFA7QricHGwUX1E/V++AtDfXYF+hjj5+CJ/aTjz3ZwQmgycADioJCnD2WMgqhHys9WG2gqUTur1RiK+JOPXwrOnctcrsndA62A5vnJ+zeB2/NOWuZIOS1+fH8E3uaMN3WbTBYN//i3CgAl0+pNhCAjaVfau2u+w9Sa3ftKD3YYQxRf2cqZp2bV9cvAAAAAElFTkSuQmCC',used:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAj0lEQVR4nGNgoBFgZGBgYKgtyP5PTUObJ0xlZIFx3FxtqGLort1HGBgYGBhYkAUVFOQpMvTBg4dwNhNFJuEBKC6+dPkqg66OLsPlK5fJMoyPlwfOxnAxuYaiA5oFxdAzmAWf5IFDJwka4GBnjlV8mAUFLm8SA4ZeUNAnjJHzOtUMPnn4GNUMZWAYimFMMwAAnAkYf2m8fNQAAAAASUVORK5CYII='})){const im=new Image();im.src=url;qbrickArt[key]=im;}
