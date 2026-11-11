@@ -295,7 +295,7 @@ function buildSecretRoom(){return {key:'0b',secret:true,end:690,
 let secretReturnX=1370;
 let snow=null;
 let interactionTarget=null;
- const DOOR_X=1382;
+ const DOOR_X=1372;
  function doorUnlocked(){return data.keys.includes('0-q4')}
  function doorRevealed(){return doorUnlocked()&&(data.secretDoors.includes('0-secret-door')||Math.abs(p.x+11-(DOOR_X+12))<100)}
 function enterSecretRoom(){
@@ -1044,12 +1044,12 @@ function update(dt){
   /* heart collected on contact below */}}
   if(L.secret&&p.x>555)showInteract='✦ 离开小屋';
   if(L.secret&&data.snowboard&&p.x>305&&p.x<355)showInteract='✦ 滑雪';
-  if(level===0&&!L.secret&&!L.under&&p.x>1356&&p.x<1407&&doorRevealed())showInteract='✦ 进入';
+  if(level===0&&!L.secret&&!L.under&&p.x>1346&&p.x<1397&&doorRevealed())showInteract='✦ 进入';
  const ib=$('#interact');
  if(showInteract){
   let worldX=p.x+11, worldY=p.y-20;
   if(L.secret){if(p.x>555){worldX=595;worldY=G-55;showInteract='✦ 离开'}else{worldX=330;worldY=G-48;showInteract='✦ 滑雪'}}
-  else if(level===0&&p.x>1356&&p.x<1407){worldX=DOOR_X+12;worldY=G-70;showInteract='✦ 进入'}
+  else if(level===0&&p.x>1346&&p.x<1397){worldX=DOOR_X+12;worldY=G-70;showInteract='✦ 进入'}
   const bounds=canvas.getBoundingClientRect();
   ib.style.left=(bounds.left+(worldX-cam)/W*bounds.width)+'px';
   ib.style.top=(bounds.top+Math.max(40,worldY)/H*bounds.height)+'px';
@@ -1393,7 +1393,7 @@ function firstLevelTownMidground(){
  // Two short foreground-yard fence sections flank the first pink cottage:
  // one between the left cherry tree and cottage, another between cottage and right tree.
  // All other fence placements and approved fence pixel art remain untouched.
- firstLevelFence(120,45,G-22);firstLevelFence(860,190,G-2);firstLevelFence(1515,225,G-22);firstLevelFence(1810,175,G-22);
+ firstLevelFence(120,45,G-22);firstLevelFence(925,190,G-7);firstLevelFence(1515,225,G-7);firstLevelFence(1810,175,G-7);
  // The raised-platform red cottage at x=1665 is intentionally removed.
  // The x=1115 blue cottage moves onto flat ground beside the bench (x=1210).
  // Final cottage x=1962 moves left to x=1865, off the x=2025 streetlamp.
@@ -2074,7 +2074,7 @@ function loop(t){try{let dt=Math.min(40,t-last||16);last=t;
 function interact(){if(mode==='dive'){diveInteract();return}if(mode==='scene'&&scene&&scene.type==='plant')return;if(mode!=='play')return;
  if(L.secret){if(p.x>555){exitSecretRoom();return}if(data.snowboard&&p.x>305&&p.x<355){startSnow();return}return}
  if(L.under){if(p.x>1415)exitUnder();return}if(L.cabin){if(p.x<100){exitCabin();return}if(p.x>335&&p.x<475){enterUnder();return}return}
- if(level===0&&p.x>1356&&p.x<1407&&doorRevealed()){enterSecretRoom();return}
+ if(level===0&&p.x>1346&&p.x<1397&&doorRevealed()){enterSecretRoom();return}
  // Sitting is automatic only at the final beach; no early interaction.
 
  if(level===2&&!L.cabin&&Math.abs(p.x+11-980)<58){enterCabin();return}}
