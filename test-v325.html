@@ -39,6 +39,8 @@ window.__V325_SCENE_BUILD__='V3.2.5-first-level-house-fence-platform-local-edit-
 (function(){'use strict';
 const $=q=>document.querySelector(q), canvas=$('#game'), ctx=canvas.getContext('2d');
 if(!ctx){$('#error').style.display='block';$('#error').textContent='Canvas 无法启动，请使用 Safari 打开链接';return}
+// V3.2.5: first-level finish flag visual-only candidate; gameplay unchanged.
+const firstLevelFinishFlagArt=new Image();firstLevelFinishFlagArt.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADQAAABeCAYAAABsFzfXAAADeklEQVR4nO2bT0gUURzHv0VLgiCJsCCsEHjqIkEQCXZxYaFuCQrLZgQWRZciwZse3FNiQghRt6JkYAvzLKmkgl2E6NJpiVBYGIhC0Iw9TIfprW9m5828nXmz+3N8HxjcmXmz+/vM7/f+zMoCCeOUTCPr91vLcdG5m1LXtYLTQQ0OVu7aMm1X7I0/RpBAoePGyRJ6Mlo4Kq3Dz/bmdY4QZ2Qa/dn+FHccyjhZJXccSZxQYB+af3XQjDiUkbgMBTJ2/bZlVdYsq7Jmbc5NWZtzUySHa0biMqSFPix+iyMOZUitFNyMDwwr60dPN98pfRQJJQQAE5luzOxWIgfA3xwVcqGFAGD21mWYqzuRAuBvCpOLIhZJCADSgz2hrzVXdzCR6a7tM7koWYskZK7uNCxkbJSQvzoCwHkzeDmvrPH4SUbOkCqYnChrPH6STZ2HjI0S8pO9MDZKwjbpwZ7aBtiDD9tE8BmLnKEwZSeL+31n0eMYhGZ2K3Xl17QMsewgUwjMkgi3jBdK+pDU0J0CkCko+Qwm4zU4KB0UVlJbwnP5yV5gd8HeyRSQn1yAURRnKVvtB2CXnawMoFgoW+3HSmrLDl4Cr3ZGsVyTAeQzw1Deh7LVfhjFsn8jlikXbhke2WVWLPOQLWWXn0y22A2QkQlaOcQ2yrHggrIVJAPAMQcFrfSPzQOe38TK03ShwP7lA5Pyy1LsQqwPGcVyTYZ/LTsiuhFJRRL68mtfeI6fk/h+wjb+uLu9H0GlF3mUE0ql7T9GsYwus89ui6O22U4mJSfCw56WxweGLfeoF1ooaF64BGD7+/n/e3uOc7n2jtqN6IIt+zP9taHPF0nF9jx0JFPP8v5e3bGc2efIIABc7Gx37MtMrg0L3Ri6gIHH00q+qeE7tlsy194hvTrgs9TSJ1Z3/fsJiq5xQ+YRHHAG69XhZSC7Ugj7VRZZobBoIepoIepoIepoIepoIepoIepoIepoIepoIepoIepoIepoIepoIepoIepoIepoIepoIeokTkj4X/D7Q/csAKge/hWeY7xYfEnmx+4nJ0M8d8ZeO/ZTbWdjCUYFgUKUg/eiruTM9SXLXF9q6BdcYa6JC2GGph9da2YcykjmoPB86pmScuHf58H0w5YM5XUl9/7jj1bEoYzElVzihBx1PpIbjdyXSstvWroMSlyGEiekoc4/v+9fMfVFi+oAAAAASUVORK5CYII=';
 const H=360, G=284, SAVE='our_adventure_side_review_v324', GATE='our_adventure_gate_side_review_v324';
 // V3.2.5: jump candidate (four frames, first-level review); running seam fix and lion motion detection review; four-frame running legs and three-frame idle; no approved faces repainted. No turn/run/sit assets are claimed.
 // V3.2.4: approved front sprites are byte-for-byte identical to V3.2.4.
@@ -2056,7 +2058,7 @@ function draw(){
      ctx.globalAlpha=.40;circle(dx+12,G-45,3,'#eaf9ff');circle(dx+17,G-41,2,'#f7ffff');ctx.globalAlpha=1;
    }
   }
- if(!L.under&&!L.secret&&!L.cabin&&level===0){rect(L.end-70-cam,G-90,5,90,'#fff4e4');rect(L.end-65-cam,G-90,48,24,'#f18eb2');text('终点',L.end-59-cam,G-73,'#fff',13)}
+ if(!L.under&&!L.secret&&!L.cabin&&level===0){const flag=firstLevelFinishFlagArt;if(flag.complete&&flag.naturalWidth){ctx.drawImage(flag,Math.round(L.end-78-cam),G-94,52,94)}else{rect(L.end-70-cam,G-90,5,90,'#fff4e4');rect(L.end-65-cam,G-90,48,24,'#f18eb2');text('终点',L.end-59-cam,G-73,'#fff',13)}}
  for(const r of rockets){if(!r.parts){rect(r.x-1,r.y,2,7,r.c);ctx.globalAlpha=.4;rect(r.x-1,r.y+7,2,10,r.c);ctx.globalAlpha=1}else for(const q of r.parts)if(q.life>0){ctx.globalAlpha=Math.max(0,q.life);circle(q.x,q.y,2.4,r.c);ctx.globalAlpha=Math.max(0,q.life*.4);circle(q.x-q.vx*2,q.y-q.vy*2,1.6,r.c);ctx.globalAlpha=1}}
  if(scene&&scene.type==='sunsetPhoto')drawSunsetPhoto();
  if(scene&&scene.type==='beachArrival'){text('🦁 我们就在这里等烟花吧。',W/2,64,'#fff5e8',17,'center')}
