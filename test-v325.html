@@ -1510,7 +1510,7 @@ function bg(){
   // The original sunset-to-fireworks timing and sun descent are unchanged.
   const sunX=W*.62,sunY=80+d*190;
   ctx.globalAlpha=Math.max(0,1-Math.max(0,d-.78)*3.5);
-  ctx.save();ctx.globalAlpha=.13;circle(sunX,sunY,65,'#ffdf98');ctx.globalAlpha=.21;circle(sunX,sunY,49,'#ffe8a5');ctx.restore();
+  ctx.save();ctx.globalAlpha=.21;circle(sunX,sunY,49,'#ffe8a5');ctx.restore();
   circle(sunX,sunY,34,mix3('#ffeaa3','#ffd16e','#ff997b',Math.min(1,d*1.2)));
   circle(sunX-8,sunY-9,17,mix3('#fff1b9','#ffe19b','#ffc4a0',d));ctx.globalAlpha=1;
   if(d>.85){
@@ -2322,11 +2322,8 @@ function draw(){
 // Photo event and reusable pixel-polaroid illustration, drawn by the real game canvas.
 function drawSunsetPhoto(){
  const s=scene,t=s.t,center=W/2;
- // Slow-moving heart-shaped cloud remains in the golden hour, not a night sky.
- ctx.save();ctx.globalAlpha=Math.min(1,Math.max(0,(t-600)/650));
- const cx=center+120,cy=83;
- for(const [dx,dy,r] of [[-21,-6,15],[-8,-17,17],[10,-17,17],[23,-6,15],[0,4,22]])circle(cx+dx,cy+dy,r,'#ffe3e7');
- ctx.restore();
+ // Keep the sunset background and sun unobstructed during the bridge photo.
+ // The old heart-shaped cloud overlapped the sun; it is intentionally omitted.
  // Camera held by lion; small lens and camera body are clearly visible.
  const lx=lion.x-cam;
  rect(lx+14,lion.y+9,13,10,'#a78ca8');rect(lx+16,lion.y+6,5,3,'#f1cad8');circle(lx+21,lion.y+14,3,'#fce9ed');
@@ -2335,7 +2332,7 @@ function drawSunsetPhoto(){
 
  }else{
   const elapsed=t-s.shotAt;
-  if(elapsed<180){ctx.globalAlpha=1-elapsed/180;rect(0,0,W,H,'#fff9ed');ctx.globalAlpha=1;}
+  if(elapsed<180){ctx.save();ctx.globalAlpha=.65*(1-elapsed/180);rect(center-118,35,236,244,'#fff9ed');ctx.restore();}
   // A designed pixel postcard, not a screenshot with touch controls.
   const x=center-106,y=50;
   ctx.save();ctx.fillStyle='#fffaf6';ctx.fillRect(x-8,y-8,212,224);
