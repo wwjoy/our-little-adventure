@@ -2575,6 +2575,7 @@ function draw(){
  if(scene&&scene.type==='beachArrival'){text('🦁 我们就在这里等烟花吧。',W/2,64,'#fff5e8',17,'center')}
  if(scene&&scene.type==='sunset'&&scene.t>1500&&scene.t<6000){ctx.globalAlpha=Math.min(1,(scene.t-1500)/600,(6000-scene.t)/600);text('太阳慢慢落进海里……',W/2,58,'#fff',15,'center');ctx.globalAlpha=1}
  if(scene&&scene.type==='fireworks'&&scene.t<3000){ctx.globalAlpha=Math.min(1,scene.t/600,(3000-scene.t)/600);text('花火大会开始啦！',W/2,76,'#fff4dc',25,'center');ctx.globalAlpha=1}
+ if(L.cabin&&cabinHatchOpening)drawCabinHatchOpening();
  if(toast&&timer<toast.until&&mode==='play'){ctx.font='bold 14px sans-serif';const w=ctx.measureText(toast.t).width+20;rect(W/2-w/2,48,w,26,'#00000055');text(toast.t,W/2,66,'#fff',14,'center')}
  if(fade.a>0){ctx.globalAlpha=fade.a;rect(0,0,W,H,'#1c1530');if(fade.text){text(fade.text,W/2,H/2,'#ffd6e6',15,'center')}ctx.globalAlpha=1}
  $('#hud').textContent='❤️ '+data.hearts.filter(Boolean).length+'/3　🌱 '+(data.seed?1:0)+'/1　🪙 '+data.coins.length+'　'+(L.secret?'秘密小屋':L.under?'蓝冰洞':L.cabin?'森林小屋':LEVELS[level])+(level===1?'　🐚 '+data.shells.length+'/5　⭐ '+data.stars.length+'/3':'')}
@@ -2610,13 +2611,39 @@ function drawSunsetPhoto(){
  }
 }
 function loop(t){try{let dt=Math.min(40,t-last||16);last=t;
- if(mode==='dive')updateDive(dt);else if(mode==='play')update(dt);else if(mode==='scene'&&scene)updateScene(dt);else if(mode==='dying'&&dying)updateDying(dt);
+ if(cabinHatchOpening){cabinHatchElapsed+=dt;timer+=dt;if(cabinHatchElapsed>=1200){cabinHatchOpening=false;enterUnder();}}
+ if(mode==='dive')updateDive(dt);else if(mode==='play'&&!cabinHatchOpening)update(dt);else if(mode==='scene'&&scene)updateScene(dt);else if(mode==='dying'&&dying)updateDying(dt);
  updateFade(dt);if(mode==='dive')drawDive();else draw()}catch(e){$('#error').style.display='block';$('#error').textContent='游戏运行异常：'+e.message+'。请截图反馈。';return}requestAnimationFrame(loop)}
+
+// V3.2.5 secret hatch: visual-only 1.2s reveal; original interaction range unchanged.
+let cabinHatchOpening=false, cabinHatchElapsed=0;
+function beginCabinHatch(){
+ if(cabinHatchOpening)return;
+ cabinHatchOpening=true;cabinHatchElapsed=0;
+}
+function drawCabinHatchOpening(){
+ if(!cabinHatchOpening||!L.cabin)return;
+ const t=Math.min(1,cabinHatchElapsed/950), ease=t*t*(3-2*t);
+ const hx=348,hy=G-28;
+ ctx.save();
+ // Subtle seam light becomes a descending stairwell, without naming its destination.
+ ctx.globalAlpha=.25+.75*ease;
+ rect(hx,hy-2,80,15,'#15384a');
+ for(let i=0;i<4;i++)rect(hx+8+i*3,hy+2+i*3,64-i*6,2,i%2?'#80b9c6':'#a4d4db');
+ ctx.globalAlpha=1;
+ // Hinged wooden lid swings upward; stays aligned with the existing hatch.
+ const lidHeight=Math.round(9+ease*37);
+ rect(hx,hy-lidHeight,80,9,'#a47759');rect(hx,hy-lidHeight,80,2,'#d9ad7e');
+ rect(hx+4,hy-lidHeight+3,72,2,'#795441');
+ for(let i=0;i<5;i++)circle(hx+8+i*16,hy-8-(i%2)*5-Math.sin(cabinHatchElapsed*.008+i)*3,2,'#b6e9ee');
+ ctx.restore();
+ text('↓ 暗门',388,G-87,'#65545b',12,'center');
+}
 
 // ================= Interact =================
 function interact(){if(mode==='dive'){diveInteract();return}if(mode==='scene'&&scene&&scene.type==='plant')return;if(mode!=='play')return;
  if(L.secret){if(p.x>555){exitSecretRoom();return}if(data.snowboard&&p.x>305&&p.x<355){startSnow();return}return}
- if(L.under){if(p.x>1415)exitUnder();return}if(L.cabin){if(p.x<100){exitCabin();return}if(p.x>335&&p.x<475){enterUnder();return}return}
+ if(L.under){if(p.x>1415)exitUnder();return}if(L.cabin){if(p.x<100){exitCabin();return}if(p.x>335&&p.x<475){beginCabinHatch();return}return}
  if(level===0&&p.x>1346&&p.x<1397&&doorRevealed()){enterSecretRoom();return}
  // Sitting is automatic only at the final beach; no early interaction.
 
