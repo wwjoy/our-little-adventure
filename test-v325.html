@@ -254,7 +254,7 @@ function buildLevel(n){
    bl(425,96,274),bl(580,92,254),bl(1150,110,267),bl(1350,100,251),bl(1810,105,266)],
   boxes:[qb(0,220,184,'coin'),qb(1,1050,178,'bag'),qb(2,1690,182,'coin'),qb(3,2580,183,'gift'),qb(4,1787,116,'gift')],
   // The 225px gap cannot be crossed by an ordinary jump: rafts carry the bunny across.
-  plats:[mover(941,G-20,83,20,4,3200),mover(1622,G-20,78,21,4,3400),mover(2284,G-23,100,8,4,3500),mover(2398,G-26,100,9,4,3800),mover(2806,G-20,92,56,4,3000),spring(1770)],
+  plats:[mover(941,G-20,83,20,4,3200),mover(1622,G-20,78,21,4,3400),mover(2398,G-26,100,0,0,3800),spring(1770)],
   cps:[45,755,1475,2070,2550,2990],trees:[],
   enemies:[{type:'walker',x:845,start:805,end:885,v:.35},{type:'walker',x:1910,start:1880,end:1990,v:.35}],
   objects:[{type:'heart',x:3280,y:263},
@@ -265,7 +265,7 @@ function buildLevel(n){
   map:[gr(0,510),gr(700,370),gr(1115,440),gr(1780,670),bl(295,90,245),bl(715,92,237),bl(1170,105,235)],
   boxes:[qb(0,300,159,'coin'),qb(1,615,151,'bag'),qb(2,1215,148,'coin')],
   plats:[mover(560,G-20,82,49,0,3600)], // Independent moving platform at first chasm only; second chasm uses the lion-operated wooden bridge.
-  cps:[45,560,825,1510,2180],trees:[],
+  cps:[45,560,990,1510,2180],trees:[],
   enemies:[{type:'walker',x:1320,start:1280,end:1390,v:.30}],
   objects:[{type:'switch',x:1392},{type:'heart',x:2310,y:264},
    ...coins(0,[[175,216],[335,177],[710,194],[1155,185],[1710,190],[1950,170]])]};
@@ -320,16 +320,24 @@ const TOTAL_COINS=totalCoins();
 
 function starBridgeReady(){return level===1&&L&&!L.under&&!L.secret&&data.stars.length>=3&&coastCoop.phase>=2}
 function starBridgeProgress(){return starBridgeBorn<0?1:Math.min(1,(timer-starBridgeBorn)/2300)}
+// One shared, continuous walking profile for the bunny, lion and photo scene.
+const ARCH_START=2730,ARCH_END=3010;
+function archDeckY(x){const u=Math.max(0,Math.min(1,(x-ARCH_START)/(ARCH_END-ARCH_START)));return G-8-Math.round(10*Math.sin(Math.PI*u))}
+function archWalkable(){return starBridgeReady()&&starBridgeProgress()>=.98}
+function archUnderfoot(x,w){return x+w>ARCH_START&&x<ARCH_END}
+
 function surfaces(){
  const arr=[];
  for(const a of L.map)arr.push(a.kind==='block'?{x:a.x,y:a.y,w:a.w,h:H+200,kind:'block',box:true}:a);
  for(const b of L.boxes)arr.push({x:b.x,y:b.y,w:b.w,h:b.h,kind:'q',box:true,ref:b});
  clouds.forEach(c=>{if(!c.building)arr.push({x:c.x,y:G-5,w:c.w,kind:'cloud'});});
  if(L.under){if(!icePuzzle.gateOpen)arr.push({x:icePuzzle.gateX,y:G-214,w:24,h:214,kind:'block',box:true});if(icePuzzle.light==='ready')arr.push({...ICE_BRIDGE_WALKWAY,kind:'icebridge'});arr.push({...ICE_MEMORY_LEDGE,kind:'icebridge'});}
- if(starBridgeReady()&&starBridgeProgress()>=.98){
-  // Optional vertical star steps: do not cover the main ground or substitute for rafts.
-  for(const a of [{x:2740,y:G-49,w:43},{x:2792,y:G-79,w:45},{x:2847,y:G-105,w:46},{x:2903,y:G-105,w:100}])arr.push({...a,kind:'starbridge'});
+ if(archWalkable()){
+  // Fine-grained collision strips with a shared surface function.  Each strip
+  // overlaps its neighbor, preventing missed landings at the two bridge heads.
+  for(let x=ARCH_START;x<ARCH_END;x+=4)arr.push({x,y:archDeckY(x+2),w:6,h:12,kind:'starbridge'});
  }
+
  for(const o of L.objects)if(o.type==='pipe')arr.push({x:o.x-5,y:o.top,w:o.w+10,h:G-o.top,kind:'pipe',box:true,ref:o});
  if(level===2&&!L.under&&!L.cabin){arr.push({x:1430,y:G-38,w:65,h:38,kind:'block',box:true});if(data.story.bridge)arr.push({x:1555,y:G-7,w:225,kind:'bridge'});}
  for(const pl of L.plats){if(pl.kind==='fall'&&pl.y>H+40)continue;
@@ -354,7 +362,7 @@ function gateOk(){try{return localStorage.getItem(GATE)==='1'}catch(e){return fa
 
 // ================= Flow =================
 function clearInput(){Object.keys(held).forEach(k=>{held[k]=false;$('#'+k).classList.remove('pressed')});jumpQueue=false}
-function layout(n){memoryTrailSeen=[false,false,false];memoryTrailGreeting=false;starBridgeBorn=-1;starBridgeAnnounced=false;starLionReunion=false;coastCoop={phase:0,t:0,lionTarget:2206};pickups=[];coop={state:'idle',lionX:1392,lionReady:false,started:false,bridgeTime:0};pendingFlag=-1;flagCrossingArmed=false;finalReviewOpen=false;if(finalSceneTimeout){clearTimeout(finalSceneTimeout);finalSceneTimeout=null}fade={a:0,dir:0,cb:null,text:''};level=n;L=buildLevel(n);mainL=null;L.pops=[];restoreUnclaimedRewards();clouds=[];forestClouds=[];sleeping=false;failCount=0;failCp=-1;chasmFailures={};chasmHelpDeclined={};chasmCleared={};townWaterfallFailures={};townWaterfallHelpDeclined={};scene=null;dying=null;gardenWater=null;L.enemies.forEach(e=>{e.v=Math.abs(e.v);e.dead=0;e.vy=0;e.hop=0;e.jt=Math.random()*900;e.dir=e.v>=0?1:-1;e.animT=Math.random()*360;e.turnT=0;e.pendingV=0})}
+function layout(n){memoryTrailSeen=[false,false,false];memoryTrailGreeting=false;starBridgeBorn=-1;starBridgeAnnounced=false;starLionReunion=false;coastCoop={phase:(n===1&&sessionStorage.getItem('v325_coop_raft_parked')==='1'?3:0),t:0,lionTarget:2206};pickups=[];coop={state:'idle',lionX:1392,lionReady:false,started:false,bridgeTime:0};pendingFlag=-1;flagCrossingArmed=false;finalReviewOpen=false;if(finalSceneTimeout){clearTimeout(finalSceneTimeout);finalSceneTimeout=null}fade={a:0,dir:0,cb:null,text:''};level=n;L=buildLevel(n);mainL=null;L.pops=[];restoreUnclaimedRewards();clouds=[];forestClouds=[];sleeping=false;failCount=0;failCp=-1;chasmFailures={};chasmHelpDeclined={};chasmCleared={};townWaterfallFailures={};townWaterfallHelpDeclined={};scene=null;dying=null;gardenWater=null;L.enemies.forEach(e=>{e.v=Math.abs(e.v);e.dead=0;e.vy=0;e.hop=0;e.jt=Math.random()*900;e.dir=e.v>=0?1:-1;e.animT=Math.random()*360;e.turnT=0;e.pendingV=0})}
 
 function restoreUnclaimedRewards(){
  // Uncollected physical prizes return INSIDE their question bricks on retry/reload.
@@ -380,7 +388,7 @@ function resetPlanks(){for(const pl of L.plats)if(pl.kind==='fall'){pl.y=pl.y0;p
 function respawnAt(x){if(L&&L.under&&!icePuzzle.gateOpen)icePuzzle.cubeX=icePuzzle.cubeStart;if(level===2&&!L.under&&!data.story.bridge&&coop.state==='approaching'){coop.state='waiting';coop.lionReady=true}pendingFlag=-1;flagCrossingArmed=false;x=safeX(x);p.x=x;p.y=G-p.h;p.vx=p.vy=0;p.on=true;p.ride=null;p.sit=false;p.hidden=false;p.coyote=p.buffer=p.jumpMs=0;lion.x=x-34*p.face;lion.y=p.y;lion.sit=false;trail=[];resetPlanks();cam=Math.max(0,Math.min(L.end-W,x-W*.35));respawnGuard=900;clearInput()}
 function startLevel(n,fromSave){
  // Replaying beach must replay the sunset/fireworks, independently of previous unlocks.
- if(n===1&&!fromSave){data.story.fireworks=false;data.story.sunset=false;}
+ if(n===1&&!fromSave){sessionStorage.removeItem('v325_coop_raft_parked');data.story.fireworks=false;data.story.sunset=false;}
  // On refresh during a cinematic, return to a safe replayable state, not a dead end.
  if(n===1&&fromSave&&data.story.fireworks&&!data.hearts[1]){
    data.story.fireworks=false;data.story.sunset=false;
@@ -743,8 +751,8 @@ function sceneDusk(){if(scene&&scene.type==='sunset')return Math.min(1,scene.t/4
 function updateScene(dt){const s=scene,k=Math.min(2,dt/16.667);s.t+=dt;timer+=dt;
  if(s.type==='sunsetPhoto'){
   // Both companions remain visible on the lookout; camera stays at the same position.
-  p.x=2928;p.y=G-105-p.h;p.vx=p.vy=0;p.on=true;
-  lion.x=2901;lion.y=G-105-27;lion.face=1;p.face=1;
+  p.x=2894;p.y=archDeckY(p.x+p.w/2)-p.h;p.vx=p.vy=0;p.on=true;
+  lion.x=2864;lion.y=archDeckY(lion.x+11)-27;lion.face=1;p.face=1;
   camTo(p.x-W*.58,k);
   if(s.t>1900&&!s.shot&&(held.jump||jumpQueue||s.t>4300)){s.shot=true;s.shotAt=s.t;clearInput();}
   if(s.shot&&s.t-s.shotAt>3000){data.story.sunsetPhoto=true;save();scene=null;play();flash('📸 夕阳下的你 · 已收进冒险手册 ♡');}
@@ -757,11 +765,11 @@ function updateScene(dt){const s=scene,k=Math.min(2,dt/16.667);s.t+=dt;timer+=dt
   if(s.t>5000){data.story.sunset=true;save();startScene('fireworks');return}}
  if(s.type==='plant'){s.t=Math.max(s.t,performance.now()-s.startedAt);if(s.t>=23200&&s.visibleFrames>=8){s.readyToFinish=true;completeFinalPlanting()}return}
  if(s.type==='fireworks'){p.x=3250;p.y=G-p.h;p.sit=true;lion.x=3223;lion.y=G-27;lion.sit=true;lion.face=1;camTo(p.x-W*.45,k);
-  if(s.t<8600&&(s.next||0)<s.t){s.next=s.t+260+Math.random()*300;if(Math.random()<.35)rockets.push({x:W*(.15+Math.random()*.75),y:H-110,vy:-4.8-Math.random()*1.4,c:'#ffd6f0',parts:null});rockets.push({x:W*(.15+Math.random()*.75),y:H-110,vy:-4.6-Math.random()*1.6,c:['#ffcb8e','#ff91c1','#9ad7ff','#c8f7a6','#fff1a8'][Math.floor(Math.random()*5)],parts:null})}
-  for(const r of rockets){if(!r.parts){r.y+=r.vy*k;r.vy+=.07*k;if(r.vy>-.6){r.parts=[];const n=34;for(let i=0;i<n;i++){const a=i/n*Math.PI*2,sp=1.8+Math.random()*1.6;r.parts.push({x:r.x,y:r.y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:1})}}}
-   else for(const q of r.parts){q.x+=q.vx*k;q.y+=q.vy*k;q.vy+=.035*k;q.vx*=.985;q.life-=dt/1300}}
+  if(s.t<8600&&(s.next||0)<s.t){const finale=s.t>6500;s.next=s.t+(finale?350:620)+Math.random()*(finale?200:280);const palette=['#ffd69b','#ff9ecb','#c9a9f4','#9acded','#fff0bd'];const idx=Math.floor(Math.random()*palette.length);rockets.push({x:W*(.18+Math.random()*.65),y:H-110,vy:-4.6-Math.random()*1.5,c:palette[idx],parts:null,heart:finale&&!s.heartShown});if(finale&&!s.heartShown)s.heartShown=true}
+  for(const r of rockets){if(!r.parts){r.y+=r.vy*k;r.vy+=.07*k;if(r.vy>-.6){r.parts=[];const n=r.heart?40:30;for(let i=0;i<n;i++){const a=i/n*Math.PI*2,sp=1.9+Math.random()*.9;let vx=Math.cos(a)*sp,vy=Math.sin(a)*sp;if(r.heart){const hx=16*Math.pow(Math.sin(a),3)/17,hy=-(13*Math.cos(a)-5*Math.cos(2*a)-2*Math.cos(3*a)-Math.cos(4*a))/17;vx=hx*2.4;vy=hy*2.4}r.parts.push({x:r.x,y:r.y,vx,vy,life:1})}}}
+   else for(const q of r.parts){q.x+=q.vx*k;q.y+=q.vy*k;q.vy+=.035*k;q.vx*=.985;q.life-=dt/1050}}
   rockets=rockets.filter(r=>!r.parts||r.parts.some(q=>q.life>0));
-  if(s.t>10000){data.story.fireworks=true;data.story.sunset=true;save();scene=null;p.sit=lion.sit=false;collectHeart(1);p.x=3250;p.y=G-p.h;lion.x=3223;lion.y=G-27;cut('🎆 夕阳花火','那天的夕阳和烟花，我都想一直记得。<br>❤️ 这一刻的特别爱心已经收藏。',()=>{play();finishLevel()})}}
+  if(s.t>10000){data.story.fireworks=true;data.story.sunset=true;save();rockets=[];scene=null;p.sit=lion.sit=false;collectHeart(1);p.x=3250;p.y=G-p.h;lion.x=3223;lion.y=G-27;cut('🎆 夕阳花火','那天的夕阳和烟花，我都想一直记得。<br>❤️ 这一刻的特别爱心已经收藏。',()=>{play();finishLevel()})}}
  if(s.type==='switch'){
   coop.bridgeTime+=dt;
   // Show the cooperation for long enough to see the two beams and bridge.
@@ -822,12 +830,11 @@ function coastFloor(x){let y=G;for(const a of L.map)if(a.kind==='block'&&x>=a.x+
 function enemyBox(e){const ground=(level===1&&!L.secret&&!L.under?coastFloor(e.x):G);const top=e.type==='fly'?e.y-10:ground-22-e.hop;const bottom=e.type==='fly'?e.y+10:ground-e.hop;return {l:e.x-11,r:e.x+11,t:top,b:bottom}}
 function updatePlats(dt,k){
  for(const pl of L.plats){
-  if(pl.kind==='mover'){if(level===1&&pl.x0>=2280&&pl.x0<2500){
-    // Before cooperation, both boarding platforms are submerged: no crossing is possible.
-    // When the lion secures the rope, the boards rise visibly into a usable path.
+  if(pl.kind==='mover'){if(level===1&&pl.x0===2398){
+    // Single cooperative raft: waits offshore, then travels left toward the landing.
     const active=coastCoop.phase>=2;
-    const targetX=pl.x0;
-    const targetY=active?pl.y0:pl.y0+80;
+    const targetX=active?2284:2398;
+    const targetY=active?G-23:pl.y0+80;
     const nx=pl.x+Math.max(-4,Math.min(4,targetX-pl.x));
     const ny=pl.y+Math.max(-2.5,Math.min(2.5,targetY-pl.y));
     pl.dx=nx-pl.x;pl.dy=ny-pl.y;pl.x=nx;pl.y=ny;continue
@@ -858,30 +865,16 @@ function updateLion(k){
   }
  }
 
- // The secret lookout is a shared discovery: climb its actual stepped silhouette
- // rather than leaving the companion on the ground or teleporting her to the top.
- if(level===1&&starBridgeReady()&&starBridgeProgress()>=.98&&p.x>=2705&&p.x<3070&&p.y<G-35){
-  const steps=[{x:2740,y:G-49,w:43},{x:2792,y:G-79,w:45},{x:2847,y:G-105,w:46},{x:2903,y:G-105,w:100}];
-  const followingX=Math.max(2700,Math.min(2970,p.x-31));
-  const d=followingX-lion.x;
-  lion.x+=Math.max(-4.0*k,Math.min(4.0*k,d*.22*k));
-  lion.face=d>=0?1:-1;
-  let floor=G-27;
-  // Approach each stair from the left, then rise smoothly onto it.
-  for(const a of steps){if(lion.x+22>a.x&&lion.x<a.x+a.w){
-   const blend=Math.max(0,Math.min(1,(lion.x+22-a.x)/22));
-   floor=Math.min(floor,G-27+(a.y-G)*blend);
-  }}
-  // Sync to bunny height during a jump while retaining visible following motion.
-  if(p.y<floor-8&&Math.abs(p.x-lion.x)<78)floor=Math.min(floor,p.y+8);
-  lion.y+=(floor-lion.y)*Math.min(1,.16*k);
-  if(p.x>2912&&p.y<G-94&&lion.x>2872&&lion.y<G-94&&!starLionReunion){
+ // The former aerial photo platform is now the center of the stone arch bridge.
+ if(level===1&&starBridgeReady()&&starBridgeProgress()>=.98&&
+    p.x>2844&&p.x<2910&&p.on&&!starLionReunion){
    starLionReunion=true;
    if(!data.story.sunsetPhoto){startScene('sunsetPhoto');return;}
-  }
-  return;
  }
  if(level===1&&(coastCoop.phase===1||coastCoop.phase===2))return;
+ // Once the coastal co-op is complete, mirror the bunny's intentional turn
+ // even before the companion has covered the follow-distance threshold.
+ if(level===1&&coastCoop.phase===3&&Math.abs(p.vx||0)>0.12)lion.face=p.face;
  if(level===2&&!L.under&&!data.story.bridge&&['approaching','waiting','raising'].includes(coop.state)){
   if(coop.state==='approaching'){const dx=coop.lionX-lion.x;lion.x+=Math.sign(dx)*Math.min(Math.abs(dx),3.5*k);lion.face=dx>=0?1:-1;if(Math.abs(dx)<2){lion.x=coop.lionX;coop.state='waiting';coop.lionReady=true;flash('🦁 小狮子已站上粉色机关，轮到你啦！')}}
   lion.y=G-27;return;
@@ -910,12 +903,16 @@ function updateLion(k){
  const dx=desiredX-lion.x;
  if(Math.abs(dx)>220){lion.x=desiredX;lion.y=p.y;lion.face=p.face;return}
  lion.x+=Math.max(-3.3*k,Math.min(3.3*k,dx*.13*k));
- if(Math.abs(dx)>4)lion.face=Math.sign(dx);
+ if(Math.abs(dx)>4&&!(level===1&&coastCoop.phase===3&&Math.abs(p.vx||0)>0.12))lion.face=Math.sign(dx);
  // Always resolve the companion against raised terrain, never embed it in a block.
  let floor=G-27;
 
  for(const a of L.map){if(a.kind==='block'&&lion.x+22>a.x+3&&lion.x<a.x+a.w-3)floor=Math.min(floor,a.y-27)}
  if(L.under&&icePuzzle.light==='ready')for(const s of [ICE_BRIDGE_WALKWAY,ICE_MEMORY_LEDGE])if(lion.x+22>s.x+3&&lion.x<s.x+s.w-3)floor=Math.min(floor,s.y-27);
+ if(archWalkable()&&archUnderfoot(lion.x,22)){
+  // Same world-space arch profile as the bunny, at the lion's own feet.
+  floor=Math.min(floor,archDeckY(lion.x+11)-27);
+ }
  if(!p.on&&Math.abs(p.x-lion.x)<64&&p.y<floor-22)floor=Math.min(floor,p.y+12);
  if(lion.y>floor+6)lion.y=floor;
  else lion.y+=(floor-lion.y)*Math.min(1,.23*k);
@@ -931,11 +928,11 @@ function update(dt){
   if(coastCoop.phase===0&&onPlate){coastCoop.phase=1;coastCoop.t=0;flash('🦁 我来拉住绳索，把木筏拉到岸边！')}
   if(coastCoop.phase===1){coastCoop.t+=dt;const d=coastCoop.lionTarget-lion.x;
    lion.x+=Math.sign(d)*Math.min(Math.abs(d),3.4*k);lion.y=G-27;lion.face=d>=0?1:-1;
-   if(Math.abs(d)<3){coastCoop.phase=2;coastCoop.t=0;flash('🦁 木筏靠岸了！现在可以跳上去啦！')}}
-  if(coastCoop.phase===2){for(const raft of L.plats.filter(a=>a.kind==='mover'&&a.x0>=2280)){raft.dx=0;raft.dy=0}
+   if(Math.abs(d)<3){coastCoop.phase=2;sessionStorage.setItem('v325_coop_raft_parked','1');coastCoop.t=0;flash('🦁 木筏靠岸了！现在可以跳上去啦！')}}
+  if(coastCoop.phase===2){coastCoop.t+=dt;for(const raft of L.plats.filter(a=>a.kind==='mover'&&a.x0>=2280)){raft.dx=0;raft.dy=0}
    if(p.x>2475){coastCoop.phase=3;flash('🦁 我们成功啦！')}}
-  if(coastCoop.phase===3){lion.x+=(p.x-35-lion.x)*Math.min(1,.14*k)}
-  if(starBridgeReady()&&!starBridgeAnnounced){starBridgeAnnounced=true;starBridgeBorn=timer;flash('✨ 海岸上方出现了通往秘密观景台的星光台阶……')}
+  if(coastCoop.phase===3){/* Following and facing are handled by updateLion below. */}
+  if(starBridgeReady()&&!starBridgeAnnounced){starBridgeAnnounced=true;starBridgeBorn=timer;flash('✨ 三颗回忆星星与双人合作唤醒了夕阳拱桥！')}
  }
  if(L.under){
   if(icePuzzle.light==='idle'&&p.x>775&&p.x<875&&lion.x>630&&lion.x<970&&icePuzzle.gateOpen){icePuzzle.light='revealing';icePuzzle.lightT=0;flash('🦁 小狮子的头灯照出了隐藏冰桥！');}
@@ -947,6 +944,12 @@ function update(dt){
  if(dir)p.face=dir;
  p.vx+=(dir*2.45-p.vx)*Math.min(1,.27*k);if(!dir)p.vx*=Math.pow(.7,k);
  p.x=Math.max(0,Math.min(L.end-24,p.x+p.vx*k));
+ // On the unlocked arch, follow the sloping deck only while grounded and
+ // walking.  Never magnetize a jumping or falling bunny onto the bridge.
+ const archWasGrounded=archWalkable()&&p.on&&p.vy>=0&&archUnderfoot(p.x,p.w)&&
+   prevY+p.h>=archDeckY(p.x+p.w/2)-15&&prevY+p.h<=archDeckY(p.x+p.w/2)+12;
+ if(archWasGrounded){p.y=archDeckY(p.x+p.w/2)-p.h;p.vy=0;}
+
  if(L.under&&!icePuzzle.gateOpen){
   const cube=icePuzzle,old=cube.cubeX,cw=39;
   if(dir>0&&prevX+p.w<=old+5&&p.x+p.w>old&&p.y+p.h>G-39){
@@ -987,6 +990,9 @@ function update(dt){
    p.y=a.y-p.h;p.vy=0;p.on=true;ride=a.ref||null}
   else if(a.box&&p.vy<0&&prevY>=a.y+a.h-6&&p.y<a.y+a.h){p.y=a.y+a.h;p.vy=.5;p.jumpMs=999;
    if(a.kind==='q'){boxReward(a.ref)}}}
+ if(archWasGrounded&&p.vy>=0&&archUnderfoot(p.x,p.w)){
+  p.y=archDeckY(p.x+p.w/2)-p.h;p.vy=0;p.on=true;ride=null;
+ }
  p.ride=p.on?ride:null;
  if(p.y>H+30){die('fall');return}
  // A successful landing on the far bank clears the streak for that exact gap.
@@ -1463,15 +1469,84 @@ function bg(){
  if(L.secret){const sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#a5d6ed');sky.addColorStop(1,'#f5e8f4');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);for(let i=0;i<8;i++){let x=i*135-cam*.18;ctx.fillStyle=i%2?'#eaf7ff':'#cde8f5';ctx.beginPath();ctx.moveTo(x-110,G);ctx.lineTo(x+35,105+(i%3)*22);ctx.lineTo(x+170,G);ctx.fill()}for(let i=0;i<38;i++){let x=(i*89+timer*.012)%Math.max(W,560),y=(i*43+timer*.024)%G;circle(x,y,1.6,'#fff')}return}
  if(L.under){rect(0,0,W,H,'#2c2440');for(let y=0;y<G;y+=18)for(let x=((y/18)%2)*14-((cam*.6)%28);x<W;x+=28)rect(x,y,26,16,'#3a3054');for(let i=0;i<20;i++)circle((i*137+20)%W,30+(i*53)%200,1.4,'#f6d8ff');return}
  let g=ctx.createLinearGradient(0,0,0,H);
- if(level===1){const d=sceneDusk();
-  g.addColorStop(0,mix3('#f39b9e','#e8705f','#20254f',d));g.addColorStop(1,mix3('#ffe2b0','#ffb37a','#6d568c',d));ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-  if(d>.6)for(let i=0;i<40;i++){ctx.globalAlpha=Math.min(1,(d-.6)*2.5);circle((i*97)%W,20+(i*37)%170,1.1,'#fff4ce')}ctx.globalAlpha=1;
-  const sunX=W*.62,sunY=80+d*190;circle(sunX,sunY,30,mix3('#fff0bd','#ffb257','#ff6b5a',Math.min(1,d*1.2)));
-  if(d>.85){ctx.globalAlpha=(d-.85)/.15;circle(W*.2,70,20,'#e6ecff');circle(W*.2+8,64,17,mix3('#f39b9e','#e8705f','#20254f',d));ctx.globalAlpha=1}
-  rect(0,244,W,116,mix3('#da97b0','#e98a6f','#283c6b',d));
-  for(let i=0;i<40;i++){let x=((i*79-cam*.18)%W+W)%W;rect(x,265+i%6*11,35,2,i%3?'#ffccab':'#a9b2db')}
-  if(d<.98){ctx.globalAlpha=.55*(1-d);for(let i=0;i<7;i++)rect(sunX-24+i%3*6-(i*5)%18,250+i*12,48-i*5,3,'#fff0bd');ctx.globalAlpha=1}
+ if(level===1){
+  // V3.2.5 Level 2 sunset sky art candidate: visual-only, all existing scene timing retained.
+  const d=sceneDusk(),night=Math.max(0,Math.min(1,(d-.42)/.58));
+  g.addColorStop(0,mix3('#9b79c6','#704b9c','#171b4b',d));
+  g.addColorStop(.34,mix3('#e68fbe','#c26ba6','#42356e',d));
+  g.addColorStop(.72,mix3('#ffa38f','#f17b8a','#71517f',d));
+  g.addColorStop(1,mix3('#ffcf9a','#ffac7b','#3d426f',d));
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  // Pixel clouds: fixed shapes, parallax offset; sunset edges retain their warmth at dusk.
+  const cloud=(cx,cy,scale,seed)=>{
+   const x=Math.round(cx),y=Math.round(cy),s=scale;
+   ctx.save();ctx.translate(x,y);ctx.scale(s,s);ctx.globalAlpha=.92-night*.32;
+   const shadow=mix3('#9874b8','#865a9b','#333463',d),body=mix3('#e99dc1','#c87cae','#675481',d),rim=mix3('#ffd3b4','#ffb69f','#ad779d',d);
+   // Stepped silhouettes, lit upper lobes, lavender underside, scattered dusk glints.
+   rect(2,16,111,18,shadow);rect(13,7,90,23,body);rect(27,-4,56,27,body);
+   rect(37,-12,31,20,body);rect(74,1,23,18,body);rect(17,12,16,7,rim);
+   rect(35,-8,34,6,rim);rect(43,-14,17,5,rim);rect(75,3,16,5,rim);
+   rect(8,31,94,4,shadow);rect(25,35,61,3,shadow);
+   for(let k=0;k<8;k++){const xx=(seed*17+k*19)%98,yy=(k*7+seed*3)%19;rect(xx+8,yy+8,4+(k%3)*2,2,k%3?'#f5afbb':'#ffdbb7');}
+   ctx.restore();
+  };
+  for(let i=0;i<15;i++){
+   const x=((i*167+37-Math.round(cam*.055))%(W+270)+(W+270))%(W+270)-135;
+   cloud(x,23+(i*53)%127,i%3===0?.8:i%3===1?.5:.62,i);
+  }
+  // Distant violet Osaka-bay silhouette; decorative only, behind the ocean.
+  ctx.globalAlpha=.48+night*.25;
+  const hill=mix3('#9373a5','#805f98','#25264f',d);
+  ctx.fillStyle=hill;ctx.beginPath();ctx.moveTo(0,244);
+  for(let x=0;x<=W+16;x+=16){const wx=x+cam*.035;ctx.lineTo(x,220+10*Math.sin(wx/95)+6*Math.sin(wx/41));}
+  ctx.lineTo(W,244);ctx.closePath();ctx.fill();
+  for(let i=0;i<45;i++){
+   const x=((i*37-Math.round(cam*.07))%(W+55)+(W+55))%(W+55)-18;
+   const h=9+(i*17)%29;
+   rect(x,244-h,12+(i%3)*5,h,mix3('#8b719d','#795c8e','#292a56',d));
+   if(i%4===0){ctx.globalAlpha=.5+night*.3;rect(x+4,244-h+6,2,2,'#ffe6aa');ctx.globalAlpha=.48+night*.25;}
+  }
+  ctx.globalAlpha=1;
+  // The original sunset-to-fireworks timing and sun descent are unchanged.
+  const sunX=W*.62,sunY=80+d*190;
+  ctx.globalAlpha=Math.max(0,1-Math.max(0,d-.78)*3.5);
+  ctx.save();ctx.globalAlpha=.21;circle(sunX,sunY,49,'#ffe8a5');ctx.restore();
+  circle(sunX,sunY,34,mix3('#ffeaa3','#ffd16e','#ff997b',Math.min(1,d*1.2)));
+  circle(sunX-8,sunY-9,17,mix3('#fff1b9','#ffe19b','#ffc4a0',d));ctx.globalAlpha=1;
+  if(d>.85){
+   // Hand-shaped crescent: a single continuous ivory silhouette, not overlapping circles.
+   ctx.save();ctx.globalAlpha=(d-.85)/.15;
+   const mx=W*.2,my=70;
+   ctx.fillStyle='#fff1d6';ctx.beginPath();
+   ctx.moveTo(mx+9,my-19);
+   ctx.bezierCurveTo(mx-14,my-25,mx-23,my-8,mx-20,my+6);
+   ctx.bezierCurveTo(mx-17,my+23,mx+2,my+26,mx+16,my+14);
+   ctx.bezierCurveTo(mx-2,my+18,mx-12,my+6,mx-8,my-5);
+   ctx.bezierCurveTo(mx-5,my-14,mx+1,my-18,mx+9,my-19);
+   ctx.closePath();ctx.fill();
+   ctx.restore();
+  }
+  if(d>.45)for(let i=0;i<40;i++){
+   ctx.globalAlpha=Math.min(.9,(d-.45)*2)*(i%5===0?1:.6);
+   rect((i*97+13)%W,18+(i*37)%174,i%7===0?3:2,i%7===0?3:2,'#fff0cf');
+  }ctx.globalAlpha=1;
+  // Pixel-banded sea, moving highlights and narrowing warm reflection beneath the sun.
+  rect(0,244,W,H-244,mix3('#9974ae','#745b9c','#27365f',d));
+  for(let band=0;band<7;band++){const yy=251+band*18;rect(0,yy,W,4,mix3('#b486b6','#9771ad','#415482',d));}
+  for(let i=0;i<57;i++){
+   const y=249+i*3,off=(i*43+Math.floor(timer/115)*(i%3+1))%W;
+   const c=i%4===0?mix3('#f7a9bb','#e59bad','#6874a6',d):mix3('#d995b6','#bb7da8','#405583',d);
+   for(let j=-1;j<3;j++)rect(off+j*W,y,16+(i%5)*13,2,c);
+  }
+  const glow=Math.max(0,1-d*.94);
+  ctx.globalAlpha=.9*glow;
+  for(let i=0;i<39;i++){
+   const y=247+i*3.1,width=12+i*3.4,dx=Math.sin(i*2.4+timer/430)*11;
+   rect(Math.round(sunX-width/2+dx),Math.round(y),Math.round(width),i%3===0?3:2,i%4===0?'#fff4c5':'#ffd77e');
+   if(i%3===0)rect(Math.round(sunX+width*.6+dx),Math.round(y),10+i%5*4,2,'#ffb88f');
+  }ctx.globalAlpha=1;
   return}
+
  if(level===0){g.addColorStop(0,'#f6aed3');g.addColorStop(1,'#ffe7c9')}else{g.addColorStop(0,'#b4e3d4');g.addColorStop(1,'#eaf7c9')}
  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);circle(W*.78-cam*.015,80,31,'#fff0bd');
  for(let i=0;i<14;i++){let x=i*190-cam*.12;ctx.fillStyle=level===2?'#a0cfc2':'#cbb9df';ctx.beginPath();ctx.moveTo(x-140,G);ctx.lineTo(x+70,155+(i%3)*11);ctx.lineTo(x+280,G);ctx.fill()}
@@ -1534,27 +1609,92 @@ function v325DrawNaturalTerrain(a){
   ctx.restore();
 }
 
+// V3.2.5 / LEVEL 2-1 ONLY: decorative pixel art; no physics, map or collectible edits.
+// V3.2.5 Level 2 visual-only terrain tiles; original geometry and collision remain unchanged.
+function v325SeasideTerrain(a){
+ const x=Math.round(a.x-cam), top=a.kind==='block'?a.y:G,w=a.w;
+ ctx.save();ctx.beginPath();ctx.rect(x,top,w,H-top);ctx.clip();
+ rect(x,top,w,H-top,'#b98794');rect(x+4,top+12,w-8,H-top-12,'#c89c96');
+ // Hand-staggered warm stone masonry with mortar, chips and illuminated edges.
+ for(let row=0;row<Math.ceil((H-top)/17);row++){
+  const yy=top+13+row*17,shift=row%2?13:0;
+  for(let col=-1;col<Math.ceil(w/29)+1;col++){
+   const xx=x+col*29-shift,seed=(col*31+row*17+Math.floor(a.x/13)*7+9999)>>>0;
+   rect(xx+1,yy,27,15,seed%4===0?'#d3a39b':seed%4===1?'#c59498':seed%4===2?'#b98b9a':'#c99b9b');
+   rect(xx+2,yy+1,23,2,'#e5b6a5');rect(xx+1,yy+13,25,2,'#a77a90');
+   if(seed%3===0)rect(xx+8,yy+7,7,2,'#e7bdac');
+   if(seed%5===0)rect(xx+20,yy+9,3,3,'#a7788e');
+  }
+ }
+ // Three-dimensional meadow cap with uneven tufts and tiny blossoms.
+ rect(x,top,w,3,'#f9e5a1');rect(x,top+3,w,4,'#a7d16f');rect(x,top+7,w,4,'#6b9c64');
+ for(let i=0;i<w;i+=9){const v=(Math.floor((a.x+i)/9)*13)%7;
+  rect(x+i,top+9,5,2+v%4,'#57895f');
+  if(v===2){rect(x+i+3,top-2,2,4,'#b4d77a');rect(x+i+2,top-3,4,2,'#f6c2d2');}
+ }
+ ctx.restore();
+}
+function v325SeasideDecorBack(){
+ if(level!==1||L.under||L.secret)return;
+ const X=wx=>Math.round(wx-cam),visible=(wx,w=100)=>X(wx)<W+30&&X(wx)+w>-30;
+ // Faraway Ferris wheel, port tower and warm-lit coastal skyline.
+ ctx.save();ctx.globalAlpha=.62;
+ if(visible(45,650)){
+  for(let i=0;i<26;i++){
+   const wx=38+i*23,x=X(wx)*.34+cam*.0+30;
+   const h=8+(i*17)%28;rect(x,241-h,12+(i%3)*4,h,'#775b93');
+   if(i%2===0)rect(x+4,240-h+6,2,2,'#ffd9a0');
+  }
+  const fx=X(260)*.34+90,fy=219;
+  ctx.strokeStyle='#ffdbb0';ctx.lineWidth=2;ctx.beginPath();ctx.arc(fx,fy,22,0,Math.PI*2);ctx.stroke();
+  for(let k=0;k<8;k++){const t=k*Math.PI/4;ctx.beginPath();ctx.moveTo(fx,fy);ctx.lineTo(fx+22*Math.cos(t),fy+22*Math.sin(t));ctx.stroke();}
+  rect(fx-2,fy+20,4,15,'#c69ab5');
+ }
+ ctx.restore();
+ // Low shoreline foam follows the background; no collision surface is created.
+ for(let i=0;i<19;i++){
+  const wx=i*54+8;if(!visible(wx,44))continue;
+  rect(X(wx),267+(i%3)*2,26+(i%3)*7,2,i%2?'#ffe7d4':'#fff2e4');
+ }
+}
+const v325OctopusShopImg=new Image();v325OctopusShopImg.src='data:image/png;base64,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';
+const v325PierRailImg=new Image();v325PierRailImg.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHAAAAAkCAYAAABR/76qAAAB8klEQVR4nO2YMUzCQBSGf8BZJGGRxcHVganRhcTdxeBqYuKGo4Q41BASEg1hcnA2OhPDyETCgnFicFQTF1hMEBNHrAMpseXa3tH26DXv22jvva/l9V3vChAEQRAEQShIgnXQ+HgwLIO2jpnj/CLLExcfK1/ST0Ji9VieiK/uteE0EAA29i8CeWJleeLic8tHHag4VEDFoQIqzsJcXDksGYWd6fx37yUFAGg83gb6npDliYvPKd8aT7Be1aBXNQMA1vMngd9wobiHQnHuCs0TFd8yLr2qodfqLxwX7sDvwd18ReTnpv/n6bX6oXmi6DPP8XjMsfXaM1h1sSQYd5uuy187qUzW8dx0/Ol5PggPjyuqPnsOVl6nPFc37wA4p1An3C4ylckK/WnLeoJ2yfTZcyyT19KBtaMzZgdW6nkAQEMfCCUXRZZHFZ/b+J/prFS0jVAcrg4koofZgbQPVMTnlI+mUMVJvN6XadpUGM8ObHcmaHcmQkkpRl6M8D5wczu3cGz0NqSYFcUIF9BLSjFyYxLnB6eu78BcOonSpQYA0MtPXOJcejYzDye/XONle8yYenOXy+fXY+Lls8fwXB+tQhWHqwMB/08fxYQT41lAItrQlxhFfPQlJqZQARWHuQ802zNsZHni4mPlow5UHCogQaySP/hDxGVKkxEMAAAAAElFTkSuQmCC';
+function v325DrawPierRail(wx,wy,w){if(!v325PierRailImg.complete||!v325PierRailImg.naturalWidth)return;const x=Math.round(wx-cam);ctx.save();ctx.imageSmoothingEnabled=false;ctx.drawImage(v325PierRailImg,x,wy-29,w,29);ctx.restore();}
+const v325SeasideLampImg=new Image();v325SeasideLampImg.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAABOCAYAAAAzS3ZoAAAB40lEQVR4nO1YMU/CQBh9JQ4uxjAZCH9AWNwcnJCBQROCMTiZEAcF2aWG2QguLioJgyFhIBKVkOjggEwM/gCQXYJxYnAxYaiLZ6htr722Sj36xvb6Xr/3fXf33QG8Q2D9QBrUJBmBP8HE4WEVtIo/FzSFXjUn9ao5SX+kEvxbyr8g0xz66JRVC2U2lDTM47wI0+tppvIv3hWpnFNcNJ1y1tRKQhBKFlS5+bfUGTncje5Yyh9B6eFSwc+/pTO0l1vhBQBArT00RJZY8QIArlpvmmOoy1AzfygBwOp20JDgY6ULAIiIx5q8sghfm/nvYvFFROVH3pA6y7CjeKTFNWVF44uIwkE8Y8scPD17AQCc1M9lqeHf0slP/J+em4UWjwcApH5DkvoNW4pFD5OxVAjEbLFRC8Q9IRATJl80v4FxBx0eocquwApnRphKtQ2RkR2fBs3pkI3vW1oICvWLKe28DeUwuaGfGwAo3+p3d4aWtOeKsTuZxe0jXT5nnC1oyKztyaIdff1z6Z5+1Cbgv0r5F2TeD0fwYDPsBwBctwbMgvxb6gq6gq6gK+gKuoI2C97kRM3+lPZuHKZOwGZ2egLn9zTRpXlLgoa6ZXLDuByco4576r4DoN9mMUVICK3A2dPiXwp+Ag0ecbHEOrJjAAAAAElFTkSuQmCC';
+// V3.2.5 seaside flowers: four transparent pixel-art variations, visual only.
+const v325SeasideFlowersImg=new Image();v325SeasideFlowersImg.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAAAcCAYAAACpmrfzAAADyElEQVR4nO2YPWgUQRiGvwMjxB+MFgEPBTGFIpqggtgomCiYxiLYpLFIFUhpc8chGiQkTcpAqitsrpErbE7QRNBGBCOJICpEgkoCKfTEn4Ap1iL5Zndn5pubv10SM29zezszO/PlfWfu2QAEBQUFBQUFBQUFBQUF7SAV8pgkevg6Eia+eT6XubeCouYLsf6OS1ui/l2mA6zMvHg8vn75yXRKZ808+Casue/WISsDrMxs74qv1xZtpnXS79qssOa9g70FAIsAmJgpCwvfZnoS2Jh59vJBdv3m+XeT6UQZmCkLC99mehKozKS0+1wPu/47N59q0w6Ak5ked72JmbKw8G26J4GTmR53vcpMXrKw8G3mJ4CLmVeXNj6fHjMe6mKm865PysnM1c3PTuOROmZSJ4EqKOYBQBFmqk4K1K+3y9bTupjZe+MZAADMPrpi/YxYcjNVJwXq57tX1rO22vUq7enf+Nv9acSnqBAAU8gTzFQxAguLfQBQlJmqkwK1+OEL2WYKeYKZSkbAsCy1WmJLycwEUJ8UqK/La+xaPAF0IY8zc9+Zotbux75UqEwhjzdTxQhxWOgA6ENe2sz9py5o7X7sS4XKFPKSZgKoGSEOiyQAupDH90Mz2X1H4NOFPN7MrhNHtXY/9uVDpQt5fD80k913BD5dyOPNPFJs19r92Jd+DfRF7JuMUG7MpW5/fL8C9dGqkGhdyOP7oZl43xn4vBH7BiPo1q8LeXw/NBPvmzICDYESyCvVKlF5vc6+U8W4yBexIyPoGiBKhLxSrRKVG48tnqUvF8hLChmhVf0t3wJSkHfSYAUsOHOqXqRkkFeqVaInMMm+Z2EAL3tiN3/VS0oGeaVaJboPM+y7j/rpABgSO0IdzwjjbQOsbeDuUNTdcxi66xXW597AmLKAFOSd1loKACSC02YXQFNiR6jjGWG8/zprs6k/BXlFraUAgPh2QIkFgDKQInabYkykRewJIdTxjHBt/TZrU62ZMpAi9qzrlxG7Sgh1PCPcgT7WJluz/T+CJHJhBMpAGbEDZG+AjVwYgTIwSexJ+ao/FYA8IG9hPrvfbVdGyAPysq7flBGcTgC+mFKtovUeSikPyPNpQBb1+4Y8Xvyavf4ETAzGR5DsiFqYX/E5nXcDXLUd62cBGJoeiVZ/NAEAoDo8VeAL+LzaZIOqw1PSVA5Nj7AFNFdoeEn2w2cl5+880KE1hheOx/kpA1rNv5Pq93oC+NLE4JjSgP9dedZPBqA+Wi0k0yNrVz24Plot1Im2ZAKznJ8fj2Pymn871P8PBi4zNj8dV1AAAAAASUVORK5CYII=';
+function v325SeasideDecorFront(){
+ if(level!==1||L.under||L.secret)return;
+ const X=wx=>Math.round(wx-cam),visible=(wx,w=100)=>X(wx)<W+20&&X(wx)+w>-20;
+ const flower=(wx,wy,pink=true)=>{let x=X(wx),c=pink?'#ff9bca':'#c5a3f3';rect(x,wy+4,2,8,'#548f72');rect(x-4,wy+1,10,5,c);rect(x-2,wy-2,6,10,c);rect(x,wy+2,3,3,'#fff3ac')};
+ const lamp=(wx,wy)=>{if(!v325SeasideLampImg.complete||!v325SeasideLampImg.naturalWidth)return;ctx.save();ctx.imageSmoothingEnabled=false;ctx.drawImage(v325SeasideLampImg,Math.round(X(wx)-14),wy-78,28,78);ctx.restore();};
+ const fence=(wx,wy,w)=>{let x=X(wx);rect(x,wy-15,w,4,'#ad755f');rect(x,wy-4,w,4,'#c78a69');for(let j=0;j<=w;j+=20){rect(x+j,wy-20,5,24,'#94614f');rect(x+j-1,wy-22,7,4,'#efc58d')}};
+ // Detailed transparent pixel-art shop sprite; decorative only, original footprint and mechanics preserved.
+ if(visible(22,158)&&v325OctopusShopImg.complete&&v325OctopusShopImg.naturalWidth){
+  ctx.drawImage(v325OctopusShopImg,X(22),G-116,160,116);
+ }
+ if(visible(170,28))lamp(183,G);
+ if(visible(310,100))v325DrawPierRail(316,G,96);
+ if(visible(702,110))v325DrawPierRail(707,G,85);
+ if(visible(833,28))lamp(844,G);
+ for(const wx of [16,194,209,308,325,337,407,513,528,675,692,790,811,875]){
+  if(!visible(wx,32))continue;
+  if(v325SeasideFlowersImg.complete&&v325SeasideFlowersImg.naturalWidth){
+   const variant=([0,1,3,2][(Math.floor(wx/17)+wx)%4]);
+   ctx.save();ctx.imageSmoothingEnabled=false;ctx.drawImage(v325SeasideFlowersImg,variant*32,0,32,28,Math.round(X(wx)-12),G-27,32,28);ctx.restore();
+  }else flower(wx,G-12-(wx%3)*2,wx%2===0);
+ }
+ // Tiny seashells and starfish sit below the walkable ground surface.
+ for(const wx of [281,548,685,880]){
+  if(!visible(wx,16))continue;let x=X(wx);rect(x,G+7,10,3,'#f9d2a6');rect(x+2,G+4,6,4,'#e9a5ac');rect(x+4,G+3,2,2,'#fff0d6');
+ }
+}
 function terrain(a){let x=a.x-cam;if(x>W||x+a.w<0)return;
  if(level===0&&!L.secret&&!L.under&&!L.cabin){
   v325DrawNaturalTerrain(a);
   return;
  }
- if(level===2&&!L.under&&!L.secret&&!L.cabin){
-  // Forest soil and moss, drawn to the original collision rectangles.
-  rect(x,a.y,a.w,H-a.y,'#755947');
-  rect(x,a.y+9,a.w,H-a.y-9,'#846451');
-  rect(x,a.y,a.w,6,'#638b64');rect(x,a.y+5,a.w,5,'#9bbd80');
-  rect(x,a.y+10,a.w,4,'#455f4c');
-  const left=Math.max(0,Math.floor((cam-a.x)/22)-1),right=Math.min(Math.ceil(a.w/22),Math.ceil((cam+W-a.x)/22)+1);
-  for(let k=left;k<right;k++){
-   let px=x+k*22;
-   rect(px+3,a.y+22+(k%3)*12,10,3,'#a17b60');
-   rect(px+12,a.y+47+(k%4)*16,3,9,'#5d4b3e');
-   if(k%3===0){rect(px+6,a.y+14,2,7,'#9dba7b');rect(px+2,a.y+15,10,2,'#72986b')}
-   if(k%5===0){rect(px+4,a.y+71,11,7,'#6b5346');rect(px+6,a.y+72,6,2,'#b18d6f')}
-  }
-  return;
- }
+ if(level===1&&!L.under&&!L.secret){v325SeasideTerrain(a);return;}
  if(level===1&&!L.under&&!L.secret&&a.kind==='block'){
   if(true){
    // Low, climbable rock steps: collision stays solid, art follows the same geometry.
@@ -1575,31 +1715,56 @@ function terrain(a){let x=a.x-cam;if(x>W||x+a.w<0)return;
 const v325MemoryStarSprite=new Image();v325MemoryStarSprite.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAABI0lEQVR4nM2WPQ7CMAyFXxFnQLB06coROEhRL8ENEAszIwMSEyrnYOUMLF2oEDtjWEhxWsf5aZF4UpfIzufn2FKBf1ZZZCo0Z/SLQgZRWWRKXRcq1FWco2kaleatssiUel2aL8RVkKP8cAyvLhRkVP/cN2BfV96gPm68QZybUFfjzkWMfNy47khoYL6a2SPn268bqroSCzjv7liebklCDw2Y765MNsBjzcI1BCCOWFgbyF3aFgNhQRoGAFagAwDAgACWqdNBOskpB8QKioFJEOAz3k7RttEp0+fTFIBckHNhm3eqq+4okzNxNSA4MhaQAGgrjSJIHtc+tp86gVYpvVU7jgM536gNoJdo1zpGap/oyAaIiRUX1gXonRfzOzVkfi+9AY+crpOnnme2AAAAAElFTkSuQmCC';
 function drawStarBridge(){
  if(!starBridgeReady())return;
- const t=starBridgeProgress();
- const pieces=[{x:2740,y:G-49,w:43},{x:2792,y:G-79,w:45},{x:2847,y:G-105,w:46},{x:2903,y:G-105,w:100}];
- ctx.save();
- for(let j=0;j<pieces.length;j++){
-  const local=Math.max(0,Math.min(1,(t-j*.17)/.43));
-  if(local<=0)continue;
-  const a=pieces[j],xx=a.x-cam,w=a.w*local;
-  ctx.globalAlpha=.22+.78*local;ctx.shadowColor='#fff3af';ctx.shadowBlur=18;
-  rect(xx,a.y,w,8,'#fff0bb');ctx.shadowBlur=0;
-  rect(xx,a.y+8,w,3,'#dca5d3');
-  for(let k=0;k<Math.floor(w/13);k++){const x=xx+8+k*13;
-    circle(x,a.y-8-2*Math.sin(timer/240+k),2.5,'#fffce3');
-    if(k%3===0){rect(x-1,a.y-17,2,11,'#fff9d0');rect(x-5,a.y-13,10,2,'#fff9d0')}
-  }
+ const progress=starBridgeProgress();
+ ctx.save();ctx.imageSmoothingEnabled=false;
+ const n=Math.floor(28*Math.max(0,Math.min(1,progress)));
+ for(let i=0;i<n;i++){
+  const wx=2730+i*10, xx=wx-cam, u=(i+.5)/28;
+  const y=G-8-Math.round(10*Math.sin(Math.PI*u));
+  // Rounded bridge deck and warm pixel masonry; no decorative fake walkway.
+  rect(xx,y,10,5,'#fff2d5');rect(xx,y+5,10,6,'#e6b9b2');
+  rect(xx,y+11,10,9,'#ba91a8');
+  if(i%2===0)rect(xx+1,y+7,7,2,'#fff1df');
+  if(i%3===0)rect(xx+2,y+14,5,2,'#f0c9bb');
+  // Arch barrel drops away toward the center, leaving the water visible beneath.
+  const archDepth=13+Math.round(18*Math.abs(Math.cos(Math.PI*u)));
+  rect(xx,y+20,10,archDepth,'#b38ba4');
+  rect(xx+1,y+20,2,archDepth,'#e8bcb6');
  }
- if(t>.85){ctx.globalAlpha=Math.min(1,(t-.85)*7);const x=2952-cam;
-   circle(x,G-139,21,'#fff2cc');circle(x,G-139,16,'#ffdbef');
-   text('♡',x,G-132,'#ce78a4',24,'center');
-   text('星光观景台',x,G-160,'#fff8d8',13,'center');}
+ // Small low railings, not a second collision surface.
+ for(let i=0;i<n;i+=4){const wx=2730+i*10,xx=wx-cam,u=(i+.5)/28;
+  const y=G-8-Math.round(10*Math.sin(Math.PI*u));
+  rect(xx+2,y-12,4,12,'#967185');rect(xx+1,y-14,6,4,'#ffe3b6');
+  if(i+4<n)rect(xx+6,y-9,34,3,'#f2c7ae');
+ }
+ if(n>=28){
+  for(const wx of [2740,2998]){const xx=wx-cam;rect(xx,G-36,5,24,'#92738e');circle(xx+2,G-39,5,'#fff1bc');}
+  const xx=2870-cam;
+  text('♡',xx,G-40,'#ffe5ed',18,'center');
+  // Photo trigger and collectible reward are retained by their original game state.
+  for(let i=0;i<3;i++)circle(xx-15+i*15,G-47+Math.sin(timer/340+i)*2,2,'#ffe9ac');
+ }
+ ctx.restore();
+}
+// V3.2.5 review candidate: purely visual pixel-stepped transition into the final beach.
+// The world-space collision map, checkpoint and sunset story remain untouched.
+function v325BeachLeftTransition(){
+ if(level!==1||L.under||L.secret)return;
+ ctx.save();ctx.imageSmoothingEnabled=false;
+ // A sandy visual apron at the beach-side bridge landing, no new collision.
+ for(let wx=2990;wx<3034;wx+=2){
+  const u=(wx-2990)/44,x=Math.round(wx-cam);
+  if(x<-4||x>W+4)continue;
+  const top=G+Math.round(18-28*u+2*Math.sin(u*7));
+  rect(x,top,2,H-top,u<.3?'#e6bda8':u<.65?'#efd0b0':'#f5dbb7');
+  if(wx%6===2)rect(x,top+8,2,2,'#fff0d6');
+ }
  ctx.restore();
 }
 // V2.8.4: full-width sand scene above the physics floor instead of recoloring the dirt underneath.
 function drawFinalBeach(){
  if(level!==1||L.under||L.secret)return;
- const start=3000,finish=3370,left=Math.max(0,start-cam),right=Math.min(W,finish-cam);
+ const start=2990,finish=3370,left=Math.max(0,start-cam),right=Math.min(W,finish-cam);
  if(right<=left)return;
  const w=right-left;
  ctx.save();
@@ -1610,12 +1775,7 @@ function drawFinalBeach(){
   ctx.lineTo(x,G+dune)}
  ctx.lineTo(right,H+12);ctx.lineTo(left,H+12);ctx.closePath();ctx.fill();
  rect(left,G+17,w,H-G-17,'#f5dbb7');
- // Foreground ripples are soft, curved; no horizontal turf edge remains.
- ctx.fillStyle='#c9e5e3';ctx.globalAlpha=.72;ctx.beginPath();ctx.moveTo(left,G+48);
- for(let x=left;x<=right;x+=5){ctx.lineTo(x,G+44+3*Math.sin((x+cam)/31+timer/510))}
- ctx.lineTo(right,H+2);ctx.lineTo(left,H+2);ctx.closePath();ctx.fill();
- ctx.globalAlpha=.9;ctx.strokeStyle='#fff7e6';ctx.lineWidth=2;ctx.beginPath();
- for(let x=left;x<=right;x+=5){const y=G+43+3*Math.sin((x+cam)/31+timer/510);if(x===left)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+ // Dry continuous beach foreground; no near-shore water overlay or foam line.
  ctx.globalAlpha=.9;
  for(let i=0;i<48;i++){const wx=start+13+i*8,x=wx-cam;
   if(x<left||x>right)continue;
@@ -1632,14 +1792,25 @@ function drawFinalBeach(){
  }
  ctx.restore();
 }
-function drawShallowCove(){
- if(level!==1||L.under||L.secret)return;
- const left=Math.max(0,2710-cam),right=Math.min(W,3010-cam);
- if(right<=left)return;
- ctx.save();ctx.globalAlpha=.62;rect(left,G-5,right-left,16,'#a7d9db');
- for(let i=0;i<12;i++){const x=2720+i*25-cam;if(x<left||x>right)continue;
-  rect(x,G+2+Math.sin(timer/360+i)*2,14,2,'#fff4d7')}
+// V3.2.5 second-level beach decoration: visual-only, four 72x72 pixel sprites.
+// No terrain, collisions, checkpoint, sunset or story state is changed.
+const v325BeachDecorAtlas=new Image();
+v325BeachDecorAtlas.src='data:image/png;base64,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';
+function v325BeachDecor(){
+ if(level!==1||L.under||L.secret||L.cabin)return;
+ if(!v325BeachDecorAtlas.complete||!v325BeachDecorAtlas.naturalWidth)return;
+ // Preserve the central sitting/heart scene around x=3234 unobstructed.
+ const items=[{wx:3068,sy:0,w:57,h:57},{wx:3130,sy:72,w:53,h:53},{wx:3312,sy:144,w:49,h:49},{wx:3360,sy:216,w:37,h:37}];
+ ctx.save();ctx.imageSmoothingEnabled=false;
+ for(const a of items){const x=Math.round(a.wx-cam-a.w/2),y=Math.round(G+14-a.h);
+  if(x+a.w<0||x>W)continue;
+  ctx.drawImage(v325BeachDecorAtlas,a.sy,0,72,72,x,y,a.w,a.h);
+ }
  ctx.restore();
+}
+function drawShallowCove(){
+ // Intentionally empty: the former pale-blue strip looked like a water trench.
+ // The distant ocean remains rendered by the background layer.
 }
 function bridge(a,c1,c2){let x=a.x-cam;rect(x,a.y,a.w,8,c1);rect(x,a.y+8,a.w,3,c2);for(let i=4;i<a.w;i+=12)rect(x+i,a.y+2,2,4,c2)}
 const qbrickArt={};for(const [key,url] of Object.entries({fresh:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAABTUlEQVR4nLWVPUvDUBSGn6sRBAcHEVyE6lDsL1BxSib7B6w6uQoZi+AkToJ2FMTNxU90dmtACNqhq5VCacHZr02HWofkNo35Tug7nZxz7pPDm8ONYEC9r7MeGSQmt4SMFYCrzalMQCnJWb94E4pMlsp5aJ1mApfKea4rTQCUz/NZZ9p8GUw9HXXlGJoVXt/HOFqd6SmuoqnD8n46sKnDdK7/qAR32hpf8+a+byKPecGPe06sNgCo7iz0U9rhi/UyoxAKHgms/INqRYFWFA7QricHGwUX1E/V++AtDfXYF+hjj5+CJ/aTjz3ZwQmgycADioJCnD2WMgqhHys9WG2gqUTur1RiK+JOPXwrOnctcrsndA62A5vnJ+zeB2/NOWuZIOS1+fH8E3uaMN3WbTBYN//i3CgAl0+pNhCAjaVfau2u+w9Sa3ftKD3YYQxRf2cqZp2bV9cvAAAAAElFTkSuQmCC',used:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAj0lEQVR4nGNgoBFgZGBgYKgtyP5PTUObJ0xlZIFx3FxtqGLort1HGBgYGBhYkAUVFOQpMvTBg4dwNhNFJuEBKC6+dPkqg66OLsPlK5fJMoyPlwfOxnAxuYaiA5oFxdAzmAWf5IFDJwka4GBnjlV8mAUFLm8SA4ZeUNAnjJHzOtUMPnn4GNUMZWAYimFMMwAAnAkYf2m8fNQAAAAASUVORK5CYII='})){const im=new Image();im.src=url;qbrickArt[key]=im;}
@@ -1650,20 +1821,24 @@ function qbrick(b){const used=data.qb.includes(qKey(b));const x=b.x-cam,y=b.y-(b
  if(!used&&b.reward==='gift')rect(x+b.w-5,y+3,3,3,'#e879ac');if(!used&&b.reward==='keepsake')rect(x+3,y+3,3,3,'#ff8caa');}
 const v325HeartCoinSprite=new Image();v325HeartCoinSprite.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABCUlEQVR4nGNkwAHmeEn8R+anbHvBiE0dhuAcL4n/ya3aWA2dW30VwyAmrJqVEyAYDSS3amO4DG4AimY8wDOQC8UQRqya7y7AacCzM/cZGBgYGLav/8aQsu0FIxOGirsLGF7OCWJ4OSeIgYGBgeFmnTXDzTprnAYyotgO1Sye6QvRXDkHRbF601G4C2CuYEG2GQZeTt+M00Z0gOEF8ZR1WBWqNx2Fsz88/I7bAGyGoGsWkOdEGJCy7QXj3OqrWA05/+EFimZkgDsWkEDEpLso/Gtrr6HYDvcCLlega9YK1kKxnYEBLS/M8ZL47xnIhdcgZM1wF8BAyrYXjNvXfyNaM4YL0F2Dbjg2dQDBtXxbpES7rAAAAABJRU5ErkJggg==';
 function coinDraw(x,y){if(v325HeartCoinSprite.complete&&v325HeartCoinSprite.naturalWidth){ctx.drawImage(v325HeartCoinSprite,Math.round(x)-8,Math.round(y)-8,16,16);return;}circle(x,y,7,'#b97826');circle(x,y,6,'#ffd25c');circle(x-1.5,y-2,2,'#fff2ac');ctx.fillStyle='#e65c86';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText('♥',x,y+3);ctx.textAlign='left'}
+const v325MysteryGiftImg=new Image();v325MysteryGiftImg.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAABPklEQVR4nGNgGAVQ8P/j7f+UyMMAI6kGMPKrYughRS0TMa7CZzgplmFY+P/JXLhmXBpglsAwac7FE6Qwg9HFXh6ciMIXt8/HNBSPY0kOUlLB/69HURyN1SWflh3DGlS8Th8YXp7ahiImbubF8HmfAFbL+KKsMMxnQRdYHtXwn4GBgYFXXwGLERewGoxN7eeLDxiWRzX8j1zWgGIphoWEgLiZF6laUADN4xAdYGbiz6QndbwW8KKmWLr7kO4WYiSaFelLGbx93HBq4PUVReF/3vwaIu4vhBDb+I6BgYGBYeuWXRj6B96HDAwMDN/uP8epgZcB1Ycwtd8m4NaDDEZgomFgYGDgUpRkYGBgYOC1VkcR/3z0Jk61WMHVyxhCg8OHMIDNRzSxEFv+gYEI32ii1RJtIT6wIn0pqVpGAW0BAL3hbBuhRA0xAAAAAElFTkSuQmCC';
 function pickupDraw(a){const x=a.x-cam,y=a.y;if(x<-25||x>W+25)return;
  if(a.kind==='snowboard'){rect(x-15,y-3,30,6,'#f8c5dd');rect(x-12,y-5,24,2,'#fff');rect(x-8,y-7,5,3,'#7baed5');rect(x+4,y-7,5,3,'#7baed5')}
   else if(a.kind==='keepsake'){ctx.save();ctx.translate(x,y);ctx.scale(1.3,1.3);heart(0,0);ctx.restore()}
  else if(a.kind==='key'){circle(x-4,y,6,'#ffe47c');rect(x,y-2,14,4,'#e9b74e');rect(x+9,y+2,3,5,'#e9b74e');text('✦',x-4,y+3,'#fff',8,'center')}
+ else if(a.kind==='gift'&&v325MysteryGiftImg.complete&&v325MysteryGiftImg.naturalWidth){ctx.save();ctx.imageSmoothingEnabled=false;ctx.drawImage(v325MysteryGiftImg,Math.round(x-14),Math.round(y-15),28,28);ctx.restore()}
  else{rect(x-10,y-9,20,18,'#f3a5c5');rect(x-10,y-3,20,5,'#fff0a9');rect(x-2,y-9,4,18,'#fff0a9');text('♡',x,y+5,'#fff',11,'center')}
 }
 // V3.2.5 mushroom spring visual-only sprites; collision and physics unchanged.
 const v325MushroomSpring0=new Image();v325MushroomSpring0.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAPCAYAAAD6Ud/mAAABJ0lEQVR4nGNkIAF8L2/7j8zn7KxiJFYvQYX3gwrhhkuoiqLIvbj9Gs5WXNeP1yysksiGIwMJVVEGjppABgYGBoYfLesxLMNnKYZAm13o/0gRGQwLsBkIAwoL0xgexM+C85e/ecJQdWg1itlMOHVDDVBYmIbXEgYGBoYH8bMYFBam4VUDtxXZJ4R8QCxA9hlWH1HDEnTAgu4CBgYGhsqtTRQZ2u5dhyFGdD442m3/n4GBgcEqPJqBUS6NEca3Lj1IlBl4EwM2wCiXxvj/0SysyR+vPkIKYC6HAavwaIZjK5diqCPkMxTJr9d64YZyyXoxMDAwMBybkUHILRAHZMxgYGBgYPj2eBtcjFurGG4+TouoAZAtIjmOyAVYw3VjdwJFPvMvXYBhLgClUmE46J3MnQAAAABJRU5ErkJggg==';
 const v325MushroomSpring1=new Image();v325MushroomSpring1.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAPCAYAAAD6Ud/mAAAAzklEQVR4nGNgGAWDHTCSovh7edt/ZD5nZxXR+gkqvB9UCDdcQlUURe7F7ddwtuK6frxmYZVENhwZSKiKMnDUBDIwMDAw/GhZj2EZPksxBNrsQv9HishgWIDNQBhQWJjG8CB+Fpy//M0ThqpDq1HMZsKpG2qAwsI0vJYwMDAwPIifxaCwMA2vGrityD4h5ANiAbLPsPqIGpagAxZ0FzAwMDBUbm2iyNB27zoMMZQI+3qtF2tqIxdwaxXDzcebGKgJsOajjd0JFPnMv3QBhrkADKJEMxf770cAAAAASUVORK5CYII=';
+const v325CoastPlatformArt=new Image();v325CoastPlatformArt.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAAAQCAYAAADpunr5AAABCklEQVR4nGNkgIKlWf7/QwrDGEYB7cGa/lUM0dM2MjIwMDAwDbRjRjpgyXAJ+w9h/hxYl4wwAAt3FmTBNf2rGBQUhAbGRSMEPHjwDoXPgk3RlJ2fMMSmlxkTZcHVi7eximvrq45I/ZhhycLgo/4HiYcDLJvhBGdHZezD6TBiwUjWjx6WyGC0Eh5ggDMH4AN7T3ESpc7Z7PuofgKAEVYb26ohWkFbbmLGC3K5NQqIB7jC8vAtdgYGBiw54PR9bgZsTVKI+CggHeBv3mMtgsTZ2LEqttThwhA7fuUb0U4ZifrRw9JU8SsKnxHREYMADlayqoVRQCT48Ru1KMcIbXQFo2AUjIJRMAqGLQAA+vFxHzQ7ZAYAAAAASUVORK5CYII=';
+function v325DrawCoastPlatform(x,y,w){if(v325CoastPlatformArt.complete&&v325CoastPlatformArt.naturalWidth){ctx.save();ctx.imageSmoothingEnabled=false;ctx.drawImage(v325CoastPlatformArt,Math.round(x),Math.round(y),Math.round(w),13);ctx.restore();return true;}return false;}
 function platDraw(pl){const x=pl.x-cam;if(x<-80||x>W+80)return;
  if(pl.kind==='mover'){const y=pl.y;
-  if(level===1&&!L.secret&&!L.under){rect(x,y,pl.w,8,'#e7bd86');rect(x,y+8,pl.w,5,'#9d765a');for(let i=7;i<pl.w;i+=13)rect(x+i,y+2,2,5,'#b58b68');circle(x+6,y+13,3,'#f4e2b9');circle(x+pl.w-6,y+13,3,'#f4e2b9')}
-  else{circle(x+10,y+4,10,'#e6f3f4');circle(x+pl.w/2,y-1,13,'#fff');circle(x+pl.w-10,y+4,10,'#f4fbfa');rect(x,y+2,pl.w,9,'#f5fbf8');rect(x+4,y+10,pl.w-8,3,'#a6d4eb');if(level===2&&!L.secret&&!L.under&&!L.cabin){rect(x+7,y+9,pl.w-14,2,'#a4c8ce');rect(x+13,y+1,pl.w-26,2,'#ffffff')}}}
- if(pl.kind==='fall'){const sh=pl.t>0&&pl.t<450?Math.sin(timer/25)*1.5:0;rect(x+sh,pl.y,pl.w,9,'#c69468');rect(x+sh,pl.y+9,pl.w,3,'#8d6248');for(let i=6;i<pl.w;i+=14)rect(x+sh+i,pl.y+2,2,5,'#8d6248')}
+  if(level===1&&!L.secret&&!L.under&&v325DrawCoastPlatform(x,y,pl.w)){}else if(level===1&&!L.secret&&!L.under){rect(x,y,pl.w,3,'#ffdc9c');rect(x,y+3,pl.w,6,'#b87b58');rect(x,y+9,pl.w,4,'#77536a');for(let i=5;i<pl.w-4;i+=15){rect(x+i,y+4,11,2,'#e2ad7a');rect(x+i+2,y+7,7,1,'#80556b');}circle(x+5,y+7,2,'#f4d7a5');circle(x+pl.w-5,y+7,2,'#f4d7a5')}
+  else{circle(x+10,y+4,10,'#f2fbff');circle(x+pl.w/2,y-1,13,'#fff');circle(x+pl.w-10,y+4,10,'#f2fbff');rect(x,y+2,pl.w,9,'#eef8ff');rect(x+4,y+10,pl.w-8,3,'#a6d4eb')}}
+ if(pl.kind==='fall'){const sh=pl.t>0&&pl.t<450?Math.sin(timer/25)*1.5:0;if(level===1&&!L.secret&&!L.under&&v325DrawCoastPlatform(x+sh,pl.y,pl.w))return;rect(x+sh,pl.y,pl.w,3,'#ffdfa2');rect(x+sh,pl.y+3,pl.w,6,'#bc805b');rect(x+sh,pl.y+9,pl.w,3,'#78546b');for(let i=6;i<pl.w;i+=14){rect(x+sh+i,pl.y+4,9,2,'#e9b183');rect(x+sh+i+2,pl.y+7,5,1,'#8d6248');}}
  if(pl.kind==='spring'){const sprite=pl.anim?v325MushroomSpring1:v325MushroomSpring0;if(sprite.complete&&sprite.naturalWidth)ctx.drawImage(sprite,Math.round(x),Math.round(pl.y),26,15);else{const sq=pl.anim?4:0;rect(x+2,pl.y+8,pl.w-4,7,'#9d5b73');rect(x+9,pl.y+6,8,9-sq,'#f5e6d3');rect(x+1,pl.y+sq,pl.w-2,8,'#e8577f');rect(x+1,pl.y+sq,pl.w-2,2,'#ffc3d8');circle(x+7,pl.y+3+sq,2.2,'#fff');circle(x+18,pl.y+4+sq,2,'#fff')}}}
 function pipeDraw(o){const x=o.x-cam;if(x<-60||x>W+60)return;rect(x,o.top+5,o.w,G-o.top-5,'#4bba83');rect(x+4,o.top+5,5,G-o.top-5,'#7cdda0');rect(x-5,o.top,o.w+10,10,'#7cdda0');rect(x-5,o.top+8,o.w+10,2,'#3f9a6c');
  if(o.type==='pipe'&&!o.exit&&!data.seed){circle(x+o.w/2,o.top-14+Math.sin(timer/250)*2,6,'#fff1a8');text('跳上管道',x+o.w/2,o.top-26,'#fff',11,'center')}
@@ -1720,102 +1895,43 @@ function cloudDraw(c){
 
 // V3.0.2 — spring diving, summer cave, redwood autumn, winter cabin, seed pickups and cooperative watering.
 function drawFourSeasons(){
- // V3.2.5 third-level art-only candidate. World positions, collision and gameplay untouched.
- const sky=ctx.createLinearGradient(0,0,0,G);
- sky.addColorStop(0,'#a6b5dc');sky.addColorStop(.38,'#d5c6e7');sky.addColorStop(.78,'#f5d9d2');sky.addColorStop(1,'#e1e6c6');
+ // One continuous forest-to-garden palette; no hard seasonal panels.
+ const sky=ctx.createLinearGradient(0,0,0,G);sky.addColorStop(0,'#c7e4db');sky.addColorStop(.7,'#dff0cf');sky.addColorStop(1,'#b7d8b9');
  ctx.fillStyle=sky;ctx.fillRect(0,0,W,G);
- // Distant violet ridges, mist and forest silhouettes; gentle parallax.
- for(let layer=0;layer<3;layer++){
-  const speed=[.10,.22,.37][layer],base=[183,215,245][layer];
-  ctx.fillStyle=['#b8b7cf','#9eb7bd','#86a8a0'][layer];
-  ctx.beginPath();ctx.moveTo(-30,G);
-  for(let k=-2;k<17;k++){let x=k*90-((cam*speed)%90);ctx.lineTo(x,base-((k*k+layer*7)%4)*9);ctx.lineTo(x+45,base-13-((k+layer*3)%3)*7)}
-  ctx.lineTo(W+40,G);ctx.closePath();ctx.fill();
- }
  for(let i=0;i<24;i++){
-  const wx=i*115+25,x=wx-cam*.38;if(x<-130||x>W+130)continue;
-  rect(x-7,110,14,G-110,'#879e95');rect(x-3,114,3,G-114,'#b5c6ae');
-  for(let j=0;j<4;j++)circle(x+(j%2?17:-13),111+j*8,23+(j%2)*4,j%2?'#85a89d':'#a4beb1');
+  const wx=i*115+25, x=wx-cam*.38;if(x<-130||x>W+130)continue;
+  rect(x-7,105,14,G-105,'#a3b6a1');circle(x,108,36,'#9cc5a8');
  }
- // Fifth pass: layered natural pixel-bough silhouettes, based on approved concept art.
- // Only visual tree drawing changes; anchors and collision remain untouched.
+ // Redwood trunks with vertical bark, layered canopies and warm sunbeams.
  for(let i=0;i<15;i++){
-  const wx=90+i*137,x=wx-cam;if(Math.abs(wx-980)<205||x<-130||x>W+130)continue;
-  const kind=i%3,top=[-54,-30,-42][kind]+((i*7)%13),base=G;
-  const trunk=[17,20,15][kind];
-  ctx.fillStyle='#694737';ctx.beginPath();ctx.moveTo(x-29,base);ctx.lineTo(x-trunk,base-34);ctx.lineTo(x-trunk+3,top+48);ctx.lineTo(x+trunk-5,top+48);ctx.lineTo(x+trunk,base-34);ctx.lineTo(x+30,base);ctx.closePath();ctx.fill();
-  rect(x-trunk+4,top+58,4,base-top-72,'#a87555');rect(x+trunk-8,top+80,3,base-top-96,'#4c382f');
-  for(let j=0;j<12;j++){const yy=top+79+j*21,dx=((i*13+j*17)%25)-12;rect(x+dx,yy,2,5+(j%3)*2,j%2?'#bd8760':'#4d372e')}
-  // Large connected tiers taper toward the crown; scalloped pixel needle edges.
-  const widths=[[24,34,45,54,47,40,29],[22,36,49,57,52,39,28],[20,30,43,49,55,36,25]][kind];
-  const shifts=[[0,-6,5,-3,6,-5,3],[2,7,-4,4,-7,5,-3],[-3,5,-8,3,8,-4,2]][kind];
-  const tones=['#416d56','#4d7b5d','#5a8866'];
-  for(let tier=widths.length-1;tier>=0;tier--){
-   const cy=top+24+tier*22,span=widths[tier],center=x+shifts[tier];
-   // Connecting woody boughs are mostly hidden beneath foliage.
-   rect(x-3,cy-2,Math.max(3,center-x+span-6),3,'#614937');
-   const foliage=tones[(i+tier)%3];
-   ctx.fillStyle=foliage;ctx.beginPath();
-   ctx.moveTo(center-span-9,cy+4);ctx.lineTo(center-span-2,cy-5);
-   ctx.lineTo(center-span+10,cy-12);ctx.lineTo(center-span+18,cy-17);
-   ctx.lineTo(center-10,cy-20);ctx.lineTo(center+6,cy-23);
-   ctx.lineTo(center+span-17,cy-14);ctx.lineTo(center+span-3,cy-6);
-   ctx.lineTo(center+span+8,cy+4);ctx.lineTo(center+span-6,cy+7);
-   ctx.lineTo(center+span-13,cy+13);ctx.lineTo(center+span-25,cy+10);
-   ctx.lineTo(center+10,cy+13);ctx.lineTo(center-8,cy+12);
-   ctx.lineTo(center-span+15,cy+12);ctx.lineTo(center-span+5,cy+16);
-   ctx.closePath();ctx.fill();
-   // Uneven clusters and dangling needles make the bough edges organic.
-   for(let k=0;k<5;k++){
-    const px=center-span+12+k*(span*2-24)/4;
-    const wobble=((i*7+tier*5+k*11)%7)-3;
-    rect(px,cy+9+wobble,5+(k%2)*3,4+((tier+k)%3)*3,foliage);
-   }
-   rect(center-span+19,cy-13,Math.max(10,span*.7),3,'#8fae7c');
-   rect(center-span+25,cy-9,Math.max(8,span*.42),3,'#b0c68a');
-   rect(center+8,cy+7,Math.max(8,span*.42),3,'#345f4d');
-  }
-  // A tapered irregular top ties the branches into one tree silhouette.
-  ctx.fillStyle='#547e61';ctx.beginPath();ctx.moveTo(x+2,top-26);ctx.lineTo(x-9,top-3);ctx.lineTo(x-17,top+16);ctx.lineTo(x-8,top+26);ctx.lineTo(x+13,top+27);ctx.lineTo(x+17,top+11);ctx.closePath();ctx.fill();
-  rect(x-4,top+1,4,15,'#91b17d');
+  const wx=90+i*137,x=wx-cam;if(Math.abs(wx-980)<205||x<-115||x>W+115)continue;
+  const h=205+(i%3)*20;
+  rect(x-21,G-h,42,h,'#965e43');rect(x-13,G-h,4,h,'#bd8058');rect(x+9,G-h,3,h,'#6d443c');
+  for(let j=0;j<4;j++){circle(x+(j%2?19:-17),G-h-18+j*10,27+(j%2)*6,j%2?'#638f69':'#7da978')}
+  for(let j=0;j<5;j++)circle(x+(j-2)*8,G-h+70+j*20,2,'#d49c72');
  }
- // Woodland floor: ferns, mushrooms and tiny flowers, not collectible markers.
- for(let i=0;i<34;i++){
-  const wx=40+i*73,x=wx-cam;if(x<-25||x>W+25||Math.abs(wx-980)<115)continue;
-  rect(x,G-13,2,13,'#648c6d');
-  for(let j=0;j<3;j++){rect(x-9+j*6,G-11-j*3,8,3,j%2?'#91bd81':'#6b9e75');rect(x+2,G-9-j*4,8,3,'#7aaa76')}
-  if(i%4===0){circle(x+13,G-8,4,'#f4c5d5');circle(x+17,G-9,2,'#fff2c7')}
-  if(i%7===0){rect(x-14,G-9,4,8,'#f5dfb7');circle(x-12,G-10,7,'#d79b83')}
+ for(let i=0;i<12;i++){const wx=70+i*195,x=wx-cam;if(Math.abs(wx-980)<130||x<-20||x>W+20)continue;
+  circle(x,G-8,8,'#72a77a');circle(x+11,G-11,7,'#8cc58b');circle(x-9,G-5,3,'#f3c6dc');
  }
- // Cabin: retains original center x=980 and entrance alignment.
+ // The cabin sits naturally in the forest and conceals the underground cave.
  const cx=980-cam;if(cx>-150&&cx<W+150){
-  rect(cx-83,G-137,166,137,'#92634f');rect(cx-76,G-127,152,115,'#c99b73');
-  for(let j=0;j<8;j++){rect(cx-75,G-123+j*14,150,2,'#b48666');rect(cx-73,G-118+j*14,7,2,'#e4b98d')}
-  ctx.fillStyle='#684b4b';ctx.beginPath();ctx.moveTo(cx-102,G-135);ctx.lineTo(cx,G-207);ctx.lineTo(cx+102,G-135);ctx.closePath();ctx.fill();
-  ctx.strokeStyle='#b48b77';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(cx-93,G-138);ctx.lineTo(cx,G-197);ctx.lineTo(cx+93,G-138);ctx.stroke();
-  rect(cx-64,G-96,35,39,'#654e52');rect(cx+33,G-96,35,39,'#654e52');
-  rect(cx-60,G-92,27,31,'#ffe2a4');rect(cx+37,G-92,27,31,'#ffe2a4');
-  rect(cx-48,G-93,3,33,'#b98569');rect(cx+49,G-93,3,33,'#b98569');
-  rect(cx-16,G-74,32,74,'#654e49');rect(cx-12,G-70,24,70,'#826457');circle(cx+8,G-35,2.5,'#f6d695');
-  rect(cx-89,G-14,178,14,'#8e7564');
-  for(let j=0;j<4;j++){circle(cx-79+j*6,G-14,5,'#6d9d73');circle(cx+67+j*6,G-14,5,'#6d9d73')}
-  rect(cx-83,G-139,8,8,'#d4a578');rect(cx+75,G-139,8,8,'#d4a578');
-  text('森林小屋',cx,G-219,'#73566c',13,'center');
+  rect(cx-83,G-137,166,137,'#b88465');rect(cx-73,G-124,146,110,'#dfb38a');
+  ctx.fillStyle='#7c584f';ctx.beginPath();ctx.moveTo(cx-100,G-135);ctx.lineTo(cx,G-205);ctx.lineTo(cx+100,G-135);ctx.fill();
+  rect(cx-64,G-95,34,35,'#ffe6a9');rect(cx+35,G-95,33,35,'#ffe6a9');rect(cx-16,G-74,32,74,'#755b53');
+  circle(cx,G-91,5,'#ffde9e');text('森林小屋',cx,G-220,'#785a67',13,'center');
   if(!data.seed){circle(cx,G-237+Math.sin(timer/350)*3,7,'#fff2b8');text('地下藏着秘密',cx,G-250,'#8e667b',11,'center')}
  }
- // Gradual spring blossoms, no hard biome seams.
- for(let i=0;i<23;i++){
-  const wx=1510+i*42,x=wx-cam;if(x<-20||x>W+20)continue;
-  rect(x,G-18-(i%3)*6,2,18+(i%3)*6,'#77a67d');
-  for(let j=0;j<4;j++)circle(x+Math.cos(j*1.57)*5,G-22-(i%3)*6+Math.sin(j*1.57)*5,4,i%2?'#f4b9d4':'#fbd7b0');
-  circle(x,G-22-(i%3)*6,2,'#fff2b2');
+ // Gradual blossom density toward the final garden.
+ for(let i=0;i<19;i++){
+  const wx=1510+i*52,x=wx-cam;if(x<-20||x>W+20)continue;
+  circle(x,G-24-(i%3)*9,7,i%2?'#f4b9d4':'#ffe2a4');circle(x+6,G-22-(i%3)*9,4,'#fff4c4');
  }
  const tx=2380-cam;if(tx>-160&&tx<W+160){
-  rect(tx-19,G-165,38,165,'#8a6269');rect(tx-10,G-165,5,165,'#b68182');
-  for(let i=0;i<29;i++){const a=i*2.4,r=35+(i%6)*12;
-   circle(tx+Math.cos(a)*r,G-171+Math.sin(a)*r*.68,18+(i%3)*4,
+  rect(tx-17,G-163,34,163,'#986b78');
+  for(let i=0;i<24;i++){const a=i*2.4,r=35+(i%6)*12;
+   circle(tx+Math.cos(a)*r,G-171+Math.sin(a)*r*.68,19+(i%3)*4,
     gardenPlanted().includes(0)?(i%2?'#ffb0d0':'#ffe0ec'):'#c6a8b9')}
-  for(let i=0;i<9;i++)circle(tx+(i-4)*14,G-185+Math.sin(timer/480+i)*6,2.5,'#fff4b9');
+  for(let i=0;i<7;i++)circle(tx+(i-3)*17,G-183+Math.sin(timer/480+i)*6,2.6,'#fff4b9');
   text('♡',tx-8,G-206,'#fff5d7',24);
  }
 }
@@ -2000,7 +2116,7 @@ function draw(){
   return;
  }
  if(!L){ctx.fillStyle='#2a203f';ctx.fillRect(0,0,W,H);return}
- bg();if(level===0&&!L.under&&!L.secret&&!L.cabin)firstLevelTownMidground();if(level===2&&!L.under&&!L.secret&&!L.cabin)drawFourSeasons();L.trees.forEach(tree);
+ bg();v325SeasideDecorBack();if(level===0&&!L.under&&!L.secret&&!L.cabin)firstLevelTownMidground();if(level===2&&!L.under&&!L.secret&&!L.cabin)drawFourSeasons();L.trees.forEach(tree);
  // House 753 retains its approved foreground ordering. The terminal
  // cottage is repositioned left on normal ground, leaving the final lamp clear.
  if(level===0&&!L.secret&&!L.under&&!L.cabin){
@@ -2044,7 +2160,7 @@ function draw(){
   let glow=ctx.createRadialGradient(lx,ly,2,lx+facing*55,ly-5,145);glow.addColorStop(0,'#ffe9ad88');glow.addColorStop(1,'#ffe6a300');ctx.fillStyle=glow;ctx.fillRect(0,0,W,G);
   // Keep the existing cave light gradient; remove only the floating extra torch.
   for(let i=0;i<9;i++){const xx=i*106+25-cam*.12;ctx.fillStyle=i%2?'#7de1f0':'#a9efff';ctx.globalAlpha=.42;ctx.beginPath();ctx.moveTo(xx,15);ctx.lineTo(xx+18,15);ctx.lineTo(xx+8,65+(i%3)*18);ctx.fill();ctx.globalAlpha=1;}text('蓝冰洞',W/2,52,'#d8f7ff',16,'center');text('出口 →',1460-cam,G-53,'#fff3cf',13,'center');}
- L.map.forEach(terrain);if(level===0&&!L.under&&!L.secret&&!L.cabin)firstLevelDecor();drawShallowCove();drawFinalBeach();clouds.forEach(cloudDraw);
+ L.map.forEach(terrain);v325SeasideDecorFront();if(level===0&&!L.under&&!L.secret&&!L.cabin)firstLevelDecor();drawShallowCove();drawFinalBeach();v325BeachLeftTransition();v325BeachDecor();clouds.forEach(cloudDraw);
  if(L.under){
   const c=icePuzzle;
   // Ice cube and pressure plate, both in world coordinates.
@@ -2073,13 +2189,74 @@ function draw(){
 
  // Stars uncover an optional elevated lookout, not a shortcut across the tidal section.
  if(level===2&&!L.under&&(data.story.bridge||(scene&&scene.type==='switch'))){const r=data.story.bridge?1:Math.min(1,coop.bridgeTime/2000);bridge({x:1555,y:G-7-(1-r)*75,w:225},'#c99a6b','#8d6248')}
- if(!L.under&&!L.secret&&!L.cabin)for(let i=1;i<L.cps.length;i++){if(level===2&&i===1)continue;if(level===0&&(i===1||i===2))continue;let x=L.cps[i]-cam;if(x<-30||x>W+30)continue;drawCheckpointPennant(x,data.cpLevel===level&&data.cp>=i)}
+ if(!L.under&&!L.secret&&!L.cabin)for(let i=1;i<L.cps.length;i++){if(level===2&&i===1)continue;if(level===0&&(i===1||i===2))continue;let x=L.cps[i]-cam+(level===1&&i===5?36:0);if(x<-30||x>W+30)continue;drawCheckpointPennant(x,data.cpLevel===level&&data.cp>=i)}
  for(const o of L.objects)if(o.type==='sign')sign(o);
  if(level===1&&!L.under&&!L.secret){
-  const px=2140-cam;rect(px,G-7,48,7,coastCoop.phase?'#ffcf87':'#e9a2b2');
-  if(coastCoop.phase===0&&p.x>1900&&p.x<2230)text('两个人一起，才能让木筏靠岸 ♡',px-34,G-34,'#fff7e8',12,'center');
-  const rx=2206-cam;rect(rx,G-64,3,64,'#94777d');circle(rx+1,G-66,5,'#ffe5b6');
-  if(coastCoop.phase>0){ctx.strokeStyle='#e7cfac';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(rx,G-64);ctx.lineTo((coastCoop.phase>=2?2284:2444)-cam,(coastCoop.phase>=2?G-23:G-2));ctx.stroke()}
+  // V3.2.5 Level 2 cooperative raft: visual-only seaside star mechanism.
+  // All world positions, collision data, phases and gameplay triggers remain unchanged.
+  const px=2140-cam, active=coastCoop.phase>0;
+  // Decorative inset plate; the original 48x7 visual footprint is retained.
+  rect(px,G-7,48,7,active?'#bd865d':'#aa7785');
+  rect(px+2,G-7,44,2,active?'#ffe4a0':'#f8bfd0');
+  for(let k=0;k<3;k++)rect(px+7+k*15,G-4,7,2,active?'#e9b67d':'#d58ca4');
+  rect(px+2,G-6,3,4,'#684b62');rect(px+43,G-6,3,4,'#684b62');
+  // Fixed world-space timber winch: its base and anchor are unchanged.
+  const rx=2206-cam;
+  rect(rx-4,G-10,11,10,'#80566a');rect(rx-2,G-8,7,5,'#c99271');
+  rect(rx-2,G-64,7,56,'#684e61');rect(rx-1,G-62,3,52,'#b98975');
+  for(let k=0;k<5;k++)rect(rx+3,G-57+k*10,2,4,'#e3b28a');
+  rect(rx-6,G-70,15,8,'#79536a');rect(rx-4,G-69,11,4,'#e6b982');
+  // Small golden star on the original pulley anchor, no new interactive area.
+  circle(rx+1,G-66,5,active?'#fff0b4':'#f6d9a5');
+  rect(rx,G-73,2,14,'#fff2bf');rect(rx-5,G-67,12,2,'#fff2bf');
+  rect(rx-2,G-68,6,4,active?'#ffd46c':'#efc18e');
+  if(active){
+   // Pixel rope uses the exact original endpoints and only changes stroke styling.
+   const taskRaft=L.plats.find(a=>a.kind==='mover'&&a.x0===2398);
+   const ex=(taskRaft?taskRaft.x+taskRaft.w/2:2444)-cam;
+   const ey=taskRaft?taskRaft.y:G-2;
+   ctx.save();ctx.lineWidth=3;ctx.strokeStyle='#7e5970';ctx.beginPath();ctx.moveTo(rx,G-64);ctx.lineTo(ex,ey);ctx.stroke();
+   ctx.lineWidth=1;ctx.strokeStyle='#ffe5a6';ctx.beginPath();ctx.moveTo(rx,G-65);ctx.lineTo(ex,ey-1);ctx.stroke();ctx.restore();
+  }
+  // V3.2.5: decorative feedback only. No collision, platform or trigger changes.
+  // Phase 1: warm star-light travels along the rope while the lion pulls.
+  // Phase 2: a short 900ms heart-and-star arrival celebration near the winch.
+  if(coastCoop.phase===1){
+   const raft=L.plats.find(a=>a.kind==='mover'&&a.x0===2398);
+   if(raft){
+    const ex=raft.x+raft.w/2-cam, ey=raft.y, sx=rx, sy=G-65;
+    for(let j=0;j<4;j++){
+     const u=((coastCoop.t/125+j*.25)%1), xx=sx+(ex-sx)*u, yy=sy+(ey-sy)*u;
+     ctx.save();ctx.globalAlpha=.55+.35*Math.sin(u*Math.PI);
+     rect(Math.round(xx)-2,Math.round(yy)-1,5,3,'#ffe8a2');
+     rect(Math.round(xx),Math.round(yy)-3,1,7,'#fff8d8');ctx.restore();
+    }
+   }
+   const pulse=.55+.35*Math.sin(coastCoop.t/130);
+   ctx.save();ctx.globalAlpha=pulse;circle(rx+1,G-66,9,'#ffe2a1');ctx.restore();
+  }
+  if(coastCoop.phase===2&&coastCoop.t<900){
+   const progress=coastCoop.t/900, fade=1-progress;
+   const raft=L.plats.find(a=>a.kind==='mover'&&a.x0===2398);
+   const center=(raft?raft.x+raft.w/2:2330)-cam;
+   const top=(raft?raft.y:G-23)-8;
+   ctx.save();ctx.globalAlpha=Math.max(0,fade);
+   for(let j=0;j<9;j++){
+    const angle=j*Math.PI*2/9, radius=8+progress*30;
+    const xx=Math.round(center+Math.cos(angle)*radius),yy=Math.round(top+Math.sin(angle)*radius-progress*14);
+    if(j%3===0){text('♡',xx,yy,'#ffb6d4',12,'center');}
+    else{rect(xx-1,yy-4,3,9,'#fff0b7');rect(xx-4,yy-1,9,3,'#fff0b7');}
+   }
+   ctx.restore();
+  }
+  if(coastCoop.phase===0&&p.x>1900&&p.x<2230){
+   // Compact storybook prompt, shown only where the original hint appeared.
+   const tx=px-93,ty=G-118; // Raise the entire sign 20 world pixels; text stays centered inside.
+   rect(tx+2,ty+3,204,27,'#80566b');rect(tx,ty,204,27,'#fff0d9');
+   rect(tx+2,ty+2,200,2,'#e9adba');rect(tx+2,ty+23,200,2,'#d8a6a4');
+   rect(tx+8,ty+8,17,13,'#f5b7c7');rect(tx+11,ty+10,4,4,'#fff5ee');rect(tx+18,ty+10,4,4,'#ffe4a0');
+   text('双人合作，让木筏靠岸 ♡',tx+111,ty+18,'#80546a',11,'center');
+  }
   if(coastCoop.phase===0&&p.x>2010&&p.x<2210)text('♡',px+20,G-17,'#fff4d8',14,'center');
  }
  if(level===2&&!L.under&&!L.secret&&!L.cabin)drawGardenItems();
@@ -2134,7 +2311,7 @@ function draw(){
    }
   }
  if(!L.under&&!L.secret&&!L.cabin&&level===0){const flag=firstLevelFinishFlagArt;if(flag.complete&&flag.naturalWidth){ctx.drawImage(flag,Math.round(L.end-78-cam),G-94,52,94)}else{rect(L.end-70-cam,G-90,5,90,'#fff4e4');rect(L.end-65-cam,G-90,48,24,'#f18eb2');text('终点',L.end-59-cam,G-73,'#fff',13)}}
- for(const r of rockets){if(!r.parts){rect(r.x-1,r.y,2,7,r.c);ctx.globalAlpha=.4;rect(r.x-1,r.y+7,2,10,r.c);ctx.globalAlpha=1}else for(const q of r.parts)if(q.life>0){ctx.globalAlpha=Math.max(0,q.life);circle(q.x,q.y,2.4,r.c);ctx.globalAlpha=Math.max(0,q.life*.4);circle(q.x-q.vx*2,q.y-q.vy*2,1.6,r.c);ctx.globalAlpha=1}}
+ if(level===1&&scene&&scene.type==='fireworks')for(const r of rockets){if(!r.parts){rect(r.x-1,r.y,2,7,r.c);ctx.globalAlpha=.4;rect(r.x-1,r.y+7,2,10,r.c);ctx.globalAlpha=1}else for(const q of r.parts)if(q.life>0){ctx.globalAlpha=Math.max(0,q.life);rect(q.x-1.5,q.y-1.5,3,3,r.c);ctx.globalAlpha=Math.max(0,q.life*.3);rect(q.x-q.vx*2-1,q.y-q.vy*2-1,2,2,r.c);ctx.globalAlpha=1}}
  if(scene&&scene.type==='sunsetPhoto')drawSunsetPhoto();
  if(scene&&scene.type==='beachArrival'){text('🦁 我们就在这里等烟花吧。',W/2,64,'#fff5e8',17,'center')}
  if(scene&&scene.type==='sunset'&&scene.t>1500&&scene.t<6000){ctx.globalAlpha=Math.min(1,(scene.t-1500)/600,(6000-scene.t)/600);text('太阳慢慢落进海里……',W/2,58,'#fff',15,'center');ctx.globalAlpha=1}
@@ -2145,20 +2322,17 @@ function draw(){
 // Photo event and reusable pixel-polaroid illustration, drawn by the real game canvas.
 function drawSunsetPhoto(){
  const s=scene,t=s.t,center=W/2;
- // Slow-moving heart-shaped cloud remains in the golden hour, not a night sky.
- ctx.save();ctx.globalAlpha=Math.min(1,Math.max(0,(t-600)/650));
- const cx=center+120,cy=83;
- for(const [dx,dy,r] of [[-21,-6,15],[-8,-17,17],[10,-17,17],[23,-6,15],[0,4,22]])circle(cx+dx,cy+dy,r,'#ffe3e7');
- ctx.restore();
+ // Keep the sunset background and sun unobstructed during the bridge photo.
+ // The old heart-shaped cloud overlapped the sun; it is intentionally omitted.
  // Camera held by lion; small lens and camera body are clearly visible.
  const lx=lion.x-cam;
  rect(lx+14,lion.y+9,13,10,'#a78ca8');rect(lx+16,lion.y+6,5,3,'#f1cad8');circle(lx+21,lion.y+14,3,'#fce9ed');
  if(!s.shot){
-  text('🦁 这里好漂亮，我给你拍张照吧！',center,34,'#fffaf1',17,'center');
-  if(t>1200)text('✦ 按跳跃键摆姿势并拍照',center,57,'#ffebed',12,'center');
+  text('🦁 在桥上拍张照吧！',center,77,'#fffaf1',16,'center');
+
  }else{
   const elapsed=t-s.shotAt;
-  if(elapsed<180){ctx.globalAlpha=1-elapsed/180;rect(0,0,W,H,'#fff9ed');ctx.globalAlpha=1;}
+  if(elapsed<180){ctx.save();ctx.globalAlpha=.65*(1-elapsed/180);rect(center-118,35,236,244,'#fff9ed');ctx.restore();}
   // A designed pixel postcard, not a screenshot with touch controls.
   const x=center-106,y=50;
   ctx.save();ctx.fillStyle='#fffaf6';ctx.fillRect(x-8,y-8,212,224);
@@ -2173,7 +2347,7 @@ function drawSunsetPhoto(){
   bunny(x+89,y+125,1,false,false);
   text('夕阳下的你 ♡',center,y+204,'#b36c94',15,'center');
   ctx.restore();
-  text('📸 咔嚓！',center,31,'#fff9ed',17,'center');
+  text('📸 咔嚓！',center,78,'#fff9ed',17,'center');
  }
 }
 function loop(t){try{let dt=Math.min(40,t-last||16);last=t;
