@@ -1539,6 +1539,22 @@ function terrain(a){let x=a.x-cam;if(x>W||x+a.w<0)return;
   v325DrawNaturalTerrain(a);
   return;
  }
+ if(level===2&&!L.under&&!L.secret&&!L.cabin){
+  // Forest soil and moss, drawn to the original collision rectangles.
+  rect(x,a.y,a.w,H-a.y,'#755947');
+  rect(x,a.y+9,a.w,H-a.y-9,'#846451');
+  rect(x,a.y,a.w,6,'#638b64');rect(x,a.y+5,a.w,5,'#9bbd80');
+  rect(x,a.y+10,a.w,4,'#455f4c');
+  const left=Math.max(0,Math.floor((cam-a.x)/22)-1),right=Math.min(Math.ceil(a.w/22),Math.ceil((cam+W-a.x)/22)+1);
+  for(let k=left;k<right;k++){
+   let px=x+k*22;
+   rect(px+3,a.y+22+(k%3)*12,10,3,'#a17b60');
+   rect(px+12,a.y+47+(k%4)*16,3,9,'#5d4b3e');
+   if(k%3===0){rect(px+6,a.y+14,2,7,'#9dba7b');rect(px+2,a.y+15,10,2,'#72986b')}
+   if(k%5===0){rect(px+4,a.y+71,11,7,'#6b5346');rect(px+6,a.y+72,6,2,'#b18d6f')}
+  }
+  return;
+ }
  if(level===1&&!L.under&&!L.secret&&a.kind==='block'){
   if(true){
    // Low, climbable rock steps: collision stays solid, art follows the same geometry.
@@ -1646,7 +1662,7 @@ const v325MushroomSpring1=new Image();v325MushroomSpring1.src='data:image/png;ba
 function platDraw(pl){const x=pl.x-cam;if(x<-80||x>W+80)return;
  if(pl.kind==='mover'){const y=pl.y;
   if(level===1&&!L.secret&&!L.under){rect(x,y,pl.w,8,'#e7bd86');rect(x,y+8,pl.w,5,'#9d765a');for(let i=7;i<pl.w;i+=13)rect(x+i,y+2,2,5,'#b58b68');circle(x+6,y+13,3,'#f4e2b9');circle(x+pl.w-6,y+13,3,'#f4e2b9')}
-  else{circle(x+10,y+4,10,'#f2fbff');circle(x+pl.w/2,y-1,13,'#fff');circle(x+pl.w-10,y+4,10,'#f2fbff');rect(x,y+2,pl.w,9,'#eef8ff');rect(x+4,y+10,pl.w-8,3,'#a6d4eb')}}
+  else{circle(x+10,y+4,10,'#e6f3f4');circle(x+pl.w/2,y-1,13,'#fff');circle(x+pl.w-10,y+4,10,'#f4fbfa');rect(x,y+2,pl.w,9,'#f5fbf8');rect(x+4,y+10,pl.w-8,3,'#a6d4eb');if(level===2&&!L.secret&&!L.under&&!L.cabin){rect(x+7,y+9,pl.w-14,2,'#a4c8ce');rect(x+13,y+1,pl.w-26,2,'#ffffff')}}}
  if(pl.kind==='fall'){const sh=pl.t>0&&pl.t<450?Math.sin(timer/25)*1.5:0;rect(x+sh,pl.y,pl.w,9,'#c69468');rect(x+sh,pl.y+9,pl.w,3,'#8d6248');for(let i=6;i<pl.w;i+=14)rect(x+sh+i,pl.y+2,2,5,'#8d6248')}
  if(pl.kind==='spring'){const sprite=pl.anim?v325MushroomSpring1:v325MushroomSpring0;if(sprite.complete&&sprite.naturalWidth)ctx.drawImage(sprite,Math.round(x),Math.round(pl.y),26,15);else{const sq=pl.anim?4:0;rect(x+2,pl.y+8,pl.w-4,7,'#9d5b73');rect(x+9,pl.y+6,8,9-sq,'#f5e6d3');rect(x+1,pl.y+sq,pl.w-2,8,'#e8577f');rect(x+1,pl.y+sq,pl.w-2,2,'#ffc3d8');circle(x+7,pl.y+3+sq,2.2,'#fff');circle(x+18,pl.y+4+sq,2,'#fff')}}}
 function pipeDraw(o){const x=o.x-cam;if(x<-60||x>W+60)return;rect(x,o.top+5,o.w,G-o.top-5,'#4bba83');rect(x+4,o.top+5,5,G-o.top-5,'#7cdda0');rect(x-5,o.top,o.w+10,10,'#7cdda0');rect(x-5,o.top+8,o.w+10,2,'#3f9a6c');
@@ -1721,17 +1737,32 @@ function drawFourSeasons(){
   rect(x-7,110,14,G-110,'#879e95');rect(x-3,114,3,G-114,'#b5c6ae');
   for(let j=0;j<4;j++)circle(x+(j%2?17:-13),111+j*8,23+(j%2)*4,j%2?'#85a89d':'#a4beb1');
  }
- // Ancient redwoods: irregular boughs, bark and dappled foliage.
+ // Tall coast redwoods: tapering silhouettes and fine pixel-branch sprays.
+ // Leave the cabin clearing open; keep world placement and physics unchanged.
  for(let i=0;i<15;i++){
   const wx=90+i*137,x=wx-cam;if(Math.abs(wx-980)<205||x<-115||x>W+115)continue;
-  const h=205+(i%3)*20,top=G-h;
-  rect(x-22,top,44,h,'#825744');rect(x-15,top,5,h,'#b77a57');rect(x+8,top,4,h,'#593e3b');
-  for(let j=0;j<8;j++){const yy=top+13+j*22;rect(x-19+(j%3)*5,yy,2,9,'#cf9872');rect(x+10-(j%2)*5,yy+7,2,11,'#a66c51')}
-  for(let j=0;j<6;j++){const yy=top-17+j*9,offset=j%2?24:-22;
-   rect(x+(offset<0?-42:14),yy+12,30,5,'#76513f');
-   for(let k=0;k<3;k++)circle(x+offset+(k-1)*13,yy+(k%2)*7,19+(j%3)*3,['#537e67','#6c9975','#91af7d'][((i+j+k)%3)]);
+  const variation=(i*17)%23,top=-28+variation,base=G;
+  // A broad flared root and a red-brown trunk with broken vertical bark.
+  ctx.fillStyle='#674535';ctx.beginPath();ctx.moveTo(x-28,base);ctx.lineTo(x-18,base-40);ctx.lineTo(x-14,top+70);ctx.lineTo(x-4,top+10);ctx.lineTo(x+5,top+10);ctx.lineTo(x+15,top+70);ctx.lineTo(x+19,base-38);ctx.lineTo(x+30,base);ctx.closePath();ctx.fill();
+  rect(x-11,top+63,5,base-top-68,'#a56a4d');rect(x+8,top+83,3,base-top-90,'#4c382f');
+  for(let j=0;j<14;j++){let yy=top+76+j*17,dx=((i*11+j*13)%24)-13;rect(x+dx,yy,2,5+(j%3)*3,j%2?'#c18a60':'#503b32')}
+  // Irregular horizontal tiers: needle-like branches, not circular deciduous crowns.
+  for(let j=0;j<11;j++){
+   const yy=top+18+j*16,spread=Math.max(15,57-j*2+((i+j)%3)*5);
+   rect(x-spread,yy+7,spread*2,4,'#554c3b');
+   for(let side of [-1,1])for(let k=0;k<4;k++){
+    const reach=spread*(k+1)/4,xx=x+side*reach;
+    rect(xx-7,yy+3+(k%2)*3,15,4,(j+k+i)%3===0?'#507b61':'#648d69');
+    rect(xx-5,yy+8+(k%3)*2,11,4,(j+k)%2?'#789c71':'#436f5c');
+    rect(xx-2,yy+12+(k%2)*3,5,5,'#83a77a');
+   }
   }
-  for(let j=0;j<4;j++)circle(x+(j-2)*12,top-21-(j%2)*7,18,'#709a78');
+  // Narrow irregular crown reaches above the viewport.
+  for(let j=0;j<8;j++){
+   const yy=top-23+j*10,ww=8+j*3;
+   rect(x-ww,yy,ww*2,9,j%3===0?'#527e61':j%3===1?'#6f9b70':'#416e5b');
+   rect(x-ww+4,yy+3,ww,3,'#8caf79');
+  }
  }
  // Woodland floor: ferns, mushrooms and tiny flowers, not collectible markers.
  for(let i=0;i<34;i++){
