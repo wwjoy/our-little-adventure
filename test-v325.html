@@ -552,6 +552,7 @@ function beginFinalPlanting(){
 function completeFinalPlanting(){
   if(mode!=='scene'||!scene||scene.type!=='plant'||!scene.readyToFinish)return;
   scene=null;
+  $('#hud').classList.remove('hide');
   data.story.finalTreePlanted=true;save();
   $('#interact').classList.add('hide');
   $('#interact').style.bottom='';
@@ -2308,24 +2309,37 @@ function draw(){
   const sky=ctx.createLinearGradient(0,0,0,H);
   sky.addColorStop(0,'#f8cbdf');sky.addColorStop(.63,'#fbe4ce');sky.addColorStop(1,'#d7eed3');
   ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
-  // Redwood forest recedes gently into the final garden.
-  for(let i=0;i<10;i++){
-    const x=(i*127+37)%(W+90)-30;
-    rect(x,72,19,ground-72,'#aebfae');circle(x+10,84,42,'#b2cbb2');
+  // Final promise grove: soft layered forest, floral foreground, no gameplay geometry changes.
+  for(let layer=0;layer<3;layer++){
+    const alpha=[.27,.43,.72][layer];ctx.save();ctx.globalAlpha=alpha;
+    for(let i=0;i<9;i++){
+      const x=((i*127+layer*51+19)%(W+130))-30;
+      const top=58+layer*18+(i%3)*9,tw=11+layer*6;
+      rect(x,top,tw,ground-top,layer===0?'#8da9a3':layer===1?'#9ab3a3':'#a47c70');
+      for(let k=0;k<3;k++){
+        const yy=top+4+k*17,rr=25+layer*5+(i+k)%3*4;
+        circle(x+tw/2-rr*.33,yy,rr*.74,layer===2?'#8fb6a0':'#b0cbb5');
+        circle(x+tw/2+rr*.35,yy-5,rr*.67,layer===2?'#96bea8':'#c3d8c5');
+      }
+    }ctx.restore();
   }
-  for(let i=0;i<7;i++){
-    const x=i*117+12;rect(x,36,24,ground-36,'#b48b7b');
-    circle(x+12,36,44,'#93b99d');circle(x-9,25,27,'#a0c2a4');
+  // Garden floor has a readable walkable line and a decorative stone planting bed.
+  rect(0,ground,W,H-ground,'#a97971');rect(0,ground,W,7,'#80b69b');
+  rect(0,ground+7,W,5,'#765e60');
+  for(let i=0;i<55;i++){
+    const x=(i*67+17)%W,y=ground+17+(i*29)%(H-ground-24);
+    rect(x,y,3+(i%3),2,i%3===0?'#b58d80':'#8c6969');
   }
-  rect(0,ground,W,H-ground,'#b9897e');rect(0,ground,W,10,'#7cc69b');
-  // Flowers, little glowing lanterns and swaying particles.
-  for(let i=0;i<30;i++){
-    const x=(i*73+21)%W,y=ground-8-(i%3)*7;
-    circle(x,y,3,i%3?'#f4a9cb':'#ffe3a4');
+  for(let i=0;i<38;i++){
+    const x=(i*71+23)%W,offset=i%4;
+    if(Math.abs(x-W/2)<78)continue;
+    rect(x,ground-11-offset*2,2,11+offset*2,'#679e78');
+    circle(x-3,ground-11-offset*2,3.5,i%4===0?'#fff0c4':'#f7c2d5');
+    circle(x+3,ground-12-offset*2,3.3,i%3===0?'#f4a8c8':'#ffe4ed');
   }
-  for(let i=0;i<20;i++){
-    const x=(i*89+timer*.008*(i%3+1))%W,y=80+(i*37)%174+Math.sin(timer/550+i)*4;
-    circle(x,y,1.4+(i%2),i%3?'#fff7c4':'#ffcee2');
+  for(let i=0;i<25;i++){
+    const x=(i*89+timer*.007*(i%3+1))%W,y=75+(i*43)%176+Math.sin(timer/600+i)*4;
+    circle(x,y,1.4+(i%2),i%3?'#fff3c8':'#ffcade');
   }
   // Neither character teleports: they appear beside the same tree throughout the scene.
   const bx=cx-75, lx=cx+48;
@@ -2362,66 +2376,85 @@ function draw(){
       }
     }
   }
-  // Growth: sprout -> trunk -> branching leaves -> clustered blossoms, not an instant tree.
+  // A single flowering promise tree grows continuously from seed to full bloom.
   const grow=fadeIn(4600,9700),bloom=fadeIn(8650,13300),glow=fadeIn(12100,15300);
-  const treeBase=ground-7, treeH=140*grow;
+  const treeBase=ground-7,treeH=151*grow;
   if(grow>0){
-    const trunkW=3+8*grow;
-    rect(cx-trunkW/2,treeBase-treeH,trunkW,treeH,'#926b61');
-    if(grow>.13){
-      ctx.strokeStyle='#996f66';ctx.lineWidth=3+4*grow;
-      ctx.beginPath();ctx.moveTo(cx,treeBase-treeH*.54);ctx.lineTo(cx-53*grow,treeBase-treeH*.90);
-      ctx.moveTo(cx,treeBase-treeH*.72);ctx.lineTo(cx+58*grow,treeBase-treeH*1.04);ctx.stroke();}
-    if(grow<.22){circle(cx,treeBase-treeH-7,7+grow*18,'#91ce86')}
-    const clusters=25;
-    for(let i=0;i<clusters;i++){
-      const a=i*2.39996;const spread=(28+(i%6)*9)*grow;
-      const px=cx+Math.cos(a)*spread,py=treeBase-treeH+(Math.sin(a)*.61-.05)*spread;
-      const f=fadeIn(8600+i*90,10400+i*120);
-      const r=(9+i%4*3)*grow;
-      circle(px,py,r,'#a7c89a');
-      if(f>0){ctx.save();ctx.globalAlpha=f;
-        circle(px,py,r+1,i%3===0?'#ffe4ef':i%3===1?'#f7b2d1':'#f9c8df');
-        circle(px+3,py-3,Math.max(1,r*.28),'#fff1f3');ctx.restore();}
+    const top=treeBase-treeH;
+    ctx.save();ctx.lineCap='round';ctx.lineJoin='round';
+    // Tapered trunk, roots and warm bark shading.
+    ctx.fillStyle='#926b65';ctx.beginPath();ctx.moveTo(cx-11*grow,treeBase);
+    ctx.lineTo(cx-7*grow,top+34*grow);ctx.lineTo(cx+5*grow,top+25*grow);
+    ctx.lineTo(cx+11*grow,treeBase);ctx.closePath();ctx.fill();
+    ctx.strokeStyle='#b58a7c';ctx.lineWidth=2.2*grow;
+    ctx.beginPath();ctx.moveTo(cx-3*grow,treeBase-6);ctx.lineTo(cx-2*grow,top+46*grow);ctx.stroke();
+    const branches=[[-70,-.72],[-51,-.92],[-37,-1.07],[54,-.78],[76,-.96],[34,-1.13]];
+    ctx.strokeStyle='#865e60';ctx.lineWidth=7*grow;
+    for(const [dx,ry] of branches){ctx.beginPath();ctx.moveTo(cx,treeBase-treeH*.44);ctx.quadraticCurveTo(cx+dx*.52*grow,top+treeH*.28,cx+dx*grow,treeBase+treeH*ry);ctx.stroke();}
+    // Interlocking blossom clusters: irregular flower-shaped silhouettes, not isolated circles.
+    const petals=[[-65,12,21],[-43,-10,24],[-17,-22,26],[14,-29,25],[43,-13,25],[68,10,21],[-79,32,16],[-52,34,22],[-23,18,24],[9,15,26],[39,29,23],[75,34,15],[-30,-47,17],[4,-50,21],[35,-43,18]];
+    for(let i=0;i<petals.length;i++){
+      const [ox,oy,r]=petals[i],phase=fadeIn(8450+i*115,10500+i*135);
+      const x=cx+ox*grow,y=top+48*grow+oy*grow,rad=r*grow;
+      ctx.globalAlpha=.98;
+      circle(x,y,rad,'#88ae88');
+      if(phase>0){ctx.globalAlpha=phase;
+        const shades=['#f5a9ca','#ffdce9','#f8c4d9','#f1b4d3'];
+        for(let j=0;j<5;j++){
+          const angle=j*Math.PI*2/5+i*.27;
+          circle(x+Math.cos(angle)*rad*.39,y+Math.sin(angle)*rad*.34,rad*.66,shades[(i+j)%4]);
+        }
+        circle(x-2,y-2,rad*.39,'#ffeaf1');
+        for(let k=0;k<3;k++)circle(x+(k-1)*rad*.45,y+((i+k)%2?1:-1)*rad*.3,Math.max(1,rad*.1),'#fff4ce');
+      }
     }
-    if(glow>0){ctx.save();ctx.globalAlpha=glow;
-      for(let i=0;i<7;i++){const a=(i-3)*.65;
-        circle(cx+Math.sin(a)*72,treeBase-treeH*.88+Math.cos(a)*24,3.5,'#ffedae');}
-      heart(cx,treeBase-treeH*.69);ctx.restore();}
+    ctx.globalAlpha=1;
+    if(grow<.22)circle(cx,top-5,6+grow*17,'#91c98d');
+    if(glow>0){ctx.globalAlpha=glow;
+      for(let i=0;i<11;i++){
+        const a=i*2.4,rr=34+(i%4)*14;
+        circle(cx+Math.cos(a)*rr,top+52+Math.sin(a)*rr*.54,2.2+(i%3)*.5,'#ffe9a6');
+      }
+      heart(cx,top+70);
+    }
+    ctx.restore();
   }
   // Flower petals spiral only once blossoms have appeared.
   if(bloom>.05){ctx.save();ctx.globalAlpha=bloom;
     for(let i=0;i<30;i++){
       const x=cx-150+(i*61+timer*.017*(i%3+1))%300;
-      const y=50+(i*41+timer*.026)%220;
+      const y=80+(i*41+timer*.026)%190;
       rect(x,y,3+(i%2),2,'#f6a9cf');}
     ctx.restore();}
-  // Dialogue and the anniversary typography appear AFTER planting and flowering.
-  const lines=t<2200?'把未来的种子轻轻种下 ♡':
-    t<5000?'小狮子认真地为它浇水…':
-    t<9600?'一起长大，一起开花 ♡':
-    t<13600?'以后，我们一起照顾它吧。':
-    'Happy 1st Anniversary ♡';
-  text(lines,cx,43,t<13600?'#805d77':'#bb5f91',t<13600?17:24,'center');
-  if(t>=13800){ctx.save();ctx.globalAlpha=fadeIn(13800,15100);
-    text(ANNIV.label,cx,74,'#8e5b7a',16,'center');
-    text('我们一起走过了第一个四季。',cx,100,'#936578',15,'center');
-    ctx.restore();}
-  if(t>=16900){ctx.save();ctx.globalAlpha=fadeIn(16900,18000);
-    text('我们的第一年结束了，冒险才刚刚开始。',cx,133,'#936578',14,'center');
-    ctx.restore();}
-  // A single invitation appears only AFTER the tree has blossomed and the anniversary text.
-  if(t>=20000){
-    const a=fadeIn(20000,21700);
-    ctx.save();ctx.globalAlpha=a;
-    const ex=cx+77,ey=ground-33-17*(1-a);
-    rect(ex-13,ey-9,26,19,'#fff8ee');rect(ex-13,ey-9,26,3,'#f3b8ce');
-    ctx.strokeStyle='#e6a1bd';ctx.lineWidth=1.5;
-    ctx.beginPath();ctx.moveTo(ex-12,ey-8);ctx.lineTo(ex,ey+2);ctx.lineTo(ex+12,ey-8);ctx.stroke();
-    heart(ex,ey-16);
-    text('🦁 还有一件事，想亲手交给你。',cx,166,'#875e7b',15,'center');
+  // Keep the planting dialogue above the tree, then move the anniversary copy
+  // into a dedicated translucent parchment card. No text sits on the blossoms.
+  if(t<13600){
+    const lines=t<2200?'把未来的种子轻轻种下 ♡':
+      t<5000?'小狮子认真地为它浇水…':
+      t<9600?'一起长大，一起开花 ♡':'以后，我们一起照顾它吧。';
+    ctx.save();ctx.globalAlpha=.94;
+    rect(cx-143,13,286,34,'#fff9f0');
+    ctx.strokeStyle='#e8b8cb';ctx.lineWidth=2;ctx.strokeRect(cx-143,13,286,34);
+    text(lines,cx,35,'#805d77',16,'center');ctx.restore();
+  }else{
+    const appear=fadeIn(13600,14900);
+    ctx.save();ctx.globalAlpha=appear;
+    // Fixed upper-center safe zone: clear of characters and blossom canopy.
+    const cardX=cx-174,cardY=10,cardW=348,cardH=t>=20000?131:111;
+    ctx.fillStyle='rgba(255,249,241,0.94)';ctx.fillRect(cardX,cardY,cardW,cardH);
+    ctx.strokeStyle='#dca5c2';ctx.lineWidth=2;ctx.strokeRect(cardX+1,cardY+1,cardW-2,cardH-2);
+    text('Happy 1st Anniversary ♡',cx,35,'#b45f89',21,'center');
+    text(ANNIV.label,cx,56,'#906779',13,'center');
+    text('我们一起走过了第一个四季。',cx,79,'#906779',13,'center');
+    if(t>=16900){ctx.globalAlpha=appear*fadeIn(16900,18000);
+      text('我们的第一年结束了，冒险才刚刚开始。',cx,100,'#906779',12,'center');
+    }
+    if(t>=20000){ctx.globalAlpha=appear*fadeIn(20000,21700);
+      text(data.dive.finished?'🦁 兔兔，我们的藏宝图已经拼好啦 ♡':'🦁 兔兔，最后的线索藏在深蓝色的海底 ♡',cx,124,'#a45c85',12,'center');
+    }
     ctx.restore();
   }
+  // The final invitation remains in the card, not across the tree or characters.
   return;
  }
  if(!L){ctx.fillStyle='#2a203f';ctx.fillRect(0,0,W,H);return}
@@ -2535,13 +2568,18 @@ function draw(){
   v325ForestChasmBackdrop();L.map.forEach(terrain);
  }
  if(L.under){
-  // Frosted stone edging on existing walkable terrain; no new platforms.
+  // Layered frost and carved rock: visual overlay only; map/collision untouched.
   for(const seg of L.map){
    if(seg.y===undefined||seg.w===undefined||seg.h===undefined)continue;
    const xx=seg.x-cam;if(xx>W+30||xx+seg.w< -30)continue;
    if(seg.y>=G-85){
-    rect(xx,seg.y,seg.w,5,'#a4d9ed');rect(xx,seg.y+5,seg.w,3,'#5e9dbb');
-    for(let j=13;j<seg.w-8;j+=39){rect(xx+j,seg.y+10+(j%3)*5,11,3,'#7897b4');}
+    rect(xx,seg.y,seg.w,3,'#e2faff');rect(xx,seg.y+3,seg.w,3,'#9bd6ec');
+    rect(xx,seg.y+6,seg.w,3,'#507eac');
+    for(let j=12;j<seg.w-9;j+=43){
+     const px=xx+j,yy=seg.y+12+(j%4)*3;
+     rect(px,yy,16,3,'#8399bb');rect(px+3,yy+3,8,2,'#465b83');
+     if((j/43|0)%2===0){rect(px+7,seg.y+2,9,2,'#ffffff');rect(px+10,seg.y+5,4,2,'#c8f5ff');}
+    }
    }
   }
  }
@@ -2549,27 +2587,64 @@ function draw(){
  if(L.under){
   const c=icePuzzle;
   // Ice cube and pressure plate, both in world coordinates.
-  rect(c.plateX-cam,G-8,58,8,c.gateOpen?'#9df3ce':'#87aabe');
-  rect(c.cubeX-cam,G-39,39,39,'#77b9e3');rect(c.cubeX+4-cam,G-35,31,7,'#d4f8ff');
-  rect(c.cubeX+4-cam,G-23,7,17,'#a3def9');
-  if(!c.gateOpen){rect(c.gateX-cam,G-214,24,214,'#82c7e9');rect(c.gateX+5-cam,G-207,8,192,'#d4f6ff');}
+  // Inlaid crystalline pressure socket (unchanged activation footprint).
+  rect(c.plateX-cam,G-9,58,9,'#365e83');rect(c.plateX+3-cam,G-8,52,5,c.gateOpen?'#79e4bc':'#82cce5');
+  for(let k=0;k<5;k++)rect(c.plateX+7+k*10-cam,G-7,5,2,c.gateOpen?'#e3ffe5':'#e5fbff');
+  // Faceted pushable ice monolith, exact 39x39 gameplay footprint.
+  rect(c.cubeX-cam,G-39,39,39,'#4484ad');rect(c.cubeX+2-cam,G-37,35,35,'#82c8e8');
+  rect(c.cubeX+5-cam,G-35,27,6,'#d7f7ff');rect(c.cubeX+5-cam,G-27,6,22,'#b7eafa');
+  rect(c.cubeX+27-cam,G-27,7,22,'#5a9dc7');rect(c.cubeX+12-cam,G-17,12,2,'#e9ffff');
+  rect(c.cubeX+17-cam,G-14,2,10,'#d4f8ff');
+  // Asymmetric icy facets within the same 39x39 bounding box.
+  ctx.save();ctx.beginPath();ctx.moveTo(c.cubeX+8-cam,G-29);ctx.lineTo(c.cubeX+23-cam,G-34);ctx.lineTo(c.cubeX+31-cam,G-22);ctx.lineTo(c.cubeX+18-cam,G-7);ctx.closePath();ctx.fillStyle='rgba(220,250,255,.30)';ctx.fill();ctx.restore();
+  rect(c.cubeX+7-cam,G-9,8,2,'#dffbff');rect(c.cubeX+30-cam,G-13,3,7,'#3677a6');
+  if(!c.gateOpen){
+   rect(c.gateX-cam,G-214,24,214,'#3c7198');rect(c.gateX+2-cam,G-211,20,208,'#79bddd');
+   rect(c.gateX+5-cam,G-207,7,192,'#d4f6ff');rect(c.gateX+15-cam,G-198,3,175,'#a4e6fa');
+   for(let j=0;j<5;j++)rect(c.gateX+3-cam,G-185+j*37,18,2,'#5697c0');
+   // Carved edge ribs and frost at the base; gate dimensions unchanged.
+   rect(c.gateX+1-cam,G-210,3,203,'#b4edff');rect(c.gateX+20-cam,G-207,3,201,'#2d628d');
+   for(let j=0;j<4;j++){rect(c.gateX+5-cam,G-171+j*43,12,2,'#b8eafb');}
+   rect(c.gateX-5-cam,G-5,34,3,'#d8faff');
+  }
   else {circle(c.gateX+12-cam,G-210,10,'#b8ffe9');text('冰门已开启',c.gateX-cam,G-231,'#d5fff9',12,'center')}
   text('推动冰块 →',c.cubeX+20-cam,G-61,'#e5fbff',12,'center');
   const bridgeAlpha=c.light==='ready'?1:c.light==='revealing'?Math.min(1,c.lightT/1700):0;
   if(bridgeAlpha){ctx.save();ctx.globalAlpha=bridgeAlpha;
    // Sections visually retain their identity, but their top edges join without dangerous gaps.
-   for(const s of iceBridgePieces()){rect(s.x-cam,s.y,s.w,12,'#a2efff');rect(s.x+5-cam,s.y+3,s.w-10,4,'#e1ffff');circle(s.x+8-cam,s.y-8,3,'#d8ffff');}
+   for(const s of iceBridgePieces()){
+    rect(s.x-cam,s.y,s.w,12,'#559dc4');rect(s.x+1-cam,s.y+1,s.w-2,8,'#a6e9f8');
+    rect(s.x+5-cam,s.y+2,s.w-10,3,'#ecffff');rect(s.x+3-cam,s.y+9,s.w-6,2,'#4e8eae');
+    circle(s.x+8-cam,s.y-8,3,'#d8ffff');
+   }
    rect(864-cam,G-9,225,3,'#7ccbe5');
    ctx.restore();}
   // Optional collectible ledge over the main bridge: discoverable and reachable while moving forward.
   const ledge=ICE_MEMORY_LEDGE;
-  rect(ledge.x-cam,ledge.y,ledge.w,11,'#9ce2f3');rect(ledge.x+5-cam,ledge.y+2,ledge.w-10,4,'#d7f8ff');
+  rect(ledge.x-cam,ledge.y,ledge.w,11,'#568db5');rect(ledge.x+2-cam,ledge.y+1,ledge.w-4,7,'#9ce2f3');
+  rect(ledge.x+5-cam,ledge.y+2,ledge.w-10,3,'#e6ffff');rect(ledge.x+10-cam,ledge.y+9,ledge.w-20,2,'#42799d');
+  // Hanging crystal teeth are decorative, entirely below the collision surface.
+  for(let k=0;k<5;k++){
+   const bx=ledge.x+8+k*19-cam,depth=5+(k*7)%9;
+   ctx.save();ctx.beginPath();ctx.moveTo(bx,ledge.y+11);ctx.lineTo(bx+13,ledge.y+11);ctx.lineTo(bx+6,ledge.y+11+depth);ctx.closePath();ctx.fillStyle=k%2?'#5a9fc4':'#83cfe4';ctx.fill();ctx.restore();
+   rect(bx+3,ledge.y+12,3,Math.max(2,depth-3),'#bceffc');
+  }
+  rect(ledge.x+17-cam,ledge.y-3,ledge.w-34,2,'#f0ffff');
   if(!iceMemoryOwned()){drawIceMemoryCrystal(ICE_MEMORY.x-cam,ICE_MEMORY.y);if(Math.abs(p.x-ICE_MEMORY.x)<150)text('💎 跳上冰台发现秘密',ICE_MEMORY.x-cam,ICE_MEMORY.y-28,'#e6ffff',12,'center')}
   if(c.light==='idle'&&p.x>720)text('让小狮子的头灯照亮前方',820-cam,G-83,'#d6f9ff',12,'center');
   if(c.light==='revealing')text('✨ 隐藏的冰桥正在显现',930-cam,G-95,'#e5fdff',12,'center');
   // Seed altar at the end of the puzzle.
-  rect(1334-cam,G-13,71,13,'#72c7d7');rect(1345-cam,G-22,51,10,'#a6e6eb');
-  for(let i=0;i<4;i++)circle(1340+i*18-cam,G-27-(i%2)*5,4,'#c7f9ff');
+  // Carved ice altar; seed location and interactions are unchanged.
+  rect(1334-cam,G-13,71,13,'#407a9f');rect(1338-cam,G-11,63,7,'#7cc6dc');
+  rect(1345-cam,G-22,51,10,'#a6e6eb');rect(1351-cam,G-20,39,3,'#e7ffff');
+  for(let i=0;i<4;i++){circle(1340+i*18-cam,G-27-(i%2)*5,4,'#c7f9ff');rect(1339+i*18-cam,G-31-(i%2)*5,2,3,'#ffffff');}
+  // Six-sided ceremonial crystal dais; existing collectible remains in place.
+  ctx.save();ctx.beginPath();ctx.moveTo(1351-cam,G-22);ctx.lineTo(1389-cam,G-22);ctx.lineTo(1399-cam,G-13);ctx.lineTo(1389-cam,G-6);ctx.lineTo(1351-cam,G-6);ctx.lineTo(1341-cam,G-13);ctx.closePath();ctx.fillStyle='#7ac3d9';ctx.fill();ctx.strokeStyle='#c6f5ff';ctx.lineWidth=2;ctx.stroke();ctx.restore();
+  rect(1354-cam,G-19,33,3,'#e9ffff');rect(1358-cam,G-9,25,2,'#427ca9');
+  for(let i=0;i<3;i++){
+   const sx=1343+i*26-cam,sy=G-33-(i%2)*6;
+   rect(sx,sy,2,7,'#d7fcff');rect(sx-2,sy+2,6,2,'#d7fcff');
+  }
  }
 
  // Stars uncover an optional elevated lookout, not a shortcut across the tidal section.
