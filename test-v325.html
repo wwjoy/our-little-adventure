@@ -699,32 +699,51 @@ function snowMotionDraw(kind,x,y,action,frame,dir='right'){
 }
 // V3.2.5 snowboard visual upgrade: layered winter mountains, pine forests, ice details.
 function snowPine(x,y,h,shade){
- ctx.fillStyle='#7a91a9';ctx.fillRect(Math.round(x-1),Math.round(y-h*.12),2,Math.ceil(h*.2));
+ // Three silhouettes, varied heights and snow caps; decorative only.
+ const variant=((Math.floor(x/11)%3)+3)%3;
+ ctx.fillStyle='#7897aa';ctx.fillRect(Math.round(x-1),Math.round(y-h*.17),2,Math.ceil(h*.23));
  ctx.fillStyle=shade;
- for(let k=0;k<3;k++){const yy=y-h+(k*h*.24),w=h*(.19+k*.055);
- ctx.beginPath();ctx.moveTo(Math.round(x),Math.round(yy));ctx.lineTo(Math.round(x-w),Math.round(yy+h*.35));ctx.lineTo(Math.round(x+w),Math.round(yy+h*.35));ctx.closePath();ctx.fill();}
- ctx.fillStyle='#e9f8ff';rect(x-h*.075,y-h*.69,h*.15,2,'#e9f8ff');
+ const tiers=variant===0?3:variant===1?4:2;
+ for(let k=0;k<tiers;k++){const yy=y-h+(k*h*(variant===1?.19:.26)),w=h*(.16+k*.045+(variant===2?.025:0));
+ ctx.beginPath();ctx.moveTo(Math.round(x),Math.round(yy));ctx.lineTo(Math.round(x-w),Math.round(yy+h*.33));ctx.lineTo(Math.round(x+w),Math.round(yy+h*.33));ctx.closePath();ctx.fill();}
+ rect(x-h*.07,y-h*.72,h*.14,2,'#e8f7ff');
 }
 function drawSnow(){
  const s=snow;if(!s)return;
  const sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#74b7df');sky.addColorStop(.58,'#c0e3f3');sky.addColorStop(1,'#f3e7f4');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
  const px=Math.min(W*.30,220),offset=s.distance-px;
- // Small winter sun, no opaque halos.
- circle(508,65,19,'#fff4db');circle(504,61,10,'#fffaf0');
- // Three depth-separated ranges; each scrolls independently.
+ // Winter sun sits clear of the progress bar at y=65; no halos.
+ circle(508,104,19,'#fff4db');circle(504,100,10,'#fffaf0');
+ // Airier three-layer alpine panorama: fewer peaks, distinct silhouettes and sparse facets.
  for(let layer=0;layer<3;layer++){
-  const span=layer===0?172:layer===1?142:106;
+  const span=[250,214,172][layer];
   const scroll=s.distance*[.075,.15,.25][layer];
-  const base=[244,265,287][layer],top=[62,99,148][layer];
-  ctx.fillStyle=['#b5d8ea','#d4eaf4','#a8cddc'][layer];
-  for(let i=-2;i<9;i++){const x=i*span-(scroll%span),peak=top+(i*31%37);
-   ctx.beginPath();ctx.moveTo(x-span*.62,base);ctx.lineTo(x+span*.35,peak);ctx.lineTo(x+span*1.2,base);ctx.closePath();ctx.fill();
-   ctx.fillStyle=['#f1faff','#f8fdff','#e7f7ff'][layer];ctx.beginPath();ctx.moveTo(x+span*.35,peak);ctx.lineTo(x+span*.12,peak+span*.26);ctx.lineTo(x+span*.32,peak+span*.20);ctx.lineTo(x+span*.48,peak+span*.30);ctx.lineTo(x+span*.59,peak+span*.25);ctx.closePath();ctx.fill();
-   ctx.fillStyle=['#b5d8ea','#d4eaf4','#a8cddc'][layer];
+  const base=[244,267,290][layer],top=[80,124,177][layer];
+  const body=['#b5d8ea','#d4eaf4','#a8cddc'][layer];
+  const snowCap=['#f1faff','#f8fdff','#e7f7ff'][layer];
+  const count=Math.ceil(W/span)+4;
+  for(let i=-2;i<count;i++){
+   const x=i*span-(scroll%span),cx=x+span*.36;
+   const variation=((i*37+layer*19)%47+47)%47;
+   const peak=top+variation*.52;
+   ctx.fillStyle=body;
+   ctx.beginPath();ctx.moveTo(x-span*.55,base);ctx.lineTo(cx,peak);ctx.lineTo(x+span*1.18,base);ctx.closePath();ctx.fill();
+   ctx.fillStyle=snowCap;
+   ctx.beginPath();ctx.moveTo(cx,peak);ctx.lineTo(cx-span*.23,peak+span*.27);ctx.lineTo(cx-span*.035,peak+span*.20);ctx.lineTo(cx+span*.12,peak+span*.29);ctx.lineTo(cx+span*.26,peak+span*.25);ctx.closePath();ctx.fill();
+   // Selective pixelated rock facets: only one out of two peaks.
+   if((i+layer)%2===0){
+    ctx.fillStyle=['#99c4d9','#bad9e8','#91bbce'][layer];
+    ctx.beginPath();ctx.moveTo(cx+span*.14,peak+span*.39);ctx.lineTo(cx+span*.24,peak+span*.53);ctx.lineTo(cx+span*.10,peak+span*.58);ctx.closePath();ctx.fill();
+    rect(cx-span*.14,peak+span*.49,span*.065,3,['#d4edf7','#e9f6fb','#cce5ee'][layer]);
+   }
   }
  }
- // Forest silhouette is behind the slope and never affects hitboxes.
- for(let i=-2;i<19;i++){const x=i*49-(s.distance*.32%49);snowPine(x,268+(i%3)*5,25+(i*7%18),i%2?'#7ca8bd':'#91bacb');}
+ // Sparse pines in three varied silhouettes; remain behind the unchanged snow slope.
+ for(let i=-2;i<15;i++){
+  const x=i*67-(s.distance*.32%67);
+  const h=24+((i*13+63)%23);
+  snowPine(x,270+(i%3)*5,h,i%3===0?'#729bb1':i%3===1?'#8ab3c5':'#9ac1cf');
+ }
  // Gentle drifting snow: deterministic positions, no accumulating particles.
  for(let i=0;i<76;i++){const x=((i*113-s.distance*.19+timer*.006)%W+W)%W,y=(i*67+timer*.012)%270;
   rect(x,y,i%9===0?2:1,i%9===0?2:1,i%4===0?'#f5ffff':'#ffffff');}
