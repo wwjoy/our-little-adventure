@@ -2470,27 +2470,43 @@ function draw(){
  if(L.under){
   const c=icePuzzle;
   // Ice cube and pressure plate, both in world coordinates.
-  rect(c.plateX-cam,G-8,58,8,c.gateOpen?'#9df3ce':'#87aabe');
-  rect(c.cubeX-cam,G-39,39,39,'#77b9e3');rect(c.cubeX+4-cam,G-35,31,7,'#d4f8ff');
-  rect(c.cubeX+4-cam,G-23,7,17,'#a3def9');
-  if(!c.gateOpen){rect(c.gateX-cam,G-214,24,214,'#82c7e9');rect(c.gateX+5-cam,G-207,8,192,'#d4f6ff');}
+  // Inlaid crystalline pressure socket (unchanged activation footprint).
+  rect(c.plateX-cam,G-9,58,9,'#365e83');rect(c.plateX+3-cam,G-8,52,5,c.gateOpen?'#79e4bc':'#82cce5');
+  for(let k=0;k<5;k++)rect(c.plateX+7+k*10-cam,G-7,5,2,c.gateOpen?'#e3ffe5':'#e5fbff');
+  // Faceted pushable ice monolith, exact 39x39 gameplay footprint.
+  rect(c.cubeX-cam,G-39,39,39,'#4484ad');rect(c.cubeX+2-cam,G-37,35,35,'#82c8e8');
+  rect(c.cubeX+5-cam,G-35,27,6,'#d7f7ff');rect(c.cubeX+5-cam,G-27,6,22,'#b7eafa');
+  rect(c.cubeX+27-cam,G-27,7,22,'#5a9dc7');rect(c.cubeX+12-cam,G-17,12,2,'#e9ffff');
+  rect(c.cubeX+17-cam,G-14,2,10,'#d4f8ff');
+  if(!c.gateOpen){
+   rect(c.gateX-cam,G-214,24,214,'#3c7198');rect(c.gateX+2-cam,G-211,20,208,'#79bddd');
+   rect(c.gateX+5-cam,G-207,7,192,'#d4f6ff');rect(c.gateX+15-cam,G-198,3,175,'#a4e6fa');
+   for(let j=0;j<5;j++)rect(c.gateX+3-cam,G-185+j*37,18,2,'#5697c0');
+  }
   else {circle(c.gateX+12-cam,G-210,10,'#b8ffe9');text('冰门已开启',c.gateX-cam,G-231,'#d5fff9',12,'center')}
   text('推动冰块 →',c.cubeX+20-cam,G-61,'#e5fbff',12,'center');
   const bridgeAlpha=c.light==='ready'?1:c.light==='revealing'?Math.min(1,c.lightT/1700):0;
   if(bridgeAlpha){ctx.save();ctx.globalAlpha=bridgeAlpha;
    // Sections visually retain their identity, but their top edges join without dangerous gaps.
-   for(const s of iceBridgePieces()){rect(s.x-cam,s.y,s.w,12,'#a2efff');rect(s.x+5-cam,s.y+3,s.w-10,4,'#e1ffff');circle(s.x+8-cam,s.y-8,3,'#d8ffff');}
+   for(const s of iceBridgePieces()){
+    rect(s.x-cam,s.y,s.w,12,'#559dc4');rect(s.x+1-cam,s.y+1,s.w-2,8,'#a6e9f8');
+    rect(s.x+5-cam,s.y+2,s.w-10,3,'#ecffff');rect(s.x+3-cam,s.y+9,s.w-6,2,'#4e8eae');
+    circle(s.x+8-cam,s.y-8,3,'#d8ffff');
+   }
    rect(864-cam,G-9,225,3,'#7ccbe5');
    ctx.restore();}
   // Optional collectible ledge over the main bridge: discoverable and reachable while moving forward.
   const ledge=ICE_MEMORY_LEDGE;
-  rect(ledge.x-cam,ledge.y,ledge.w,11,'#9ce2f3');rect(ledge.x+5-cam,ledge.y+2,ledge.w-10,4,'#d7f8ff');
+  rect(ledge.x-cam,ledge.y,ledge.w,11,'#568db5');rect(ledge.x+2-cam,ledge.y+1,ledge.w-4,7,'#9ce2f3');
+  rect(ledge.x+5-cam,ledge.y+2,ledge.w-10,3,'#e6ffff');rect(ledge.x+10-cam,ledge.y+9,ledge.w-20,2,'#42799d');
   if(!iceMemoryOwned()){drawIceMemoryCrystal(ICE_MEMORY.x-cam,ICE_MEMORY.y);if(Math.abs(p.x-ICE_MEMORY.x)<150)text('💎 跳上冰台发现秘密',ICE_MEMORY.x-cam,ICE_MEMORY.y-28,'#e6ffff',12,'center')}
   if(c.light==='idle'&&p.x>720)text('让小狮子的头灯照亮前方',820-cam,G-83,'#d6f9ff',12,'center');
   if(c.light==='revealing')text('✨ 隐藏的冰桥正在显现',930-cam,G-95,'#e5fdff',12,'center');
   // Seed altar at the end of the puzzle.
-  rect(1334-cam,G-13,71,13,'#72c7d7');rect(1345-cam,G-22,51,10,'#a6e6eb');
-  for(let i=0;i<4;i++)circle(1340+i*18-cam,G-27-(i%2)*5,4,'#c7f9ff');
+  // Carved ice altar; seed location and interactions are unchanged.
+  rect(1334-cam,G-13,71,13,'#407a9f');rect(1338-cam,G-11,63,7,'#7cc6dc');
+  rect(1345-cam,G-22,51,10,'#a6e6eb');rect(1351-cam,G-20,39,3,'#e7ffff');
+  for(let i=0;i<4;i++){circle(1340+i*18-cam,G-27-(i%2)*5,4,'#c7f9ff');rect(1339+i*18-cam,G-31-(i%2)*5,2,3,'#ffffff');}
  }
 
  // Stars uncover an optional elevated lookout, not a shortcut across the tidal section.
