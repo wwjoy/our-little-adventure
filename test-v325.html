@@ -2399,7 +2399,27 @@ function draw(){
   let glow=ctx.createRadialGradient(lx,ly,2,lx+facing*55,ly-5,145);glow.addColorStop(0,'#ffe9ad88');glow.addColorStop(1,'#ffe6a300');ctx.fillStyle=glow;ctx.fillRect(0,0,W,G);
   // Keep the existing cave light gradient; remove only the floating extra torch.
   for(let i=0;i<9;i++){const xx=i*106+25-cam*.12;ctx.fillStyle=i%2?'#7de1f0':'#a9efff';ctx.globalAlpha=.42;ctx.beginPath();ctx.moveTo(xx,15);ctx.lineTo(xx+18,15);ctx.lineTo(xx+8,65+(i%3)*18);ctx.fill();ctx.globalAlpha=1;}text('蓝冰洞',W/2,52,'#d8f7ff',16,'center');text('出口 →',1460-cam,G-53,'#fff3cf',13,'center');}
- v325ForestChasmBackdrop();L.map.forEach(terrain);v325SeasideDecorFront();if(level===0&&!L.under&&!L.secret&&!L.cabin)firstLevelDecor();drawShallowCove();drawFinalBeach();v325BeachLeftTransition();v325BeachDecor();clouds.forEach(cloudDraw);
+ // Cabin floor is an indoor cross-section, not outdoor terrain. Keep collision map unchanged.
+ if(L.cabin){
+  // Wooden threshold, structural beam, and warm timber foundation below the walkable floor.
+  rect(0,G-19,W,19,'#77503f');
+  rect(0,G-19,W,4,'#e1b78a');
+  rect(0,G-14,W,3,'#aa7959');
+  rect(0,G-4,W,4,'#513b34');
+  rect(0,G,W,H-G,'#715244');
+  rect(0,G+2,W,6,'#9b7158');
+  rect(0,G+9,W,3,'#4f3a34');
+  for(let x=0;x<W;x+=58){
+   rect(x+3,G+13,3,H-G-15,'#5e453a');
+   rect(x+10,G+20,39,3,'#896550');
+   rect(x+16,G+46,30,2,'#9c755c');
+  }
+  rect(0,H-11,W,11,'#594137');
+  rect(0,H-12,W,2,'#a77e61');
+ }else{
+  v325ForestChasmBackdrop();L.map.forEach(terrain);
+ }
+ v325SeasideDecorFront();if(level===0&&!L.under&&!L.secret&&!L.cabin)firstLevelDecor();drawShallowCove();drawFinalBeach();v325BeachLeftTransition();v325BeachDecor();clouds.forEach(cloudDraw);
  if(L.under){
   const c=icePuzzle;
   // Ice cube and pressure plate, both in world coordinates.
