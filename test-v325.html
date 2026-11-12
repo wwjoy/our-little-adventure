@@ -1694,7 +1694,22 @@ function terrain(a){let x=a.x-cam;if(x>W||x+a.w<0)return;
   v325DrawNaturalTerrain(a);
   return;
  }
- if(level===1&&!L.under&&!L.secret){v325SeasideTerrain(a);return;}
+ if(level===2&&!L.under&&!L.secret&&!L.cabin){
+  // Forest soil and moss, drawn to the original collision rectangles.
+  rect(x,a.y,a.w,H-a.y,'#755947');
+  rect(x,a.y+9,a.w,H-a.y-9,'#846451');
+  rect(x,a.y,a.w,6,'#638b64');rect(x,a.y+5,a.w,5,'#9bbd80');
+  rect(x,a.y+10,a.w,4,'#455f4c');
+  const left=Math.max(0,Math.floor((cam-a.x)/22)-1),right=Math.min(Math.ceil(a.w/22),Math.ceil((cam+W-a.x)/22)+1);
+  for(let k=left;k<right;k++){
+   let px=x+k*22;
+   rect(px+3,a.y+22+(k%3)*12,10,3,'#a17b60');
+   rect(px+12,a.y+47+(k%4)*16,3,9,'#5d4b3e');
+   if(k%3===0){rect(px+6,a.y+14,2,7,'#9dba7b');rect(px+2,a.y+15,10,2,'#72986b')}
+   if(k%5===0){rect(px+4,a.y+71,11,7,'#6b5346');rect(px+6,a.y+72,6,2,'#b18d6f')}
+  }
+  return;
+ }
  if(level===1&&!L.under&&!L.secret&&a.kind==='block'){
   if(true){
    // Low, climbable rock steps: collision stays solid, art follows the same geometry.
@@ -1895,43 +1910,102 @@ function cloudDraw(c){
 
 // V3.0.2 — spring diving, summer cave, redwood autumn, winter cabin, seed pickups and cooperative watering.
 function drawFourSeasons(){
- // One continuous forest-to-garden palette; no hard seasonal panels.
- const sky=ctx.createLinearGradient(0,0,0,G);sky.addColorStop(0,'#c7e4db');sky.addColorStop(.7,'#dff0cf');sky.addColorStop(1,'#b7d8b9');
+ // V3.2.5 third-level art-only candidate. World positions, collision and gameplay untouched.
+ const sky=ctx.createLinearGradient(0,0,0,G);
+ sky.addColorStop(0,'#a6b5dc');sky.addColorStop(.38,'#d5c6e7');sky.addColorStop(.78,'#f5d9d2');sky.addColorStop(1,'#e1e6c6');
  ctx.fillStyle=sky;ctx.fillRect(0,0,W,G);
+ // Distant violet ridges, mist and forest silhouettes; gentle parallax.
+ for(let layer=0;layer<3;layer++){
+  const speed=[.10,.22,.37][layer],base=[183,215,245][layer];
+  ctx.fillStyle=['#b8b7cf','#9eb7bd','#86a8a0'][layer];
+  ctx.beginPath();ctx.moveTo(-30,G);
+  for(let k=-2;k<17;k++){let x=k*90-((cam*speed)%90);ctx.lineTo(x,base-((k*k+layer*7)%4)*9);ctx.lineTo(x+45,base-13-((k+layer*3)%3)*7)}
+  ctx.lineTo(W+40,G);ctx.closePath();ctx.fill();
+ }
  for(let i=0;i<24;i++){
-  const wx=i*115+25, x=wx-cam*.38;if(x<-130||x>W+130)continue;
-  rect(x-7,105,14,G-105,'#a3b6a1');circle(x,108,36,'#9cc5a8');
+  const wx=i*115+25,x=wx-cam*.38;if(x<-130||x>W+130)continue;
+  rect(x-7,110,14,G-110,'#879e95');rect(x-3,114,3,G-114,'#b5c6ae');
+  for(let j=0;j<4;j++)circle(x+(j%2?17:-13),111+j*8,23+(j%2)*4,j%2?'#85a89d':'#a4beb1');
  }
- // Redwood trunks with vertical bark, layered canopies and warm sunbeams.
+ // Fifth pass: layered natural pixel-bough silhouettes, based on approved concept art.
+ // Only visual tree drawing changes; anchors and collision remain untouched.
  for(let i=0;i<15;i++){
-  const wx=90+i*137,x=wx-cam;if(Math.abs(wx-980)<205||x<-115||x>W+115)continue;
-  const h=205+(i%3)*20;
-  rect(x-21,G-h,42,h,'#965e43');rect(x-13,G-h,4,h,'#bd8058');rect(x+9,G-h,3,h,'#6d443c');
-  for(let j=0;j<4;j++){circle(x+(j%2?19:-17),G-h-18+j*10,27+(j%2)*6,j%2?'#638f69':'#7da978')}
-  for(let j=0;j<5;j++)circle(x+(j-2)*8,G-h+70+j*20,2,'#d49c72');
+  const wx=90+i*137,x=wx-cam;if(Math.abs(wx-980)<205||x<-130||x>W+130)continue;
+  const kind=i%3,top=[-54,-30,-42][kind]+((i*7)%13),base=G;
+  const trunk=[17,20,15][kind];
+  ctx.fillStyle='#694737';ctx.beginPath();ctx.moveTo(x-29,base);ctx.lineTo(x-trunk,base-34);ctx.lineTo(x-trunk+3,top+48);ctx.lineTo(x+trunk-5,top+48);ctx.lineTo(x+trunk,base-34);ctx.lineTo(x+30,base);ctx.closePath();ctx.fill();
+  rect(x-trunk+4,top+58,4,base-top-72,'#a87555');rect(x+trunk-8,top+80,3,base-top-96,'#4c382f');
+  for(let j=0;j<12;j++){const yy=top+79+j*21,dx=((i*13+j*17)%25)-12;rect(x+dx,yy,2,5+(j%3)*2,j%2?'#bd8760':'#4d372e')}
+  // Large connected tiers taper toward the crown; scalloped pixel needle edges.
+  const widths=[[24,34,45,54,47,40,29],[22,36,49,57,52,39,28],[20,30,43,49,55,36,25]][kind];
+  const shifts=[[0,-6,5,-3,6,-5,3],[2,7,-4,4,-7,5,-3],[-3,5,-8,3,8,-4,2]][kind];
+  const tones=['#416d56','#4d7b5d','#5a8866'];
+  for(let tier=widths.length-1;tier>=0;tier--){
+   const cy=top+24+tier*22,span=widths[tier],center=x+shifts[tier];
+   // Connecting woody boughs are mostly hidden beneath foliage.
+   rect(x-3,cy-2,Math.max(3,center-x+span-6),3,'#614937');
+   const foliage=tones[(i+tier)%3];
+   ctx.fillStyle=foliage;ctx.beginPath();
+   ctx.moveTo(center-span-9,cy+4);ctx.lineTo(center-span-2,cy-5);
+   ctx.lineTo(center-span+10,cy-12);ctx.lineTo(center-span+18,cy-17);
+   ctx.lineTo(center-10,cy-20);ctx.lineTo(center+6,cy-23);
+   ctx.lineTo(center+span-17,cy-14);ctx.lineTo(center+span-3,cy-6);
+   ctx.lineTo(center+span+8,cy+4);ctx.lineTo(center+span-6,cy+7);
+   ctx.lineTo(center+span-13,cy+13);ctx.lineTo(center+span-25,cy+10);
+   ctx.lineTo(center+10,cy+13);ctx.lineTo(center-8,cy+12);
+   ctx.lineTo(center-span+15,cy+12);ctx.lineTo(center-span+5,cy+16);
+   ctx.closePath();ctx.fill();
+   // Uneven clusters and dangling needles make the bough edges organic.
+   for(let k=0;k<5;k++){
+    const px=center-span+12+k*(span*2-24)/4;
+    const wobble=((i*7+tier*5+k*11)%7)-3;
+    rect(px,cy+9+wobble,5+(k%2)*3,4+((tier+k)%3)*3,foliage);
+   }
+   rect(center-span+19,cy-13,Math.max(10,span*.7),3,'#8fae7c');
+   rect(center-span+25,cy-9,Math.max(8,span*.42),3,'#b0c68a');
+   rect(center+8,cy+7,Math.max(8,span*.42),3,'#345f4d');
+  }
+  // A tapered irregular top ties the branches into one tree silhouette.
+  ctx.fillStyle='#547e61';ctx.beginPath();ctx.moveTo(x+2,top-26);ctx.lineTo(x-9,top-3);ctx.lineTo(x-17,top+16);ctx.lineTo(x-8,top+26);ctx.lineTo(x+13,top+27);ctx.lineTo(x+17,top+11);ctx.closePath();ctx.fill();
+  rect(x-4,top+1,4,15,'#91b17d');
  }
- for(let i=0;i<12;i++){const wx=70+i*195,x=wx-cam;if(Math.abs(wx-980)<130||x<-20||x>W+20)continue;
-  circle(x,G-8,8,'#72a77a');circle(x+11,G-11,7,'#8cc58b');circle(x-9,G-5,3,'#f3c6dc');
+ // Woodland floor: ferns, mushrooms and tiny flowers, not collectible markers.
+ for(let i=0;i<34;i++){
+  const wx=40+i*73,x=wx-cam;if(x<-25||x>W+25||Math.abs(wx-980)<115)continue;
+  rect(x,G-13,2,13,'#648c6d');
+  for(let j=0;j<3;j++){rect(x-9+j*6,G-11-j*3,8,3,j%2?'#91bd81':'#6b9e75');rect(x+2,G-9-j*4,8,3,'#7aaa76')}
+  if(i%4===0){circle(x+13,G-8,4,'#f4c5d5');circle(x+17,G-9,2,'#fff2c7')}
+  if(i%7===0){rect(x-14,G-9,4,8,'#f5dfb7');circle(x-12,G-10,7,'#d79b83')}
  }
- // The cabin sits naturally in the forest and conceals the underground cave.
+ // Cabin: retains original center x=980 and entrance alignment.
  const cx=980-cam;if(cx>-150&&cx<W+150){
-  rect(cx-83,G-137,166,137,'#b88465');rect(cx-73,G-124,146,110,'#dfb38a');
-  ctx.fillStyle='#7c584f';ctx.beginPath();ctx.moveTo(cx-100,G-135);ctx.lineTo(cx,G-205);ctx.lineTo(cx+100,G-135);ctx.fill();
-  rect(cx-64,G-95,34,35,'#ffe6a9');rect(cx+35,G-95,33,35,'#ffe6a9');rect(cx-16,G-74,32,74,'#755b53');
-  circle(cx,G-91,5,'#ffde9e');text('森林小屋',cx,G-220,'#785a67',13,'center');
+  rect(cx-83,G-137,166,137,'#92634f');rect(cx-76,G-127,152,115,'#c99b73');
+  for(let j=0;j<8;j++){rect(cx-75,G-123+j*14,150,2,'#b48666');rect(cx-73,G-118+j*14,7,2,'#e4b98d')}
+  ctx.fillStyle='#684b4b';ctx.beginPath();ctx.moveTo(cx-102,G-135);ctx.lineTo(cx,G-207);ctx.lineTo(cx+102,G-135);ctx.closePath();ctx.fill();
+  ctx.strokeStyle='#b48b77';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(cx-93,G-138);ctx.lineTo(cx,G-197);ctx.lineTo(cx+93,G-138);ctx.stroke();
+  rect(cx-64,G-96,35,39,'#654e52');rect(cx+33,G-96,35,39,'#654e52');
+  rect(cx-60,G-92,27,31,'#ffe2a4');rect(cx+37,G-92,27,31,'#ffe2a4');
+  rect(cx-48,G-93,3,33,'#b98569');rect(cx+49,G-93,3,33,'#b98569');
+  rect(cx-16,G-74,32,74,'#654e49');rect(cx-12,G-70,24,70,'#826457');circle(cx+8,G-35,2.5,'#f6d695');
+  rect(cx-89,G-14,178,14,'#8e7564');
+  for(let j=0;j<4;j++){circle(cx-79+j*6,G-14,5,'#6d9d73');circle(cx+67+j*6,G-14,5,'#6d9d73')}
+  rect(cx-83,G-139,8,8,'#d4a578');rect(cx+75,G-139,8,8,'#d4a578');
+  text('森林小屋',cx,G-219,'#73566c',13,'center');
   if(!data.seed){circle(cx,G-237+Math.sin(timer/350)*3,7,'#fff2b8');text('地下藏着秘密',cx,G-250,'#8e667b',11,'center')}
  }
- // Gradual blossom density toward the final garden.
- for(let i=0;i<19;i++){
-  const wx=1510+i*52,x=wx-cam;if(x<-20||x>W+20)continue;
-  circle(x,G-24-(i%3)*9,7,i%2?'#f4b9d4':'#ffe2a4');circle(x+6,G-22-(i%3)*9,4,'#fff4c4');
+ // Gradual spring blossoms, no hard biome seams.
+ for(let i=0;i<23;i++){
+  const wx=1510+i*42,x=wx-cam;if(x<-20||x>W+20)continue;
+  rect(x,G-18-(i%3)*6,2,18+(i%3)*6,'#77a67d');
+  for(let j=0;j<4;j++)circle(x+Math.cos(j*1.57)*5,G-22-(i%3)*6+Math.sin(j*1.57)*5,4,i%2?'#f4b9d4':'#fbd7b0');
+  circle(x,G-22-(i%3)*6,2,'#fff2b2');
  }
  const tx=2380-cam;if(tx>-160&&tx<W+160){
-  rect(tx-17,G-163,34,163,'#986b78');
-  for(let i=0;i<24;i++){const a=i*2.4,r=35+(i%6)*12;
-   circle(tx+Math.cos(a)*r,G-171+Math.sin(a)*r*.68,19+(i%3)*4,
+  rect(tx-19,G-165,38,165,'#8a6269');rect(tx-10,G-165,5,165,'#b68182');
+  for(let i=0;i<29;i++){const a=i*2.4,r=35+(i%6)*12;
+   circle(tx+Math.cos(a)*r,G-171+Math.sin(a)*r*.68,18+(i%3)*4,
     gardenPlanted().includes(0)?(i%2?'#ffb0d0':'#ffe0ec'):'#c6a8b9')}
-  for(let i=0;i<7;i++)circle(tx+(i-3)*17,G-183+Math.sin(timer/480+i)*6,2.6,'#fff4b9');
+  for(let i=0;i<9;i++)circle(tx+(i-4)*14,G-185+Math.sin(timer/480+i)*6,2.5,'#fff4b9');
   text('♡',tx-8,G-206,'#fff5d7',24);
  }
 }
