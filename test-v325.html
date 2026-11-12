@@ -262,7 +262,7 @@ function buildLevel(n){
    {type:'shell',id:0,x:815,y:231},{type:'shell',id:1,x:1535,y:217},{type:'shell',id:2,x:2020,y:221},{type:'shell',id:3,x:2700,y:222},{type:'shell',id:4,x:2890,y:218},
    ...coins(0,[[485,195],[637,174],[1190,193],[1420,179],[1718,148],[1823,148],[2090,190],[2380,183],[2830,211]])]};
  return {end:2450,
-  map:[gr(0,510),gr(700,370),gr(1115,440),gr(1780,670),bl(295,90,245),bl(715,92,237),bl(1170,105,235)],
+  map:[gr(0,510),gr(700,415),gr(1115,440),gr(1780,670),bl(295,90,245),bl(715,92,237),bl(1170,105,235)],
   boxes:[qb(0,300,159,'coin'),qb(1,615,151,'bag'),qb(2,1215,148,'coin')],
   plats:[mover(560,G-20,82,49,0,3600)], // Independent moving platform at first chasm only; second chasm uses the lion-operated wooden bridge.
   cps:[45,560,850,1510,2180],trees:[],
@@ -1689,6 +1689,39 @@ function v325SeasideDecorFront(){
   if(!visible(wx,16))continue;let x=X(wx);rect(x,G+7,10,3,'#f9d2a6');rect(x+2,G+4,6,4,'#e9a5ac');rect(x+4,G+3,2,2,'#fff0d6');
  }
 }
+// V3.2.5 forest chasm art: scenery only. The first cloud crossing and the
+// later cooperative bridge retain their original collision geometry.
+function v325ForestChasmBackdrop(){
+ if(level!==2||L.under||L.secret||L.cabin)return;
+ for(const [start,end] of [[510,700],[1555,1780]]){
+  const x=start-cam,w=end-start;if(x>W||x+w<0)continue;
+  ctx.save();ctx.beginPath();ctx.rect(x,G,w,H-G);ctx.clip();
+  // A layered, shaded woodland ravine replaces the flat pale rectangle.
+  const grad=ctx.createLinearGradient(0,G,0,H);
+  grad.addColorStop(0,'#7d9c8d');grad.addColorStop(.42,'#648678');grad.addColorStop(1,'#415e58');
+  ctx.fillStyle=grad;ctx.fillRect(x,G,w,H-G);
+  for(let i=0;i<9;i++){
+   const xx=x+((i*53+17)%(w+48))-24;
+   const hh=22+(i*17)%57;
+   rect(xx,H-hh,7,hh,i%2?'#42685b':'#537769');
+   circle(xx+3,H-hh,14+(i%3)*4,i%2?'#6f9985':'#83a896');
+  }
+  // Mossy rock faces are clipped inside the gap, never covering platforms.
+  for(const side of [0,1]){
+   const edge=side===0?x:x+w;
+   for(let j=0;j<7;j++){
+    const yy=G+10+j*17;
+    const depth=9+(j*7)%16;
+    const xx=side===0?edge:edge-depth;
+    rect(xx,yy,depth,12,j%2?'#765c4e':'#8b6c59');
+    rect(xx,yy,depth,3,j%2?'#759779':'#91ae86');
+    rect(xx+(side===0?depth-4:2),yy+5,3,4,'#ab8c72');
+   }
+  }
+  ctx.globalAlpha=.22;rect(x,G+32,w,9,'#d2e3c6');rect(x,G+91,w,13,'#d2e3c6');
+  ctx.restore();
+ }
+}
 function terrain(a){let x=a.x-cam;if(x>W||x+a.w<0)return;
  if(level===0&&!L.secret&&!L.under&&!L.cabin){
   v325DrawNaturalTerrain(a);
@@ -2323,7 +2356,7 @@ function draw(){
   let glow=ctx.createRadialGradient(lx,ly,2,lx+facing*55,ly-5,145);glow.addColorStop(0,'#ffe9ad88');glow.addColorStop(1,'#ffe6a300');ctx.fillStyle=glow;ctx.fillRect(0,0,W,G);
   // Keep the existing cave light gradient; remove only the floating extra torch.
   for(let i=0;i<9;i++){const xx=i*106+25-cam*.12;ctx.fillStyle=i%2?'#7de1f0':'#a9efff';ctx.globalAlpha=.42;ctx.beginPath();ctx.moveTo(xx,15);ctx.lineTo(xx+18,15);ctx.lineTo(xx+8,65+(i%3)*18);ctx.fill();ctx.globalAlpha=1;}text('蓝冰洞',W/2,52,'#d8f7ff',16,'center');text('出口 →',1460-cam,G-53,'#fff3cf',13,'center');}
- L.map.forEach(terrain);v325SeasideDecorFront();if(level===0&&!L.under&&!L.secret&&!L.cabin)firstLevelDecor();drawShallowCove();drawFinalBeach();v325BeachLeftTransition();v325BeachDecor();clouds.forEach(cloudDraw);
+ v325ForestChasmBackdrop();L.map.forEach(terrain);v325SeasideDecorFront();if(level===0&&!L.under&&!L.secret&&!L.cabin)firstLevelDecor();drawShallowCove();drawFinalBeach();v325BeachLeftTransition();v325BeachDecor();clouds.forEach(cloudDraw);
  if(L.under){
   const c=icePuzzle;
   // Ice cube and pressure plate, both in world coordinates.
