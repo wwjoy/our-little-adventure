@@ -1977,19 +1977,57 @@ function drawFourSeasons(){
   if(i%4===0){circle(x+13,G-8,4,'#f4c5d5');circle(x+17,G-9,2,'#fff2c7')}
   if(i%7===0){rect(x-14,G-9,4,8,'#f5dfb7');circle(x-12,G-10,7,'#d79b83')}
  }
- // Cabin: retains original center x=980 and entrance alignment.
+ // Cabin visual refinement: same center, footprint and entrance interaction.
  const cx=980-cam;if(cx>-150&&cx<W+150){
-  rect(cx-83,G-137,166,137,'#92634f');rect(cx-76,G-127,152,115,'#c99b73');
-  for(let j=0;j<8;j++){rect(cx-75,G-123+j*14,150,2,'#b48666');rect(cx-73,G-118+j*14,7,2,'#e4b98d')}
-  ctx.fillStyle='#684b4b';ctx.beginPath();ctx.moveTo(cx-102,G-135);ctx.lineTo(cx,G-207);ctx.lineTo(cx+102,G-135);ctx.closePath();ctx.fill();
-  ctx.strokeStyle='#b48b77';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(cx-93,G-138);ctx.lineTo(cx,G-197);ctx.lineTo(cx+93,G-138);ctx.stroke();
-  rect(cx-64,G-96,35,39,'#654e52');rect(cx+33,G-96,35,39,'#654e52');
-  rect(cx-60,G-92,27,31,'#ffe2a4');rect(cx+37,G-92,27,31,'#ffe2a4');
-  rect(cx-48,G-93,3,33,'#b98569');rect(cx+49,G-93,3,33,'#b98569');
-  rect(cx-16,G-74,32,74,'#654e49');rect(cx-12,G-70,24,70,'#826457');circle(cx+8,G-35,2.5,'#f6d695');
-  rect(cx-89,G-14,178,14,'#8e7564');
-  for(let j=0;j<4;j++){circle(cx-79+j*6,G-14,5,'#6d9d73');circle(cx+67+j*6,G-14,5,'#6d9d73')}
-  rect(cx-83,G-139,8,8,'#d4a578');rect(cx+75,G-139,8,8,'#d4a578');
+  // Shadowed foundation and warm timber walls.
+  rect(cx-89,G-18,178,18,'#745a50');rect(cx-83,G-137,166,123,'#805b4e');
+  rect(cx-77,G-130,154,114,'#c99d78');
+  for(let j=0;j<9;j++){
+   const yy=G-126+j*13;
+   rect(cx-75,yy,150,2,j%2?'#a87c61':'#b68b6b');
+   rect(cx-72+(j*23)%119,yy+4,8,2,'#e2b78e');
+   rect(cx+41-(j*17)%94,yy+8,4,2,'#9c745e');
+  }
+  // Deep eaves and irregular shingled roof, kept inside the old roof envelope.
+  ctx.fillStyle='#59454b';ctx.beginPath();ctx.moveTo(cx-102,G-135);ctx.lineTo(cx,G-207);ctx.lineTo(cx+102,G-135);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#795a56';ctx.beginPath();ctx.moveTo(cx-92,G-139);ctx.lineTo(cx,G-199);ctx.lineTo(cx+92,G-139);ctx.closePath();ctx.fill();
+  for(let row=0;row<5;row++){
+   const yy=G-182+row*10,half=17+row*15;
+   for(let k=-half;k<half;k+=15){
+    const off=((row*7+k*3)%5+5)%5;
+    rect(cx+k,yy+off,12,4,(row+k)%3===0?'#9a7467':'#876457');
+   }
+  }
+  ctx.strokeStyle='#c59a7a';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(cx-96,G-137);ctx.lineTo(cx,G-202);ctx.lineTo(cx+96,G-137);ctx.stroke();
+  rect(cx-96,G-140,192,6,'#634b46');rect(cx-82,G-140,8,16,'#e0ad7e');rect(cx+74,G-140,8,16,'#e0ad7e');
+  // Warm inset windows, wooden crossbars and small sills.
+  for(const dx of [-49,49]){
+   rect(cx+dx-20,G-99,40,48,'#664c47');rect(cx+dx-16,G-95,32,39,'#f9d59b');
+   rect(cx+dx-13,G-92,26,32,'#ffe8b5');rect(cx+dx-2,G-95,4,39,'#986c58');
+   rect(cx+dx-16,G-77,32,3,'#986c58');rect(cx+dx-23,G-53,46,5,'#9d725c');
+   rect(cx+dx-19,G-52,38,2,'#e4b68d');
+  }
+  // Rounded-top entrance is purely decorative: the original doorway remains aligned.
+  rect(cx-19,G-76,38,76,'#604b47');
+  rect(cx-15,G-68,30,68,'#8b6655');
+  circle(cx,G-68,15,'#8b6655');rect(cx-15,G-68,30,12,'#8b6655');
+  rect(cx-10,G-57,2,52,'#ad8268');rect(cx+11,G-57,2,52,'#6e514b');
+  circle(cx+9,G-34,3,'#f5d38d');circle(cx+9,G-34,1,'#fff4bd');
+  // Porch lantern, ivy and sparse woodland planting.
+  rect(cx+23,G-92,3,15,'#6a4e45');rect(cx+20,G-81,10,12,'#755747');
+  rect(cx+22,G-79,6,8,'#ffe6a4');circle(cx+25,G-76,10,'rgba(255,221,143,0.10)');
+  for(let i=0;i<5;i++){
+   const px=cx-79+i*7,py=G-24-(i%3)*5;
+   circle(px,py,5,i%2?'#729c72':'#87ab7a');
+  }
+  for(let i=0;i<5;i++){
+   const px=cx+58+i*6,py=G-23-(i%2)*5;
+   circle(px,py,5,i%2?'#739f79':'#90ad80');
+  }
+  for(let i=0;i<3;i++){
+   rect(cx-87+i*7,G-15,2,9,'#6f9a72');circle(cx-86+i*7,G-17,3,i%2?'#f7c2d0':'#f4e1aa');
+  }
+  rect(cx-89,G-14,178,14,'#887262');
   text('森林小屋',cx,G-219,'#73566c',13,'center');
   if(!data.seed){circle(cx,G-237+Math.sin(timer/350)*3,7,'#fff2b8');text('地下藏着秘密',cx,G-250,'#8e667b',11,'center')}
  }
