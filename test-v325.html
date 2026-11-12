@@ -1737,32 +1737,35 @@ function drawFourSeasons(){
   rect(x-7,110,14,G-110,'#879e95');rect(x-3,114,3,G-114,'#b5c6ae');
   for(let j=0;j<4;j++)circle(x+(j%2?17:-13),111+j*8,23+(j%2)*4,j%2?'#85a89d':'#a4beb1');
  }
- // Tall coast redwoods: tapering silhouettes and fine pixel-branch sprays.
- // Leave the cabin clearing open; keep world placement and physics unchanged.
+ // V3.2.5 redwood refinement: three varied, readable silhouettes with open trunks.
+ // Art-only: existing world-space tree anchors and all collision data remain unchanged.
  for(let i=0;i<15;i++){
-  const wx=90+i*137,x=wx-cam;if(Math.abs(wx-980)<205||x<-115||x>W+115)continue;
-  const variation=(i*17)%23,top=-28+variation,base=G;
-  // A broad flared root and a red-brown trunk with broken vertical bark.
-  ctx.fillStyle='#674535';ctx.beginPath();ctx.moveTo(x-28,base);ctx.lineTo(x-18,base-40);ctx.lineTo(x-14,top+70);ctx.lineTo(x-4,top+10);ctx.lineTo(x+5,top+10);ctx.lineTo(x+15,top+70);ctx.lineTo(x+19,base-38);ctx.lineTo(x+30,base);ctx.closePath();ctx.fill();
-  rect(x-11,top+63,5,base-top-68,'#a56a4d');rect(x+8,top+83,3,base-top-90,'#4c382f');
-  for(let j=0;j<14;j++){let yy=top+76+j*17,dx=((i*11+j*13)%24)-13;rect(x+dx,yy,2,5+(j%3)*3,j%2?'#c18a60':'#503b32')}
-  // Irregular horizontal tiers: needle-like branches, not circular deciduous crowns.
-  for(let j=0;j<11;j++){
-   const yy=top+18+j*16,spread=Math.max(15,57-j*2+((i+j)%3)*5);
-   rect(x-spread,yy+7,spread*2,4,'#554c3b');
-   for(let side of [-1,1])for(let k=0;k<4;k++){
-    const reach=spread*(k+1)/4,xx=x+side*reach;
-    rect(xx-7,yy+3+(k%2)*3,15,4,(j+k+i)%3===0?'#507b61':'#648d69');
-    rect(xx-5,yy+8+(k%3)*2,11,4,(j+k)%2?'#789c71':'#436f5c');
-    rect(xx-2,yy+12+(k%2)*3,5,5,'#83a77a');
-   }
+  const wx=90+i*137,x=wx-cam;if(Math.abs(wx-980)<205||x<-120||x>W+120)continue;
+  const kind=i%3,top=[-48,-24,-38][kind]+((i*7)%13),base=G;
+  const trunk=[17,20,15][kind],crownBottom=[top+133,top+158,top+119][kind];
+  // Deep redwood bark and wide root flare; lower trunk remains clearly visible.
+  ctx.fillStyle='#694737';ctx.beginPath();ctx.moveTo(x-29,base);ctx.lineTo(x-trunk,base-34);ctx.lineTo(x-trunk+3,top+48);ctx.lineTo(x+trunk-5,top+48);ctx.lineTo(x+trunk,base-34);ctx.lineTo(x+30,base);ctx.closePath();ctx.fill();
+  rect(x-trunk+4,top+58,4,base-top-72,'#a87555');
+  rect(x+trunk-8,top+80,3,base-top-96,'#4c382f');
+  for(let j=0;j<12;j++){const yy=top+79+j*21,dx=((i*13+j*17)%25)-12;rect(x+dx,yy,2,5+(j%3)*2,j%2?'#bd8760':'#4d372e')}
+  // Sparse side branches and large, uneven foliage masses; no confetti needles.
+  const clusters=[
+   [[-28,52,28,13],[24,73,32,16],[-38,96,29,15],[22,121,26,14],[0,30,25,19]],
+   [[25,47,30,16],[-26,69,32,15],[36,91,27,17],[-18,117,32,17],[0,25,22,20]],
+   [[-21,42,25,14],[31,62,34,17],[-31,84,32,16],[18,107,25,14],[0,20,22,17]]
+  ][kind];
+  for(let j=0;j<clusters.length;j++){
+   const [dx,dy,r,h]=clusters[j],yy=top+dy;
+   rect(x+(dx<0?-r:0),yy+5,Math.abs(dx)+r,4,'#594a3b');
+   const left=x+dx-r,right=x+dx+r;
+   ctx.fillStyle=['#466d57','#557d60','#668c69'][((i+j)%3)];
+   ctx.beginPath();ctx.moveTo(left+8,yy+h);ctx.lineTo(left,yy+6);ctx.lineTo(left+10,yy-4);ctx.lineTo(x+dx-4,yy-h);ctx.lineTo(right-8,yy-8);ctx.lineTo(right,yy+4);ctx.lineTo(right-12,yy+h);ctx.closePath();ctx.fill();
+   rect(left+9,yy-5,Math.max(10,r-7),5,'#8aaa79');
+   rect(x+dx+2,yy+7,Math.max(8,r-8),4,'#385e50');
   }
-  // Narrow irregular crown reaches above the viewport.
-  for(let j=0;j<8;j++){
-   const yy=top-23+j*10,ww=8+j*3;
-   rect(x-ww,yy,ww*2,9,j%3===0?'#527e61':j%3===1?'#6f9b70':'#416e5b');
-   rect(x-ww+4,yy+3,ww,3,'#8caf79');
-  }
+  // Tapered top, kept behind HUD; preserve visible sky gaps between trees.
+  ctx.fillStyle='#547e61';ctx.beginPath();ctx.moveTo(x,top-18);ctx.lineTo(x-15,top+24);ctx.lineTo(x-8,top+40);ctx.lineTo(x+18,top+40);ctx.lineTo(x+14,top+19);ctx.closePath();ctx.fill();
+  rect(x-4,top+3,5,22,'#85a47a');
  }
  // Woodland floor: ferns, mushrooms and tiny flowers, not collectible markers.
  for(let i=0;i<34;i++){
