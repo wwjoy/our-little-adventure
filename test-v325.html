@@ -2115,21 +2115,46 @@ function drawFourSeasons(){
   text('森林小屋',cx,G-219,'#73566c',13,'center');
   if(!data.seed){circle(cx,G-237+Math.sin(timer/350)*3,7,'#fff2b8');text('地下藏着秘密',cx,G-250,'#8e667b',11,'center')}
  }
- // Gradual spring blossoms, no hard biome seams.
- for(let i=0;i<23;i++){
-  const wx=1510+i*42,x=wx-cam;if(x<-20||x>W+20)continue;
-  rect(x,G-18-(i%3)*6,2,18+(i%3)*6,'#77a67d');
-  for(let j=0;j<4;j++)circle(x+Math.cos(j*1.57)*5,G-22-(i%3)*6+Math.sin(j*1.57)*5,4,i%2?'#f4b9d4':'#fbd7b0');
-  circle(x,G-22-(i%3)*6,2,'#fff2b2');
+ // Garden transition: sparse woodland blooms become denser near the promise tree.
+ for(let i=0;i<35;i++){
+  const wx=1510+i*25,x=wx-cam;if(x<-25||x>W+25)continue;
+  const near=Math.max(0,Math.min(1,(wx-1720)/550));
+  const hh=10+(i*7%12)+near*8;
+  rect(x,G-hh,2,hh,'#679a79');
+  if(i%3===0){rect(x-6,G-hh+8,7,3,'#80b08a');rect(x+2,G-hh+12,6,3,'#7eac83')}
+  const colors=['#f7d5e3','#f3a8c8','#ffe7b7','#fff1dc'];
+  if(i%4!==1){
+   for(let j=0;j<5;j++){const ang=j*Math.PI*2/5;circle(x+Math.cos(ang)*4,G-hh+Math.sin(ang)*4,3.5,colors[(i+j)%4])}
+   circle(x,G-hh,2,'#f8d98b');
+  }
  }
- const tx=2380-cam;if(tx>-160&&tx<W+160){
-  rect(tx-19,G-165,38,165,'#8a6269');rect(tx-10,G-165,5,165,'#b68182');
-  for(let i=0;i<29;i++){const a=i*2.4,r=35+(i%6)*12;
-   circle(tx+Math.cos(a)*r,G-171+Math.sin(a)*r*.68,18+(i%3)*4,
-    gardenPlanted().includes(0)?(i%2?'#ffb0d0':'#ffe0ec'):'#c6a8b9')}
+ // Promise tree: branching trunk, layered blossom canopy and delicate petal motion.
+ const tx=2380-cam;if(tx>-175&&tx<W+175){
+  ctx.save();
+  rect(tx-20,G-159,40,159,'#775359');rect(tx-13,G-158,8,158,'#a57978');
+  for(const [dx,dy,w] of [[-70,-125,11],[55,-139,10],[-44,-177,9],[37,-185,9]]){
+   ctx.strokeStyle='#855c64';ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(tx,G-102);ctx.quadraticCurveTo(tx+dx*.5,G-151,tx+dx,G+dy);ctx.stroke();
+  }
+  const groups=[[-87,-166,37],[-53,-210,45],[-8,-226,51],[42,-212,46],[83,-174,37],[-23,-170,46],[36,-159,43]];
+  for(let k=0;k<groups.length;k++){
+   const [dx,dy,r]=groups[k],cx=tx+dx,cy=G+dy;
+   circle(cx+3,cy+5,r+3,'#b87c9b');
+   circle(cx,cy,r,'#eaa8c7');
+   for(let j=0;j<8;j++){
+    const ang=j*2.399+k*.5,rr=r*(.33+.42*((j*3+k)%5)/4);
+    circle(cx+Math.cos(ang)*rr,cy+Math.sin(ang)*rr,8+(j%3)*3,(j+k)%3===0?'#fff0e9':(j%2?'#ffd6e6':'#f7bfd6'));
+   }
+   for(let j=0;j<4;j++)circle(cx+((j*17+k*9)%(r*2))-r,cy+((j*13+k*7)%(r*2))-r,2,'#fff1bb');
+  }
+  for(let j=0;j<14;j++){
+   const px=tx-120+((j*43+timer*.012*(1+j%3))%240),py=G-90-((j*37+timer*.018*(1+j%2))%150);
+   circle(px,py,2+(j%2),'#f9c5d8');
+  }
   for(let i=0;i<9;i++)circle(tx+(i-4)*14,G-185+Math.sin(timer/480+i)*6,2.5,'#fff4b9');
-  text('♡',tx-8,G-206,'#fff5d7',24);
+  text('♡',tx-8,G-218,'#fff5d7',24);
+  ctx.restore();
  }
+
 }
 const MEMORY_FLOWER_X=[1845,2010,2170];
 function drawMemoryPath(){
@@ -2163,21 +2188,30 @@ function drawMemoryPath(){
    for(let j=0;j<4;j++)circle(x+Math.sin(timer/600+j*2+i)*15,G-39-j*8,1.4,'#fff3c8');
   }else{circle(x,G-27,6,'#b9a5b3');circle(x-2,G-28,2,'#ead2df')}
  }
- // Garden entrance: two vine-wrapped posts replace the anonymous final flag visually.
- // Preserve the ORIGINAL level completion coordinate and physics.
+ // Blooming garden arch: decoration only; completion coordinate stays unchanged.
  const left=2280-cam,right=2350-cam;
  if(right>-40&&left<W+40){
+  ctx.save();
   for(const x of [left,right]){
-   rect(x-4,G-70,8,70,'#ac8176');rect(x-6,G-72,12,5,'#f0d6a7');
-   for(let k=0;k<5;k++){
-    circle(x+(k%2?5:-4),G-16-k*12,4,'#7fab83');
-    if(k%2===0)circle(x+(k%2?5:-4),G-19-k*12,2.3,'#fac6d8');
+   rect(x-5,G-75,10,75,'#9a7267');rect(x-3,G-75,3,75,'#c89a7c');
+   for(let k=0;k<7;k++){
+    const yy=G-10-k*10,side=(k%2?7:-7);
+    circle(x+side,yy,5,k%3?'#729b79':'#93b58a');
+    if(k%2===0){circle(x+side-3,yy-4,3,'#f6c3d7');circle(x+side+2,yy-4,3,'#ffe3e7')}
    }
   }
-  ctx.strokeStyle='#c49a80';ctx.lineWidth=3;
-  ctx.beginPath();ctx.moveTo(left,G-72);ctx.quadraticCurveTo((left+right)/2,G-100,right,G-72);ctx.stroke();
-  text('约定花园', (left+right)/2,G-93,'#866179',12,'center');
+  ctx.strokeStyle='#9a746b';ctx.lineWidth=6;
+  ctx.beginPath();ctx.moveTo(left,G-75);ctx.quadraticCurveTo((left+right)/2,G-121,right,G-75);ctx.stroke();
+  ctx.strokeStyle='#7d9e7b';ctx.lineWidth=4;
+  ctx.beginPath();ctx.moveTo(left,G-77);ctx.quadraticCurveTo((left+right)/2,G-123,right,G-77);ctx.stroke();
+  for(let j=0;j<=8;j++){
+   const t=j/8,x=left+(right-left)*t,y=G-77-44*4*t*(1-t);
+   circle(x,y,5,j%2?'#f5bdd5':'#ffe4e8');circle(x+2,y-1,2,'#fff5ce');
+  }
+  text('约定花园',(left+right)/2,G-133,'#866179',12,'center');
+  ctx.restore();
  }
+
  ctx.restore();
 }
 function drawGardenItems(){drawMemoryPath();/* The only planting happens in the ending cinematic. */}
