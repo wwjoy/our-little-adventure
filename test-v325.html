@@ -2360,30 +2360,39 @@ function draw(){
  for(const o of L.objects)if(o.type==='exitpipe')pipeDraw(o);
 
  if(L.cabin){
-  // Single-screen cabin: indoor walls and wooden floors occupy the entire visible viewport.
-  rect(0,0,W,H,'#705b64');
-  for(let x=0;x<W;x+=36)rect(x,24,2,G-24,'#866d70');
-  rect(0,0,W,24,'#a77e68');rect(0,G-68,W,68,'#a47759');
-  // Left cabinet, cupboard, window and side table.
-  rect(40,110,64,112,'#8e6659');for(let i=0;i<3;i++)rect(47,128+i*29,50,5,'#d7aa7e');
-  rect(117,164,69,54,'#bb8c6b');rect(122,158,59,8,'#f5d6aa');
-  rect(202,110,76,68,'#b98e78');rect(208,116,64,55,'#ffdda5');rect(213,120,54,46,'#e7bc93');
-  rect(239,116,4,55,'#ad806b');rect(208,145,64,4,'#ad806b');
-  rect(215,G-49,54,29,'#9c745e');rect(219,G-54,46,7,'#efd0a0');
-  // The blue-ice-cave trapdoor is the only passage underground.
-  rect(344,G-17,88,17,'#463c51');rect(352,G-25,71,8,'#a98f8b');
-  circle(388,G-33,9,'#ffdfa0');text('↓ 暗门',388,G-58,'#fff2ce',12,'center');
-  text('← 森林',53,G-47,'#fff2ce',12,'center');
-  // Compact reading corner fully inside the cabin, not behind an off-screen camera boundary.
-  rect(456,105,104,125,'#8d675b');for(let j=0;j<4;j++){
-   rect(464,125+j*28,88,5,'#d9a87c');
-   for(let k=0;k<5;k++)rect(469+k*16,106+j*28,9,18,['#d7a7b2','#e9c88e','#a5b7a2'][k%3]);
-  }
-  rect(566,G-76,58,11,'#d5aa87');rect(572,G-65,8,44,'#a77d66');rect(610,G-65,8,44,'#a77d66');
-  circle(595,G-90,12,'#f6d7a8');rect(591,G-113,9,18,'#ad866f');circle(595,G-115,6,'#ffe4a5');
-  rect(0,G-19,W,8,'#a77d67');rect(0,G-12,W,5,'#d3a18b');
-  rect(445,G-11,174,6,'#e0a6af');rect(62,G-11,190,6,'#e0a6af');
-  rect(W-6,24,6,G-24,'#876459'); // Closed right wall.
+  // V3.2.5: warm forest study; decorative changes only. All triggers remain unchanged.
+  rect(0,0,W,H,'#e8d6bc');
+  // Cream plaster with fine wallpaper texture and warm timber wainscoting.
+  for(let y=29;y<G-88;y+=31)for(let x=12;x<W;x+=51){rect(x+(y%3)*4,y,2,2,'#dec6a9');}
+  rect(0,0,W,27,'#8e624d');rect(0,25,W,7,'#cda07b');
+  rect(0,G-118,W,101,'#ac7b5e');rect(0,G-121,W,6,'#e2b58a');
+  for(let x=0;x<W;x+=43){rect(x,G-112,2,94,'#875f4c');rect(x+4,G-97,31,2,'#c29270');}
+  rect(0,G-18,W,18,'#815a48');
+  for(let x=0;x<W;x+=54){rect(x,G-16,2,16,'#604638');rect(x+9,G-12,29,2,'#a77b5b');}
+  // Bookcase and cabinets retain their original footprints.
+  rect(40,110,64,112,'#78503e');rect(44,114,56,104,'#b3835d');
+  for(let i=0;i<3;i++){rect(47,127+i*30,50,5,'#6e493a');for(let j=0;j<4;j++)rect(50+j*11,112+i*30,7,14,['#a3a88a','#d4a5a1','#e2c18b','#8d9d9a'][(i+j)%4]);}
+  rect(117,164,69,54,'#a57959');rect(122,158,59,8,'#e7bd8c');rect(143,185,8,4,'#e9c38a');
+  // Glowing crossbar window and small flowerpot on sill.
+  rect(201,108,79,75,'#7d5948');rect(206,113,69,63,'#ffe6af');rect(210,117,61,55,'#f7d8a2');
+  rect(239,113,5,63,'#a4785e');rect(206,143,69,5,'#a4785e');rect(207,176,72,6,'#e6b88b');
+  rect(264,169,11,9,'#b57b65');rect(268,164,3,7,'#718f68');circle(270,163,4,'#84a57a');
+  rect(215,G-49,54,29,'#956b53');rect(219,G-54,46,7,'#edc996');
+  // Reading corner: colorful books, picture frame, warm lamp.
+  rect(456,105,104,125,'#79513f');rect(461,110,94,114,'#ae7d5c');
+  for(let j=0;j<4;j++){rect(464,126+j*28,88,5,'#6e4938');for(let k=0;k<5;k++)rect(469+k*16,108+j*28,9,17,['#d9a7b3','#e8c98e','#a5b6a0','#a3b9bd'][k%4]);}
+  rect(566,G-76,58,11,'#c99a74');rect(572,G-65,8,44,'#9d7157');rect(610,G-65,8,44,'#9d7157');
+  circle(595,G-90,12,'#f5d29b');rect(591,G-113,9,18,'#a67b5f');circle(595,G-115,6,'#ffe6aa');
+  rect(336,70,64,43,'#8c6954');rect(340,74,56,35,'#e9d6b7');
+  for(let i=0;i<4;i++)circle(349+i*12,97-(i%2)*8,5,'#7f9f86');
+  // Hidden floor hatch: wood cover and subtle cool-blue seams, not an exposed cave.
+  rect(344,G-18,88,5,'#624c46');rect(348,G-26,80,9,'#a47759');
+  for(let i=0;i<5;i++)rect(351+i*15,G-24,2,6,'#775342');
+  rect(348,G-29,80,2,'#86c6d2');circle(389,G-23,3,'#f2d49b');
+  for(let i=0;i<3;i++){const t=timer*.001+i*2.1;circle(362+i*24,G-35-Math.sin(t)*3,1.7,'#b6e9ee');}
+  text('↓ 暗门',388,G-58,'#6d5b60',12,'center');
+  text('← 森林',53,G-47,'#6b5347',12,'center');
+  rect(0,G-19,W,4,'#d5a87f');rect(W-6,27,6,G-27,'#896451');
  }
 
  if(L.under){rect(0,0,W,G,'#0b2946');for(let i=0;i<22;i++){let x=(i*67-cam*.2)%W;ctx.fillStyle=i%2?'#1c567d':'#2b7da5';ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+22,0);ctx.lineTo(x+10,35+i%4*13);ctx.fill()}for(let i=0;i<13;i++){let x=i*75-cam*.3;circle(x,110+i%4*28,14,i%2?'#357ba9':'#55b6d6');circle(x,110+i%4*28,5,'#d7f9ff')}const lx=lion.x-cam+12,ly=lion.y+3;const facing=p.face>=0?1:-1;
