@@ -1737,55 +1737,47 @@ function drawFourSeasons(){
   rect(x-7,110,14,G-110,'#879e95');rect(x-3,114,3,G-114,'#b5c6ae');
   for(let j=0;j<4;j++)circle(x+(j%2?17:-13),111+j*8,23+(j%2)*4,j%2?'#85a89d':'#a4beb1');
  }
- // V3.2.5 redwood refinement: three varied, readable silhouettes with open trunks.
- // Art-only: existing world-space tree anchors and all collision data remain unchanged.
+ // Fifth pass: layered natural pixel-bough silhouettes, based on approved concept art.
+ // Only visual tree drawing changes; anchors and collision remain untouched.
  for(let i=0;i<15;i++){
-  const wx=90+i*137,x=wx-cam;if(Math.abs(wx-980)<205||x<-120||x>W+120)continue;
-  const kind=i%3,top=[-48,-24,-38][kind]+((i*7)%13),base=G;
-  const trunk=[17,20,15][kind],crownBottom=[top+133,top+158,top+119][kind];
-  // Deep redwood bark and wide root flare; lower trunk remains clearly visible.
+  const wx=90+i*137,x=wx-cam;if(Math.abs(wx-980)<205||x<-130||x>W+130)continue;
+  const kind=i%3,top=[-54,-30,-42][kind]+((i*7)%13),base=G;
+  const trunk=[17,20,15][kind];
   ctx.fillStyle='#694737';ctx.beginPath();ctx.moveTo(x-29,base);ctx.lineTo(x-trunk,base-34);ctx.lineTo(x-trunk+3,top+48);ctx.lineTo(x+trunk-5,top+48);ctx.lineTo(x+trunk,base-34);ctx.lineTo(x+30,base);ctx.closePath();ctx.fill();
-  rect(x-trunk+4,top+58,4,base-top-72,'#a87555');
-  rect(x+trunk-8,top+80,3,base-top-96,'#4c382f');
+  rect(x-trunk+4,top+58,4,base-top-72,'#a87555');rect(x+trunk-8,top+80,3,base-top-96,'#4c382f');
   for(let j=0;j<12;j++){const yy=top+79+j*21,dx=((i*13+j*17)%25)-12;rect(x+dx,yy,2,5+(j%3)*2,j%2?'#bd8760':'#4d372e')}
-  // Fourth-pass crown refinement: asymmetrical needle boughs with tapered tips.
-  // Keep the trunk and its bark exactly as in the approved third-round baseline.
-  const clusters=[
-   [[-25,54,26,12],[21,78,31,15],[-34,104,27,13],[17,127,22,11],[1,32,20,15]],
-   [[24,51,28,13],[-29,75,30,14],[31,99,25,13],[-17,126,28,14],[-3,30,19,16]],
-   [[-20,48,23,12],[29,71,30,14],[-27,94,27,12],[15,116,23,12],[2,27,19,15]]
-  ][kind];
-  for(let j=0;j<clusters.length;j++){
-   const [dx,dy,r,h]=clusters[j],yy=top+dy;
-   const offset=((i*11+j*7)%9)-4,xx=x+dx+offset;
-   // Branch attachment is thinner than foliage and never blocks the play lane.
-   rect(Math.min(x,xx),yy+3,Math.abs(xx-x)+5,3,'#594a3b');
-   const palette=['#4b725a','#587e61','#668b6b'];
-   ctx.fillStyle=palette[(i+j)%3];
-   ctx.beginPath();
-   ctx.moveTo(xx-r+7,yy+4);
-   ctx.lineTo(xx-r+3,yy-2);
-   ctx.lineTo(xx-r+12,yy-h+3);
-   ctx.lineTo(xx-5,yy-h-3);
-   ctx.lineTo(xx+r-12,yy-h+1);
-   ctx.lineTo(xx+r,yy-3);
-   ctx.lineTo(xx+r-7,yy+6);
-   ctx.lineTo(xx+9,yy+h-2);
-   ctx.lineTo(xx-7,yy+h);
+  // Large connected tiers taper toward the crown; scalloped pixel needle edges.
+  const widths=[[24,34,45,54,47,40,29],[22,36,49,57,52,39,28],[20,30,43,49,55,36,25]][kind];
+  const shifts=[[0,-6,5,-3,6,-5,3],[2,7,-4,4,-7,5,-3],[-3,5,-8,3,8,-4,2]][kind];
+  const tones=['#416d56','#4d7b5d','#5a8866'];
+  for(let tier=widths.length-1;tier>=0;tier--){
+   const cy=top+24+tier*22,span=widths[tier],center=x+shifts[tier];
+   // Connecting woody boughs are mostly hidden beneath foliage.
+   rect(x-3,cy-2,Math.max(3,center-x+span-6),3,'#614937');
+   const foliage=tones[(i+tier)%3];
+   ctx.fillStyle=foliage;ctx.beginPath();
+   ctx.moveTo(center-span-9,cy+4);ctx.lineTo(center-span-2,cy-5);
+   ctx.lineTo(center-span+10,cy-12);ctx.lineTo(center-span+18,cy-17);
+   ctx.lineTo(center-10,cy-20);ctx.lineTo(center+6,cy-23);
+   ctx.lineTo(center+span-17,cy-14);ctx.lineTo(center+span-3,cy-6);
+   ctx.lineTo(center+span+8,cy+4);ctx.lineTo(center+span-6,cy+7);
+   ctx.lineTo(center+span-13,cy+13);ctx.lineTo(center+span-25,cy+10);
+   ctx.lineTo(center+10,cy+13);ctx.lineTo(center-8,cy+12);
+   ctx.lineTo(center-span+15,cy+12);ctx.lineTo(center-span+5,cy+16);
    ctx.closePath();ctx.fill();
-   // A restrained broken highlight, rather than straight repeated stripes.
-   rect(xx-r+12,yy-h+3,Math.max(8,r-13),3,'#8baa7b');
-   rect(xx+2,yy+7,Math.max(7,r-12),3,'#3d6552');
-   // Two short descending needle tips give the crown a natural outline.
-   rect(xx-r+10,yy+5,4,4+(j%2)*3,palette[(i+j)%3]);
-   rect(xx+r-13,yy+5,4,3+((i+j)%2)*3,palette[(i+j)%3]);
+   // Uneven clusters and dangling needles make the bough edges organic.
+   for(let k=0;k<5;k++){
+    const px=center-span+12+k*(span*2-24)/4;
+    const wobble=((i*7+tier*5+k*11)%7)-3;
+    rect(px,cy+9+wobble,5+(k%2)*3,4+((tier+k)%3)*3,foliage);
+   }
+   rect(center-span+19,cy-13,Math.max(10,span*.7),3,'#8fae7c');
+   rect(center-span+25,cy-9,Math.max(8,span*.42),3,'#b0c68a');
+   rect(center+8,cy+7,Math.max(8,span*.42),3,'#345f4d');
   }
-  // Uneven crown apex; avoid repetitive geometric green mushroom caps.
-  ctx.fillStyle='#547e61';ctx.beginPath();
-  ctx.moveTo(x+2,top-18);ctx.lineTo(x-11,top+5);ctx.lineTo(x-18,top+20);
-  ctx.lineTo(x-9,top+34);ctx.lineTo(x+15,top+33);
-  ctx.lineTo(x+17,top+14);ctx.closePath();ctx.fill();
-  rect(x-4,top+1,4,15,'#85a47a');
+  // A tapered irregular top ties the branches into one tree silhouette.
+  ctx.fillStyle='#547e61';ctx.beginPath();ctx.moveTo(x+2,top-26);ctx.lineTo(x-9,top-3);ctx.lineTo(x-17,top+16);ctx.lineTo(x-8,top+26);ctx.lineTo(x+13,top+27);ctx.lineTo(x+17,top+11);ctx.closePath();ctx.fill();
+  rect(x-4,top+1,4,15,'#91b17d');
  }
  // Woodland floor: ferns, mushrooms and tiny flowers, not collectible markers.
  for(let i=0;i<34;i++){
