@@ -2395,10 +2395,46 @@ function draw(){
   rect(0,G-19,W,4,'#d5a87f');rect(W-6,27,6,G-27,'#896451');
  }
 
- if(L.under){rect(0,0,W,G,'#0b2946');for(let i=0;i<22;i++){let x=(i*67-cam*.2)%W;ctx.fillStyle=i%2?'#1c567d':'#2b7da5';ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+22,0);ctx.lineTo(x+10,35+i%4*13);ctx.fill()}for(let i=0;i<13;i++){let x=i*75-cam*.3;circle(x,110+i%4*28,14,i%2?'#357ba9':'#55b6d6');circle(x,110+i%4*28,5,'#d7f9ff')}const lx=lion.x-cam+12,ly=lion.y+3;const facing=p.face>=0?1:-1;
-  let glow=ctx.createRadialGradient(lx,ly,2,lx+facing*55,ly-5,145);glow.addColorStop(0,'#ffe9ad88');glow.addColorStop(1,'#ffe6a300');ctx.fillStyle=glow;ctx.fillRect(0,0,W,G);
-  // Keep the existing cave light gradient; remove only the floating extra torch.
-  for(let i=0;i<9;i++){const xx=i*106+25-cam*.12;ctx.fillStyle=i%2?'#7de1f0':'#a9efff';ctx.globalAlpha=.42;ctx.beginPath();ctx.moveTo(xx,15);ctx.lineTo(xx+18,15);ctx.lineTo(xx+8,65+(i%3)*18);ctx.fill();ctx.globalAlpha=1;}text('蓝冰洞',W/2,52,'#d8f7ff',16,'center');text('出口 →',1460-cam,G-53,'#fff3cf',13,'center');}
+ if(L.under){
+  // V3.2.5 blue-ice cavern art: background only, no collision or puzzle edits.
+  const iceBg=ctx.createLinearGradient(0,0,0,G);
+  iceBg.addColorStop(0,'#10243f');iceBg.addColorStop(.55,'#17466a');iceBg.addColorStop(1,'#27617a');
+  ctx.fillStyle=iceBg;ctx.fillRect(0,0,W,G);
+  // Distant frozen rock formations, three parallax layers.
+  for(let layer=0;layer<3;layer++){
+   const speed=[.10,.19,.29][layer],base=G-[116,78,34][layer];
+   ctx.fillStyle=['#244c69','#286080','#31748d'][layer];
+   for(let i=-2;i<15;i++){
+    const x=i*118-(cam*speed%118),height=42+((i*37+layer*23+900)%75);
+    ctx.beginPath();ctx.moveTo(x-48,base);ctx.lineTo(x,base-height);ctx.lineTo(x+24,base-height+19);ctx.lineTo(x+71,base);ctx.closePath();ctx.fill();
+   }
+  }
+  // Crystalline ceiling formations; intentionally irregular and softly lit.
+  for(let i=-2;i<22;i++){
+   const x=i*67-(cam*.16%67),len=24+((i*29+300)%73),width=12+((i*11+200)%14);
+   ctx.fillStyle=i%3===0?'#5cabc5':i%3===1?'#387a9e':'#4c94b2';
+   ctx.beginPath();ctx.moveTo(x-width,0);ctx.lineTo(x+width,0);ctx.lineTo(x+4,len);ctx.lineTo(x-3,len+12);ctx.closePath();ctx.fill();
+   ctx.fillStyle='#9dd9e8';ctx.globalAlpha=.27;ctx.beginPath();ctx.moveTo(x-width+3,0);ctx.lineTo(x-2,0);ctx.lineTo(x-2,len*.77);ctx.closePath();ctx.fill();ctx.globalAlpha=1;
+  }
+  // Tiny distant ice crystals and restrained bioluminescent motes.
+  for(let i=0;i<25;i++){
+   const x=((i*137-cam*.23)%(W+130)+(W+130))%(W+130)-65;
+   const y=92+(i*53%(Math.max(120,G-150)));
+   ctx.globalAlpha=.17+(i%4)*.055;circle(x,y,2+(i%3),'#b8f5ff');ctx.globalAlpha=1;
+  }
+  for(let i=0;i<11;i++){
+   const x=i*139-(cam*.31%139),y=G-33-(i%4)*16;
+   ctx.fillStyle=i%2?'#4b9ab5':'#367b99';
+   ctx.beginPath();ctx.moveTo(x-14,G);ctx.lineTo(x,y+8);ctx.lineTo(x+7,y-19);ctx.lineTo(x+17,G);ctx.closePath();ctx.fill();
+   ctx.fillStyle='#a4e4ef';ctx.globalAlpha=.3;ctx.fillRect(x+1,y+2,3,18);ctx.globalAlpha=1;
+  }
+  // Keep the lion's original guiding headlamp behavior.
+  const lx=lion.x-cam+12,ly=lion.y+3;const facing=p.face>=0?1:-1;
+  let glow=ctx.createRadialGradient(lx,ly,2,lx+facing*55,ly-5,145);
+  glow.addColorStop(0,'#ffe9ad88');glow.addColorStop(1,'#ffe6a300');ctx.fillStyle=glow;ctx.fillRect(0,0,W,G);
+  text('蓝冰洞',W/2,52,'#d8f7ff',16,'center');
+  text('出口 →',1460-cam,G-53,'#fff3cf',13,'center');
+ }
  // Cabin floor is an indoor cross-section, not outdoor terrain. Keep collision map unchanged.
  if(L.cabin){
   // Wooden threshold, structural beam, and warm timber foundation below the walkable floor.
@@ -2418,6 +2454,17 @@ function draw(){
   rect(0,H-12,W,2,'#a77e61');
  }else{
   v325ForestChasmBackdrop();L.map.forEach(terrain);
+ }
+ if(L.under){
+  // Frosted stone edging on existing walkable terrain; no new platforms.
+  for(const seg of L.map){
+   if(seg.y===undefined||seg.w===undefined||seg.h===undefined)continue;
+   const xx=seg.x-cam;if(xx>W+30||xx+seg.w< -30)continue;
+   if(seg.y>=G-85){
+    rect(xx,seg.y,seg.w,5,'#a4d9ed');rect(xx,seg.y+5,seg.w,3,'#5e9dbb');
+    for(let j=13;j<seg.w-8;j+=39){rect(xx+j,seg.y+10+(j%3)*5,11,3,'#7897b4');}
+   }
+  }
  }
  v325SeasideDecorFront();if(level===0&&!L.under&&!L.secret&&!L.cabin)firstLevelDecor();drawShallowCove();drawFinalBeach();v325BeachLeftTransition();v325BeachDecor();clouds.forEach(cloudDraw);
  if(L.under){
