@@ -265,7 +265,7 @@ function buildLevel(n){
   map:[gr(0,510),gr(700,370),gr(1115,440),gr(1780,670),bl(295,90,245),bl(715,92,237),bl(1170,105,235)],
   boxes:[qb(0,300,159,'coin'),qb(1,615,151,'bag'),qb(2,1215,148,'coin')],
   plats:[mover(560,G-20,82,49,0,3600)], // Independent moving platform at first chasm only; second chasm uses the lion-operated wooden bridge.
-  cps:[45,560,990,1510,2180],trees:[],
+  cps:[45,560,850,1510,2180],trees:[],
   enemies:[{type:'walker',x:1320,start:1280,end:1390,v:.30}],
   objects:[{type:'switch',x:1392},{type:'heart',x:2310,y:264},
    ...coins(0,[[175,216],[335,177],[710,194],[1155,185],[1710,190],[1950,170]])]};
@@ -1992,13 +1992,41 @@ function drawFourSeasons(){
   ctx.fillStyle='#547e61';ctx.beginPath();ctx.moveTo(x+2,top-26);ctx.lineTo(x-9,top-3);ctx.lineTo(x-17,top+16);ctx.lineTo(x-8,top+26);ctx.lineTo(x+13,top+27);ctx.lineTo(x+17,top+11);ctx.closePath();ctx.fill();
   rect(x-4,top+1,4,15,'#91b17d');
  }
- // Woodland floor: ferns, mushrooms and tiny flowers, not collectible markers.
- for(let i=0;i<34;i++){
-  const wx=40+i*73,x=wx-cam;if(x<-25||x>W+25||Math.abs(wx-980)<115)continue;
-  rect(x,G-13,2,13,'#648c6d');
-  for(let j=0;j<3;j++){rect(x-9+j*6,G-11-j*3,8,3,j%2?'#91bd81':'#6b9e75');rect(x+2,G-9-j*4,8,3,'#7aaa76')}
-  if(i%4===0){circle(x+13,G-8,4,'#f4c5d5');circle(x+17,G-9,2,'#fff2c7')}
-  if(i%7===0){rect(x-14,G-9,4,8,'#f5dfb7');circle(x-12,G-10,7,'#d79b83')}
+ // Third-level woodland decoration only: varied pixel clusters, no collision changes.
+ const forestPlants=[
+  [72,0],[166,2],[255,1],[345,0],[428,3],[508,1],[604,0],[720,2],
+  [808,1],[856,0],[1105,2],[1170,1],[1260,0],[1368,3],[1460,1],
+  [1745,0],[1820,2],[1925,1],[2050,3],[2175,0],[2300,2]
+ ];
+ for(const [wx,kind] of forestPlants){
+  const x=wx-cam;if(x<-28||x>W+28)continue;
+  // Keep the cabin entrance and the traversable gaps free of decoration.
+  if(wx>880&&wx<1090)continue;
+  if(kind===0){ // fern: alternating leaflets
+   rect(x,G-17,2,17,'#527a60');
+   for(let j=0;j<4;j++){
+    const yy=G-5-j*4;
+    rect(x-10+j,yy-2,10-j,3,j%2?'#8ab27c':'#6f9e75');
+    rect(x+2,yy-3,9-j,3,j%2?'#729e72':'#a0bd85');
+   }
+  }else if(kind===1){ // mossy bush, irregular outline
+   rect(x-13,G-8,26,8,'#5f8c70');
+   rect(x-9,G-13,13,7,'#83a987');rect(x+3,G-11,12,9,'#739a7a');
+   rect(x-6,G-12,5,3,'#a7c49b');
+  }else if(kind===2){ // tiny cream-and-apricot mushrooms
+   rect(x-7,G-8,3,8,'#f2dbb9');rect(x+6,G-6,3,6,'#e9d2b5');
+   rect(x-11,G-12,11,5,'#d89c83');rect(x+3,G-10,10,5,'#e5b38f');
+   rect(x-8,G-11,3,2,'#f5c8a5');
+  }else{ // sparse wildflowers
+   rect(x,G-12,2,12,'#6f9775');rect(x+9,G-8,2,8,'#779b76');
+   circle(x+1,G-14,4,'#f2cbd8');circle(x+10,G-10,3,'#f7e4b4');
+   circle(x+1,G-14,1.5,'#fff2d1');
+  }
+ }
+ // Sparse, deterministic warm fireflies beside the cabin; purely visual.
+ for(const [wx,dy] of [[845,32],[868,52],[1098,42],[1134,65]]){
+  const x=wx-cam;if(x<-8||x>W+8)continue;
+  circle(x,G-dy,2,'#f7dc9b');
  }
  // Cabin visual refinement: same center, footprint and entrance interaction.
  const cx=980-cam;if(cx>-150&&cx<W+150){
