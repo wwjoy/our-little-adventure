@@ -1748,24 +1748,44 @@ function drawFourSeasons(){
   rect(x-trunk+4,top+58,4,base-top-72,'#a87555');
   rect(x+trunk-8,top+80,3,base-top-96,'#4c382f');
   for(let j=0;j<12;j++){const yy=top+79+j*21,dx=((i*13+j*17)%25)-12;rect(x+dx,yy,2,5+(j%3)*2,j%2?'#bd8760':'#4d372e')}
-  // Sparse side branches and large, uneven foliage masses; no confetti needles.
+  // Fourth-pass crown refinement: asymmetrical needle boughs with tapered tips.
+  // Keep the trunk and its bark exactly as in the approved third-round baseline.
   const clusters=[
-   [[-28,52,28,13],[24,73,32,16],[-38,96,29,15],[22,121,26,14],[0,30,25,19]],
-   [[25,47,30,16],[-26,69,32,15],[36,91,27,17],[-18,117,32,17],[0,25,22,20]],
-   [[-21,42,25,14],[31,62,34,17],[-31,84,32,16],[18,107,25,14],[0,20,22,17]]
+   [[-25,54,26,12],[21,78,31,15],[-34,104,27,13],[17,127,22,11],[1,32,20,15]],
+   [[24,51,28,13],[-29,75,30,14],[31,99,25,13],[-17,126,28,14],[-3,30,19,16]],
+   [[-20,48,23,12],[29,71,30,14],[-27,94,27,12],[15,116,23,12],[2,27,19,15]]
   ][kind];
   for(let j=0;j<clusters.length;j++){
    const [dx,dy,r,h]=clusters[j],yy=top+dy;
-   rect(x+(dx<0?-r:0),yy+5,Math.abs(dx)+r,4,'#594a3b');
-   const left=x+dx-r,right=x+dx+r;
-   ctx.fillStyle=['#466d57','#557d60','#668c69'][((i+j)%3)];
-   ctx.beginPath();ctx.moveTo(left+8,yy+h);ctx.lineTo(left,yy+6);ctx.lineTo(left+10,yy-4);ctx.lineTo(x+dx-4,yy-h);ctx.lineTo(right-8,yy-8);ctx.lineTo(right,yy+4);ctx.lineTo(right-12,yy+h);ctx.closePath();ctx.fill();
-   rect(left+9,yy-5,Math.max(10,r-7),5,'#8aaa79');
-   rect(x+dx+2,yy+7,Math.max(8,r-8),4,'#385e50');
+   const offset=((i*11+j*7)%9)-4,xx=x+dx+offset;
+   // Branch attachment is thinner than foliage and never blocks the play lane.
+   rect(Math.min(x,xx),yy+3,Math.abs(xx-x)+5,3,'#594a3b');
+   const palette=['#4b725a','#587e61','#668b6b'];
+   ctx.fillStyle=palette[(i+j)%3];
+   ctx.beginPath();
+   ctx.moveTo(xx-r+7,yy+4);
+   ctx.lineTo(xx-r+3,yy-2);
+   ctx.lineTo(xx-r+12,yy-h+3);
+   ctx.lineTo(xx-5,yy-h-3);
+   ctx.lineTo(xx+r-12,yy-h+1);
+   ctx.lineTo(xx+r,yy-3);
+   ctx.lineTo(xx+r-7,yy+6);
+   ctx.lineTo(xx+9,yy+h-2);
+   ctx.lineTo(xx-7,yy+h);
+   ctx.closePath();ctx.fill();
+   // A restrained broken highlight, rather than straight repeated stripes.
+   rect(xx-r+12,yy-h+3,Math.max(8,r-13),3,'#8baa7b');
+   rect(xx+2,yy+7,Math.max(7,r-12),3,'#3d6552');
+   // Two short descending needle tips give the crown a natural outline.
+   rect(xx-r+10,yy+5,4,4+(j%2)*3,palette[(i+j)%3]);
+   rect(xx+r-13,yy+5,4,3+((i+j)%2)*3,palette[(i+j)%3]);
   }
-  // Tapered top, kept behind HUD; preserve visible sky gaps between trees.
-  ctx.fillStyle='#547e61';ctx.beginPath();ctx.moveTo(x,top-18);ctx.lineTo(x-15,top+24);ctx.lineTo(x-8,top+40);ctx.lineTo(x+18,top+40);ctx.lineTo(x+14,top+19);ctx.closePath();ctx.fill();
-  rect(x-4,top+3,5,22,'#85a47a');
+  // Uneven crown apex; avoid repetitive geometric green mushroom caps.
+  ctx.fillStyle='#547e61';ctx.beginPath();
+  ctx.moveTo(x+2,top-18);ctx.lineTo(x-11,top+5);ctx.lineTo(x-18,top+20);
+  ctx.lineTo(x-9,top+34);ctx.lineTo(x+15,top+33);
+  ctx.lineTo(x+17,top+14);ctx.closePath();ctx.fill();
+  rect(x-4,top+1,4,15,'#85a47a');
  }
  // Woodland floor: ferns, mushrooms and tiny flowers, not collectible markers.
  for(let i=0;i<34;i++){
