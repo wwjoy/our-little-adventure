@@ -576,7 +576,7 @@ function ending(){
  }
  data.done=true;save();
  menu('💌 啾啾的藏宝邀请函',
- '给我最喜欢的兔兔宝宝 🐰💕<br><br>我们的第一年，留下了好多美好的回忆。<br>真正的信，等见面时再亲手交给你。<br><br>不过，啾啾偷偷准备了另一份惊喜：<strong>一张藏宝图</strong>！<br>听说三块地图碎片，藏在蓝色的大海深处……<br><br><strong>愿意和我再去冒险一次吗？ 🌊</strong><br><small>—— 永远陪着你的啾啾 🦁</small>',
+ '给我最喜欢的兔兔宝宝 🐰💕<br><br>我们的第一年，留下了好多美好的回忆。<br>谢谢你陪我走过这一年的春夏秋冬。<br><br>不过，啾啾偷偷准备了另一份惊喜：<strong>一张藏宝图</strong>！<br>听说三块地图碎片，藏在蓝色的大海深处……<br><br><strong>愿意和我再去冒险一次吗？ 🌊</strong><br><small>—— 永远陪着你的啾啾 🦁</small>',
  [['🌊 一起去寻找！',startDive],['💗 晚一点再去',home]]);
 }
 function openAnniversaryLetter(){ending()}
@@ -2004,6 +2004,7 @@ function bunny(x,y,face,sit,dead){if(drawSunsetRear('bunny',x,y))return;if(drawS
  rect(x+11+ex,y+17+s,4,2,'#e58baa');rect(x+3,y+21,19,4,'#ed85ab');if(!sit){rect(x+3,y+25,6,3,'#fffaf6');rect(x+16,y+25,6,3,'#fffaf6')}else{rect(x,y+24,8,3,'#fffaf6');rect(x+16,y+24,8,3,'#fffaf6')}}
 function lionDraw(x,y,face,sit){if(drawSunsetRear('lion',x,y))return;if(drawSceneOutfit('lion',x,y,face,sit))return;if(drawReviewSprite('LION_URL',x,y,sit,face))return;x=Math.round(x);y=Math.round(y);const s=sit?3:0,ex=face<0?-2:1;circle(x+12,y+11+s,13,'#92603d');rect(x+3,y+17+s,19,10-s,'#c89158');circle(x+12,y+11+s,9,'#f4c28d');circle(x+4,y+3+s,5,'#92603d');circle(x+21,y+3+s,5,'#92603d');rect(x+7+ex,y+10+s,3,3,'#493b50');rect(x+15+ex,y+10+s,3,3,'#493b50');rect(x+11+ex,y+16+s,4,3,'#7b4d53');rect(x+7,y+21+s,11,4,'#e7839b');rect(x+3,y+25,7,3,'#f4c28d');rect(x+17,y+25,7,3,'#f4c28d')}
 function bubble(x,y,t){ctx.font='bold 11px sans-serif';const w=ctx.measureText(t).width+14;rect(x-w/2,y-22,w,20,'#fff');rect(x-3,y-3,6,4,'#fff');text(t,x,y-8,'#7b4d6e',11,'center')}
+const v325FirstLevelHeartRefined=new Image();v325FirstLevelHeartRefined.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAABGUlEQVR4nN2VMRKCMBBFP44lt6ByxhoKvQCX8ABegIrKygt4AC7hBbSAGTpnrLiCQ0GPjdkJmw0kSKO/Cpvkv2SzJMCvK5CC5+TQ81hWFoHvGABYS+bH/U7i9srAZYySsSrLRADA5XYHAEyN0SHU4OZhnlK7O10NI9Uv9ekQccthng4m8m8OGoMYZyBNtJmrvvLxHMSS7YbaK9skbqqnzEcigEzjCGEcEXRxQFc16KqGIIsDdJAO8QFay1QSpatqBnF+yHX7ojKlKvoERiHcWJJuDrAUZWURqL91jri5AfgGIpkDwmWnxPM6V2IVZWUR1O3L2cS2eivABzJmDlgeHF1j5cuvZkmTP5rt0F3MAYcdKPEn0sX8P/QGxeinKPw5mosAAAAASUVORK5CYII=';
 const v325SpecialHeartSprite=new Image();v325SpecialHeartSprite.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAA/klEQVR4nGNgGOqAEZvgPMe8/+hiSfsnMZKqBsOCeY55/yP0jLC6ZMWlc3ADiFWHYgE+TdgAp585Cv/7ppNYLWFBN5wzwwNV44wdRFsKAxCz8v4n7Z/EyEKybiwuxgcwLRDigBjQtoFcu1EAE1VMIWRB0v5JjCsunaOaoRiRjAyoFTQwgJEPHPgk4HwJOwOCBrw4dAGFf+DTC5R8gBIHSfsnMR749IIsl2IznIEBT1GB7BNyDWdgwJGKSPUJLsMZGHD4AAaQfcItKYoi9/X5a4KGMzAQyAeEfELIcAYGAj6AAWxxQozhDAxE5mR0nxBrOMlgnmPef2wVzSgY3AAAnyKB58HxEmsAAAAASUVORK5CYII=';
 function heart(x,y){circle(x-5,y-2,6,'#f26d9e');circle(x+5,y-2,6,'#f26d9e');ctx.fillStyle='#f26d9e';ctx.beginPath();ctx.moveTo(x-11,y);ctx.lineTo(x,y+12);ctx.lineTo(x+11,y);ctx.fill()}
 function seedDraw(x,y){const b=Math.sin(timer/300)*2;circle(x,y+b,11,'#fff6b0');circle(x,y+b,7,'#a5d66f');rect(x-1,y-10+b,2,6,'#5fae6a');circle(x+4,y-10+b,3,'#8bd06b')}
@@ -2388,7 +2389,7 @@ function draw(){
     ctx.lineTo(cx+11*grow,treeBase);ctx.closePath();ctx.fill();
     ctx.strokeStyle='#b58a7c';ctx.lineWidth=2.2*grow;
     ctx.beginPath();ctx.moveTo(cx-3*grow,treeBase-6);ctx.lineTo(cx-2*grow,top+46*grow);ctx.stroke();
-    const branches=[[-70,-.72],[-51,-.92],[-37,-1.07],[54,-.78],[76,-.96],[34,-1.13]];
+    const branches=[[-54,-.57],[-39,-.72],[-26,-.79],[43,-.59],[57,-.68],[27,-.82]];
     ctx.strokeStyle='#865e60';ctx.lineWidth=7*grow;
     for(const [dx,ry] of branches){ctx.beginPath();ctx.moveTo(cx,treeBase-treeH*.44);ctx.quadraticCurveTo(cx+dx*.52*grow,top+treeH*.28,cx+dx*grow,treeBase+treeH*ry);ctx.stroke();}
     // Interlocking blossom clusters: irregular flower-shaped silhouettes, not isolated circles.
@@ -2724,7 +2725,7 @@ function draw(){
  L.plats.forEach(pl=>{if(level===2&&!L.under&&!L.cabin&&pl.kind==='mover'&&clouds.some(c=>!c.building&&pl.x0>=c.x-80&&pl.x0<=c.x+c.w))return;platDraw(pl)});drawStarBridge();L.boxes.forEach(qbrick);pickups.forEach(pickupDraw);if(L.secret&&data.snowboard){const bx=330-cam;rect(bx-20,G-17,40,5,'#f3a3c9');rect(bx-16,G-19,32,2,'#fff');rect(bx-9,G-22,5,5,'#80bdd5');rect(bx+5,G-22,5,5,'#80bdd5');}
  for(const o of L.objects){let x=o.x-cam;if(x<-60||x>W+60)continue;
   if(o.type==='coin'&&!data.coins.includes(cKey(o)))coinDraw(x,o.y);
-  if(o.type==='heart'&&!data.hearts[level]){const hy=o.y+Math.sin(timer/300)*2;if(v325SpecialHeartSprite.complete&&v325SpecialHeartSprite.naturalWidth)ctx.drawImage(v325SpecialHeartSprite,Math.round(x-12),Math.round(hy-12),24,24);else heart(x,hy);}
+  if(o.type==='heart'&&!data.hearts[level]){const hy=o.y+Math.sin(timer/300)*2;if(level===0&&v325FirstLevelHeartRefined.complete&&v325FirstLevelHeartRefined.naturalWidth)ctx.drawImage(v325FirstLevelHeartRefined,Math.round(x-12),Math.round(hy-12),24,24);else if(v325SpecialHeartSprite.complete&&v325SpecialHeartSprite.naturalWidth)ctx.drawImage(v325SpecialHeartSprite,Math.round(x-12),Math.round(hy-12),24,24);else heart(x,hy);}
   if(o.type==='seed'&&!data.seed)seedDraw(x,o.y);
   if(o.type==='star'&&!data.stars.includes(o.id)){if(v325MemoryStarSprite.complete&&v325MemoryStarSprite.naturalWidth)ctx.drawImage(v325MemoryStarSprite,Math.round(x-13),Math.round(o.y-13),26,26);else{circle(x,o.y,9,'#ffe3a2');rect(x-2,o.y-13,4,26,'#fff6c4');rect(x-13,o.y-2,26,4,'#fff6c4')}}
   if(o.type==='shell'&&!data.shells.includes(o.id)){circle(x,o.y-2,6,'#ffd7a4');rect(x-5,o.y,10,3,'#e9a88f')}
@@ -3036,7 +3037,7 @@ function showFinalHomeClue(back){
  if(!FINAL_HOME_RIDDLE.trim()){
   menu('🏡 最后的家中线索 · 尚未揭晓','三块藏宝图已经拼好了！<br><br>🦁「礼物就在家里，不过最后的藏匿地点，要等我准备好才告诉你哦。」<br><br><small>这张线索卡还未配置具体位置；不会让你在不知道位置的情况下误点“已找到”。</small>',[['💌 收好藏宝图',()=>showTreasureMap(back)],['返回',back||home]]);return;
  }
- menu('🎁 一周年惊喜 · 三重寻宝线索','<div style="padding:14px;border:2px dashed #d6a7b5;border-radius:12px;background:#fff9e8"><strong>'+FINAL_HOME_RIDDLE+'</strong></div>',[['🎁 我真的找到啦！',()=>menu('💕 我们的故事未完待续','Happy 1st Anniversary ♡<br>2025.11.13 — 2026.11.13<br><br>真正的信，等见面时再亲手交给兔兔宝宝。<br>—— 永远陪着你的啾啾 🦁',[['返回首页',home]])],['返回藏宝图',()=>showTreasureMap(back)]]);
+ menu('🎁 一周年惊喜 · 三重寻宝线索','<div style="padding:14px;border:2px dashed #d6a7b5;border-radius:12px;background:#fff9e8"><strong>'+FINAL_HOME_RIDDLE+'</strong></div>',[['🎁 我真的找到啦！',()=>menu('💕 我们的故事未完待续','Happy 1st Anniversary ♡<br>2025.11.13 — 2026.11.13<br><br>我们的第一年，留下了好多美好的回忆。<br><br>谢谢你陪我走过这一年的春夏秋冬。<br><br>未来还有好多好多故事，想和你一起慢慢写下去。<br><br>—— 永远和你一起的啾啾 🦁',[['返回首页',home]])],['返回藏宝图',()=>showTreasureMap(back)]]);
 }
 function showTreasureMap(back){
  if(!data.dive.finished){menu('🗺️ 还没拼好','还需要收集三块海底藏宝图碎片。',[['继续寻宝',startDive],['返回',back||home]]);return}
