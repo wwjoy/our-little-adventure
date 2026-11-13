@@ -896,13 +896,15 @@ function updateLion(k){
   const feet=p.y+p.h;
   const cloud=clouds.find(c=>!c.building &&
     p.x+p.w>c.x-18 && p.x<c.x+c.w+18 &&
-    feet<G-9 && feet>G-100);
+    feet>=G-78 && feet<=G+12 && (p.on || p.vy>=-0.2));
   if(cloud){
    const lionWidth=22;
    const left=cloud.x+2, right=Math.max(left,cloud.x+cloud.w-lionWidth-2);
    const preferred=p.x-(p.face||1)*29;
    lion.x=Math.max(left,Math.min(right,preferred));
-   lion.y=feet-27;
+   // The cloud collision surface is G-5; its decorative lobes extend above it.
+   // Keep the companion's feet on the shared surface rather than below the cloud.
+   lion.y=G-5-27;
    lion.face=p.face;
    lionOnMovingRaftIdle=true;
    return;
@@ -2448,7 +2450,7 @@ function draw(){
     text(ANNIV.label,cx,56,'#906779',13,'center');
     text('我们一起走过了第一个四季。',cx,79,'#906779',13,'center');
     if(t>=16900){ctx.globalAlpha=appear*fadeIn(16900,18000);
-      text('但冒险才刚刚开始。',cx,100,'#906779',12,'center');
+      text('而我们的故事，才刚刚开始。',cx,100,'#906779',12,'center');
     }
     if(t>=20000){ctx.globalAlpha=appear*fadeIn(20000,21700);
       text(data.dive.finished?'🦁 兔兔，我们的藏宝图已经拼好啦 ♡':'🦁 兔兔，最后的线索藏在深蓝色的海底 ♡',cx,124,'#a45c85',12,'center');
@@ -2755,8 +2757,8 @@ function draw(){
   let lx=lion.x,ly=lion.y;
   if(level===2&&!L.under&&!L.cabin&&clouds.length&&p.on){
    const feet=p.y+p.h;
-   const c=clouds.find(c=>!c.building&&p.x+p.w>c.x-18&&p.x<c.x+c.w+18&&feet<G-9&&feet>G-100);
-   if(c){lx=Math.max(c.x+2,Math.min(c.x+c.w-24,p.x-(p.face||1)*29));ly=feet-27;lionOnMovingRaftIdle=true;}
+   const c=clouds.find(c=>!c.building&&p.x+p.w>c.x-18&&p.x<c.x+c.w+18&&feet>=G-78&&feet<=G+12&&(p.on||p.vy>=-0.2));
+   if(c){lx=Math.max(c.x+2,Math.min(c.x+c.w-24,p.x-(p.face||1)*29));ly=G-5-27;lionOnMovingRaftIdle=true;}
   }
   lionDraw(lx-cam,ly,lion.face,lion.sit);
  }}
