@@ -296,9 +296,9 @@ const ICE_MEMORY={x:1042,y:G-113};
 function iceMemoryOwned(){return !!data.story.iceCourage;}
 
 function buildSecretRoom(){return {key:'0b',secret:true,end:690,
- map:[gr(0,690),bl(185,95,240),bl(380,100,218)],
+ map:[gr(0,1100),bl(185,95,240),bl(380,100,218)],
  boxes:[qb(0,290,172,'bag'),qb(1,340,177,'snowboard')],plats:[],cps:[50],trees:[],enemies:[],
- objects:[{type:'sign',x:95,text:'❄ 冬日的秘密'},
+ objects:[{type:'sign',x:95,text:'❄ 冬日的秘密'},{type:'sign',x:605,text:'出口 →'},
  ...coins(0,[...row(110,245,3,22),...row(218,198,3,22),...row(402,177,3,22)])]}}
 let secretReturnX=1370;
 let snow=null;
@@ -2448,7 +2448,7 @@ function draw(){
     text(ANNIV.label,cx,56,'#906779',13,'center');
     text('我们一起走过了第一个四季。',cx,79,'#906779',13,'center');
     if(t>=16900){ctx.globalAlpha=appear*fadeIn(16900,18000);
-      text('我们的第一年结束了，冒险才刚刚开始。',cx,100,'#906779',12,'center');
+      text('但冒险才刚刚开始。',cx,100,'#906779',12,'center');
     }
     if(t>=20000){ctx.globalAlpha=appear*fadeIn(20000,21700);
       text(data.dive.finished?'🦁 兔兔，我们的藏宝图已经拼好啦 ♡':'🦁 兔兔，最后的线索藏在深蓝色的海底 ♡',cx,124,'#a45c85',12,'center');
@@ -3028,10 +3028,7 @@ function drawDive(){
  drawHorizontalDiveSprite('lion',d.lionX,d.lionY,d.swimFacing,d.t+90);
  drawHorizontalDiveSprite('bunny',d.x,d.y,d.swimFacing,d.t);
 
- // Keep the top HUD clear. Instructions sit in a small lower-right guide panel.
- ctx.save();ctx.globalAlpha=.88;rect(W-295,H-38,279,27,'#fff8ef');ctx.globalAlpha=1;
- ctx.strokeStyle='#e8abc5';ctx.lineWidth=2;ctx.strokeRect(W-295.5,H-38.5,279,27);
- text('左右游动  ·  ✦ 上浮  ·  跟随泡泡',W-155,H-20,'#526985',11,'center');ctx.restore();
+ // Dive guidance panel removed; swimming controls and gameplay remain unchanged.
 }
 function showFinalHomeClue(back){
  if(!FINAL_HOME_RIDDLE.trim()){
